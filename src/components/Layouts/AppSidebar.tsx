@@ -45,6 +45,51 @@ const navMain: SidebarItem[] = [
     title: "Dashboard",
     url: "/",
   },
+  {
+    title: "Messages",
+    icon: "message.png",
+    url: "/messages",
+  },
+  {
+    title: "Maintenance",
+    icon: "maintenance.png",
+    url: "/maintenance",
+  },
+  {
+    title: "Leases",
+    icon: "lease.png",
+    url: "/leases",
+  },
+  {
+    title: "Documents",
+    icon: "documents.png",
+    url: "/documents",
+  },
+  {
+    title: "Sign Documents",
+    icon: "sign-documents.png",
+    url: "/sign-documents",
+  },
+  {
+    title: "Payments",
+    icon: "finance.png",
+    url: "/payments",
+  },
+  {
+    title: "Notification",
+    icon: "notification.png",
+    url: "/notification",
+  },
+  {
+    title: "Help",
+    icon: "help.png",
+    url: "/help",
+  },
+  {
+    title: "Settings",
+    icon: "setting.png",
+    url: "/settings",
+  },
 ];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -124,7 +169,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                         className="size-4"
                       />
 
-                      <span className=" text-white"> {item.title}</span>
+                      <span className="text-white"> {item.title}</span>
                     </SidebarMenuButton>
                   )}
                 </NavLink>
