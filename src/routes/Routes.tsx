@@ -1,6 +1,7 @@
 import Dashboard from "@/features/dashboard/Dashboard";
 import HomeInsuranceForm from "@/features/dashboard/HomeInsurance";
 import Maintenance from "@/features/maintenance/Maintenance";
+import RequestMaintenance from "@/features/maintenance/RequestMaintenance";
 import Messages from "@/features/messages/Messages";
 import { type RouteObject } from "react-router-dom";
 
@@ -20,5 +21,13 @@ export const routes: RouteObject[] = [
   {
     path: "/maintenance",
     element: <Maintenance />,
+  },
+  {
+    path: "/create-maintenance-request",
+    element: <RequestMaintenance />,
+  },
+  {
+    path: "*",
+    element: <Dashboard />,
   },
 ];
