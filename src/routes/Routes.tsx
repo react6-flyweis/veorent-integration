@@ -1,6 +1,7 @@
 import Dashboard from "@/features/dashboard/Dashboard";
 import HomeInsuranceForm from "@/features/dashboard/HomeInsurance";
 import Leases from "@/features/leases/Leases";
+import RequestLeasing from "@/features/leases/RequestLeasing";
 import Maintenance from "@/features/maintenance/Maintenance";
 import RequestMaintenance from "@/features/maintenance/RequestMaintenance";
 import Messages from "@/features/messages/Messages";
@@ -30,6 +31,10 @@ export const routes: RouteObject[] = [
   {
     path: "/leases",
     element: <Leases />,
+  },
+  {
+    path: "/create-lease-request",
+    element: <RequestLeasing />,
   },
   {
     path: "*",
