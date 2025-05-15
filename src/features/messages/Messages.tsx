@@ -3,10 +3,12 @@ import {
   ChatLayout,
   ChatLayoutSidebar,
   ChatLayoutMain,
+  ChatLayoutHeader,
 } from "./components/ChatLayout";
 import { ChatSidebar, ChatSidebarContent } from "./components/ChatSidebar";
 import { ChatSidebarItem } from "./components/ChatSidebarItem";
 import { ChatMain } from "./components/ChatMain";
+import { PageTitle } from "@/components/PageTitle";
 
 const conversations: IConversation[] = [
   {
@@ -125,6 +127,9 @@ export default function Messages() {
 
   return (
     <ChatLayout>
+      <ChatLayoutHeader className="mb-4">
+        <PageTitle title="Message" />
+      </ChatLayoutHeader>
       <ChatLayoutSidebar>
         <ChatSidebar>
           <ChatSidebarContent>

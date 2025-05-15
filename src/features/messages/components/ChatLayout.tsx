@@ -1,39 +1,50 @@
-import { type ReactNode } from "react";
+import { cn } from "@/lib/utils";
+import {
+  Children,
+  isValidElement,
+  type PropsWithChildren,
+  type ReactElement,
+} from "react";
 
-interface ChatLayoutProps {
-  children: ReactNode;
-}
+function ChatLayout({ children }: PropsWithChildren) {
+  const header = Children.toArray(children).find(
+    (child) => isValidElement(child) && child.type === ChatLayoutHeader
+  ) as ReactElement | undefined;
 
-interface ChatLayoutHeaderProps {
-  children: ReactNode;
-}
+  const sidebar = Children.toArray(children).find(
+    (child) => isValidElement(child) && child.type === ChatLayoutSidebar
+  ) as ReactElement | undefined;
 
-interface ChatLayoutSidebarProps {
-  children: ReactNode;
-}
+  const main = Children.toArray(children).find(
+    (child) => isValidElement(child) && child.type === ChatLayoutMain
+  ) as ReactElement | undefined;
 
-interface ChatLayoutMainProps {
-  children: ReactNode;
-}
-
-function ChatLayout({ children }: ChatLayoutProps) {
   return (
-    <div>
-      <h2 className="text-3xl font-bold mb-4">Message</h2>
-      <div className="flex gap-5 bg-white">{children}</div>
+    <div className="">
+      {header && <>{header}</>}
+      <div className="flex gap-5 bg-white">
+        {/* sidebar */}
+        {sidebar && <>{sidebar}</>}
+        {/* main */}
+        {main && <>{main}</>}
+      </div>
     </div>
   );
 }
 
-function ChatLayoutHeader({ children }: ChatLayoutHeaderProps) {
-  return <div className="flex-none">{children}</div>;
+interface PropsWithChildClass extends PropsWithChildren {
+  className?: string;
 }
 
-function ChatLayoutSidebar({ children }: ChatLayoutSidebarProps) {
-  return <div className="w-1/3 border-r pr-4">{children}</div>;
+function ChatLayoutHeader({ children, className }: PropsWithChildClass) {
+  return <div className={cn("flex-none", className)}>{children}</div>;
 }
 
-function ChatLayoutMain({ children }: ChatLayoutMainProps) {
+function ChatLayoutSidebar({ children }: PropsWithChildClass) {
+  return <div className="w-1/3 border-r pr-2">{children}</div>;
+}
+
+function ChatLayoutMain({ children }: PropsWithChildClass) {
   return <div className="w-2/3">{children}</div>;
 }
 
