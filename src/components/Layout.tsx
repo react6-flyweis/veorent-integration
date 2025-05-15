@@ -7,7 +7,7 @@ export default function MainLayout() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <main className="p-6">
+        <main className="p-10 h-full flex flex-col">
           <Outlet />
         </main>
       </SidebarInset>
