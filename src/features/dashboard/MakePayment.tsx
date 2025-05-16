@@ -25,6 +25,8 @@ import {
 import duesImg from "@/assets/images/charges.png";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
+import { PaymentModeDialog } from "./components/PaymentModeDialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 const dues = [
   {
@@ -236,9 +238,16 @@ export default function MakePayment() {
 
             {/* Submit */}
             <MultiStepperButton>
-              <Button size="lg" type="submit" className="w-3/5">
-                Make Payment
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button size="lg" type="submit" className="w-3/5">
+                    Make Payment
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <PaymentModeDialog amount={total.toString()} />
+                </DialogContent>
+              </Dialog>
             </MultiStepperButton>
           </MultiStepper>
         </form>
