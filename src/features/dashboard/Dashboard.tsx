@@ -21,7 +21,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Link } from "react-router";
-import { IconCard } from "./components/IconCard";
+import { IconCard } from "@/components/IconCard";
 import truckImgIcon from "@/assets/icons/truck.png";
 import insuranceImgIcon from "@/assets/icons/home-insurance.png";
 
