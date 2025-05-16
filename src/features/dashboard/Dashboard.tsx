@@ -69,8 +69,8 @@ export default function Dashboard() {
             <Button size="lg" className="flex-1">
               Make Payment
             </Button>
-            <Button variant="outline" size="lg" className="flex-1">
-              Autopay
+            <Button variant="outline" size="lg" className="flex-1" asChild>
+              <Link to="/auto-pay">Auto Pay</Link>
             </Button>
           </CardFooter>
         </Card>
