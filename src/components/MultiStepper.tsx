@@ -7,6 +7,7 @@ import {
   isValidElement,
   type ReactNode,
   type ReactElement,
+  type PropsWithChildren,
 } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -29,7 +30,7 @@ const StepperContext = createContext<{
 export function MultiStepper({
   children,
 }: {
-  children: ReactElement[];
+  children: ReactElement | ReactElement[];
   routeBack?: boolean;
   showCount?: boolean;
 }) {
@@ -74,8 +75,7 @@ export function MultiStepper({
         {/* Header */}
         {header && <>{header}</>}
 
-        {/* Animated Step Panel */}
-        <div className="relative min-h-[350px]">
+        <div className="">
           {steps.map((child, index) =>
             index + 1 === step ? (
               <div key={index}>{cloneElement(child)}</div>
@@ -100,16 +100,12 @@ export function MultiStepperHeader({ children }: { children: ReactNode }) {
   return <div className="mb-4">{children}</div>;
 }
 
-// Step Indicator Component
-export function MultiStepperIndicator({
-  showCount = false,
+export function MultiStepperBackButton({
   routeBack,
 }: {
-  showCount?: boolean;
   routeBack?: () => void;
 }) {
-  const { currentStep, totalSteps, prevStep } = useContext(StepperContext);
-  const progress = (currentStep / totalSteps) * 100;
+  const { currentStep, prevStep } = useContext(StepperContext);
 
   const handleBack = () => {
     if (currentStep > 1) {
@@ -118,23 +114,39 @@ export function MultiStepperIndicator({
       routeBack();
     }
   };
+  return (
+    <Button
+      variant="outline"
+      size="icon"
+      type="button"
+      onClick={handleBack}
+      className={cn(
+        "rounded-full size-10",
+        !routeBack && currentStep === 1 && "invisible"
+      )}
+      aria-label="Previous step"
+    >
+      <ArrowLeft className="size-4" />
+    </Button>
+  );
+}
+
+// Step Indicator Component
+export function MultiStepperIndicator({
+  showCount = false,
+  routeBack,
+}: {
+  showCount?: boolean;
+  routeBack?: () => void;
+}) {
+  const { currentStep, totalSteps } = useContext(StepperContext);
+  const progress = (currentStep / totalSteps) * 100;
 
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <Button
-          variant="outline"
-          size="icon"
-          type="button"
-          onClick={handleBack}
-          className={cn(
-            "rounded-full size-10",
-            !routeBack && currentStep === 1 && "invisible"
-          )}
-          aria-label="Previous step"
-        >
-          <ArrowLeft className="size-4" />
-        </Button>
+        <MultiStepperBackButton routeBack={routeBack} />
+
         {showCount && (
           <span className="text-sm text-muted-foreground">
             Step {currentStep} of {totalSteps}
@@ -155,24 +167,29 @@ export function MultiStepperIndicator({
   );
 }
 
-// Button Component
-export function MultiStepperButton() {
+export function MultiStepperButton({ children }: PropsWithChildren) {
   const { currentStep, totalSteps, nextStep } = useContext(StepperContext);
+
+  const isLastStep = currentStep === totalSteps;
 
   return (
     <div className="flex justify-center pt-4">
-      <Button
-        type={currentStep === totalSteps ? "submit" : "button"}
-        size="lg"
-        className="w-3/5"
-        onClick={() => {
-          if (currentStep < totalSteps) {
-            nextStep();
-          }
-        }}
-      >
-        {currentStep === totalSteps ? "Submit" : "Next"}
-      </Button>
+      {isLastStep && children ? (
+        children
+      ) : (
+        <Button
+          type={isLastStep ? "submit" : "button"}
+          size="lg"
+          className="w-3/5"
+          onClick={() => {
+            if (!isLastStep) {
+              nextStep();
+            }
+          }}
+        >
+          {isLastStep ? "Submit" : "Next"}
+        </Button>
+      )}
     </div>
   );
 }
