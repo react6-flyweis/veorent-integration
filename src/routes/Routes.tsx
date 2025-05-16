@@ -4,6 +4,7 @@ import AutoPay from "@/features/dashboard/AutoPay";
 import BookMyMove from "@/features/dashboard/BookMyMove";
 import Dashboard from "@/features/dashboard/Dashboard";
 import HomeInsuranceForm from "@/features/dashboard/HomeInsurance";
+import MakePayment from "@/features/dashboard/MakePayment";
 import MoveInProcess from "@/features/dashboard/MoveInProcess";
 import Documents from "@/features/documents/Documents";
 import Help from "@/features/features/Help";
@@ -39,6 +40,10 @@ export const routes: RouteObject[] = [
   {
     path: "/auto-pay",
     element: <AutoPay />,
+  },
+  {
+    path: "/make-payment",
+    element: <MakePayment />,
   },
   {
     path: "/home-insurance",
