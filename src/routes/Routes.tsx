@@ -1,5 +1,6 @@
 import NotFound from "@/components/NotFound";
 import AddCardDetails from "@/features/dashboard/AddCardDetails";
+import AutoPay from "@/features/dashboard/AutoPay";
 import BookMyMove from "@/features/dashboard/BookMyMove";
 import Dashboard from "@/features/dashboard/Dashboard";
 import HomeInsuranceForm from "@/features/dashboard/HomeInsurance";
@@ -34,6 +35,10 @@ export const routes: RouteObject[] = [
   {
     path: "/add-card",
     element: <AddCardDetails />,
+  },
+  {
+    path: "/auto-pay",
+    element: <AutoPay />,
   },
   {
     path: "/home-insurance",
