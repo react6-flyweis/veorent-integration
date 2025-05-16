@@ -178,7 +178,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           })}
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" className="pl-6 gap-3">
-              <img src={"/icons/logout.png"} alt="logout" className="size-5" />
+              <img src={"/icons/logout.png"} alt="logout" className="size-4" />
               <span className="text-base text-white"> logout</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
