@@ -1,3 +1,4 @@
+import NotFound from "@/components/NotFound";
 import Dashboard from "@/features/dashboard/Dashboard";
 import HomeInsuranceForm from "@/features/dashboard/HomeInsurance";
 import Documents from "@/features/documents/Documents";
@@ -73,6 +74,6 @@ export const routes: RouteObject[] = [
   },
   {
     path: "*",
-    element: <Dashboard />,
+    element: <NotFound />,
   },
 ];
