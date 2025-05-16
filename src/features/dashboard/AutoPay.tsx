@@ -33,7 +33,7 @@ export default function AutoPay() {
         <Switch id="auto-pay" />
         <Label htmlFor="auto-pay">On</Label>
       </div>
-      <Card className="py-2">
+      <Card className="py-2 gap-2">
         <CardHeader className="flex gap-2 px-2">
           <img className="size-8" src={rentIconImg} alt="" />
           <p className="font-semibold text-2xl text-primary">Rent</p>
