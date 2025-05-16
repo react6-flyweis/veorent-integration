@@ -1,4 +1,5 @@
 import NotFound from "@/components/NotFound";
+import BookMyMove from "@/features/dashboard/BookMyMove";
 import Dashboard from "@/features/dashboard/Dashboard";
 import HomeInsuranceForm from "@/features/dashboard/HomeInsurance";
 import Documents from "@/features/documents/Documents";
@@ -19,6 +20,10 @@ export const routes: RouteObject[] = [
   {
     path: "/",
     element: <Dashboard />,
+  },
+  {
+    path: "/book-move",
+    element: <BookMyMove />,
   },
   {
     path: "/home-insurance",
