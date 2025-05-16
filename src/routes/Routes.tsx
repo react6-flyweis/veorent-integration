@@ -2,6 +2,7 @@ import NotFound from "@/components/NotFound";
 import BookMyMove from "@/features/dashboard/BookMyMove";
 import Dashboard from "@/features/dashboard/Dashboard";
 import HomeInsuranceForm from "@/features/dashboard/HomeInsurance";
+import MoveInProcess from "@/features/dashboard/MoveInProcess";
 import Documents from "@/features/documents/Documents";
 import Help from "@/features/features/Help";
 import Support from "@/features/features/Support";
@@ -24,6 +25,10 @@ export const routes: RouteObject[] = [
   {
     path: "/book-move",
     element: <BookMyMove />,
+  },
+  {
+    path: "/move-in-process",
+    element: <MoveInProcess />,
   },
   {
     path: "/home-insurance",
