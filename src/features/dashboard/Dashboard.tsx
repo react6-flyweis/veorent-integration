@@ -134,6 +134,7 @@ export default function Dashboard() {
             Lorem Ipsum is simply dummy text"
           icon={truckImgIcon}
           actionText="Book My Move"
+          url="/book-move"
         />
         <IconCard
           title="Know You’re Covered!"
