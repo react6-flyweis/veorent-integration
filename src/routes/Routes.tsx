@@ -2,6 +2,7 @@ import Dashboard from "@/features/dashboard/Dashboard";
 import HomeInsuranceForm from "@/features/dashboard/HomeInsurance";
 import Documents from "@/features/documents/Documents";
 import Help from "@/features/features/Help";
+import Support from "@/features/features/Support";
 import Leases from "@/features/leases/Leases";
 import RequestLeasing from "@/features/leases/RequestLeasing";
 import Maintenance from "@/features/maintenance/Maintenance";
@@ -60,6 +61,10 @@ export const routes: RouteObject[] = [
   {
     path: "/help",
     element: <Help />,
+  },
+  {
+    path: "/support",
+    element: <Support />,
   },
   {
     path: "*",
