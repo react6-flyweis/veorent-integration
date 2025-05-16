@@ -10,6 +10,7 @@ import RequestMaintenance from "@/features/maintenance/RequestMaintenance";
 import Messages from "@/features/messages/Messages";
 import Notifications from "@/features/notifications/Notifications";
 import Payments from "@/features/payments/Payments";
+import Settings from "@/features/settings/Settings";
 import SignDocuments from "@/features/sign-documents/SignDocuments";
 import { type RouteObject } from "react-router-dom";
 
@@ -65,6 +66,10 @@ export const routes: RouteObject[] = [
   {
     path: "/support",
     element: <Support />,
+  },
+  {
+    path: "/settings",
+    element: <Settings />,
   },
   {
     path: "*",
