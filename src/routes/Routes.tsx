@@ -6,6 +6,7 @@ import RequestLeasing from "@/features/leases/RequestLeasing";
 import Maintenance from "@/features/maintenance/Maintenance";
 import RequestMaintenance from "@/features/maintenance/RequestMaintenance";
 import Messages from "@/features/messages/Messages";
+import Notifications from "@/features/notifications/Notifications";
 import Payments from "@/features/payments/Payments";
 import SignDocuments from "@/features/sign-documents/SignDocuments";
 import { type RouteObject } from "react-router-dom";
@@ -50,6 +51,10 @@ export const routes: RouteObject[] = [
   {
     path: "/payments",
     element: <Payments />,
+  },
+  {
+    path: "/notification",
+    element: <Notifications />,
   },
   {
     path: "*",
