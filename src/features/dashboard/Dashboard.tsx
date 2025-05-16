@@ -66,8 +66,8 @@ export default function Dashboard() {
             </div>
           </CardContent>
           <CardFooter className="gap-1">
-            <Button size="lg" className="flex-1">
-              Make Payment
+            <Button size="lg" className="flex-1" asChild>
+              <Link to="/make-payment"> Make Payment</Link>
             </Button>
             <Button variant="outline" size="lg" className="flex-1" asChild>
               <Link to="/auto-pay">Auto Pay</Link>
