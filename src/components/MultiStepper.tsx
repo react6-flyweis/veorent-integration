@@ -134,9 +134,11 @@ export function MultiStepperBackButton({
 // Step Indicator Component
 export function MultiStepperIndicator({
   showCount = false,
+  showBackButton = true,
   routeBack,
 }: {
   showCount?: boolean;
+  showBackButton?: boolean;
   routeBack?: () => void;
 }) {
   const { currentStep, totalSteps } = useContext(StepperContext);
@@ -145,7 +147,7 @@ export function MultiStepperIndicator({
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <MultiStepperBackButton routeBack={routeBack} />
+        {showBackButton && <MultiStepperBackButton routeBack={routeBack} />}
 
         {showCount && (
           <span className="text-sm text-muted-foreground">
