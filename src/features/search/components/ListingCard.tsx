@@ -2,9 +2,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { BedDoubleIcon, BathIcon, CalendarIcon } from "lucide-react";
+import { Link } from "react-router";
 
 type ListingProps = {
   data: {
+    id: string;
     type: string;
     title: string;
     address: string;
@@ -54,8 +56,8 @@ export function RentalListingCard({ data }: ListingProps) {
               <span className="text-lg font-bold">{data.price}</span>
               <span className="text-lg ">/MO</span>
             </div>
-            <Button className="rounded-full" size="sm">
-              View Listing
+            <Button className="rounded-full" size="sm" asChild>
+              <Link to={"/listing/" + data.id}>View Listing</Link>
             </Button>
           </div>
         </div>
