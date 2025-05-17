@@ -2,7 +2,7 @@ import { Route, Routes, type RouteObject } from "react-router";
 import { routes } from "./routes/Routes";
 import { authRoutes } from "./routes/auth.routes";
 import { DashboardLayout } from "./components/Layouts/DashboardLayout";
-import AuthLayout from "./features/auth/AuthLayout";
+import { AuthLayout } from "./features/auth/AuthLayout";
 
 function App() {
   return (

@@ -1,8 +1,6 @@
-"use client";
-
 import { Outlet } from "react-router";
 
-export default function AuthLayout() {
+export function AuthLayout() {
   return (
     <div className="flex h-screen w-full">
       {/* Left Form Panel */}
