@@ -6,6 +6,8 @@ import googleIcon from "@/assets/icons/google.png";
 export function LoginPage() {
   return (
     <div className="">
+      <img src="/logo-dark.png" alt="Veorent Logo" className="h-8 mb-6" />
+
       <h2 className="text-2xl font-semibold mb-6">Login to Veorent</h2>
 
       <div className="space-y-3">

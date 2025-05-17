@@ -6,9 +6,8 @@ export default function AuthLayout() {
   return (
     <div className="flex h-screen w-full">
       {/* Left Form Panel */}
-      <div className="flex-1 p-10 flex justify-center items-center">
-        <div className="max-w-lg">
-          <img src="/logo-dark.png" alt="Veorent Logo" className="mb-6 h-10" />
+      <div className="flex-1 flex justify-center items-center">
+        <div>
           <Outlet />
         </div>
       </div>
