@@ -1,3 +1,4 @@
+import ApplicationProcess from "@/features/application/ApplicationProcess";
 import ApplyListing from "@/features/search/ApplyListing";
 import PropertyListingDetail from "@/features/search/Listing";
 import SearchProperty from "@/features/search/SearchProperty";
@@ -15,5 +16,9 @@ export const mainRoutes: RouteObject[] = [
   {
     path: "/listing/:id/apply",
     element: <ApplyListing />,
+  },
+  {
+    path: "/applying",
+    element: <ApplicationProcess />,
   },
 ];
