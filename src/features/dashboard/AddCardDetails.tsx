@@ -1,9 +1,10 @@
 import { PageTitle } from "@/components/PageTitle";
+import { CardDetailsForm } from "./components/CardDetailsForm";
+
 import amexImg from "@/assets/images/amex.png";
 import discoverImg from "@/assets/images/discover.png";
 import visaImg from "@/assets/images/visa.png";
 import masterImg from "@/assets/images/master.png";
-import { CardDetailsForm } from "./components/CardDetailsForm";
 
 export default function AddCardDetails() {
   return (

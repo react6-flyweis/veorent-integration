@@ -14,7 +14,7 @@ const paymentOptions = [
   },
   {
     id: "mtn",
-    label: "MTN momo",
+    label: "MTN money",
     icon: mtnImg,
   },
   {
