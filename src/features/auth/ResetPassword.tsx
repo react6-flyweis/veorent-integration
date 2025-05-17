@@ -10,8 +10,8 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { PasswordInput } from "@/components/ui/password-input";
 
 const passwordSchema = z
   .object({
@@ -25,7 +25,7 @@ const passwordSchema = z
 
 type PasswordFormValues = z.infer<typeof passwordSchema>;
 
-export function PasswordChangeForm() {
+export function ResetPasswordPage() {
   const form = useForm<PasswordFormValues>({
     resolver: zodResolver(passwordSchema),
     defaultValues: {
@@ -41,7 +41,8 @@ export function PasswordChangeForm() {
 
   return (
     <div className="">
-      <h2 className="text-2xl font-semibold mb-6">Forgot Password</h2>
+      <img src="/logo-dark.png" alt="Veorent Logo" className="h-8 mb-6" />
+      <h2 className="text-2xl font-semibold mb-6">Reset Password</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {/* Password */}
@@ -52,7 +53,7 @@ export function PasswordChangeForm() {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input type="password" {...field} />
+                  <PasswordInput {...field} />
                 </FormControl>
                 <FormDescription>
                   Lorem Ipsum is simply dummy text of the printing and
@@ -73,7 +74,7 @@ export function PasswordChangeForm() {
                 <FormLabel>Re-Enter Password</FormLabel>
 
                 <FormControl>
-                  <Input type="password" {...field} />
+                  <PasswordInput {...field} />
                 </FormControl>
 
                 <FormDescription>
@@ -85,9 +86,7 @@ export function PasswordChangeForm() {
             )}
           />
 
-          <Button type="submit" className="w-full bg-[#001F4D] text-white">
-            Save
-          </Button>
+          <Button type="submit">Save</Button>
         </form>
       </Form>
     </div>

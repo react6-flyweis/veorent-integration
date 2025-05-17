@@ -2,8 +2,8 @@ import { LoginPage } from "@/features/auth/LoginPage";
 import { type RouteObject } from "react-router-dom";
 
 import { ForgotPasswordPage } from "@/features/auth/ForgotPassword";
-import { PasswordChangeForm } from "@/features/auth/PasswordChangeForm";
 import { SingUpPage } from "@/features/auth/SignUp";
+import { ResetPasswordPage } from "@/features/auth/ResetPassword";
 
 export const authRoutes: RouteObject[] = [
   {
@@ -20,6 +20,6 @@ export const authRoutes: RouteObject[] = [
   },
   {
     path: "/reset-password",
-    element: <PasswordChangeForm />,
+    element: <ResetPasswordPage />,
   },
 ];
