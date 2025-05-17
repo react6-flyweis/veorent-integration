@@ -86,7 +86,9 @@ export function ResetPasswordPage() {
             )}
           />
 
-          <Button type="submit">Save</Button>
+          <Button type="submit" className="w-full">
+            Save
+          </Button>
         </form>
       </Form>
     </div>
