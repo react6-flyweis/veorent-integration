@@ -1,14 +1,14 @@
 import { Route, Routes, type RouteObject } from "react-router";
-import { routes } from "./routes/Routes";
-import { authRoutes } from "./routes/auth.routes";
-import { DashboardLayout } from "./components/Layouts/DashboardLayout";
-import { AuthLayout } from "./features/auth/AuthLayout";
+import { DashboardLayout } from "@/components/Layouts/DashboardLayout";
+import { AuthLayout } from "@/features/auth/AuthLayout";
+import { dashRoutes } from "@/routes/dash.routes";
+import { authRoutes } from "@/routes/auth.routes";
 
 function App() {
   return (
     <Routes>
       <Route element={<DashboardLayout />}>
-        {routes.map((route: RouteObject) => (
+        {dashRoutes.map((route: RouteObject) => (
           <Route key={route.path} path={route.path} element={route.element} />
         ))}
       </Route>

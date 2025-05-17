@@ -20,7 +20,7 @@ import Settings from "@/features/settings/Settings";
 import SignDocuments from "@/features/sign-documents/SignDocuments";
 import { type RouteObject } from "react-router-dom";
 
-export const routes: RouteObject[] = [
+export const dashRoutes: RouteObject[] = [
   {
     path: "/",
     element: <Dashboard />,
