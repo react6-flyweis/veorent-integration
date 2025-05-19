@@ -1,58 +1,67 @@
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import {
   MultiStepper,
   MultiStepperBackButton,
   MultiStepperHeader,
   MultiStepperIndicator,
   MultiStepperStep,
+  type MultiStepperRef,
 } from "@/components/MultiStepper";
 import { Button } from "@/components/ui/button";
 import { ApplicationInfo } from "./components/FormSteps/ApplicationInfo";
 import { ResidentialHistory } from "./components/FormSteps/ResidentialHistory";
-import { Employment } from "./components/FormSteps/Employment";
+import { EmploymentDetails } from "./components/FormSteps/Employment";
 import { OtherIncome } from "./components/FormSteps/OtherIncome";
 import { GeneralInfo } from "./components/FormSteps/GeneralInfo";
 import { BackgroundInfo } from "./components/FormSteps/Background";
 import EmergencyContactForm from "./components/FormSteps/OtherInfo";
 import UploadDocumentsForm from "./components/FormSteps/UploadDocuments";
 import { PaymentFee } from "./components/FormSteps/PaymentFee";
+import { useRef } from "react";
 
 export default function ApplicationProcess() {
   const navigate = useNavigate();
+  const stepperRef = useRef<MultiStepperRef>(null);
+
+  const handleExternalNext = () => {
+    stepperRef.current?.goNext();
+  };
   return (
-    <MultiStepper>
+    <MultiStepper ref={stepperRef}>
       <MultiStepperHeader>
         <div className="flex justify-between items-center">
           <MultiStepperBackButton routeBack={() => navigate(-1)} />
-          <Button variant="ghost">
-            <span>Save & Finish Later</span>
+          <Button variant="ghost" asChild>
+            <Link to="/">
+              <span>Save & Finish Later</span>
+            </Link>
           </Button>
         </div>
         <MultiStepperIndicator showBackButton={false} />
       </MultiStepperHeader>
       <MultiStepperStep>
-        <ApplicationInfo />
+        <ApplicationInfo onSuccess={handleExternalNext} />
       </MultiStepperStep>
       <MultiStepperStep>
-        <ResidentialHistory />
+        <ResidentialHistory onSuccess={handleExternalNext} />
       </MultiStepperStep>
       <MultiStepperStep>
-        <Employment />
+        <EmploymentDetails onSuccess={handleExternalNext} />
       </MultiStepperStep>
       <MultiStepperStep>
-        <OtherIncome />
+        <OtherIncome onSuccess={handleExternalNext} />
       </MultiStepperStep>
       <MultiStepperStep>
-        <GeneralInfo />
+        <GeneralInfo onSuccess={handleExternalNext} />
       </MultiStepperStep>
       <MultiStepperStep>
-        <BackgroundInfo />
+        <BackgroundInfo onSuccess={handleExternalNext} />
       </MultiStepperStep>
       <MultiStepperStep>
-        <EmergencyContactForm />
+        <EmergencyContactForm onSuccess={handleExternalNext} />
       </MultiStepperStep>
       <MultiStepperStep>
-        <UploadDocumentsForm />
+        <UploadDocumentsForm onSuccess={handleExternalNext} />
       </MultiStepperStep>
       <MultiStepperStep>
         <PaymentFee />
