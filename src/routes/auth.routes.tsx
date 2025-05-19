@@ -4,8 +4,13 @@ import { type RouteObject } from "react-router-dom";
 import { ForgotPasswordPage } from "@/features/auth/ForgotPassword";
 import { SingUpPage } from "@/features/auth/SignUp";
 import { ResetPasswordPage } from "@/features/auth/ResetPassword";
+import Personalize from "@/features/auth/Personalize";
 
 export const authRoutes: RouteObject[] = [
+  {
+    path: "/choose",
+    element: <Personalize />,
+  },
   {
     path: "/login",
     element: <LoginPage />,
