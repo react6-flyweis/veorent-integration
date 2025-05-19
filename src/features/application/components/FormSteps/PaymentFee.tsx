@@ -22,6 +22,7 @@ import amexImg from "@/assets/images/amex.png";
 import discoverImg from "@/assets/images/discover.png";
 import visaImg from "@/assets/images/visa.png";
 import masterImg from "@/assets/images/master.png";
+import { useNavigate } from "react-router";
 
 const PaymentSchema = z.object({
   cardHolderName: z.string().min(1, "Cardholder name is required"),
@@ -34,12 +35,17 @@ const PaymentSchema = z.object({
 type PaymentFormType = z.infer<typeof PaymentSchema>;
 
 export function PaymentFee() {
+  const navigate = useNavigate();
   const form = useForm<PaymentFormType>({
     resolver: zodResolver(PaymentSchema),
   });
 
   const onSubmit = (data: PaymentFormType) => {
     console.log("Payment Data:", data);
+  };
+
+  const successPayment = () => {
+    navigate("/payment/success");
   };
 
   return (
@@ -62,7 +68,7 @@ export function PaymentFee() {
           </div>
 
           <div className="space-y-2">
-            <Button className="w-full">
+            <Button type="button" onClick={successPayment} className="w-full">
               <img
                 src={orangePayIcon}
                 alt="orange pay"
@@ -70,7 +76,7 @@ export function PaymentFee() {
               />
               Orange money pay
             </Button>
-            <Button className="w-full">
+            <Button type="button" onClick={successPayment} className="w-full">
               <img
                 src={mtnIcon}
                 alt="mtn money"
