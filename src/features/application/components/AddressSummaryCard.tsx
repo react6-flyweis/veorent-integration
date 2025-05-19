@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import type { IAddress } from "../AddressEditor";
+import type { IAddress } from "./AddressEditor";
 import { PencilIcon, Trash2Icon } from "lucide-react";
 
 export function AddressSummaryCard({
