@@ -36,7 +36,11 @@ const EmergencySchema = z.object({
 
 type EmergencyFormType = z.infer<typeof EmergencySchema>;
 
-export default function EmergencyContactForm() {
+export default function EmergencyContactForm({
+  onSuccess,
+}: {
+  onSuccess: () => void;
+}) {
   const form = useForm<EmergencyFormType>({
     resolver: zodResolver(EmergencySchema),
     defaultValues: {
@@ -50,6 +54,7 @@ export default function EmergencyContactForm() {
 
   function onSubmit(data: EmergencyFormType) {
     console.log("Form submitted:", data);
+    onSuccess();
   }
 
   return (

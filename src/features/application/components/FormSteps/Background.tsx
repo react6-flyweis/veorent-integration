@@ -24,7 +24,7 @@ const bgInfoFormSchema = z.object({
 
 type BgFormValues = z.infer<typeof bgInfoFormSchema>;
 
-export function BackgroundInfo() {
+export function BackgroundInfo({ onSuccess }: { onSuccess: () => void }) {
   const form = useForm<BgFormValues>({
     resolver: zodResolver(bgInfoFormSchema),
     defaultValues: {
@@ -36,7 +36,7 @@ export function BackgroundInfo() {
 
   function onSubmit(values: BgFormValues) {
     console.log("Form submitted", values);
-    // You can integrate email/send logic here or pass data to an API
+    onSuccess();
   }
 
   return (

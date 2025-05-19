@@ -25,7 +25,7 @@ const generalInfoFormSchema = z.object({
 
 type GeneralFormValues = z.infer<typeof generalInfoFormSchema>;
 
-export function GeneralInfo() {
+export function GeneralInfo({ onSuccess }: { onSuccess: () => void }) {
   const form = useForm<GeneralFormValues>({
     resolver: zodResolver(generalInfoFormSchema),
     defaultValues: {
@@ -38,7 +38,7 @@ export function GeneralInfo() {
 
   function onSubmit(values: GeneralFormValues) {
     console.log("Form submitted", values);
-    // You can integrate email/send logic here or pass data to an API
+    onSuccess();
   }
 
   return (

@@ -30,7 +30,7 @@ const contactFormSchema = z.object({
 
 type ContactFormValues = z.infer<typeof contactFormSchema>;
 
-export function ApplicationInfo() {
+export function ApplicationInfo({ onSuccess }: { onSuccess: () => void }) {
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
@@ -44,6 +44,7 @@ export function ApplicationInfo() {
   function onSubmit(values: ContactFormValues) {
     console.log("Form submitted", values);
     // You can integrate email/send logic here or pass data to an API
+    onSuccess();
   }
 
   return (
@@ -142,7 +143,7 @@ export function ApplicationInfo() {
                   printer took a galley of type and
                 </FormDescription>
                 <FormControl>
-                  <CounterInput className="w-52" maxValue={10} {...field} />
+                  <CounterInput className="w-52" max={10} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

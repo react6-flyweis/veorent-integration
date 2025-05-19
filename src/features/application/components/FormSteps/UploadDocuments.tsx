@@ -33,7 +33,11 @@ const UploadSchema = z.object({
 
 type UploadFormType = z.infer<typeof UploadSchema>;
 
-export default function UploadDocumentsForm() {
+export default function UploadDocumentsForm({
+  onSuccess,
+}: {
+  onSuccess: () => void;
+}) {
   const form = useForm<UploadFormType>({
     resolver: zodResolver(UploadSchema),
     defaultValues: {
@@ -43,6 +47,7 @@ export default function UploadDocumentsForm() {
 
   const onSubmit = (data: UploadFormType) => {
     console.log("Uploaded Data:", data);
+    onSuccess();
   };
 
   return (

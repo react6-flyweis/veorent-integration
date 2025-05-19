@@ -20,12 +20,12 @@ import { Input } from "@/components/ui/input";
 
 const incomeFormSchema = z.object({
   otherSources: z.boolean(),
-  bank: z.string().min(1, "No of people is required."),
+  bank: z.string().min(1, "Bank name is required."),
 });
 
 type OtherIncomeFormValues = z.infer<typeof incomeFormSchema>;
 
-export function OtherIncome() {
+export function OtherIncome({ onSuccess }: { onSuccess: () => void }) {
   const form = useForm<OtherIncomeFormValues>({
     resolver: zodResolver(incomeFormSchema),
     defaultValues: {
@@ -36,7 +36,7 @@ export function OtherIncome() {
 
   function onSubmit(values: OtherIncomeFormValues) {
     console.log("Form submitted", values);
-    // You can integrate email/send logic here or pass data to an API
+    onSuccess();
   }
 
   return (
