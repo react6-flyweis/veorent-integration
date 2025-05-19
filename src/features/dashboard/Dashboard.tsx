@@ -83,6 +83,7 @@ export default function Dashboard() {
             Lorem Ipsum is simply dummy text"
           icon={applicationsIcon}
           actionText="Finish My Application"
+          url="/applying"
         />
       </div>
 
