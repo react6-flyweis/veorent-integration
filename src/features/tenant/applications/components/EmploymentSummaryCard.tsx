@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { PencilIcon, Trash2Icon } from "lucide-react";
-import type { IEmployer } from "../EmployerEditor";
+import type { IEmployer } from "./EmployerEditor";
 
 export function EmployerSummaryCard({
   data,
