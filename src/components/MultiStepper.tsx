@@ -8,6 +8,9 @@ import {
   type ReactNode,
   type ReactElement,
   type PropsWithChildren,
+  forwardRef,
+  useImperativeHandle,
+  useCallback,
 } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -26,17 +29,22 @@ const StepperContext = createContext<{
   prevStep: () => {},
 });
 
-// Stepper Provider Component
-export function MultiStepper({
-  children,
-}: {
-  children: ReactElement | ReactElement[];
-  routeBack?: boolean;
-  showCount?: boolean;
-}) {
+export type MultiStepperRef = {
+  goNext: () => void;
+  goPrev: () => void;
+  currentStep: number;
+};
+
+export const MultiStepper = forwardRef<
+  MultiStepperRef,
+  {
+    children: ReactElement | ReactElement[];
+    routeBack?: boolean;
+    showCount?: boolean;
+  }
+>(({ children }, ref) => {
   const [step, setStep] = useState(1);
 
-  // Separate children by type
   const steps = Children.toArray(children).filter(
     (child) => isValidElement(child) && child.type === MultiStepperStep
   ) as ReactElement[];
@@ -55,27 +63,34 @@ export function MultiStepper({
 
   const totalSteps = steps.length;
 
-  const nextStep = () => {
+  const nextStep = useCallback(() => {
     if (step < totalSteps) setStep((s) => s + 1);
-  };
+  }, [step, totalSteps]);
 
-  const prevStep = () => {
+  const prevStep = useCallback(() => {
     if (step > 1) setStep((s) => s - 1);
-  };
+  }, [step]);
+
+  // 👇 Expose methods via ref
+  useImperativeHandle(
+    ref,
+    () => ({
+      goNext: nextStep,
+      goPrev: prevStep,
+      currentStep: step,
+    }),
+    [nextStep, prevStep, step]
+  );
 
   return (
     <StepperContext.Provider
       value={{ currentStep: step, nextStep, prevStep, totalSteps }}
     >
       <div className="space-y-6">
-        {/* Step Indicator */}
-
         {indicator && <> {indicator}</>}
-
-        {/* Header */}
         {header && <>{header}</>}
 
-        <div className="">
+        <div>
           {steps.map((child, index) =>
             index + 1 === step ? (
               <div key={index}>{cloneElement(child)}</div>
@@ -83,12 +98,13 @@ export function MultiStepper({
           )}
         </div>
 
-        {/* Navigation Button */}
         {button && <div>{button}</div>}
       </div>
     </StepperContext.Provider>
   );
-}
+});
+
+MultiStepper.displayName = "MultiStepper";
 
 // Step Component
 export function MultiStepperStep({ children }: { children: ReactNode }) {
