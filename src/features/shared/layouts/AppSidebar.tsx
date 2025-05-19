@@ -16,91 +16,38 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { ChevronRight, CircleIcon } from "lucide-react";
-import { NavLink, type To } from "react-router";
+import { NavLink, type To } from "react-router-dom";
 
-type SidebarSubItem = {
+export type SidebarSubItem = {
   title: string;
   url: To;
 };
 
-type SidebarItemWithSubItems = {
+export type SidebarItemWithSubItems = {
   title: string;
   icon: string;
   items: SidebarSubItem[];
   url?: never;
 };
 
-type SidebarItemWithoutSubItems = {
+export type SidebarItemWithoutSubItems = {
   title: string;
   icon: string;
   url: To;
 };
 
-type SidebarItem = SidebarItemWithSubItems | SidebarItemWithoutSubItems;
+export type SidebarItem = SidebarItemWithSubItems | SidebarItemWithoutSubItems;
 
-// This is sample data.
-const navMain: SidebarItem[] = [
-  {
-    icon: "dashboard.png",
-    title: "Dashboard",
-    url: "/",
-  },
-  {
-    title: "Messages",
-    icon: "message.png",
-    url: "/messages",
-  },
-  {
-    title: "Maintenance",
-    icon: "maintenance.png",
-    url: "/maintenance",
-  },
-  {
-    title: "Leases",
-    icon: "lease.png",
-    url: "/leases",
-  },
-  {
-    title: "Documents",
-    icon: "documents.png",
-    url: "/documents",
-  },
-  {
-    title: "Sign Documents",
-    icon: "sign-documents.png",
-    url: "/sign-documents",
-  },
-  {
-    title: "Payments",
-    icon: "finance.png",
-    url: "/payments",
-  },
-  {
-    title: "Notification",
-    icon: "notification.png",
-    url: "/notification",
-  },
-  {
-    title: "Help",
-    icon: "help.png",
-    url: "/help",
-  },
-  {
-    title: "Settings",
-    icon: "setting.png",
-    url: "/settings",
-  },
-];
+export interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
+  navigationItems: SidebarItem[];
+  onLogout?: () => void;
+}
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  //   const logoutHandler = async () => {
-  //     toast.loading("Logging out...");
-  //     wait(200).then(() => {
-  //       logout();
-  //       toast.dismiss();
-  //     });
-  //   };
-
+export function AppSidebar({
+  navigationItems,
+  onLogout,
+  ...props
+}: AppSidebarProps) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -110,7 +57,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent className="gap-0">
         <SidebarMenu className="gap-0">
-          {navMain.map((item) => {
+          {navigationItems.map((item) => {
             const hasSubItems = "items" in item && item.items?.length > 0;
 
             return hasSubItems ? (
@@ -177,7 +124,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             );
           })}
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" className="pl-6 gap-3">
+            <SidebarMenuButton
+              size="lg"
+              className="pl-6 gap-3"
+              onClick={onLogout}
+            >
               <img src={"/icons/logout.png"} alt="logout" className="size-4" />
               <span className="text-base text-white"> logout</span>
             </SidebarMenuButton>

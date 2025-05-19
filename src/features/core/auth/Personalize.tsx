@@ -2,8 +2,26 @@ import tenantIcon from "@/assets/icons/tenant.png";
 import landlordIcon from "@/assets/icons/landlord.png";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useUserPreferenceStore } from "@/store/useUserPreferenceStore";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Personalize() {
+  const { setUserType } = useUserPreferenceStore();
+  const [selectedType, setSelectedType] = useState<"tenant" | "landlord">(
+    "tenant"
+  );
+  const navigate = useNavigate();
+
+  const handleContinue = () => {
+    setUserType(selectedType);
+    navigate(`/${selectedType}`);
+  };
+
+  const handleTypeChange = (value: string) => {
+    setSelectedType(value as "tenant" | "landlord");
+  };
+
   return (
     <div className="h-full pt-10">
       <div className="flex justify-between items-center mb-8 gap-5">
@@ -19,7 +37,11 @@ export default function Personalize() {
         Lets personalize your experience.
       </h2>
 
-      <RadioGroup defaultValue="tenant">
+      <RadioGroup
+        defaultValue="tenant"
+        onValueChange={handleTypeChange}
+        value={selectedType}
+      >
         <div className="flex gap-5 px-5 justify-between">
           <label htmlFor="tenant" className="cursor-pointer flex-1">
             <div className="rounded-2xl border border-primary flex flex-col justify-center items-center px-3 py-2 cursor-pointer">
@@ -44,7 +66,7 @@ export default function Personalize() {
       </RadioGroup>
 
       <div className="flex justify-center py-10">
-        <Button className="w-3/5" size="lg">
+        <Button className="w-3/5" size="lg" onClick={handleContinue}>
           Continue
         </Button>
       </div>

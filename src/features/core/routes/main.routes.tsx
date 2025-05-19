@@ -1,7 +1,7 @@
-import ApplicationProcess from "@/features/application/ApplicationProcess";
-import ApplyListing from "@/features/search/ApplyListing";
-import PropertyListingDetail from "@/features/search/Listing";
-import SearchProperty from "@/features/search/SearchProperty";
+import ApplicationProcess from "@/features/tenant/applications/ApplicationProcess";
+import ApplyListing from "@/features/tenant/search/ApplyListing";
+import PropertyListingDetail from "@/features/tenant/search/Listing";
+import SearchProperty from "@/features/tenant/search/SearchProperty";
 import { type RouteObject } from "react-router-dom";
 
 export const mainRoutes: RouteObject[] = [
