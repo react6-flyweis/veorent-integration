@@ -16,6 +16,7 @@ import RequestMaintenance from "@/features/maintenance/RequestMaintenance";
 import Messages from "@/features/messages/Messages";
 import Notifications from "@/features/notifications/Notifications";
 import Payments from "@/features/payments/Payments";
+import PaymentSuccessful from "@/features/payments/PaymentSuccessful";
 import Settings from "@/features/settings/Settings";
 import SignDocuments from "@/features/sign-documents/SignDocuments";
 import { type RouteObject } from "react-router-dom";
@@ -80,6 +81,10 @@ export const dashRoutes: RouteObject[] = [
   {
     path: "/payments",
     element: <Payments />,
+  },
+  {
+    path: "/payment/success",
+    element: <PaymentSuccessful />,
   },
   {
     path: "/notification",

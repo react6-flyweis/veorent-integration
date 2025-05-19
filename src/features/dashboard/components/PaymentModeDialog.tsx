@@ -5,6 +5,7 @@ import { useState } from "react";
 import mtnImg from "@/assets/images/mtn.png";
 import orangeMoneyImg from "@/assets/images/orange-money.png";
 import cardImg from "@/assets/images/card.png";
+import { Link } from "react-router";
 
 const paymentOptions = [
   {
@@ -61,12 +62,17 @@ export function PaymentModeDialog({ amount }: { amount: string }) {
       </div>
 
       <div className="pt-6">
-        <Button className="w-full bg-[#001F4D] text-white text-base font-bold py-6">
-          CONFIRM &rsaquo;
-          <span className="block text-sm font-normal text-white ml-2">
-            Pay ${amount} using{" "}
-            {paymentOptions.find((p) => p.id === selected)?.label}
-          </span>
+        <Button
+          className="w-full bg-[#001F4D] text-white text-base font-bold py-6"
+          asChild
+        >
+          <Link to="/payment/success">
+            CONFIRM &rsaquo;
+            <span className="block text-sm font-normal text-white ml-2">
+              Pay ${amount} using{" "}
+              {paymentOptions.find((p) => p.id === selected)?.label}
+            </span>
+          </Link>
         </Button>
       </div>
     </div>
