@@ -32,11 +32,12 @@ const iconImageVariants = cva("", {
 
 interface IconRoundProps extends VariantProps<typeof iconRoundVariants> {
   icon: string;
+  className?: string;
 }
 
-export function IconRound({ icon, size }: IconRoundProps) {
+export function IconRound({ icon, size, className }: IconRoundProps) {
   return (
-    <div className={cn(iconRoundVariants({ size }))}>
+    <div className={cn(iconRoundVariants({ size }), className)}>
       <img src={icon} alt="App" className={cn(iconImageVariants({ size }))} />
     </div>
   );
