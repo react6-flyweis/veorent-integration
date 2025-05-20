@@ -46,6 +46,7 @@ const sections: Section[] = [
     description:
       "Specify pets, smoking policy, and if renters insurance is required.",
     icon: petIcon,
+    path: "/landlord/lease-agreement/pet-smoking",
   },
   {
     id: "utilities",
