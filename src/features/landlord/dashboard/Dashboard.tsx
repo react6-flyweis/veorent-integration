@@ -61,6 +61,7 @@ export default function Dashboard() {
             {
               icon: <FileText className="w-4 h-4 mr-2" />,
               label: "Get a Lease Agreement",
+              path: "/lease-agreement",
             },
             {
               icon: <PenTool className="w-4 h-4 mr-2" />,
