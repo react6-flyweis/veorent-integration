@@ -66,6 +66,7 @@ export default function Dashboard() {
             {
               icon: <PenTool className="w-4 h-4 mr-2" />,
               label: "Build a Lease Addendum",
+              path: "/lease-addendum",
             },
             {
               icon: <ClipboardSignature className="w-4 h-4 mr-2" />,
