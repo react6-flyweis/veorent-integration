@@ -47,8 +47,8 @@ export default function SelectLease() {
         </Select>
       </div>
       <div className="flex justify-center">
-        <Button className="w-3/5" size="lg" disabled={!selectedAddress}>
-          Continue
+        <Button className="w-3/5" size="lg" disabled={!selectedAddress} asChild>
+          <Link to="/landlord/lease-agreement/create">Continue</Link>
         </Button>
       </div>
     </div>
