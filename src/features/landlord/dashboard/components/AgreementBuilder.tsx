@@ -1,4 +1,3 @@
-import { useCallback } from "react";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { IconRound } from "@/components/IconRound";
 import { Button } from "@/components/ui/button";
@@ -9,12 +8,14 @@ import utilitiesIcon from "../assets/utilities.png";
 import provisionsIcon from "../assets/provisions.png";
 import depositIcon from "../assets/deposit.png";
 import groupIcon from "../assets/group.png";
+import { Link } from "react-router";
 
 interface Section {
   id: string;
   title: string;
   description: string;
   icon: string;
+  path?: string;
 }
 
 const sections: Section[] = [
@@ -23,6 +24,7 @@ const sections: Section[] = [
     title: "Lease Specifics",
     description: "Verify the address and lease terms.",
     icon: penApplicationIcon,
+    path: "/landlord/lease-agreement/specific",
   },
   {
     id: "rent-deposit-fees",
@@ -59,11 +61,6 @@ const sections: Section[] = [
 ];
 
 export function AgreementBuilder() {
-  const handleSectionStart = useCallback((sectionId: string) => {
-    // TODO: Implement section navigation
-    console.log(`Starting section: ${sectionId}`);
-  }, []);
-
   return (
     <div className="space-y-6">
       <Card className="bg-blue-200 border-0 p-4 gap-2">
@@ -76,8 +73,8 @@ export function AgreementBuilder() {
               .fill(
                 "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
               )
-              .map((t) => (
-                <li className="flex items-center gap-2">
+              .map((t, i) => (
+                <li key={i} className="flex items-center gap-2">
                   <div className="size-3 bg-orange-400"></div>
                   <span>{t}</span>
                 </li>
@@ -99,12 +96,14 @@ export function AgreementBuilder() {
                 <p className="text-sm text-gray-500">{section.description}</p>
               </div>
             </div>
+
             <Button
               className="w-28 rounded-lg"
               variant="outlinePrimary"
-              onClick={() => handleSectionStart(section.id)}
+              asChild
+              disabled={!section.path}
             >
-              START
+              <Link to={section.path ?? "#"}>START</Link>
             </Button>
           </div>
         ))}
