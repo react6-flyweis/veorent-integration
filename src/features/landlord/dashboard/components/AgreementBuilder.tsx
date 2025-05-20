@@ -53,6 +53,7 @@ const sections: Section[] = [
     title: "Utilities, Services, & Keys",
     description: "Choose what is included with the lease.",
     icon: utilitiesIcon,
+    path: "/landlord/lease-agreement/utilities-services",
   },
   {
     id: "provisions",

@@ -10,6 +10,7 @@ import LeaseSpecific from "../dashboard/LeaseSpecific";
 import RentDepositFee from "../dashboard/RentDepositFee";
 import PeopleOnLease from "../dashboard/PeopleOnLease";
 import PetSmoking from "../dashboard/PetSmoking";
+import UtilitiesServices from "../dashboard/UtilitiesServices";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -47,6 +48,10 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "/lease-agreement/pet-smoking",
     element: <PetSmoking />,
+  },
+  {
+    path: "/lease-agreement/utilities-services",
+    element: <UtilitiesServices />,
   },
   {
     path: "messages",
