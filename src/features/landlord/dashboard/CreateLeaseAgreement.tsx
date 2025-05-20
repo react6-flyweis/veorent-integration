@@ -9,6 +9,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
 import lockIcon from "./assets/lock.png";
+import { AgreementBuilder } from "./components/AgreementBuilder";
 
 export default function CreateLeaseAgreement() {
   return (
@@ -34,10 +35,7 @@ export default function CreateLeaseAgreement() {
           </TabsList>
         </div>
         <TabsContent value="builder">
-          <div className="p-5">
-            <p>Builder content will go here</p>
-            {/* Add builder form components here */}
-          </div>
+          <AgreementBuilder />
         </TabsContent>
         <TabsContent className="h-full" value="advanced">
           <div className="w-full h-full flex flex-col justify-center items-center">
