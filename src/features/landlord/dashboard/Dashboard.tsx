@@ -14,6 +14,7 @@ import {
 import houseIcon from "./assets/house.png";
 import appIcon from "./assets/application.png";
 import recruitIcon from "./assets/recruitment.png";
+import { Link } from "react-router";
 
 export default function Dashboard() {
   return (
@@ -54,6 +55,7 @@ export default function Dashboard() {
             {
               icon: <UserPlus className="w-4 h-4 mr-2" />,
               label: "Invite to Apply",
+              path: "/invite",
             },
             {
               icon: <FileText className="w-4 h-4 mr-2" />,
@@ -75,18 +77,31 @@ export default function Dashboard() {
               icon: <ReceiptText className="w-4 h-4 mr-2" />,
               label: "Record an Expense",
             },
-          ].map((tool, index) => (
-            <Button
-              key={index}
-              className="rounded-lg justify-between bg-blue-100 text-foreground hover:text-accent py-3"
-            >
-              <div className="flex ">
-                {tool.icon}
-                {tool.label}
-              </div>
-              <ChevronLeftIcon className="rotate-180" />
-            </Button>
-          ))}
+          ].map((tool, index) => {
+            const button = (
+              <Button
+                key={index}
+                className="rounded-lg justify-between bg-blue-100 text-foreground hover:text-accent py-3 w-full"
+              >
+                <div className="flex ">
+                  {tool.icon}
+                  {tool.label}
+                </div>
+                <ChevronLeftIcon className="rotate-180" />
+              </Button>
+            );
+            return tool.path ? (
+              <Link
+                to={"/landlord" + tool.path}
+                key={index}
+                style={{ textDecoration: "none" }}
+              >
+                {button}
+              </Link>
+            ) : (
+              button
+            );
+          })}
         </div>
       </div>
 
