@@ -31,6 +31,7 @@ const sections: Section[] = [
     title: "Rent, Deposit, & Fees",
     description: "Set the rent amount, security deposit, and fees.",
     icon: depositIcon,
+    path: "/landlord/lease-agreement/rent-deposit-fee",
   },
   {
     id: "people",
