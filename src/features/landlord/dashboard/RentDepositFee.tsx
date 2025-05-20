@@ -1,4 +1,3 @@
-import { useState } from "react";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -47,8 +46,6 @@ const rentDepositFeeSchema = z.object({
 type RentDepositFeeValues = z.infer<typeof rentDepositFeeSchema>;
 
 export default function RentDepositFee() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const form = useForm<RentDepositFeeValues>({
     resolver: zodResolver(rentDepositFeeSchema),
     defaultValues: {
@@ -63,15 +60,16 @@ export default function RentDepositFee() {
     },
   });
 
+  const {
+    formState: { isSubmitting },
+  } = form;
+
   const onSubmit = async (values: RentDepositFeeValues) => {
-    setIsSubmitting(true);
     try {
       console.log(values);
       // TODO: Save rent, deposit, and fee information and move to next step
     } catch (error) {
       console.error("Error saving information:", error);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
