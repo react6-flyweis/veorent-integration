@@ -1,15 +1,13 @@
 import { ArrowLeftIcon } from "lucide-react";
-import { useNavigate } from "react-router";
 import { Button } from "./ui/button";
+import { useGoBack } from "@/hooks/useGoBack";
 
 export function BackButton() {
-  const navigate = useNavigate();
-  const backHandler = () => {
-    navigate(-1);
-  };
+  const goBack = useGoBack();
+
   return (
     <Button
-      onClick={backHandler}
+      onClick={goBack}
       variant="outline"
       className="rounded-full size-9 justify-center items-center"
     >
