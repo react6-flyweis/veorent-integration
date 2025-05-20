@@ -51,6 +51,7 @@ export default function Dashboard() {
             {
               icon: <ClipboardSignature className="w-4 h-4 mr-2" />,
               label: "Screen a Tenant",
+              path: "/screen",
             },
             {
               icon: <UserPlus className="w-4 h-4 mr-2" />,
