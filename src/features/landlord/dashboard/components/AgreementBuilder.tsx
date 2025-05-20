@@ -38,6 +38,7 @@ const sections: Section[] = [
     title: "People on the Lease",
     description: "Confirm the landlord and tenant info.",
     icon: groupIcon,
+    path: "/landlord/lease-agreement/people-on-lease",
   },
   {
     id: "pet-smoking",

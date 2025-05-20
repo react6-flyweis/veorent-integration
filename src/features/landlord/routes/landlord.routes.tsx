@@ -8,6 +8,7 @@ import SelectLease from "../dashboard/SelectLease";
 import CreateLeaseAgreement from "../dashboard/CreateLeaseAgreement";
 import LeaseSpecific from "../dashboard/LeaseSpecific";
 import RentDepositFee from "../dashboard/RentDepositFee";
+import PeopleOnLease from "../dashboard/PeopleOnLease";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -37,6 +38,10 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "/lease-agreement/rent-deposit-fee",
     element: <RentDepositFee />,
+  },
+  {
+    path: "/lease-agreement/people-on-lease",
+    element: <PeopleOnLease />,
   },
   {
     path: "messages",
