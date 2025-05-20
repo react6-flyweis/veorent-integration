@@ -1,6 +1,11 @@
 import { IconRound } from "@/components/IconRound";
 import { PageTitle } from "@/components/PageTitle";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/ghost-tabs";
 
 import balanceImg from "@/assets/images/balance.png";
 import { BadgeEuroIcon, InfoIcon } from "lucide-react";

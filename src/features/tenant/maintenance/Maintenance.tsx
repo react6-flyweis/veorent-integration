@@ -1,6 +1,11 @@
 import { PageTitle } from "@/components/PageTitle";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/ghost-tabs";
 import { PlusIcon } from "lucide-react";
 import RequestHistory from "./components/RequestHistory";
 import { Link } from "react-router";
