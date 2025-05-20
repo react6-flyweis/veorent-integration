@@ -6,6 +6,7 @@ import Invite from "../dashboard/Invite";
 import Screen from "../dashboard/Screen";
 import SelectLease from "../dashboard/SelectLease";
 import CreateLeaseAgreement from "../dashboard/CreateLeaseAgreement";
+import LeaseSpecific from "../dashboard/LeaseSpecific";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -27,6 +28,10 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "/lease-agreement/create",
     element: <CreateLeaseAgreement />,
+  },
+  {
+    path: "/lease-agreement/specific",
+    element: <LeaseSpecific />,
   },
   {
     path: "messages",
