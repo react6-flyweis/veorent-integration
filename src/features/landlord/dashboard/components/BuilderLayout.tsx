@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import { BackButton } from "@/components/BackButton";
 import { Button } from "@/components/ui/button";
+import { PageTitle } from "@/components/PageTitle";
 
 interface BuilderLayoutProps {
   title: string;
@@ -16,18 +16,15 @@ export function BuilderLayout({
   onSave,
 }: BuilderLayoutProps) {
   return (
-    <div className="flex flex-col w-full p-4">
-      <div className="flex justify-between items-center mb-3">
-        <div className="flex items-center gap-3">
-          <BackButton />
-          <h2 className="text-2xl font-semibold">{title}</h2>
-        </div>
+    <div className="flex w-full flex-col">
+      <div className="mb-3 flex items-center justify-between">
+        <PageTitle title={title} withBack />
 
         <Button variant="ghost" onClick={onSave}>
           Save &amp; Exit
         </Button>
       </div>
-      <p className="text-lg mb-5">{description}</p>
+      <p className="mb-5 text-lg">{description}</p>
 
       <div className="">{children}</div>
     </div>

@@ -1,4 +1,3 @@
-import { BackButton } from "@/components/BackButton";
 import {
   MultiStepper,
   MultiStepperBackButton,
@@ -19,6 +18,7 @@ import fingerSnapIcon from "./assets/finger-snap.png";
 import balanceIcon from "./assets/balance.png";
 import smoothPenIcon from "./assets/smooth-pen.png";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PageTitle } from "@/components/PageTitle";
 
 export default function SelectLeaseAddendum() {
   const [selectedAddress, setSelectedAddress] = useState<string | undefined>();
@@ -40,12 +40,7 @@ export default function SelectLeaseAddendum() {
     <MultiStepper ref={stepperRef}>
       <MultiStepperStep>
         <div className="flex flex-col">
-          <div className="mb-6 flex items-center gap-5">
-            <BackButton />
-            <h2 className="text-2xl font-semibold">
-              Select Which Lease Needs an Addendum
-            </h2>
-          </div>
+          <PageTitle title="Select Which Lease Needs an Addendum" withBack />
 
           <div>
             <div className="mb-4">
