@@ -13,6 +13,11 @@ export const landlordNavigation: SidebarItem[] = [
     url: "/landlord/messages",
   },
   {
+    title: "Maintenance",
+    icon: "maintenance.png",
+    url: "/landlord/maintenance",
+  },
+  {
     title: "Settings",
     icon: "setting.png",
     url: "/landlord/settings",

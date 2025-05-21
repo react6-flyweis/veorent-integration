@@ -16,6 +16,7 @@ import ProvisionAttachment from "../dashboard/ProvisionAttachment";
 import CreateLeaseAddendum from "../dashboard/CreateLeaseAddendum";
 import ESign from "../dashboard/ESign";
 import NeedsWork from "../dashboard/NeedsWork";
+import Maintenance from "../maintenance/Maintenance";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -81,6 +82,10 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "messages",
     element: <Messages />,
+  },
+  {
+    path: "maintenance",
+    element: <Maintenance />,
   },
   {
     path: "*",
