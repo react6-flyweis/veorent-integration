@@ -120,13 +120,18 @@ export default function Dashboard() {
           <CardContent className="p-3 text-center">
             <div className="mb-2 font-medium">Are you enjoying Voerent?</div>
             <div className="flex flex-col justify-center gap-2 @sm:flex-row">
-              <Button
-                variant="outlinePrimary"
-                className="rounded-lg bg-transparent"
+              <Link
+                to="/landlord/needs-work"
+                style={{ textDecoration: "none" }}
               >
-                Needs Work
-              </Button>
-              <Button className="rounded-lg">It’s Great!</Button>
+                <Button
+                  variant="outlinePrimary"
+                  className="w-full rounded-lg bg-transparent"
+                >
+                  Needs Work
+                </Button>
+              </Link>
+              <Button className="rounded-lg">It's Great!</Button>
             </div>
           </CardContent>
         </Card>
