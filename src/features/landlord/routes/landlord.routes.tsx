@@ -18,6 +18,7 @@ import ESign from "../dashboard/ESign";
 import NeedsWork from "../dashboard/NeedsWork";
 import Maintenance from "../maintenance/Maintenance";
 import CreateMaintenance from "../maintenance/CreateMaintenance";
+import MaintenanceDetails from "../maintenance/MaintenanceDetails";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -91,6 +92,10 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "maintenance/create",
     element: <CreateMaintenance />,
+  },
+  {
+    path: "maintenance/:id",
+    element: <MaintenanceDetails />,
   },
   {
     path: "*",
