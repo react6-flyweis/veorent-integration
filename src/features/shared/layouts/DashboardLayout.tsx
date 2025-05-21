@@ -19,7 +19,7 @@ export function DashboardLayout() {
   return (
     <SidebarProvider>
       <AppSidebar navigationItems={navigationItems} onLogout={handleLogout} />
-      <SidebarInset className="@container p-10 flex-1 flex flex-col">
+      <SidebarInset className="@container flex flex-1 flex-col p-5 md:p-10">
         <Outlet />
       </SidebarInset>
     </SidebarProvider>
