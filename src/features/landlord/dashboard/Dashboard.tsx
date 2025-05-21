@@ -1,20 +1,19 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  UserPlus,
-  FileText,
-  PenTool,
-  ClipboardSignature,
-  FileInput,
-  ReceiptText,
-  ChevronLeftIcon,
-} from "lucide-react";
 
 import houseIcon from "./assets/house.png";
 import appIcon from "./assets/application.png";
 import recruitIcon from "./assets/recruitment.png";
 import { Link } from "react-router";
+import screenIcon from "./assets/screen.png";
+import applyIcon from "./assets/apply.png";
+import agreementIcon from "./assets/agreement.png";
+import addendumIcon from "./assets/addendum.png";
+import formsIcon from "./assets/forms.png";
+import expenseIcon from "./assets/expense.png";
+import signIcon from "./assets/sign.png";
+import { ActionButton } from "./components/ActionButton";
 
 export default function Dashboard() {
   return (
@@ -47,64 +46,47 @@ export default function Dashboard() {
 
         {/* Landlord Tools */}
         <div className="mt-4 grid grid-cols-1 gap-3">
+              <ActionButton icon={screenIcon} label="Screen a Tenant" />
           {[
             {
-              icon: <ClipboardSignature className="mr-2 h-4 w-4" />,
-              label: "Screen a Tenant",
-              path: "/screen",
-            },
-            {
-              icon: <UserPlus className="mr-2 h-4 w-4" />,
+              icon: applyIcon,
               label: "Invite to Apply",
               path: "/invite",
             },
             {
-              icon: <FileText className="mr-2 h-4 w-4" />,
+              icon: formsIcon,
               label: "Get a Lease Agreement",
               path: "/lease-agreement",
             },
             {
-              icon: <PenTool className="mr-2 h-4 w-4" />,
+              icon: addendumIcon,
               label: "Build a Lease Addendum",
               path: "/lease-addendum",
             },
             {
-              icon: <ClipboardSignature className="mr-2 h-4 w-4" />,
+              icon: signIcon,
               label: "E-Sign a Document",
+              path: "#",
             },
             {
-              icon: <FileInput className="mr-2 h-4 w-4" />,
+              icon: agreementIcon,
               label: "Get Landlord Forms",
+              path: "#",
             },
             {
-              icon: <ReceiptText className="mr-2 h-4 w-4" />,
+              icon: expenseIcon,
               label: "Record an Expense",
+              path: "#",
             },
-          ].map((tool, index) => {
-            const button = (
-              <Button
-                key={index}
-                className="text-foreground hover:text-accent w-full justify-between rounded-lg bg-blue-100 py-3"
-              >
-                <div className="flex">
-                  {tool.icon}
-                  {tool.label}
-                </div>
-                <ChevronLeftIcon className="rotate-180" />
-              </Button>
-            );
-            return tool.path ? (
+          ].map((tool, index) => (
               <Link
                 to={"/landlord" + tool.path}
                 key={index}
                 style={{ textDecoration: "none" }}
               >
-                {button}
+              <ActionButton icon={tool.icon} label={tool.label} />
               </Link>
-            ) : (
-              button
-            );
-          })}
+          ))}
         </div>
       </div>
 
