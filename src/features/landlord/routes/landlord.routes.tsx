@@ -14,6 +14,7 @@ import UtilitiesServices from "../dashboard/UtilitiesServices";
 import SelectLeaseAddendum from "../dashboard/SelectLeaseAddendum";
 import ProvisionAttachment from "../dashboard/ProvisionAttachment";
 import CreateLeaseAddendum from "../dashboard/CreateLeaseAddendum";
+import ESign from "../dashboard/ESign";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -67,6 +68,10 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "/lease-addendum/create",
     element: <CreateLeaseAddendum />,
+  },
+  {
+    path: "/e-sign",
+    element: <ESign />,
   },
   {
     path: "messages",

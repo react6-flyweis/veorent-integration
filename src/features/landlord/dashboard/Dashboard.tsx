@@ -75,7 +75,7 @@ export default function Dashboard() {
             {
               icon: signIcon,
               label: "E-Sign a Document",
-              path: "#",
+              path: "/e-sign",
             },
             {
               icon: agreementIcon,
