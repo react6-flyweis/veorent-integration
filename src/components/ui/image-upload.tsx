@@ -3,8 +3,8 @@ import picturesIcon from "@/assets/icons/pictures.png";
 import { X } from "lucide-react";
 
 type ImageUploadProps = {
-  value: File[];
-  onChange: (files: File[]) => void;
+  value?: (File | string)[];
+  onChange: (files: (File | string)[]) => void;
   accept?: string[];
   maxSize?: number; // in MB
   maxFiles?: number;
@@ -23,9 +23,38 @@ export const ImageUpload = ({
 }: ImageUploadProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [dragActive, setDragActive] = useState(false);
+  const [previewUrls, setPreviewUrls] = useState<Record<number, string>>({});
 
   // Check if max files limit is reached
   const isMaxFilesReached = value.length >= maxFiles;
+
+  // Helper to check if an item is a File or string URL
+  const isFile = (item: File | string): item is File => {
+    return item instanceof File;
+  };
+
+  // Create or retrieve image preview URL
+  const getImagePreview = (item: File | string, index: number) => {
+    if (previewUrls[index]) {
+      return previewUrls[index];
+    }
+
+    const url = isFile(item) ? URL.createObjectURL(item) : item;
+    setPreviewUrls((prev) => ({ ...prev, [index]: url }));
+    return url;
+  };
+
+  // Clean up object URLs on component unmount
+  React.useEffect(() => {
+    return () => {
+      Object.values(previewUrls).forEach((url) => {
+        // Only revoke blob URLs created by this component
+        if (url.startsWith("blob:")) {
+          URL.revokeObjectURL(url);
+        }
+      });
+    };
+  }, [previewUrls]);
 
   const handleFiles = (newFiles: FileList | null) => {
     if (!newFiles || isMaxFilesReached) return;
@@ -51,14 +80,9 @@ export const ImageUpload = ({
       return true;
     });
 
-    // Limit number of files
+    // Limit number of files, preserving string URLs
     const combinedFiles = [...value, ...validFiles].slice(0, maxFiles);
     onChange(combinedFiles);
-  };
-
-  // Create image preview URL
-  const getImagePreview = (file: File) => {
-    return URL.createObjectURL(file);
   };
 
   const handleDrag = (e: React.DragEvent) => {
@@ -79,13 +103,26 @@ export const ImageUpload = ({
   };
 
   const handleRemoveFile = (indexToRemove: number) => {
+    // If removing a File object, revoke its Object URL to prevent memory leaks
+    if (previewUrls[indexToRemove]?.startsWith("blob:")) {
+      URL.revokeObjectURL(previewUrls[indexToRemove]);
+    }
+
+    // Remove from preview URLs
+    const newPreviewUrls = { ...previewUrls };
+    delete newPreviewUrls[indexToRemove];
+    setPreviewUrls(newPreviewUrls);
+
+    // Remove from value
     onChange(value.filter((_, index) => index !== indexToRemove));
   };
 
   return (
     <div className="space-y-2">
       <div
-        className={`relative ${className} ${isMaxFilesReached ? "pointer-events-none opacity-50" : ""}`}
+        className={`relative ${className} ${
+          isMaxFilesReached ? "pointer-events-none opacity-50" : ""
+        }`}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
         onDragOver={handleDrag}
@@ -93,7 +130,9 @@ export const ImageUpload = ({
       >
         <label
           htmlFor="image-upload"
-          className={`block w-full ${isMaxFilesReached ? "cursor-not-allowed" : "cursor-pointer"}`}
+          className={`block w-full ${
+            isMaxFilesReached ? "cursor-not-allowed" : "cursor-pointer"
+          }`}
           onClick={(e) => {
             if (isMaxFilesReached) {
               e.preventDefault();
@@ -113,7 +152,9 @@ export const ImageUpload = ({
             disabled={isMaxFilesReached}
           />
           <div
-            className={`flex h-40 flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed p-6 transition-colors ${dragActive ? "border-primary bg-primary/5" : ""} `}
+            className={`flex h-40 flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed p-6 transition-colors ${
+              dragActive ? "border-primary bg-primary/5" : ""
+            } `}
           >
             <img src={picturesIcon} className="size-10" alt="Upload Images" />
             <span className="text-muted-foreground text-center text-lg">
@@ -131,33 +172,41 @@ export const ImageUpload = ({
             Uploaded images ({value.length}/{maxFiles}):
           </p>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
-            {value.map((file, index) => (
-              <div
-                key={`${file.name}-${index}`}
-                className="group relative aspect-square overflow-hidden rounded-md border"
-              >
-                <img
-                  src={getImagePreview(file)}
-                  alt={file.name}
-                  className="h-full w-full object-cover"
-                />
-                <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/50 to-transparent p-2 opacity-0 transition-opacity group-hover:opacity-100">
-                  <div className="w-full truncate text-xs text-white">
-                    {file.name}
-                    <span className="ml-1">
-                      ({(file.size / (1024 * 1024)).toFixed(2)} MB)
-                    </span>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => handleRemoveFile(index)}
-                  className="absolute top-1 right-1 rounded-full bg-black/50 p-1 text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-red-500"
+            {value.map((item, index) => {
+              const isFileItem = isFile(item);
+              const fileName = isFileItem
+                ? item.name
+                : item.split("/").pop() || "image";
+              const fileSize = isFileItem
+                ? `(${(item.size / (1024 * 1024)).toFixed(2)} MB)`
+                : "";
+
+              return (
+                <div
+                  key={`${fileName}-${index}`}
+                  className="group relative aspect-square overflow-hidden rounded-md border"
                 >
-                  <X size={14} />
-                </button>
-              </div>
-            ))}
+                  <img
+                    src={getImagePreview(item, index)}
+                    alt={fileName}
+                    className="h-full w-full object-cover"
+                  />
+                  <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/50 to-transparent p-2 opacity-0 transition-opacity group-hover:opacity-100">
+                    <div className="w-full truncate text-xs text-white">
+                      {fileName}
+                      <span className="ml-1">{fileSize}</span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveFile(index)}
+                    className="absolute top-1 right-1 rounded-full bg-black/50 p-1 text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-red-500"
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
