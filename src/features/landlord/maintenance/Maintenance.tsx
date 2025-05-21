@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -9,16 +8,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Calendar1,
-  Home,
-  Plus,
-  Search,
-  Star,
-  ClipboardList,
-} from "lucide-react";
+import { Calendar1, Home, Search, Star, ClipboardList } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router";
+import {CreateButton} from "@/components/CreateButton";
 
 interface MaintenanceIssue {
   id: string;
@@ -51,9 +44,9 @@ export default function Maintenance() {
     <div className="w-full space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Maintenance</h1>
-        <Button size="icon" variant="outline" className="rounded-full">
-          <Plus className="h-4 w-4" />
-        </Button>
+        <Link to="create">
+          <CreateButton label="Create Request" />
+        </Link>
       </div>
 
       <div className="flex items-center space-x-4">
