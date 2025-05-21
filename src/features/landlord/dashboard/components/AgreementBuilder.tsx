@@ -61,13 +61,14 @@ const sections: Section[] = [
     description:
       "Add custom clauses, rules or provisions specific to your property and/or local area.",
     icon: provisionsIcon,
+    path: "/landlord/lease-agreement/provisions-attachments",
   },
 ];
 
 export function AgreementBuilder() {
   return (
     <div className="space-y-6">
-      <Card className="bg-blue-200 border-0 p-4 gap-2">
+      <Card className="gap-2 border-0 bg-blue-200 p-4">
         <CardTitle className="text-semibold text-lg">
           Here's what you need to know:
         </CardTitle>
@@ -75,7 +76,7 @@ export function AgreementBuilder() {
           <ul className="list-disc space-y-1">
             {new Array(4)
               .fill(
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+                "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
               )
               .map((t, i) => (
                 <li key={i} className="flex items-center gap-2">
@@ -91,7 +92,7 @@ export function AgreementBuilder() {
         {sections.map((section) => (
           <div
             key={section.id}
-            className="flex items-center justify-between border rounded-lg p-4 bg-white"
+            className="flex items-center justify-between rounded-lg border bg-white p-4"
           >
             <div className="flex items-center gap-4">
               <IconRound icon={section.icon} />
