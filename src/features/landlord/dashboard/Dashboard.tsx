@@ -6,6 +6,9 @@ import houseIcon from "./assets/house.png";
 import appIcon from "./assets/application.png";
 import recruitIcon from "./assets/recruitment.png";
 import { Link } from "react-router";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { ScreenMethodDialog } from "./components/ScreenMethodDialog";
+
 import screenIcon from "./assets/screen.png";
 import applyIcon from "./assets/apply.png";
 import agreementIcon from "./assets/agreement.png";
@@ -46,7 +49,13 @@ export default function Dashboard() {
 
         {/* Landlord Tools */}
         <div className="mt-4 grid grid-cols-1 gap-3">
+          <Dialog>
+            <DialogTrigger>
               <ActionButton icon={screenIcon} label="Screen a Tenant" />
+            </DialogTrigger>
+            <ScreenMethodDialog />
+          </Dialog>
+
           {[
             {
               icon: applyIcon,
@@ -79,13 +88,13 @@ export default function Dashboard() {
               path: "#",
             },
           ].map((tool, index) => (
-              <Link
-                to={"/landlord" + tool.path}
-                key={index}
-                style={{ textDecoration: "none" }}
-              >
+            <Link
+              to={"/landlord" + tool.path}
+              key={index}
+              style={{ textDecoration: "none" }}
+            >
               <ActionButton icon={tool.icon} label={tool.label} />
-              </Link>
+            </Link>
           ))}
         </div>
       </div>
