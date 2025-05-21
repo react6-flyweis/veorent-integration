@@ -19,6 +19,7 @@ import balanceIcon from "./assets/balance.png";
 import smoothPenIcon from "./assets/smooth-pen.png";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageTitle } from "@/components/PageTitle";
+import { Link } from "react-router";
 
 export default function SelectLeaseAddendum() {
   const [selectedAddress, setSelectedAddress] = useState<string | undefined>();
@@ -148,12 +149,8 @@ export default function SelectLeaseAddendum() {
             </div>
 
             <div className="mt-6 flex justify-center">
-              <Button
-                className="w-3/5 bg-blue-950 text-white"
-                size="lg"
-                onClick={() => {}}
-              >
-                Sounds Good
+              <Button className="w-3/5" size="lg" asChild>
+                <Link to="/landlord/lease-addendum/create">Sounds Good</Link>
               </Button>
             </div>
           </div>

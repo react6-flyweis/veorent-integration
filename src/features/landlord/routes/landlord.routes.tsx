@@ -13,6 +13,7 @@ import PetSmoking from "../dashboard/PetSmoking";
 import UtilitiesServices from "../dashboard/UtilitiesServices";
 import SelectLeaseAddendum from "../dashboard/SelectLeaseAddendum";
 import ProvisionAttachment from "../dashboard/ProvisionAttachment";
+import CreateLeaseAddendum from "../dashboard/CreateLeaseAddendum";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -62,6 +63,10 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "/lease-addendum",
     element: <SelectLeaseAddendum />,
+  },
+  {
+    path: "/lease-addendum/create",
+    element: <CreateLeaseAddendum />,
   },
   {
     path: "messages",
