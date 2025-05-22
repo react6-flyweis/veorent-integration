@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import * as z from "zod";
 import {
   Form,
@@ -77,11 +77,16 @@ export function CreateMaintenance() {
     },
   });
 
+  const property = useWatch({
+    control: form.control,
+    name: "property",
+  });
+
   // Handle form submission
   const onSubmit = (data: FormValues) => {
     console.log("Form submitted with data:", data);
     // Add your API call here to submit the form data
-    navigate("/landlord/maintenance/4545");
+    navigate("/landlord/maintenance/_id_");
   };
 
   return (
@@ -118,131 +123,140 @@ export function CreateMaintenance() {
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="lease"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  Lease
-                  <span className="text-muted-foreground"> (Optional)</span>
-                </FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter lease information" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {property && (
+            <>
+              <FormField
+                control={form.control}
+                name="lease"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Lease
+                      <span className="text-muted-foreground"> (Optional)</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter lease information" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name="leaseCategory"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Lease Category</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter lease category" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <FormField
+                control={form.control}
+                name="leaseCategory"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Lease Category</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter lease category" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name="issueTitle"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Issue Title</FormLabel>
-                <FormControl>
-                  <Input placeholder="e.g., Leaky Kitchen Faucet" {...field} />
-                </FormControl>
-                <FormDescription>
-                  {field.value?.length ?? 0} / 50 characters
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <FormField
+                control={form.control}
+                name="issueTitle"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Issue Title</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="e.g., Leaky Kitchen Faucet"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      {field.value?.length ?? 0} / 50 characters
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Description</FormLabel>
-                <FormDescription>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing
-                </FormDescription>
-                <FormControl>
-                  <Textarea
-                    placeholder="Describe the maintenance issue in detail"
-                    {...field}
-                    rows={5}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormDescription>
+                      Lorem ipsum dolor, sit amet consectetur adipisicing
+                    </FormDescription>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Describe the maintenance issue in detail"
+                        {...field}
+                        rows={5}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name="preferredTime"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Preferred Time to Enter</FormLabel>
-                <FormControl>
-                  <RadioGroup
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    className="flex flex-col"
-                  >
-                    <FormItem className="flex items-center space-y-0 space-x-3">
-                      <FormControl>
-                        <RadioGroupItem value="anytime" />
-                      </FormControl>
-                      <FormLabel className="font-normal">Anytime</FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-y-0 space-x-3">
-                      <FormControl>
-                        <RadioGroupItem value="coordinate" />
-                      </FormControl>
-                      <FormLabel className="font-normal">
-                        Coordinate a Time First
-                      </FormLabel>
-                    </FormItem>
-                  </RadioGroup>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <FormField
+                control={form.control}
+                name="preferredTime"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Preferred Time to Enter</FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        className="flex flex-col"
+                      >
+                        <FormItem className="flex items-center space-y-0 space-x-3">
+                          <FormControl>
+                            <RadioGroupItem value="anytime" />
+                          </FormControl>
+                          <FormLabel className="font-normal">Anytime</FormLabel>
+                        </FormItem>
+                        <FormItem className="flex items-center space-y-0 space-x-3">
+                          <FormControl>
+                            <RadioGroupItem value="coordinate" />
+                          </FormControl>
+                          <FormLabel className="font-normal">
+                            Coordinate a Time First
+                          </FormLabel>
+                        </FormItem>
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name="photos"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Photos (Optional)</FormLabel>
-                <FormControl>
-                  <ImageUpload
-                    value={field.value}
-                    onChange={(urls) => field.onChange(urls)}
-                    maxFiles={3}
-                  />
-                </FormControl>
-                <FormDescription>
-                  Upload up to 3 photos of the issue
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <FormField
+                control={form.control}
+                name="photos"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Photos (Optional)</FormLabel>
+                    <FormControl>
+                      <ImageUpload
+                        value={field.value}
+                        onChange={(urls) => field.onChange(urls)}
+                        maxFiles={3}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Upload up to 3 photos of the issue
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </>
+          )}
+
           <div className="flex justify-center">
             <LoadingButton
               isLoading={form.formState.isSubmitting}
+              disabled={form.formState.isSubmitting || !property}
               type="submit"
               size="lg"
               className="w-3/5"
