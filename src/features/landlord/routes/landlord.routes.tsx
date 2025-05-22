@@ -20,6 +20,7 @@ import Maintenance from "../maintenance/Maintenance";
 import CreateMaintenance from "../maintenance/CreateMaintenance";
 import MaintenanceDetails from "../maintenance/MaintenanceDetails";
 import Leases from "../leases/Leases";
+import AddLeaseDetails from "../leases/AddLeaseDetails";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -101,6 +102,10 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "/leases",
     element: <Leases />,
+  },
+  {
+    path: "/leases/create",
+    element: <AddLeaseDetails />,
   },
   {
     path: "*",
