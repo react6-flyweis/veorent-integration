@@ -6,6 +6,7 @@ import { IconRound } from "@/components/IconRound";
 
 import documentsIcon from "./assets/documents.png";
 import applicationIcon from "./assets/application.png";
+import { Link } from "react-router";
 
 export default function WhatsNext() {
   return (
@@ -19,6 +20,7 @@ export default function WhatsNext() {
             icon: documentsIcon,
             description: "Stay compliant with Veorent lease agreements.",
             buttonText: "Get a lease agreement",
+            url: "/landlord/lease-agreement/create",
             isRecommended: true,
           },
           {
@@ -27,6 +29,7 @@ export default function WhatsNext() {
             description:
               "Stay organized by storing all lease documents in one place.",
             buttonText: "Upload a document",
+            url: "/landlord/leases/upload",
           },
         ].map((item, index) => (
           <Card key={index} className="relative justify-between gap-2 pt-7">
@@ -48,8 +51,8 @@ export default function WhatsNext() {
               </p>
             </CardContent>
             <CardFooter className="flex justify-center">
-              <Button size="lg" className="w-full">
-                {item.buttonText}
+              <Button size="lg" className="w-full" asChild>
+                <Link to={item.url}>{item.buttonText}</Link>
               </Button>
             </CardFooter>
           </Card>

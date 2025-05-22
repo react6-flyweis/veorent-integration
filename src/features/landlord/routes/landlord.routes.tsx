@@ -22,6 +22,7 @@ import MaintenanceDetails from "../maintenance/MaintenanceDetails";
 import Leases from "../leases/Leases";
 import AddLeaseDetails from "../leases/AddLeaseDetails";
 import WhatsNext from "../leases/WhatsNext";
+import UploadLeaseDocument from "../leases/UploadLeaseDocument";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -107,6 +108,10 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "/leases/create",
     element: <AddLeaseDetails />,
+  },
+  {
+    path: "/leases/upload",
+    element: <UploadLeaseDocument />,
   },
   {
     path: "/leases/whats-next",
