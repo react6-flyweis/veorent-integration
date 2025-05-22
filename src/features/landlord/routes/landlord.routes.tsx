@@ -19,6 +19,7 @@ import NeedsWork from "../dashboard/NeedsWork";
 import Maintenance from "../maintenance/Maintenance";
 import CreateMaintenance from "../maintenance/CreateMaintenance";
 import MaintenanceDetails from "../maintenance/MaintenanceDetails";
+import Leases from "../leases/Leases";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -82,20 +83,24 @@ export const landlordRoutes: RouteObject[] = [
     element: <NeedsWork />,
   },
   {
-    path: "messages",
+    path: "/messages",
     element: <Messages />,
   },
   {
-    path: "maintenance",
+    path: "/maintenance",
     element: <Maintenance />,
   },
   {
-    path: "maintenance/create",
+    path: "/maintenance/create",
     element: <CreateMaintenance />,
   },
   {
-    path: "maintenance/:id",
+    path: "/maintenance/:id",
     element: <MaintenanceDetails />,
+  },
+  {
+    path: "/leases",
+    element: <Leases />,
   },
   {
     path: "*",
