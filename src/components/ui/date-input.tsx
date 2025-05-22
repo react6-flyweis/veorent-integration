@@ -33,7 +33,7 @@ export function DateInput({
   minAge = 13,
   maxAge = 120,
 }: {
-  value: Date;
+  value?: Date | undefined;
   onChange: (date: Date) => void;
   className?: string;
 } & DateConstraints) {
@@ -61,7 +61,9 @@ export function DateInput({
   };
 
   // Default month to show in calendar — 20 years ago if isDob and no value selected
-  const defaultMonth = isDob ? value ?? subYears(today, 20) : value ?? today;
+  const defaultMonth = isDob
+    ? (value ?? subYears(today, 20))
+    : (value ?? today);
 
   return (
     <Popover open={dateOpen} onOpenChange={setDateOpen}>
@@ -70,9 +72,9 @@ export function DateInput({
           <Button
             variant="outline"
             className={cn(
-              "w-full pl-3 text-left font-normal border-input",
+              "border-input w-full pl-3 text-left font-normal",
               !value && "text-muted-foreground",
-              className
+              className,
             )}
           >
             {value ? format(value, "PPP") : <span>Select date</span>}
