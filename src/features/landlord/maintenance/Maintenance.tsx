@@ -11,7 +11,8 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calendar1, Home, Search, Star, ClipboardList } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router";
-import {CreateButton} from "@/components/CreateButton";
+import { CreateButton } from "@/components/CreateButton";
+import { PageTitle } from "@/components/PageTitle";
 
 interface MaintenanceIssue {
   id: string;
@@ -43,7 +44,7 @@ export default function Maintenance() {
   return (
     <div className="w-full space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Maintenance</h1>
+        <PageTitle title="Maintenance" />
         <Link to="create">
           <CreateButton label="Create Request" />
         </Link>
