@@ -23,6 +23,11 @@ export const landlordNavigation: SidebarItem[] = [
     url: "/landlord/leases",
   },
   {
+    title: "Form",
+    icon: "forms.png",
+    url: "/landlord/forms",
+  },
+  {
     title: "Settings",
     icon: "setting.png",
     url: "/landlord/settings",
