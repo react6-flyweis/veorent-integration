@@ -28,6 +28,7 @@ import Renters from "../renters/Renters";
 import RentersDetails from "../renters/RentersDetails";
 import ApplicationScreened from "../renters/ApplicationScreened";
 import ScreeningReportSoon from "../renters/ScreeningReportSoon";
+import ApplicationUnscreened from "../renters/ApplicationUnscreened";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -133,6 +134,10 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "/renters/application-screened/:id",
     element: <ApplicationScreened />,
+  },
+  {
+    path: "/renters/application-unscreened/:id",
+    element: <ApplicationUnscreened />,
   },
   {
     path: "/renters/screening-report-soon",
