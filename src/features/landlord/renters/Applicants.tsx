@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 
 import verifiedIcon from "./assets/verified.png";
+import { Link } from "react-router";
 
 export default function Applicants() {
   return (
@@ -60,7 +61,7 @@ export default function Applicants() {
       </Card>
 
       {/* Applicants List */}
-      <div className="space-y-4">
+      <div className="flex flex-col gap-4">
         {[
           {
             name: "Kianna Dias",
@@ -77,26 +78,31 @@ export default function Applicants() {
             verified: false,
           },
         ].map((applicant, index) => (
-          <Card key={index} className="relative overflow-hidden py-3">
-            <CardContent className="relative flex flex-col gap-1 px-3">
-              <span className="text-primary text-base font-bold">
-                {applicant.name}
-              </span>
-              {applicant.verified && (
-                <Badge className="absolute -top-3 right-0 flex items-center gap-1 bg-green-200 text-black">
-                  <img src={verifiedIcon} className="max-h-3" alt="" />
-                  Verified
-                </Badge>
-              )}
-              <div className="text-sm text-gray-700">{applicant.address}</div>
-              <div className="text-muted-foreground mt-1 text-sm">
-                {applicant.time} |{" "}
-                <span className="text-primary cursor-pointer">
-                  {applicant.status}
+          <Link
+            to={`/landlord/renters/application-${applicant.verified ? "screened" : "unscreened"}/${index}`}
+            key={index}
+          >
+            <Card key={index} className="relative overflow-hidden py-3">
+              <CardContent className="relative flex flex-col gap-1 px-3">
+                <span className="text-primary text-base font-bold">
+                  {applicant.name}
                 </span>
-              </div>
-            </CardContent>
-          </Card>
+                {applicant.verified && (
+                  <Badge className="absolute -top-3 right-0 flex items-center gap-1 bg-green-200 text-black">
+                    <img src={verifiedIcon} className="max-h-3" alt="" />
+                    Verified
+                  </Badge>
+                )}
+                <div className="text-sm text-gray-700">{applicant.address}</div>
+                <div className="text-muted-foreground mt-1 text-sm">
+                  {applicant.time} |{" "}
+                  <span className="text-primary cursor-pointer">
+                    {applicant.status}
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
     </div>
