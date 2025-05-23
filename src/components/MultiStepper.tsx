@@ -22,17 +22,22 @@ const StepperContext = createContext<{
   totalSteps: number;
   nextStep: () => void;
   prevStep: () => void;
+  currentStepValidator?: () => boolean | Promise<boolean>; // Added
 }>({
   currentStep: 1,
   totalSteps: 1,
   nextStep: () => {},
   prevStep: () => {},
+  currentStepValidator: undefined, // Added
 });
 
 export type MultiStepperRef = {
   goNext: () => void;
   goPrev: () => void;
   currentStep: number;
+  validateAndGoNext: (
+    validator: () => boolean | Promise<boolean>,
+  ) => Promise<void>;
 };
 
 export const MultiStepper = forwardRef<
@@ -63,6 +68,11 @@ export const MultiStepper = forwardRef<
 
   const totalSteps = steps.length;
 
+  const currentStepElement = steps[step - 1] as
+    | ReactElement<MultiStepperStepProps>
+    | undefined;
+  const currentStepValidator = currentStepElement?.props.onValidate;
+
   const nextStep = useCallback(() => {
     if (step < totalSteps) setStep((s) => s + 1);
   }, [step, totalSteps]);
@@ -71,6 +81,16 @@ export const MultiStepper = forwardRef<
     if (step > 1) setStep((s) => s - 1);
   }, [step]);
 
+  const validateAndGoNext = useCallback(
+    async (validator: () => boolean | Promise<boolean>) => {
+      const isValid = await validator();
+      if (isValid) {
+        nextStep();
+      }
+    },
+    [nextStep],
+  );
+
   // 👇 Expose methods via ref
   useImperativeHandle(
     ref,
@@ -78,13 +98,20 @@ export const MultiStepper = forwardRef<
       goNext: nextStep,
       goPrev: prevStep,
       currentStep: step,
+      validateAndGoNext,
     }),
-    [nextStep, prevStep, step]
+    [nextStep, prevStep, step, validateAndGoNext],
   );
 
   return (
     <StepperContext.Provider
-      value={{ currentStep: step, nextStep, prevStep, totalSteps }}
+      value={{
+        currentStep: step,
+        nextStep,
+        prevStep,
+        totalSteps,
+        currentStepValidator, // Added
+      }}
     >
       <div className="space-y-6">
         {indicator && <> {indicator}</>}
@@ -107,7 +134,12 @@ export const MultiStepper = forwardRef<
 MultiStepper.displayName = "MultiStepper";
 
 // Step Component
-export function MultiStepperStep({ children }: { children: ReactNode }) {
+export interface MultiStepperStepProps {
+  children: ReactNode;
+  onValidate?: () => boolean | Promise<boolean>;
+}
+
+export function MultiStepperStep({ children }: MultiStepperStepProps) {
   return <div className="space-y-4">{children}</div>;
 }
 
@@ -186,9 +218,23 @@ export function MultiStepperIndicator({
 }
 
 export function MultiStepperButton({ children }: PropsWithChildren) {
-  const { currentStep, totalSteps, nextStep } = useContext(StepperContext);
+  const { currentStep, totalSteps, nextStep, currentStepValidator } =
+    useContext(StepperContext);
 
   const isLastStep = currentStep === totalSteps;
+
+  const handleNextClick = async () => {
+    if (!isLastStep) {
+      if (currentStepValidator) {
+        const isValid = await currentStepValidator();
+        if (isValid) {
+          nextStep();
+        }
+      } else {
+        nextStep();
+      }
+    }
+  };
 
   return (
     <div className="flex justify-center pt-4">
@@ -199,11 +245,7 @@ export function MultiStepperButton({ children }: PropsWithChildren) {
           type={isLastStep ? "submit" : "button"}
           size="lg"
           className="w-3/5"
-          onClick={() => {
-            if (!isLastStep) {
-              nextStep();
-            }
-          }}
+          onClick={handleNextClick} // Updated
         >
           {isLastStep ? "Submit" : "Next"}
         </Button>
