@@ -80,8 +80,10 @@ export default function ApplicationUnscreened() {
 
             {/* View Full Application Button */}
             <div className="mt-4 flex-shrink-0">
-              <Button className="w-full font-semibold md:w-auto">
-                View Full Application
+              <Button className="w-full font-semibold md:w-auto" asChild>
+                <Link to="/landlord/renters/application/_id_">
+                  View Full Application
+                </Link>
               </Button>
             </div>
           </div>
