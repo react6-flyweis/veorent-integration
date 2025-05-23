@@ -2,17 +2,18 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 import penApplicationIcon from "@/assets/landlord/icons/pen-application.png";
+import { Link } from "react-router";
 
 export const FormCard = ({
   title,
   description,
   buttonText,
-  onButtonClick,
+  url,
 }: {
   title: string;
   description: string;
   buttonText: string;
-  onButtonClick: () => void;
+  url ?: string;
 }) => {
   return (
     <Card className="">
@@ -24,8 +25,10 @@ export const FormCard = ({
             <p className="text-muted-foreground text-sm">{description}</p>
           </div>
         </div>
-        <Button className="w-32" onClick={onButtonClick}>
-          {buttonText}
+        <Button className="w-32" asChild>
+          <Link to={url ?? "#"} >
+            {buttonText}
+          </Link>
         </Button>
       </CardContent>
     </Card>
