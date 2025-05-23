@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/ghost-tabs";
 import { RenterItem } from "./RenterItem";
 import { Link } from "react-router";
+import Applicants from "./Applicants";
 
 // Sample renter data - in a real app, this would come from a database or API
 const renters = {
@@ -58,9 +59,7 @@ export default function Renters() {
         </TabsContent>
 
         <TabsContent value="applicants" className="mt-6">
-          <div className="py-8 text-center text-gray-500">
-            No applicants found
-          </div>
+          <Applicants />
         </TabsContent>
 
         <TabsContent value="tenants" className="mt-6">
