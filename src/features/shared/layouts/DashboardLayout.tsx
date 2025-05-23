@@ -3,6 +3,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import { AppSidebar } from "./AppSidebar";
 import { tenantNavigation } from "@/features/tenant/config/navigation";
 import { landlordNavigation } from "@/features/landlord/config/navigation";
+import { ToastProvider } from "@/contexts/ToastContext";
 
 export function DashboardLayout() {
   const location = useLocation();
@@ -18,10 +19,12 @@ export function DashboardLayout() {
 
   return (
     <SidebarProvider>
-      <AppSidebar navigationItems={navigationItems} onLogout={handleLogout} />
-      <SidebarInset className="@container flex flex-1 flex-col p-5 md:p-10">
-        <Outlet />
-      </SidebarInset>
+      <ToastProvider>
+        <AppSidebar navigationItems={navigationItems} onLogout={handleLogout} />
+        <SidebarInset className="@container flex flex-1 flex-col p-5 md:p-10">
+          <Outlet />
+        </SidebarInset>
+      </ToastProvider>
     </SidebarProvider>
   );
 }
