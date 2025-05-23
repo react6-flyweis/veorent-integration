@@ -90,7 +90,7 @@ export function AppSidebar({
                           {({ isActive }) => (
                             <SidebarMenuSubButton asChild isActive={isActive}>
                               <div>
-                                <CircleIcon className="size-2! fill-primary" />
+                                <CircleIcon className="fill-primary size-2!" />
                                 {subItem.title}
                               </div>
                             </SidebarMenuSubButton>
@@ -103,7 +103,7 @@ export function AppSidebar({
               </Collapsible>
             ) : (
               <SidebarMenuItem key={item.title}>
-                <NavLink to={(item as SidebarItemWithoutSubItems).url}>
+                <NavLink to={(item as SidebarItemWithoutSubItems).url} end>
                   {({ isActive }) => (
                     <SidebarMenuButton
                       size="lg"
@@ -126,7 +126,7 @@ export function AppSidebar({
           <SidebarMenuItem>
             <SidebarMenuButton
               size="lg"
-              className="pl-6 gap-3"
+              className="gap-3 pl-6"
               onClick={onLogout}
             >
               <img src={"/icons/logout.png"} alt="logout" className="size-4" />
