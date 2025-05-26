@@ -34,6 +34,8 @@ import MoveInRenter from "../renters/MoveInRenter";
 import AddTenant from "../renters/AddTenant";
 import TenantDetails from "../renters/TenantDetails";
 import Payments from "../payments/Payments";
+import CreateCharge from "../payments/CreateCharge";
+import MonthlyCharge from "../payments/MonthlyCharge";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -183,6 +185,14 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "/payments",
     element: <Payments />,
+  },
+  {
+    path: "/payments/create-charge",
+    element: <CreateCharge />,
+  },
+  {
+    path: "/payments/monthly-charge",
+    element: <MonthlyCharge />,
   },
   {
     path: "*",
