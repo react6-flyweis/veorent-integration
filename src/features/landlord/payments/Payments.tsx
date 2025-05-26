@@ -10,6 +10,7 @@ import { PageTitle } from "@/components/PageTitle";
 import { OverviewTabContent } from "./components/OverviewTabContent";
 import { ChargesTabContent } from "./components/ChargesTabContent";
 import { DepositsTabContent } from "./components/DepositsTabContent";
+import { Link } from "react-router";
 
 type TabValue = "overview" | "charges" | "deposits";
 
@@ -20,7 +21,9 @@ export default function Payments() {
     <div className="">
       <div className="flex items-center justify-between">
         <PageTitle title="Payments" />
-        <CreateButton label="Create Charges" />
+        <Link to="/landlord/payments/create-charge">
+          <CreateButton label="Create Charge" />
+        </Link>
       </div>
 
       <Tabs
