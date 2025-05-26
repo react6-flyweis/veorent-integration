@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useUserPreferenceStore } from "@/store/useUserPreferenceStore";
 
 /**
@@ -9,6 +9,7 @@ import { useUserPreferenceStore } from "@/store/useUserPreferenceStore";
  */
 export function useGoBack(customFallbackPath?: string) {
   const navigate = useNavigate();
+  const location = useLocation();
   const userType = useUserPreferenceStore((state) => state.userType);
 
   const goBack = useCallback(() => {
@@ -25,14 +26,14 @@ export function useGoBack(customFallbackPath?: string) {
       fallbackPath = customFallbackPath;
     }
 
-    // Check if there's history to go back to
-    if (window.history.length > 2) {
-      navigate(-1);
-    } else {
-      // If no history, go to the determined fallback path
+    if (location.key === "default") {
+      // If there's no history (user navigated directly to this page)
       navigate(fallbackPath);
+    } else {
+      // Go back in the navigation history
+      navigate(-1);
     }
-  }, [navigate, customFallbackPath, userType]);
+  }, [navigate, customFallbackPath, userType, location.key]);
 
   return goBack;
 }
