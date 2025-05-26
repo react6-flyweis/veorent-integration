@@ -7,6 +7,7 @@ import {
   TabsContent,
 } from "@/components/ui/ghost-tabs";
 import { RenterItem } from "./RenterItem";
+import { TenantCard } from "./components/TenantCard";
 
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Applicants from "./Applicants";
@@ -24,7 +25,24 @@ const renters = {
     },
   ],
   applicants: [],
-  tenants: [],
+  tenants: [
+    {
+      name: "William Thorne",
+      address: "123 Main St.",
+      unit: "1",
+      room: "A",
+      inviteDate: "08/19/2024 07:40 AM",
+      image: "/assets/avatars/william-thorne.jpg",
+    },
+    {
+      name: "Alicia Sandoval",
+      address: "123 Main St.",
+      unit: "1",
+      room: "A",
+      lastActive: "08/19/2024 07:40 AM",
+      image: "/assets/avatars/alicia-sandoval.jpg",
+    },
+  ],
 };
 
 export default function Renters() {
@@ -46,11 +64,15 @@ export default function Renters() {
     navigate(`/landlord/renters/${tabValue}`);
   };
 
+  const handleAddNew = () => {
+    navigate("/landlord/renters/add");
+  };
+
   return (
     <div className="container py-6">
       <div className="mb-2 flex items-center justify-between">
         <PageTitle title="Renters" className="mb-0" />
-        <CreateButton label="Add New" />
+        <CreateButton label="Add New" onClick={handleAddNew} />
       </div>
 
       <Tabs value={activeTab} onValueChange={handleTabChange}>
@@ -79,7 +101,27 @@ export default function Renters() {
         </TabsContent>
 
         <TabsContent value="tenants" className="mt-6">
-          <div className="py-8 text-center text-gray-500">No tenants found</div>
+          <h2 className="mb-3 text-2xl font-semibold">Active Tenants</h2>
+          <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-2">
+            {renters.tenants.length > 0 ? (
+              renters.tenants.map((tenant, index) => (
+                <TenantCard
+                  key={index}
+                  name={tenant.name}
+                  image={tenant.image}
+                  inviteDate={tenant.inviteDate}
+                  lastActive={tenant.lastActive}
+                  address={tenant.address}
+                  unit={tenant.unit}
+                  room={tenant.room}
+                />
+              ))
+            ) : (
+              <div className="py-8 text-center text-gray-500">
+                No tenants found
+              </div>
+            )}
+          </div>
         </TabsContent>
       </Tabs>
     </div>
