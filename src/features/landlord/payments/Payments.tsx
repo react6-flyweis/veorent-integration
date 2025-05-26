@@ -9,6 +9,7 @@ import { CreateButton } from "@/components/CreateButton";
 import { PageTitle } from "@/components/PageTitle";
 import { OverviewTabContent } from "./components/OverviewTabContent";
 import { ChargesTabContent } from "./components/ChargesTabContent";
+import { DepositsTabContent } from "./components/DepositsTabContent";
 
 type TabValue = "overview" | "charges" | "deposits";
 
@@ -42,11 +43,8 @@ export default function Payments() {
           <ChargesTabContent />
         </TabsContent>
 
-        <TabsContent value="deposits">
-          <div className="p-4">
-            <h2>Deposits content will go here</h2>
-            {/* Deposits specific content */}
-          </div>
+        <TabsContent value="deposits" className="mt-0">
+          <DepositsTabContent />
         </TabsContent>
       </Tabs>
     </div>
