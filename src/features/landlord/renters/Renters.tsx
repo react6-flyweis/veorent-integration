@@ -105,16 +105,20 @@ export default function Renters() {
           <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-2">
             {renters.tenants.length > 0 ? (
               renters.tenants.map((tenant, index) => (
-                <TenantCard
+                <Link
+                  to={`/landlord/renters/tenants/${tenant.name.replace(/\s+/g, "-")}`}
                   key={index}
-                  name={tenant.name}
-                  image={tenant.image}
-                  inviteDate={tenant.inviteDate}
-                  lastActive={tenant.lastActive}
-                  address={tenant.address}
-                  unit={tenant.unit}
-                  room={tenant.room}
-                />
+                >
+                  <TenantCard
+                    name={tenant.name}
+                    address={tenant.address}
+                    unit={tenant.unit}
+                    room={tenant.room}
+                    inviteDate={tenant.inviteDate}
+                    lastActive={tenant.lastActive}
+                    image={tenant.image}
+                  />
+                </Link>
               ))
             ) : (
               <div className="py-8 text-center text-gray-500">

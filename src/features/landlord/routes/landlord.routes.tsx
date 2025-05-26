@@ -32,6 +32,7 @@ import ApplicationUnscreened from "../renters/ApplicationUnscreened";
 import Application from "../renters/Application";
 import MoveInRenter from "../renters/MoveInRenter";
 import AddTenant from "../renters/AddTenant";
+import TenantDetails from "../renters/TenantDetails";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -169,6 +170,10 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "/renters/tenants",
     element: <Renters />,
+  },
+  {
+    path: "/renters/tenants/:id",
+    element: <TenantDetails />,
   },
   {
     path: "/forms",
