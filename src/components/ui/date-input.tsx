@@ -38,8 +38,8 @@ export function DateInput({
   minDate,
   maxDate,
   isDob = false,
-  minAge = 13,
-  maxAge = 120,
+  minAge = 1,
+  maxAge = 100,
 }: {
   value?: Date | undefined;
   onChange: (date: Date) => void;
@@ -80,10 +80,26 @@ export function DateInput({
     _e(_event);
   };
 
-  // // Default month to show in calendar — 20 years ago if isDob and no value selected
-  // const defaultMonth = isDob
-  //   ? (value ?? subYears(today, 20))
-  //   : (value ?? today);
+  // Custom function to determine the year range for the dropdown
+  const getYearRange = () => {
+    const startYear = isDob
+      ? dobMinDate.getFullYear()
+      : minDate?.getFullYear() ||
+        (allowPastDates ? today.getFullYear() - 10 : today.getFullYear());
+
+    // For future years, add 10 years by default or respect maxDate if provided
+    const endYear = isDob
+      ? dobMaxDate.getFullYear()
+      : maxDate?.getFullYear() ||
+        (allowFutureDates ? today.getFullYear() + 10 : today.getFullYear());
+
+    return { fromYear: startYear, toYear: endYear };
+  };
+
+  // Default month to show in calendar — 20 years ago if isDob and no value selected
+  const defaultMonth = isDob
+    ? (value ?? subYears(today, 20))
+    : (value ?? today);
 
   return (
     <Popover open={dateOpen} onOpenChange={setDateOpen}>
@@ -115,11 +131,10 @@ export function DateInput({
           }}
           className="rounded-md border p-2"
           captionLayout="dropdown"
-          // classNames={{
-          //   month_caption: "mx-0",
-          // }}
-          // hideNavigation
+          defaultMonth={defaultMonth}
           showOutsideDays={false}
+          fromYear={getYearRange().fromYear}
+          toYear={getYearRange().toYear}
           components={{
             DropdownNav: (props: DropdownNavProps) => {
               return (
