@@ -56,7 +56,9 @@ export default function Applicants() {
               </div>
             </div>
             <Button className="mt-2 h-10 px-6">
-              <Link to="application/_id_/move-in">Move in Renter</Link>
+              <Link to="/landlord/renters/application/_id_/move-in">
+                Move in Renter
+              </Link>
             </Button>
           </div>
         </CardContent>

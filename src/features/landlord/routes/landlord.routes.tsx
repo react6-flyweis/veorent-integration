@@ -130,8 +130,16 @@ export const landlordRoutes: RouteObject[] = [
     element: <Renters />,
   },
   {
-    path: "/renters/:id",
+    path: "/renters/leads",
+    element: <Renters />,
+  },
+  {
+    path: "/renters/leads/:id",
     element: <RentersDetails />,
+  },
+  {
+    path: "/renters/applicants",
+    element: <Renters />,
   },
   {
     path: "/renters/application/:id",
@@ -152,6 +160,10 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "/renters/screening-report-soon",
     element: <ScreeningReportSoon />,
+  },
+  {
+    path: "/renters/tenants",
+    element: <Renters />,
   },
   {
     path: "/forms",

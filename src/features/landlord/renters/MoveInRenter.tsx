@@ -90,6 +90,7 @@ export default function MoveInRenter() {
     try {
       console.log(values);
       showToast("Renter moved successfully", "success");
+      navigate("/landlord/renters/applicants");
     } catch (error) {
       console.error("Error submitting form:", error);
     }
