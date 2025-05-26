@@ -33,6 +33,7 @@ import Application from "../renters/Application";
 import MoveInRenter from "../renters/MoveInRenter";
 import AddTenant from "../renters/AddTenant";
 import TenantDetails from "../renters/TenantDetails";
+import Payments from "../payments/Payments";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -178,6 +179,10 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "/forms",
     element: <Forms />,
+  },
+  {
+    path: "/payments",
+    element: <Payments />,
   },
   {
     path: "*",
