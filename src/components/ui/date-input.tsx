@@ -10,6 +10,14 @@ import { FormControl } from "./form";
 import { Button } from "./button";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import type { DropdownNavProps, DropdownProps } from "react-day-picker";
+import {
+  Select,
+  SelectContent,
+  SelectValue,
+  SelectTrigger,
+  SelectItem,
+} from "./select";
 
 type DateConstraints = {
   allowPastDates?: boolean;
@@ -60,10 +68,22 @@ export function DateInput({
     return false;
   };
 
-  // Default month to show in calendar — 20 years ago if isDob and no value selected
-  const defaultMonth = isDob
-    ? (value ?? subYears(today, 20))
-    : (value ?? today);
+  const handleCalendarChange = (
+    _value: string | number,
+    _e: React.ChangeEventHandler<HTMLSelectElement>,
+  ) => {
+    const _event = {
+      target: {
+        value: String(_value),
+      },
+    } as React.ChangeEvent<HTMLSelectElement>;
+    _e(_event);
+  };
+
+  // // Default month to show in calendar — 20 years ago if isDob and no value selected
+  // const defaultMonth = isDob
+  //   ? (value ?? subYears(today, 20))
+  //   : (value ?? today);
 
   return (
     <Popover open={dateOpen} onOpenChange={setDateOpen}>
@@ -85,17 +105,57 @@ export function DateInput({
       <PopoverContent className="w-auto p-0" align="start">
         <Calendar
           mode="single"
+          disabled={isDateDisabled}
           selected={value}
-          defaultMonth={defaultMonth}
           onSelect={(date) => {
             if (date) {
               onChange(date);
               setDateOpen(false);
             }
           }}
-          disabled={isDateDisabled}
+          className="rounded-md border p-2"
           captionLayout="dropdown"
-          initialFocus
+          // classNames={{
+          //   month_caption: "mx-0",
+          // }}
+          // hideNavigation
+          showOutsideDays={false}
+          components={{
+            DropdownNav: (props: DropdownNavProps) => {
+              return (
+                <div className="flex w-full items-center gap-2">
+                  {props.children}
+                </div>
+              );
+            },
+            Dropdown: (props: DropdownProps) => {
+              return (
+                <Select
+                  value={String(props.value)}
+                  onValueChange={(value) => {
+                    if (props.onChange) {
+                      handleCalendarChange(value, props.onChange);
+                    }
+                  }}
+                >
+                  <SelectTrigger className="h-8 w-fit font-medium first:grow">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="max-h-[min(26rem,var(--radix-select-content-available-height))]">
+                    {props.options?.map((option) => (
+                      <SelectItem
+                        key={option.value}
+                        value={String(option.value)}
+                        disabled={option.disabled}
+                      >
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              );
+            },
+          }}
         />
       </PopoverContent>
     </Popover>
