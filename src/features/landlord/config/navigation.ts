@@ -58,6 +58,11 @@ export const landlordNavigation: SidebarItem[] = [
     url: "/landlord/help",
   },
   {
+    title: "Referral",
+    icon: "referral.png",
+    url: "/landlord/referral",
+  },
+  {
     title: "Settings",
     icon: "setting.png",
     url: "/landlord/settings",

@@ -41,6 +41,7 @@ import Expenses from "../expenses/Expenses";
 import Accounting from "../accounting/Accounting";
 import Education from "../education/Education";
 import Support from "@/features/shared/support/Support";
+import Referral from "../referral/Referral";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -218,6 +219,10 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "/help",
     element: <Support />,
+  },
+  {
+    path: "/referral",
+    element: <Referral />,
   },
   {
     path: "*",
