@@ -18,6 +18,7 @@ const currencyIconVariants = cva(
         sm: "size-4",
         md: "size-5",
         lg: "size-6",
+        xl: "size-12 border-4",
       },
     },
     defaultVariants: {
@@ -31,6 +32,7 @@ const iconSizeMap = {
   sm: "size-2",
   md: "size-3",
   lg: "size-4",
+  xl: "size-7",
 } as const;
 
 interface CurrencyIconProps
