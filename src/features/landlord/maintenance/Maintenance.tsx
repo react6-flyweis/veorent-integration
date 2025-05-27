@@ -44,7 +44,7 @@ export default function Maintenance() {
   return (
     <div className="w-full space-y-6">
       <div className="flex items-center justify-between">
-        <PageTitle title="Maintenance" />
+        <PageTitle title="Maintenance" className="mb-0" />
         <Link to="create">
           <CreateButton label="Create Request" />
         </Link>

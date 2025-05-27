@@ -69,7 +69,7 @@ export default function Renters() {
   };
 
   return (
-    <div className="container py-6">
+    <div className="">
       <div className="mb-2 flex items-center justify-between">
         <PageTitle title="Renters" className="mb-0" />
         <CreateButton label="Add New" onClick={handleAddNew} />

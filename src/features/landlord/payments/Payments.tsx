@@ -19,8 +19,8 @@ export default function Payments() {
 
   return (
     <div className="">
-      <div className="flex items-center justify-between">
-        <PageTitle title="Payments" />
+      <div className="mb-5 flex items-center justify-between">
+        <PageTitle title="Payments" className="mb-0" />
         <Link to="/landlord/payments/create-charge">
           <CreateButton label="Create Charge" />
         </Link>
