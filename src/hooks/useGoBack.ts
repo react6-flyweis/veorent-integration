@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useUserPreferenceStore } from "@/store/useUserPreferenceStore";
+import type { MouseEvent } from "react";
 
 /**
  * A hook that provides a function to navigate back to the previous page.
@@ -12,28 +13,68 @@ export function useGoBack(customFallbackPath?: string) {
   const location = useLocation();
   const userType = useUserPreferenceStore((state) => state.userType);
 
-  const goBack = useCallback(() => {
-    // Determine the fallback path based on user type if no custom path is provided
-    let fallbackPath = "/";
+  const goBack = useCallback(
+    (eventOrSteps?: MouseEvent<HTMLButtonElement> | number) => {
+      let stepsToGoBack = 1;
 
-    if (!customFallbackPath) {
-      if (userType === "landlord") {
-        fallbackPath = "/landlord";
-      } else if (userType === "tenant") {
-        fallbackPath = "/tenant";
+      // Check if the argument is a number
+      if (typeof eventOrSteps === "number") {
+        stepsToGoBack = eventOrSteps;
       }
-    } else {
-      fallbackPath = customFallbackPath;
-    }
 
-    if (location.key === "default") {
-      // If there's no history (user navigated directly to this page)
-      navigate(fallbackPath);
-    } else {
-      // Go back in the navigation history
-      navigate(-1);
-    }
-  }, [navigate, customFallbackPath, userType, location.key]);
+      // Determine the fallback path based on user type if no custom path is provided
+      let fallbackPath = "/";
+
+      if (!customFallbackPath) {
+        if (userType === "landlord") {
+          fallbackPath = "/landlord";
+        } else if (userType === "tenant") {
+          fallbackPath = "/tenant";
+        }
+      } else {
+        fallbackPath = customFallbackPath;
+      }
+
+      if (location.key === "default") {
+        // If there's no history (user navigated directly to this page)
+        navigate(fallbackPath);
+      } else {
+        try {
+          // For multiple steps back, use browser's history API
+          if (Math.abs(stepsToGoBack) > 1) {
+            console.log(
+              "Going back",
+              stepsToGoBack,
+              "steps using browser history",
+            );
+
+            // Set up a fallback timer in case history navigation fails
+            const fallbackTimer = setTimeout(() => {
+              console.log("History navigation timeout, using fallback");
+              navigate(fallbackPath);
+            }, 100);
+
+            // Listen for popstate to clear the timer if navigation succeeds
+            const handlePopState = () => {
+              clearTimeout(fallbackTimer);
+              window.removeEventListener("popstate", handlePopState);
+            };
+
+            window.addEventListener("popstate", handlePopState);
+            window.history.go(stepsToGoBack);
+          } else {
+            // For single step, use React Router
+            console.log("Going back", stepsToGoBack, "step");
+            navigate(-stepsToGoBack);
+          }
+        } catch (error) {
+          console.error("Navigation error:", error);
+          navigate(fallbackPath);
+        }
+      }
+    },
+    [navigate, customFallbackPath, userType, location.key],
+  );
 
   return goBack;
 }
