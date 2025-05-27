@@ -46,13 +46,9 @@ export default function Subscription() {
   return (
     <div className="container">
       <PageTitle title="Subscription" />
-      <div className="grid grid-cols-1 gap-20 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-10 @md:grid-cols-2 @xl:grid-cols-3 @2xl:gap-14 @3xl:gap-20">
         {subscriptionPlans.map((plan) => (
-          <Link
-            to="/landlord/subscription/details"
-            className="no-underline"
-            key={plan.title}
-          >
+          <Link to="/landlord/subscription/details" key={plan.title}>
             <SubscriptionCard plan={plan} />
           </Link>
         ))}
