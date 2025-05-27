@@ -11,6 +11,7 @@ import {
   forwardRef,
   useImperativeHandle,
   useCallback,
+  useMemo,
 } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -51,19 +52,19 @@ export const MultiStepper = forwardRef<
   const [step, setStep] = useState(1);
 
   const steps = Children.toArray(children).filter(
-    (child) => isValidElement(child) && child.type === MultiStepperStep
+    (child) => isValidElement(child) && child.type === MultiStepperStep,
   ) as ReactElement[];
 
   const header = Children.toArray(children).find(
-    (child) => isValidElement(child) && child.type === MultiStepperHeader
+    (child) => isValidElement(child) && child.type === MultiStepperHeader,
   ) as ReactElement | undefined;
 
   const indicator = Children.toArray(children).find(
-    (child) => isValidElement(child) && child.type === MultiStepperIndicator
+    (child) => isValidElement(child) && child.type === MultiStepperIndicator,
   ) as ReactElement | undefined;
 
   const button = Children.toArray(children).find(
-    (child) => isValidElement(child) && child.type === MultiStepperButton
+    (child) => isValidElement(child) && child.type === MultiStepperButton,
   ) as ReactElement | undefined;
 
   const totalSteps = steps.length;
@@ -121,7 +122,7 @@ export const MultiStepper = forwardRef<
           {steps.map((child, index) =>
             index + 1 === step ? (
               <div key={index}>{cloneElement(child)}</div>
-            ) : null
+            ) : null,
           )}
         </div>
 
@@ -169,8 +170,8 @@ export function MultiStepperBackButton({
       type="button"
       onClick={handleBack}
       className={cn(
-        "rounded-full size-10",
-        !routeBack && currentStep === 1 && "invisible"
+        "size-10 rounded-full",
+        !routeBack && currentStep === 1 && "invisible",
       )}
       aria-label="Previous step"
     >
@@ -198,14 +199,14 @@ export function MultiStepperIndicator({
         {showBackButton && <MultiStepperBackButton routeBack={routeBack} />}
 
         {showCount && (
-          <span className="text-sm text-muted-foreground">
+          <span className="text-muted-foreground text-sm">
             Step {currentStep} of {totalSteps}
           </span>
         )}
       </div>
-      <div className="h-2 w-full bg-secondary rounded-full overflow-hidden">
+      <div className="bg-secondary h-2 w-full overflow-hidden rounded-full">
         <div
-          className="h-full bg-primary transition-all duration-300"
+          className="bg-primary h-full transition-all duration-300"
           style={{ width: `${progress}%` }}
           role="progressbar"
           aria-valuemin={0}
@@ -221,9 +222,20 @@ export function MultiStepperButton({ children }: PropsWithChildren) {
   const { currentStep, totalSteps, nextStep, currentStepValidator } =
     useContext(StepperContext);
 
-  const isLastStep = currentStep === totalSteps;
+  const isLastStep = useMemo(
+    () => currentStep === totalSteps,
+    [currentStep, totalSteps],
+  );
+  console.log({
+    currentStep,
+    totalSteps,
+    isLastStep,
+  });
 
-  const handleNextClick = async () => {
+  const handleNextClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    // Always prevent default to avoid unwanted form submission
+    e.preventDefault();
+    
     if (!isLastStep) {
       if (currentStepValidator) {
         const isValid = await currentStepValidator();
@@ -233,23 +245,42 @@ export function MultiStepperButton({ children }: PropsWithChildren) {
       } else {
         nextStep();
       }
+    } else {
+      // On last step, validate if needed then submit the form
+      if (currentStepValidator) {
+        const isValid = await currentStepValidator();
+        if (isValid) {
+          // Find the closest form and submit it
+          const form = (e.target as HTMLElement).closest('form');
+          if (form) {
+            form.requestSubmit();
+          }
+        }
+      } else {
+        // No validation needed, submit the form
+        const form = (e.target as HTMLElement).closest('form');
+        if (form) {
+          form.requestSubmit();
+        }
+      }
     }
   };
 
+  if (isLastStep && children) {
+    // If we have custom children for last step, render them
+    return <div className="flex justify-center pt-4">{children}</div>;
+  }
+
   return (
     <div className="flex justify-center pt-4">
-      {isLastStep && children ? (
-        children
-      ) : (
-        <Button
-          type={isLastStep ? "submit" : "button"}
-          size="lg"
-          className="w-3/5"
-          onClick={handleNextClick} // Updated
-        >
-          {isLastStep ? "Submit" : "Next"}
-        </Button>
-      )}
+      <Button
+        type="button"
+        size="lg"
+        className="w-3/5"
+        onClick={handleNextClick}
+      >
+        {isLastStep ? "Submit" : "Next"}
+      </Button>
     </div>
   );
 }
