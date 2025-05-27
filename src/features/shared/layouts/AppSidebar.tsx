@@ -4,19 +4,29 @@ import {
   SidebarHeader,
   SidebarMenuItem,
   SidebarMenuSubButton,
-  SidebarRail,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuSub,
   SidebarMenuSubItem,
+  useSidebar,
+  SidebarRail,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { ChevronRight, CircleIcon } from "lucide-react";
 import { NavLink, type To } from "react-router-dom";
+import { cn } from "@/lib/utils";
+import { motion } from "motion/react";
+import { useRef, useEffect, useState } from "react";
 
 export type SidebarSubItem = {
   title: string;
@@ -48,11 +58,90 @@ export function AppSidebar({
   onLogout,
   ...props
 }: AppSidebarProps) {
+  const { state } = useSidebar();
+
+  // Component to handle individual text animations
+  const AnimatedText = ({
+    children,
+    className,
+  }: {
+    children: string;
+    className?: string;
+  }) => {
+    const textRef = useRef<HTMLSpanElement>(null);
+    const [textWidth, setTextWidth] = useState(0);
+
+    useEffect(() => {
+      if (textRef.current) {
+        setTextWidth(textRef.current.scrollWidth);
+      }
+    }, [children]);
+
+    return (
+      <>
+        {/* Hidden span to measure text width */}
+        <span
+          ref={textRef}
+          className={cn("invisible absolute whitespace-nowrap", className)}
+          aria-hidden="true"
+        >
+          {children}
+        </span>
+        {/* Animated container */}
+        <motion.div
+          initial={false}
+          animate={{
+            width: state === "collapsed" ? 0 : textWidth,
+          }}
+          transition={{
+            duration: state === "collapsed" ? 0.3 : 0.4,
+            ease:
+              state === "collapsed"
+                ? [0.6, 0.04, 0.98, 0.335]
+                : [0.175, 0.885, 0.32, 1.275],
+            type: "tween",
+          }}
+          className="overflow-hidden"
+          style={{ display: "inline-block" }}
+        >
+          <motion.span
+            className={cn("whitespace-nowrap", className)}
+            animate={{
+              opacity: state === "collapsed" ? 0 : 1,
+              x: state === "collapsed" ? -10 : 0,
+            }}
+            transition={{
+              opacity: {
+                duration: state === "collapsed" ? 0.2 : 0.3,
+                delay: state === "collapsed" ? 0 : 0.15,
+                ease: state === "collapsed" ? "easeIn" : "easeOut",
+              },
+              x: {
+                duration: state === "collapsed" ? 0.25 : 0.35,
+                delay: state === "collapsed" ? 0 : 0.1,
+                ease:
+                  state === "collapsed"
+                    ? [0.55, 0.085, 0.68, 0.53]
+                    : [0.25, 0.46, 0.45, 0.94],
+              },
+            }}
+          >
+            {children}
+          </motion.span>
+        </motion.div>
+      </>
+    );
+  };
+
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-        <div className="flex items-center justify-center gap-2 py-2">
-          <img src="/logo.png" alt="logo" className="w-32" />
+        <div className="flex items-center justify-center">
+          {state === "collapsed" ? (
+            <SidebarTrigger className="size-8 text-white" />
+          ) : (
+            <img src="/logo.png" alt="logo" className="my-2 w-32" />
+          )}
         </div>
       </SidebarHeader>
       <SidebarContent className="gap-0">
@@ -68,70 +157,175 @@ export function AppSidebar({
               >
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
-                    <SidebarMenuButton className="group-data-[state=open]/collapsible:bg-sidebar-accent group-data-[state=open]/collapsible:rounded-b-none">
-                      <img
-                        src={item.icon}
-                        alt={item.title}
-                        className="size-4"
-                      />
-                      {item.title}
-                      <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
-                    </SidebarMenuButton>
+                    {state === "collapsed" ? (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <SidebarMenuButton
+                            className={cn(
+                              "group-data-[state=open]/collapsible:bg-sidebar-accent transition-all duration-300 ease-in-out group-data-[state=open]/collapsible:rounded-b-none",
+                              "justify-center",
+                            )}
+                          >
+                            <img
+                              src={"/icons/" + item.icon}
+                              alt={item.title}
+                              className="max-h-4 max-w-4 flex-shrink-0 transition-all duration-300"
+                            />
+                          </SidebarMenuButton>
+                        </TooltipTrigger>
+                        <TooltipContent side="right">
+                          <p>{item.title}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    ) : (
+                      <SidebarMenuButton
+                        className={cn(
+                          "group-data-[state=open]/collapsible:bg-sidebar-accent transition-all duration-300 ease-in-out group-data-[state=open]/collapsible:rounded-b-none",
+                          "pl-5",
+                        )}
+                      >
+                        <img
+                          src={"/icons/" + item.icon}
+                          alt={item.title}
+                          className="max-h-4 max-w-4 flex-shrink-0 transition-all duration-300"
+                        />
+                        <AnimatedText className="text-white">
+                          {item.title}
+                        </AnimatedText>
+                        <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+                      </SidebarMenuButton>
+                    )}
                   </CollapsibleTrigger>
+
+                  {state !== "collapsed" && (
+                    <CollapsibleContent className="bg-sidebar-accent rounded-b-md">
+                      <SidebarMenuSub className="border-0 p-0">
+                        {item.items.map((subItem) => (
+                          <SidebarMenuSubItem key={subItem.title}>
+                            <NavLink
+                              to={subItem.url}
+                              className="flex items-center gap-2 text-sm"
+                            >
+                              {({ isActive }) => (
+                                <SidebarMenuSubButton
+                                  asChild
+                                  isActive={isActive}
+                                >
+                                  <div>
+                                    <CircleIcon className="fill-primary size-2!" />
+                                    {subItem.title}
+                                  </div>
+                                </SidebarMenuSubButton>
+                              )}
+                            </NavLink>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  )}
                 </SidebarMenuItem>
-                <CollapsibleContent className="bg-sidebar-accent rounded-b-md">
-                  <SidebarMenuSub className="border-0 p-0">
-                    {item.items.map((subItem) => (
-                      <SidebarMenuSubItem key={subItem.title}>
-                        <NavLink
-                          to={subItem.url}
-                          className="flex items-center gap-2 text-sm"
-                        >
-                          {({ isActive }) => (
-                            <SidebarMenuSubButton asChild isActive={isActive}>
-                              <div>
-                                <CircleIcon className="fill-primary size-2!" />
-                                {subItem.title}
-                              </div>
-                            </SidebarMenuSubButton>
-                          )}
-                        </NavLink>
-                      </SidebarMenuSubItem>
-                    ))}
-                  </SidebarMenuSub>
-                </CollapsibleContent>
               </Collapsible>
             ) : (
               <SidebarMenuItem key={item.title}>
-                <NavLink to={(item as SidebarItemWithoutSubItems).url} end>
+                <NavLink
+                  className={cn(
+                    "flex",
+                    state === "collapsed" && "justify-center p-0",
+                  )}
+                  to={(item as SidebarItemWithoutSubItems).url}
+                  end
+                >
                   {({ isActive }) => (
-                    <SidebarMenuButton
-                      size="lg"
-                      className="pl-5"
-                      isActive={isActive}
-                    >
-                      <img
-                        src={"/icons/" + item.icon}
-                        alt={item.title}
-                        className="size-4"
-                      />
-
-                      <span className="text-white"> {item.title}</span>
-                    </SidebarMenuButton>
+                    <>
+                      {state === "collapsed" ? (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <SidebarMenuButton
+                              size="lg"
+                              className={cn(
+                                "m-0! transition-all duration-300 ease-in-out",
+                                "justify-center rounded-md",
+                              )}
+                              isActive={isActive}
+                            >
+                              <img
+                                src={"/icons/" + item.icon}
+                                alt={item.title}
+                                className="max-h-4 max-w-4 flex-shrink-0 transition-all duration-300"
+                              />
+                            </SidebarMenuButton>
+                          </TooltipTrigger>
+                          <TooltipContent side="right">
+                            <p>{item.title}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      ) : (
+                        <SidebarMenuButton
+                          size="lg"
+                          className={cn(
+                            "m-0! transition-all duration-300 ease-in-out",
+                            "pl-5",
+                          )}
+                          isActive={isActive}
+                        >
+                          <img
+                            src={"/icons/" + item.icon}
+                            alt={item.title}
+                            className="max-h-4 max-w-4 flex-shrink-0 transition-all duration-300"
+                          />
+                          <AnimatedText className="text-white">
+                            {item.title}
+                          </AnimatedText>
+                        </SidebarMenuButton>
+                      )}
+                    </>
                   )}
                 </NavLink>
               </SidebarMenuItem>
             );
           })}
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              size="lg"
-              className="gap-3 pl-6"
-              onClick={onLogout}
-            >
-              <img src={"/icons/logout.png"} alt="logout" className="size-4" />
-              <span className="text-base text-white"> logout</span>
-            </SidebarMenuButton>
+          <SidebarMenuItem className="flex justify-center">
+            {state === "collapsed" ? (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <SidebarMenuButton
+                    size="lg"
+                    className={cn(
+                      "transition-all duration-300 ease-in-out",
+                      "justify-center",
+                    )}
+                    onClick={onLogout}
+                  >
+                    <img
+                      src={"/icons/logout.png"}
+                      alt="logout"
+                      className="max-h-4 max-w-4 flex-shrink-0 transition-all duration-300"
+                    />
+                  </SidebarMenuButton>
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p>Logout</p>
+                </TooltipContent>
+              </Tooltip>
+            ) : (
+              <SidebarMenuButton
+                size="lg"
+                className={cn(
+                  "transition-all duration-300 ease-in-out",
+                  "pl-5",
+                )}
+                onClick={onLogout}
+              >
+                <img
+                  src={"/icons/logout.png"}
+                  alt="logout"
+                  className="max-h-4 max-w-4 flex-shrink-0 transition-all duration-300"
+                />
+                <AnimatedText className="text-base text-white">
+                  logout
+                </AnimatedText>
+              </SidebarMenuButton>
+            )}
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarContent>
