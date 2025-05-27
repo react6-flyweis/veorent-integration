@@ -3,6 +3,8 @@ import { CurrencyIcon } from "@/components/CurrencyIcon";
 
 import subscriptionDetailsIcon from "./assets/subscription-details.png";
 import { BackButton } from "@/components/BackButton";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { PaymentModeDialog } from "@/features/shared/payments/components/PaymentModeDialog";
 
 export default function SubscriptionDetails() {
   // This would typically come from an API or store
@@ -57,9 +59,16 @@ export default function SubscriptionDetails() {
         </ul>
 
         <div className="mt-8 flex justify-center">
-          <Button className="w-3/5" size="lg">
-            Buy Subscription
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="w-3/5" size="lg">
+                Buy Subscription
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <PaymentModeDialog amount={subscriptionPlan.price} />
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
     </div>

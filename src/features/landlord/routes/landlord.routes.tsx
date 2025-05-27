@@ -45,6 +45,7 @@ import Referral from "../referral/Referral";
 import Subscription from "../subscription/Subscription";
 import SubscriptionDetails from "../subscription/SubscriptionDetails";
 import Setting from "../settings/Setting";
+import PaymentSuccessful from "@/features/shared/payments/PaymentSuccessful";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -238,6 +239,10 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "/settings",
     element: <Setting />,
+  },
+  {
+    path: "/payment/success",
+    element: <PaymentSuccessful />,
   },
   {
     path: "*",
