@@ -48,6 +48,11 @@ export const landlordNavigation: SidebarItem[] = [
     url: "/landlord/accounting",
   },
   {
+    title: "Education",
+    icon: "education.png",
+    url: "/landlord/education",
+  },
+  {
     title: "Settings",
     icon: "setting.png",
     url: "/landlord/settings",
