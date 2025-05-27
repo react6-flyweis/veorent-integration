@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/ghost-tabs";
 import { AccountForm } from "./components/AccountForm";
 import { NotificationPreferences } from "./components/NotificationPreferences";
+import { Navigate } from "react-router";
 
 export default function Setting() {
   return (
@@ -31,10 +32,7 @@ export default function Setting() {
         </TabsContent>
 
         <TabsContent value="payment">
-          <div>
-            <h2 className="mb-4 text-xl font-bold">Payment Settings</h2>
-            {/* Payment settings content */}
-          </div>
+          <Navigate to="/landlord/payments" />
         </TabsContent>
       </Tabs>
     </div>
