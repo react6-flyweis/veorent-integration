@@ -6,10 +6,11 @@ import {
   TabsTrigger,
 } from "@/components/ui/ghost-tabs";
 import { AccountForm } from "./components/AccountForm";
+import { NotificationPreferences } from "./components/NotificationPreferences";
 
 export default function Setting() {
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div>
       <PageTitle title="Settings" />
 
       <Tabs defaultValue="account" className="mt-6">
@@ -26,10 +27,7 @@ export default function Setting() {
         </TabsContent>
 
         <TabsContent value="notifications">
-          <div>
-            <h2 className="mb-4 text-xl font-bold">Notification Preferences</h2>
-            {/* Notification preferences content */}
-          </div>
+          <NotificationPreferences />
         </TabsContent>
 
         <TabsContent value="payment">
