@@ -10,6 +10,7 @@ type ImageUploadProps = {
   maxFiles?: number;
   className?: string;
   dragPrompt?: string;
+  variant?: "default" | "small";
 };
 
 export const ImageUpload = ({
@@ -20,6 +21,7 @@ export const ImageUpload = ({
   maxFiles = 1,
   className = "",
   dragPrompt = "CLICK OR DRAG TO UPLOAD IMAGES",
+  variant = "default",
 }: ImageUploadProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [dragActive, setDragActive] = useState(false);
@@ -152,12 +154,20 @@ export const ImageUpload = ({
             disabled={isMaxFilesReached}
           />
           <div
-            className={`flex h-40 flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed p-6 transition-colors ${
+            className={`flex flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed p-6 transition-colors ${
               dragActive ? "border-primary bg-primary/5" : ""
-            } `}
+            } ${variant === "small" ? "h-24" : "h-40"}`}
           >
-            <img src={picturesIcon} className="size-10" alt="Upload Images" />
-            <span className="text-muted-foreground text-center text-lg">
+            <img
+              src={picturesIcon}
+              className={`${variant === "small" ? "size-6" : "size-10"}`}
+              alt="Upload Images"
+            />
+            <span
+              className={`text-muted-foreground text-center ${
+                variant === "small" ? "text-sm" : "text-lg"
+              }`}
+            >
               {isMaxFilesReached
                 ? `Maximum ${maxFiles} image${maxFiles > 1 ? "s" : ""} reached`
                 : dragPrompt}
