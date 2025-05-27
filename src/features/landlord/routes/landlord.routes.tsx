@@ -42,6 +42,7 @@ import Accounting from "../accounting/Accounting";
 import Education from "../education/Education";
 import Support from "@/features/shared/support/Support";
 import Referral from "../referral/Referral";
+import Subscription from "../subscription/Subscription";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -223,6 +224,10 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "/referral",
     element: <Referral />,
+  },
+  {
+    path: "/subscription",
+    element: <Subscription />,
   },
   {
     path: "*",
