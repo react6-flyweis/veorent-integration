@@ -44,6 +44,7 @@ import Support from "@/features/shared/support/Support";
 import Referral from "../referral/Referral";
 import Subscription from "../subscription/Subscription";
 import SubscriptionDetails from "../subscription/SubscriptionDetails";
+import Setting from "../settings/Setting";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -233,6 +234,10 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "/subscription/:id",
     element: <SubscriptionDetails />,
+  },
+  {
+    path: "/settings",
+    element: <Setting />,
   },
   {
     path: "*",
