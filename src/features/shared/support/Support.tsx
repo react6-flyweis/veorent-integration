@@ -8,10 +8,10 @@ export default function Support() {
       <PageTitle title="Support" withBack />
       <img
         src={supportImg}
-        className="h-52 w-full object-cover rounded"
+        className="h-52 w-full rounded object-cover"
         alt=""
       />
-      <h2 className="text-xl font-bold text-primary">
+      <h2 className="text-primary text-xl font-bold">
         In Veorent we are here for 24x7
       </h2>
       <ContactForm />
