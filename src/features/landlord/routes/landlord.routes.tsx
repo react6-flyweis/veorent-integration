@@ -40,6 +40,7 @@ import OneTimeCharge from "../payments/OneTimeCharge";
 import Expenses from "../expenses/Expenses";
 import Accounting from "../accounting/Accounting";
 import Education from "../education/Education";
+import Support from "@/features/shared/support/Support";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -213,6 +214,10 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "/accounting",
     element: <Accounting />,
+  },
+  {
+    path: "/help",
+    element: <Support />,
   },
   {
     path: "*",
