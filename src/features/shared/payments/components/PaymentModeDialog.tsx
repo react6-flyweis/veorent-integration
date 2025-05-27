@@ -7,6 +7,7 @@ import mtnImg from "@/assets/images/mtn.png";
 import orangeMoneyImg from "@/assets/images/orange-money.png";
 import cardImg from "@/assets/images/card.png";
 import { useUserPreferenceStore } from "@/store/useUserPreferenceStore";
+import { DialogTitle } from "@/components/ui/dialog";
 
 const paymentOptions = [
   {
@@ -37,7 +38,9 @@ export function PaymentModeDialog({ amount }: { amount: string }) {
 
   return (
     <div className="">
-      <div className="text-left text-xl font-bold">Payment Mode</div>
+      <DialogTitle className="text-left text-xl font-bold">
+        Payment Mode
+      </DialogTitle>
 
       <div className="space-y-4">
         {paymentOptions.map((method) => (
