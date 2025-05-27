@@ -25,7 +25,7 @@ import {
 import duesImg from "@/assets/images/charges.png";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
-import { PaymentModeDialog } from "@/components/PaymentModeDialog";
+import { PaymentModeDialog } from "@/features/shared/payments/components/PaymentModeDialog";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 const dues = [

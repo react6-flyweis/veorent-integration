@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { Link } from "react-router";
 
 import mtnImg from "@/assets/images/mtn.png";
 import orangeMoneyImg from "@/assets/images/orange-money.png";
 import cardImg from "@/assets/images/card.png";
-import { Link } from "react-router";
+import { useUserPreferenceStore } from "@/store/useUserPreferenceStore";
 
 const paymentOptions = [
   {
@@ -27,6 +28,12 @@ const paymentOptions = [
 
 export function PaymentModeDialog({ amount }: { amount: string }) {
   const [selected, setSelected] = useState("orange");
+  const { userType } = useUserPreferenceStore();
+
+  // Format payment URL with user type prefix
+  const paymentSuccessUrl = userType
+    ? `/${userType}/payment/success`
+    : `/payment/success`;
 
   return (
     <div className="">
@@ -42,7 +49,7 @@ export function PaymentModeDialog({ amount }: { amount: string }) {
               <img
                 src={method.icon}
                 alt={method.label}
-                className="rounded-full size-9"
+                className="size-9 rounded-full"
               />
               <span className="font-medium">{method.label}</span>
             </div>
@@ -51,7 +58,7 @@ export function PaymentModeDialog({ amount }: { amount: string }) {
               variant={selected === method.id ? "default" : "outline"}
               className={cn(
                 "rounded-full text-xs",
-                selected === method.id && "bg-green-500"
+                selected === method.id && "bg-green-500",
               )}
               onClick={() => setSelected(method.id)}
             >
@@ -63,12 +70,12 @@ export function PaymentModeDialog({ amount }: { amount: string }) {
 
       <div className="pt-6">
         <Button
-          className="w-full bg-[#001F4D] text-white text-base font-bold py-6"
+          className="w-full bg-[#001F4D] py-6 text-base font-bold text-white"
           asChild
         >
-          <Link to="/payment/success">
+          <Link to={paymentSuccessUrl}>
             CONFIRM &rsaquo;
-            <span className="block text-sm font-normal text-white ml-2">
+            <span className="ml-2 block text-sm font-normal text-white">
               Pay ${amount} using{" "}
               {paymentOptions.find((p) => p.id === selected)?.label}
             </span>
