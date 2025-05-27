@@ -25,7 +25,7 @@ import {
 import duesImg from "@/assets/images/charges.png";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
-import { PaymentModeDialog } from "./components/PaymentModeDialog";
+import { PaymentModeDialog } from "@/components/PaymentModeDialog";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 const dues = [
@@ -75,7 +75,7 @@ export default function MakePayment() {
         <form onSubmit={form.handleSubmit((data) => console.log(data))}>
           <MultiStepper>
             <MultiStepperHeader>
-              <div className="flex gap-2 items-center">
+              <div className="flex items-center gap-2">
                 <MultiStepperBackButton routeBack={() => navigate(-1)} />
                 <PageTitle title="Make Payment" />
               </div>
@@ -93,15 +93,15 @@ export default function MakePayment() {
                         <FormLabel className="sr-only">{due.title}</FormLabel>
                         <FormControl>
                           <label className="cursor-pointer">
-                            <Card className="py-2 gap-1">
-                              <CardHeader className="flex px-2 items-center justify-between">
+                            <Card className="gap-1 py-2">
+                              <CardHeader className="flex items-center justify-between px-2">
                                 <div className="flex items-center gap-2">
                                   <img
                                     className="size-8"
                                     src={paperMoneyImg}
                                     alt=""
                                   />
-                                  <p className="font-semibold text-2xl text-primary">
+                                  <p className="text-primary text-2xl font-semibold">
                                     {due.title}
                                   </p>
                                 </div>
@@ -115,7 +115,7 @@ export default function MakePayment() {
                                         const newValue = checked
                                           ? [...field.value, due._id]
                                           : field.value.filter(
-                                              (id) => id !== due._id
+                                              (id) => id !== due._id,
                                             );
                                         field.onChange(newValue);
                                       }}
@@ -130,7 +130,7 @@ export default function MakePayment() {
                                       <span>Date: </span>
                                       <span>{due.date}</span>
                                     </div>
-                                    <div className="flex gap-1 items-center">
+                                    <div className="flex items-center gap-1">
                                       <span>Rent: </span>
                                       <EuroIcon className="size-3" />
                                       <span>{due.total}</span>
@@ -174,18 +174,18 @@ export default function MakePayment() {
                     {dues.map((due) => (
                       <div className="flex items-center gap-2" key={due._id}>
                         <Checkbox checked={selectedDues.includes(due._id)} />
-                        <div className="flex-1 flex items-center justify-between">
+                        <div className="flex flex-1 items-center justify-between">
                           <div className="flex-1 space-y-1">
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-muted-foreground text-sm">
                               Due On: {due.date}
                             </p>
-                            <p className="font-semibold text-base text-blue-900">
+                            <p className="text-base font-semibold text-blue-900">
                               {due.title}
                             </p>
                           </div>
-                          <div className="text-right text-blue-900 font-bold">
+                          <div className="text-right font-bold text-blue-900">
                             <span className="flex items-center gap-1">
-                              <EuroIcon className="w-4 h-4" />
+                              <EuroIcon className="h-4 w-4" />
                               {due.total.toLocaleString(undefined, {
                                 minimumFractionDigits: 2,
                               })}
@@ -215,19 +215,19 @@ export default function MakePayment() {
 
                 <div>
                   <h3 className="">Summary</h3>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     Lorem Ipsum is simply dummy text of the printing and
                     typesetting industry. Lorem Ipsum has been the industry's
                     standard dummy text ever since the 1500s
                   </p>
                 </div>
 
-                <div className="pt-4 border-t mt-4 flex justify-between items-center">
+                <div className="mt-4 flex items-center justify-between border-t pt-4">
                   <p className="text-lg font-semibold text-blue-900">
                     Total Payable Amount:
                   </p>
                   <p className="flex items-center gap-1 text-lg font-bold text-blue-900">
-                    <EuroIcon className="w-5 h-5" />
+                    <EuroIcon className="h-5 w-5" />
                     {total.toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                     })}

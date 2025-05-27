@@ -16,7 +16,7 @@ import RequestMaintenance from "@/features/tenant/maintenance/RequestMaintenance
 import Messages from "@/features/shared/messaging/Messages";
 import Notifications from "@/features/tenant/notifications/Notifications";
 import Payments from "@/features/tenant/payments/Payments";
-import PaymentSuccessful from "@/features/tenant/payments/PaymentSuccessful";
+import PaymentSuccessful from "@/features/shared/payments/PaymentSuccessful";
 import Settings from "@/features/tenant/settings/Settings";
 import SignDocuments from "@/features/tenant/documents/sign-documents/SignDocuments";
 import { type RouteObject } from "react-router-dom";
