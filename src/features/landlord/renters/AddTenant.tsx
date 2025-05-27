@@ -184,7 +184,7 @@ export default function AddTenant() {
   };
 
   return (
-    <div className="container mx-auto py-6">
+    <div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <MultiStepper>
