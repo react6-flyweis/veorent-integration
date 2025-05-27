@@ -38,6 +38,7 @@ import CreateCharge from "../payments/CreateCharge";
 import MonthlyCharge from "../payments/MonthlyCharge";
 import OneTimeCharge from "../payments/OneTimeCharge";
 import Expenses from "../expenses/Expenses";
+import Accounting from "../accounting/Accounting";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -203,6 +204,10 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "/expenses",
     element: <Expenses />,
+  },
+  {
+    path: "/accounting",
+    element: <Accounting />,
   },
   {
     path: "*",
