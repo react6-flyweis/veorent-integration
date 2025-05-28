@@ -71,11 +71,12 @@ export function AccountForm() {
   }
 
   return (
-    <div>
-      <h2 className="mb-4 text-xl font-bold">My Information</h2>
+    <div className="w-full">
+      <h2 className="mb-4 text-xl font-bold sm:mb-6">My Information</h2>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
+          {/* Name Fields */}
+          <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2">
             <FormField
               control={form.control}
               name="firstName"
@@ -104,6 +105,7 @@ export function AccountForm() {
             />
           </div>
 
+          {/* Company Field */}
           <FormField
             control={form.control}
             name="company"
@@ -120,7 +122,8 @@ export function AccountForm() {
             )}
           />
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          {/* Contact Fields */}
+          <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2">
             <FormField
               control={form.control}
               name="email"
@@ -149,17 +152,19 @@ export function AccountForm() {
             />
           </div>
 
-          <div className="flex gap-8">
-            <div className="grid flex-1 grid-cols-3 gap-2">
-              <div className="col-span-2">
+          {/* Address Section */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium">Address</h3>
+            
+            {/* Street Address and Unit */}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+              <div className="sm:col-span-2">
                 <FormField
                   control={form.control}
                   name="streetAddress"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-medium">
-                        Street Address
-                      </FormLabel>
+                      <FormLabel className="font-medium">Street Address</FormLabel>
                       <FormControl>
                         <Input {...field} className="w-full" />
                       </FormControl>
@@ -183,84 +188,91 @@ export function AccountForm() {
                   )}
                 />
               </div>
-              <div>
-                <FormField
-                  control={form.control}
-                  name="city"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="font-medium">City</FormLabel>
-                      <FormControl>
-                        <Input {...field} className="w-full" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div>
-                <FormField
-                  control={form.control}
-                  name="region"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="font-medium">Region</FormLabel>
-                      <FormControl>
-                        <Input {...field} className="w-full" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div>
-                <FormField
-                  control={form.control}
-                  name="zipCode"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="font-medium">Zip Code</FormLabel>
-                      <FormControl>
-                        <Input {...field} className="w-full" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
             </div>
-            <div className="flex flex-1 gap-5">
-              <div className="flex flex-col justify-between">
-                <div>
-                  <h3 className="mb-1 block font-medium">Password</h3>
-                  <Button
-                    type="button"
-                    variant="outlinePrimary"
-                    className="w-full uppercase"
-                    onClick={() => setShowPasswordDialog(true)}
-                  >
-                    Change Password
-                  </Button>
-                </div>
+
+            {/* City, Region, Zip */}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <FormField
+                control={form.control}
+                name="city"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-medium">City</FormLabel>
+                    <FormControl>
+                      <Input {...field} className="w-full" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="region"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-medium">Region</FormLabel>
+                    <FormControl>
+                      <Input {...field} className="w-full" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="zipCode"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-medium">Zip Code</FormLabel>
+                    <FormControl>
+                      <Input {...field} className="w-full" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+
+          {/* Password and Logo Section */}
+          <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
+            {/* Password Section */}
+            <div className="flex flex-col space-y-4 lg:min-w-[200px]">
+              <div>
+                <h3 className="mb-2 text-lg font-medium">Password</h3>
                 <Button
-                  type="submit"
-                  className="bg-blue-900 px-8 text-white hover:bg-blue-800"
+                  type="button"
+                  variant="outlinePrimary"
+                  className="w-full uppercase sm:w-auto sm:min-w-[160px]"
+                  onClick={() => setShowPasswordDialog(true)}
                 >
-                  SAVE CHANGES
+                  Change Password
                 </Button>
               </div>
-              <div className="flex-1">
-                <FormLabel className="mb-1 block font-medium">
-                  Company Logo
-                </FormLabel>
-                <div className="flex flex-col items-center justify-center rounded-md border-2 border-dashed border-gray-300 p-6">
-                  <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full border border-gray-300">
-                    <PlusIcon className="h-5 w-5 text-gray-500" />
-                  </div>
-                  <span className="text-sm text-gray-500">ADD LOGO</span>
+            </div>
+
+            {/* Company Logo Section */}
+            <div className="flex-1">
+              <FormLabel className="mb-2 block text-lg font-medium">
+                Company Logo
+              </FormLabel>
+              <div className="flex h-32 flex-col items-center justify-center rounded-md border-2 border-dashed border-gray-300 p-4 sm:h-40 sm:p-6">
+                <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full border border-gray-300">
+                  <PlusIcon className="h-5 w-5 text-gray-500" />
                 </div>
+                <span className="text-sm text-gray-500">ADD LOGO</span>
               </div>
             </div>
+          </div>
+
+          {/* Submit Button */}
+          <div className="flex justify-end pt-4">
+            <Button
+              type="submit"
+              className="w-full bg-blue-900 px-8 text-white hover:bg-blue-800 sm:w-auto"
+            >
+              SAVE CHANGES
+            </Button>
           </div>
         </form>
       </Form>

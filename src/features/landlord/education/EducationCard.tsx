@@ -13,7 +13,7 @@ export function EducationCard({
   imageUrl,
 }: EducationCardProps) {
   return (
-    <div className="mb-8 grid grid-cols-3 gap-4">
+    <div className="mb-8 grid gap-4 @md:grid-cols-3">
       <div className="relative col-span-1 w-full overflow-hidden rounded-lg shadow">
         <img
           src={imageUrl}
@@ -26,7 +26,7 @@ export function EducationCard({
           </div>
         </div>
       </div>
-      <div className="col-span-2 flex flex-1 flex-col justify-between">
+      <div className="flex flex-1 flex-col justify-between @md:col-span-2">
         <div>
           <h3 className="text-primary mb-2 text-xl font-bold">{title}</h3>
           <p className="text-gray-600">{description}</p>

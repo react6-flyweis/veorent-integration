@@ -15,7 +15,7 @@ export default function Setting() {
       <PageTitle title="Settings" />
 
       <Tabs defaultValue="account" className="mt-6">
-        <TabsList className="mb-5 flex max-w-2xl px-0 @lg:gap-10">
+        <TabsList className="mb-5 flex px-0 @lg:max-w-2xl @lg:gap-10">
           <TabsTrigger value="account">ACCOUNT</TabsTrigger>
           <TabsTrigger value="notifications">
             NOTIFICATION PREFERENCES

@@ -13,11 +13,11 @@ export const FormCard = ({
   title: string;
   description: string;
   buttonText: string;
-  url ?: string;
+  url?: string;
 }) => {
   return (
     <Card className="">
-      <CardContent className="flex items-center justify-between">
+      <CardContent className="flex flex-col items-center justify-between gap-3 @lg:flex-row">
         <div className="flex items-center gap-4">
           <img src={penApplicationIcon} className="size-14" />
           <div>
@@ -25,10 +25,8 @@ export const FormCard = ({
             <p className="text-muted-foreground text-sm">{description}</p>
           </div>
         </div>
-        <Button className="w-32" asChild>
-          <Link to={url ?? "#"} >
-            {buttonText}
-          </Link>
+        <Button className="w-full @lg:w-32" asChild>
+          <Link to={url ?? "#"}>{buttonText}</Link>
         </Button>
       </CardContent>
     </Card>

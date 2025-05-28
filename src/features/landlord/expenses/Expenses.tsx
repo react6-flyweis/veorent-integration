@@ -2,20 +2,33 @@ import { CreateButton } from "@/components/CreateButton";
 import { CurrencyIcon } from "@/components/CurrencyIcon";
 import { PageTitle } from "@/components/PageTitle";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Separator } from "@/components/ui/separator";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   CalendarDaysIcon,
   ExternalLinkIcon,
   LayoutDashboardIcon,
 } from "lucide-react";
 import { useState } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import CreateExpense from "./CreateExpense";
 
 interface Expense {
@@ -30,6 +43,7 @@ interface Expense {
 const Expenses = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [timeFilter, setTimeFilter] = useState<string | null>("All Time");
+  const isMobile = useIsMobile();
 
   const expenses: Expense[] = [
     {
@@ -64,60 +78,89 @@ const Expenses = () => {
       </div>
 
       <div className="flex gap-2">
-        <Button
-          variant={selectedCategory === null ? "default" : "outline"}
-          onClick={() => setSelectedCategory(null)}
-          className="rounded-md"
-          size="sm"
-        >
-          <LayoutDashboardIcon className="size-4" />
-          <span>All Categories</span>
-        </Button>
-        <Button
-          variant={timeFilter === "All Time" ? "default" : "outline"}
-          onClick={() => setTimeFilter("All Time")}
-          className="rounded-md"
-          size="sm"
-        >
-          <CalendarDaysIcon className="size-4" />
-          <span>All Time</span>
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant={selectedCategory === null ? "default" : "outline"}
+              onClick={() => setSelectedCategory(null)}
+              className="rounded-md"
+              size="sm"
+            >
+              <LayoutDashboardIcon className="size-4" />
+              {!isMobile && <span>All Categories</span>}
+            </Button>
+          </TooltipTrigger>
+          {isMobile && (
+            <TooltipContent>
+              <p>All Categories</p>
+            </TooltipContent>
+          )}
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant={timeFilter === "All Time" ? "default" : "outline"}
+              onClick={() => setTimeFilter("All Time")}
+              className="rounded-md"
+              size="sm"
+            >
+              <CalendarDaysIcon className="size-4" />
+              {!isMobile && <span>All Time</span>}
+            </Button>
+          </TooltipTrigger>
+          {isMobile && (
+            <TooltipContent>
+              <p>All Time</p>
+            </TooltipContent>
+          )}
+        </Tooltip>
         <div className="ml-auto">
-          <Button className="rounded-md bg-blue-500" size="sm">
-            <ExternalLinkIcon />
-            <span>EXPORT</span>
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button className="rounded-md bg-blue-500" size="sm">
+                <ExternalLinkIcon />
+                {!isMobile && <span>EXPORT</span>}
+              </Button>
+            </TooltipTrigger>
+            {isMobile && (
+              <TooltipContent>
+                <p>Export</p>
+              </TooltipContent>
+            )}
+          </Tooltip>
         </div>
       </div>
 
       <Card className="gap-0 overflow-hidden p-0">
-        <CardHeader className="my-0 px-0 shadow">
-          <div className="grid grid-cols-4 p-3 text-sm font-medium">
-            <div>DATE</div>
-            <div>CATEGORY & DESCRIPTION</div>
-            <div>RENTAL</div>
-            <div className="flex items-center gap-1">
-              TOTAL <CurrencyIcon /> {totalExpenses.toFixed(2)}
-            </div>
-          </div>
-          <Separator className="my-0" />
-        </CardHeader>
-
-        <CardContent className="p-0">
-          {expenses.map((expense) => (
-            <div key={expense.id}>
-              <div className="grid grid-cols-4 items-center p-4">
-                <div className="text-gray-600">{expense.date}</div>
-                <div className="text-lg font-medium">{expense.description}</div>
-                <div className="text-blue-500 underline">{expense.rental}</div>
-                <div className="flex items-center gap-1 text-lg font-medium">
-                  <CurrencyIcon />
-                  {expense.amount.toFixed(2)}
+        <Table>
+          <TableHeader>
+            <TableRow className="shadow bg-background">
+              <TableHead className="p-3 text-sm font-medium">DATE</TableHead>
+              <TableHead className="p-3 text-sm font-medium">CATEGORY & DESCRIPTION</TableHead>
+              <TableHead className="p-3 text-sm font-medium">RENTAL</TableHead>
+              <TableHead className="p-3 text-sm font-medium">
+                <div className="flex items-center gap-1">
+                  TOTAL <CurrencyIcon /> {totalExpenses.toFixed(2)}
                 </div>
-              </div>
-            </div>
-          ))}
-        </CardContent>
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {expenses.map((expense) => (
+              <TableRow key={expense.id}>
+                <TableCell className="text-gray-600 p-4">{expense.date}</TableCell>
+                <TableCell className="text-lg font-medium p-4">{expense.description}</TableCell>
+                <TableCell className="text-blue-500 underline p-4">{expense.rental}</TableCell>
+                <TableCell className="p-4">
+                  <div className="flex items-center gap-1 text-lg font-medium">
+                    <CurrencyIcon />
+                    {expense.amount.toFixed(2)}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </Card>
     </div>
   );

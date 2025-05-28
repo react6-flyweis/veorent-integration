@@ -18,7 +18,7 @@ export function BuilderLayout({
   return (
     <div className="flex w-full flex-col">
       <div className="mb-3 flex items-center justify-between">
-        <PageTitle title={title} withBack />
+        <PageTitle title={title} withBack className="mb-0" />
 
         <Button variant="ghost" onClick={onSave}>
           Save &amp; Exit

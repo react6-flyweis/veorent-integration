@@ -60,14 +60,14 @@ export default function Referral() {
           <Input
             value={referralLink}
             readOnly
-            className="max-w-1/2 flex-1 text-blue-500"
+            className="flex-1 text-blue-500 @md:max-w-1/2"
           />
           <Button onClick={handleCopyLink} className="whitespace-nowrap">
             {copied ? "Copied!" : "Copy Link"}
           </Button>
         </div>
 
-        <div className="mb-6 flex items-center gap-2">
+        <div className="mb-6 flex flex-col items-center gap-2 @lg:flex-row">
           <p className="text-sm">SHARE YOUR LINK ON:</p>
           <div className="flex gap-2">
             <Button

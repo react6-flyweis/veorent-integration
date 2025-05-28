@@ -29,10 +29,10 @@ export default function Applicants() {
             </div>
           </div>
 
-          <div className="flex items-end">
-            <div className="flex flex-1 items-center gap-5">
+          <div className="flex flex-col @md:flex-row @md:items-end">
+            <div className="flex flex-1 flex-col items-center gap-5 @md:flex-row">
               <p className="text-muted-foreground text-lg">Applied to</p>
-              <div className="flex gap-3">
+              <div className="flex w-full flex-col gap-3 @lg:flex-row">
                 {[
                   {
                     title: "Marvel Property",
