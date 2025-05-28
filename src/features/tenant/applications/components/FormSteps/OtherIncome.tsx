@@ -63,14 +63,18 @@ export function OtherIncome({ onSuccess }: { onSuccess: () => void }) {
                 </FormDescription>
                 <FormControl>
                   <RadioGroup
-                    className="flex"
-                    {...field}
+                    className="flex gap-6"
                     value={field.value ? "yes" : "no"}
+                    onValueChange={(value) => field.onChange(value === "yes")}
                   >
-                    <RadioGroupItem value="yes" />
-                    <Label>Yes</Label>
-                    <RadioGroupItem value="no" />
-                    <Label>No</Label>
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="yes" id="yes" />
+                      <Label htmlFor="yes">Yes</Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="no" id="no" />
+                      <Label htmlFor="no">No</Label>
+                    </div>
                   </RadioGroup>
                 </FormControl>
                 <FormMessage />

@@ -60,13 +60,17 @@ export function GeneralInfo({ onSuccess }: { onSuccess: () => void }) {
                 <FormControl>
                   <RadioGroup
                     className="flex"
-                    {...field}
                     value={field.value ? "yes" : "no"}
+                    onValueChange={(value) => field.onChange(value === "yes")}
                   >
-                    <RadioGroupItem value="yes" />
-                    <Label>Yes</Label>
-                    <RadioGroupItem value="no" />
-                    <Label>No</Label>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="yes" id="haveAnimal-yes" />
+                      <Label htmlFor="haveAnimal-yes">Yes</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="no" id="haveAnimal-no" />
+                      <Label htmlFor="haveAnimal-no">No</Label>
+                    </div>
                   </RadioGroup>
                 </FormControl>
                 <FormMessage />
@@ -84,13 +88,17 @@ export function GeneralInfo({ onSuccess }: { onSuccess: () => void }) {
                 <FormControl>
                   <RadioGroup
                     className="flex"
-                    {...field}
                     value={field.value ? "yes" : "no"}
+                    onValueChange={(value) => field.onChange(value === "yes")}
                   >
-                    <RadioGroupItem value="yes" />
-                    <Label>Yes</Label>
-                    <RadioGroupItem value="no" />
-                    <Label>No</Label>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="yes" id="haveVehicle-yes" />
+                      <Label htmlFor="haveVehicle-yes">Yes</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="no" id="haveVehicle-no" />
+                      <Label htmlFor="haveVehicle-no">No</Label>
+                    </div>
                   </RadioGroup>
                 </FormControl>
                 <FormMessage />
@@ -106,13 +114,17 @@ export function GeneralInfo({ onSuccess }: { onSuccess: () => void }) {
                 <FormControl>
                   <RadioGroup
                     className="flex"
-                    {...field}
                     value={field.value ? "yes" : "no"}
+                    onValueChange={(value) => field.onChange(value === "yes")}
                   >
-                    <RadioGroupItem value="yes" />
-                    <Label>Yes</Label>
-                    <RadioGroupItem value="no" />
-                    <Label>No</Label>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="yes" id="smoke-yes" />
+                      <Label htmlFor="smoke-yes">Yes</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="no" id="smoke-no" />
+                      <Label htmlFor="smoke-no">No</Label>
+                    </div>
                   </RadioGroup>
                 </FormControl>
                 <FormMessage />
@@ -131,13 +143,17 @@ export function GeneralInfo({ onSuccess }: { onSuccess: () => void }) {
                 <FormControl>
                   <RadioGroup
                     className="flex"
-                    {...field}
                     value={field.value ? "yes" : "no"}
+                    onValueChange={(value) => field.onChange(value === "yes")}
                   >
-                    <RadioGroupItem value="yes" />
-                    <Label>Yes</Label>
-                    <RadioGroupItem value="no" />
-                    <Label>No</Label>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="yes" id="requirement-yes" />
+                      <Label htmlFor="requirement-yes">Yes</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="no" id="requirement-no" />
+                      <Label htmlFor="requirement-no">No</Label>
+                    </div>
                   </RadioGroup>
                 </FormControl>
                 <FormMessage />

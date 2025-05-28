@@ -59,13 +59,17 @@ export function BackgroundInfo({ onSuccess }: { onSuccess: () => void }) {
                 <FormControl>
                   <RadioGroup
                     className="flex"
-                    {...field}
                     value={field.value ? "yes" : "no"}
+                    onValueChange={(value) => field.onChange(value === "yes")}
                   >
-                    <RadioGroupItem value="yes" />
-                    <Label>Yes</Label>
-                    <RadioGroupItem value="no" />
-                    <Label>No</Label>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="yes" id="evicted-yes" />
+                      <Label htmlFor="evicted-yes">Yes</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="no" id="evicted-no" />
+                      <Label htmlFor="evicted-no">No</Label>
+                    </div>
                   </RadioGroup>
                 </FormControl>
                 <FormMessage />
@@ -81,18 +85,22 @@ export function BackgroundInfo({ onSuccess }: { onSuccess: () => void }) {
                   Have you or any member of your household ever been convicted
                   of (or pled guilty or no contest to) any criminal offense(s)
                   other than minor infraction(s) that were disposed of by means
-                  other than acquittal or a finding of “not guilty”?
+                  other than acquittal or a finding of "not guilty"?
                 </FormLabel>
                 <FormControl>
                   <RadioGroup
                     className="flex"
-                    {...field}
                     value={field.value ? "yes" : "no"}
+                    onValueChange={(value) => field.onChange(value === "yes")}
                   >
-                    <RadioGroupItem value="yes" />
-                    <Label>Yes</Label>
-                    <RadioGroupItem value="no" />
-                    <Label>No</Label>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="yes" id="criminalOffense-yes" />
+                      <Label htmlFor="criminalOffense-yes">Yes</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="no" id="criminalOffense-no" />
+                      <Label htmlFor="criminalOffense-no">No</Label>
+                    </div>
                   </RadioGroup>
                 </FormControl>
                 <FormMessage />
@@ -112,13 +120,17 @@ export function BackgroundInfo({ onSuccess }: { onSuccess: () => void }) {
                 <FormControl>
                   <RadioGroup
                     className="flex"
-                    {...field}
                     value={field.value ? "yes" : "no"}
+                    onValueChange={(value) => field.onChange(value === "yes")}
                   >
-                    <RadioGroupItem value="yes" />
-                    <Label>Yes</Label>
-                    <RadioGroupItem value="no" />
-                    <Label>No</Label>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="yes" id="bankrupted-yes" />
+                      <Label htmlFor="bankrupted-yes">Yes</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="no" id="bankrupted-no" />
+                      <Label htmlFor="bankrupted-no">No</Label>
+                    </div>
                   </RadioGroup>
                 </FormControl>
                 <FormMessage />
