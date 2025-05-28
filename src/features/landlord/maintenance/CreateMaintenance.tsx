@@ -259,7 +259,7 @@ export function CreateMaintenance() {
               disabled={form.formState.isSubmitting || !property}
               type="submit"
               size="lg"
-              className="w-3/5"
+              className="w-4/5 @lg:w-3/5"
             >
               Create Request
             </LoadingButton>

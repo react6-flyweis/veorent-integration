@@ -42,7 +42,7 @@ const demoData: MaintenanceIssue[] = [
 
 export default function Maintenance() {
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-8">
       <div className="flex items-center justify-between">
         <PageTitle title="Maintenance" className="mb-0" />
         <Link to="create">
@@ -52,35 +52,39 @@ export default function Maintenance() {
 
       <div className="flex items-center space-x-4">
         <Tabs defaultValue="all-time" className="flex-1">
-          <TabsList className="flex gap-2 border-0">
-            <TabsTrigger
-              value="all-time"
-              className="flex h-8 items-center bg-blue-100 font-semibold text-gray-700"
-            >
-              <Calendar1 className="size-5 text-gray-700" />
-              <span className="align-bottom"> All Time</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="rentals"
-              className="flex h-8 items-center bg-blue-100 font-semibold text-gray-700"
-            >
-              <Home className="size-5 text-gray-700" />
-              <span className="align-bottom"> Rentals</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="all-status"
-              className="flex h-8 items-center bg-blue-100 font-semibold text-gray-700"
-            >
-              <ClipboardList className="size-5 text-gray-700" />
-              <span className="align-bottom"> All Status</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="starred"
-              className="flex h-8 items-center bg-blue-100 font-semibold text-gray-700"
-            >
-              <Star className="size-5 text-gray-700" />
-              <span className="align-bottom"> Starred</span>
-            </TabsTrigger>
+          <TabsList className="flex flex-col items-start gap-2 border-0 @lg:flex-row">
+            <div className="flex gap-2">
+              <TabsTrigger
+                value="all-time"
+                className="flex h-8 items-center bg-blue-100 font-semibold text-gray-700"
+              >
+                <Calendar1 className="size-5 text-gray-700" />
+                <span className="hidden align-bottom @md:block"> All Time</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="rentals"
+                className="flex h-8 items-center bg-blue-100 font-semibold text-gray-700"
+              >
+                <Home className="size-5 text-gray-700" />
+                <span className="hidden align-bottom @md:block"> Rentals</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="all-status"
+                className="flex h-8 items-center bg-blue-100 font-semibold text-gray-700"
+              >
+                <ClipboardList className="size-5 text-gray-700" />
+                <span className="hidden align-bottom @md:block">
+                  All Status
+                </span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="starred"
+                className="flex h-8 items-center bg-blue-100 font-semibold text-gray-700"
+              >
+                <Star className="size-5 text-gray-700" />
+                <span className="hidden align-bottom @md:block"> Starred</span>
+              </TabsTrigger>
+            </div>
             <div className="focus-within-within:ring-2 focus-within-within:ring-blue-500 flex h-8 w-32 items-center justify-center rounded-md border px-1">
               <Search className="size-5 text-gray-500" />
               <Input

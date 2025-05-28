@@ -92,7 +92,7 @@ export function AgreementBuilder() {
         {sections.map((section) => (
           <div
             key={section.id}
-            className="flex items-center justify-between rounded-lg border bg-white p-4"
+            className="flex flex-col items-center justify-between gap-3 rounded-lg border bg-white p-4 @md:flex-row"
           >
             <div className="flex items-center gap-4">
               <IconRound icon={section.icon} />
@@ -103,7 +103,7 @@ export function AgreementBuilder() {
             </div>
 
             <Button
-              className="w-28 rounded-lg"
+              className="w-full rounded-lg @md:w-28"
               variant="outlinePrimary"
               asChild
               disabled={!section.path}

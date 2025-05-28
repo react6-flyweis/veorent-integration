@@ -16,7 +16,7 @@ export default function CreateLeaseAgreement() {
       <PageTitle title=" Create Your Colorado Lease Agreement" withBack />
 
       <Tabs defaultValue="builder" className="h-full">
-        <div className="flex items-center gap-5">
+        <div className="flex flex-col @md:flex-row @md:items-center @md:gap-5">
           <h2 className="text-2xl">Complete Each Section</h2>
           <TabsList className="grid grid-cols-2">
             <TabsTrigger value="builder">Builder</TabsTrigger>
@@ -28,7 +28,7 @@ export default function CreateLeaseAgreement() {
         </TabsContent>
         <TabsContent className="h-full" value="advanced">
           <div className="flex h-full w-full flex-col items-center justify-center">
-            <Card className="w-1/2 bg-blue-100 py-5 @lg:w-2/5">
+            <Card className="w-full bg-blue-100 py-5 @lg:w-2/5">
               <CardContent className="flex flex-col items-center justify-center space-y-2 text-center">
                 <div className="bg-primary/10 flex h-16 w-16 items-center justify-center rounded-full">
                   <IconRound className="bg-blue-50" icon={lockIcon} />

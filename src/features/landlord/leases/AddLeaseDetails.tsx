@@ -163,11 +163,11 @@ export default function AddLeaseDetails() {
             )}
           />
 
-          <div className="pt-2">
+          <div className="flex justify-center pt-2">
             <LoadingButton
               isLoading={form.formState.isSubmitting}
               type="submit"
-              className="w-full"
+              className="w-4/5 @lg:w-3/5"
               size="lg"
             >
               Add Lease
