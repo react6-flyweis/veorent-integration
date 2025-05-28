@@ -8,20 +8,20 @@ export default function Help() {
   return (
     <div className="space-y-5">
       <PageTitle title="Help" />
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid gap-5 @lg:grid-cols-2">
         <IconCard
           title="Questions About the Rental?"
           description="Lorem Ipsum is simply dummy text"
           icon={questionMarkImg}
           actionText="Message landlord"
-          url="/messages"
+          url="/tenant/messages"
         />
         <IconCard
           title="Veorent Questions?"
           description="Lorem Ipsum is simply dummy text"
           icon={customerServiceImg}
           actionText="Veorent Support"
-          url="/support"
+          url="/tenant/support"
         />
       </div>
     </div>
