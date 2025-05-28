@@ -23,6 +23,7 @@ import discoverImg from "@/assets/images/discover.png";
 import visaImg from "@/assets/images/visa.png";
 import masterImg from "@/assets/images/master.png";
 import { useNavigate } from "react-router";
+import { CurrencyIcon } from "@/components/CurrencyIcon";
 
 const PaymentSchema = z.object({
   cardHolderName: z.string().min(1, "Cardholder name is required"),
@@ -45,23 +46,23 @@ export function PaymentFee() {
   };
 
   const successPayment = () => {
-    navigate("/payment/success");
+    navigate("/tenant/payment/success");
   };
 
   return (
     <div className="space-y-5">
       <div className="flex items-center gap-3">
-        <div className="size-12 bg-blue-50 flex justify-center items-center rounded-full">
-          <div className="flex justify-center items-center size-8 border-primary rounded-full border-2">
+        <div className="flex size-12 items-center justify-center rounded-full bg-blue-50">
+          <div className="border-primary flex size-8 items-center justify-center rounded-full border-2">
             <SwissFrancIcon />
           </div>
         </div>
-        <h2 className="text-2xl font-bold text-primary">Pay Screening Fee</h2>
+        <h2 className="text-primary text-2xl font-bold">Pay Screening Fee</h2>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <p className="font-semibold text-muted-foreground uppercase">
+            <p className="text-muted-foreground font-semibold uppercase">
               Payment Amount
             </p>
             <p className="text-lg font-bold">₣55.00</p>
@@ -86,9 +87,9 @@ export function PaymentFee() {
             </Button>
           </div>
 
-          <div className="relative flex justify-center items-center py-5">
-            <div className="w-full border border-accent"></div>
-            <div className="absolute bg-white p-1 px-3 text-center text-muted-foreground text-sm">
+          <div className="relative flex items-center justify-center py-5">
+            <div className="border-accent w-full border"></div>
+            <div className="text-muted-foreground absolute bg-white p-1 px-3 text-center text-sm">
               OR
             </div>
           </div>
@@ -178,7 +179,9 @@ export function PaymentFee() {
           </div>
 
           <Button type="submit" className="w-full">
-            Pay ₣55.00
+            <span>Pay</span>
+            <CurrencyIcon size="sm" />
+            <span>55.00</span>
           </Button>
         </form>
       </Form>

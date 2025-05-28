@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SwissFrancIcon } from "lucide-react";
 import { z } from "zod";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
@@ -16,6 +15,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
+import { CurrencyIcon } from "@/components/CurrencyIcon";
 
 export const addressSchema = z
   .object({
@@ -214,8 +214,8 @@ export function AddressEditor({
             <FormItem className="gap-1">
               <FormLabel className="text-base">Monthly Rent</FormLabel>
               <div className="relative">
-                <div className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground">
-                  <SwissFrancIcon className="w-4 h-4" />
+                <div className="text-muted-foreground absolute top-1/2 left-2 -translate-y-1/2">
+                  <CurrencyIcon />
                 </div>
                 <FormControl>
                   <Input className="pl-8" placeholder="Amount" {...field} />
