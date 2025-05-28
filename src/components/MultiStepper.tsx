@@ -226,16 +226,11 @@ export function MultiStepperButton({ children }: PropsWithChildren) {
     () => currentStep === totalSteps,
     [currentStep, totalSteps],
   );
-  console.log({
-    currentStep,
-    totalSteps,
-    isLastStep,
-  });
 
   const handleNextClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     // Always prevent default to avoid unwanted form submission
     e.preventDefault();
-    
+
     if (!isLastStep) {
       if (currentStepValidator) {
         const isValid = await currentStepValidator();
@@ -251,14 +246,14 @@ export function MultiStepperButton({ children }: PropsWithChildren) {
         const isValid = await currentStepValidator();
         if (isValid) {
           // Find the closest form and submit it
-          const form = (e.target as HTMLElement).closest('form');
+          const form = (e.target as HTMLElement).closest("form");
           if (form) {
             form.requestSubmit();
           }
         }
       } else {
         // No validation needed, submit the form
-        const form = (e.target as HTMLElement).closest('form');
+        const form = (e.target as HTMLElement).closest("form");
         if (form) {
           form.requestSubmit();
         }
@@ -276,7 +271,7 @@ export function MultiStepperButton({ children }: PropsWithChildren) {
       <Button
         type="button"
         size="lg"
-        className="w-3/5"
+        className="w-4/5 @lg:w-3/5"
         onClick={handleNextClick}
       >
         {isLastStep ? "Submit" : "Next"}
