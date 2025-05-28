@@ -61,13 +61,13 @@ export default function EmergencyContactForm({
     <div className="space-y-5">
       <div className="flex items-center gap-3">
         <IconRound icon={infoCircleIcon} size="sm" />
-        <h2 className="text-2xl font-bold text-primary">Other Information</h2>
+        <h2 className="text-primary text-2xl font-bold">Other Information</h2>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {/* Emergency Contact Section */}
           <div>
-            <h2 className="text-md font-semibold text-primary mb-1">
+            <h2 className="text-md text-primary mb-1 font-semibold">
               Emergency Contact
             </h2>
             <FormField
@@ -83,7 +83,7 @@ export default function EmergencyContactForm({
                 </FormItem>
               )}
             />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <FormField
                 control={form.control}
                 name="relationship"
@@ -166,9 +166,11 @@ export default function EmergencyContactForm({
           />
 
           {/* Submit */}
-          <Button type="submit" className="w-full mt-4">
-            Next
-          </Button>
+          <div className="flex items-center justify-center">
+            <Button type="submit" className="mt-2 w-4/5 @lg:w-3/5">
+              Next
+            </Button>
+          </div>
         </form>
       </Form>
     </div>

@@ -290,7 +290,7 @@ export function AddressEditor({
                   onCheckedChange={field.onChange}
                 />
               </FormControl>
-              <FormLabel className=" text-sm text-muted-foreground">
+              <FormLabel className="text-muted-foreground text-sm">
                 I don&apos;t know my landlord&apos;s email
               </FormLabel>
               <FormMessage />
@@ -317,7 +317,7 @@ export function AddressEditor({
               onSubmit(values);
             })}
             size="lg"
-            className="w-3/5"
+            className="mt-3 w-full @lg:w-3/5"
           >
             Add Current Address
           </Button>

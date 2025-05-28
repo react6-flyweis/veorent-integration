@@ -43,7 +43,7 @@ export function BackgroundInfo({ onSuccess }: { onSuccess: () => void }) {
     <div className="space-y-5">
       <div className="flex items-center gap-3">
         <IconRound icon={bgCheckIcon} size="sm" />
-        <h2 className="text-2xl font-bold text-primary">Background</h2>
+        <h2 className="text-2xl font-bold">Background</h2>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -127,7 +127,7 @@ export function BackgroundInfo({ onSuccess }: { onSuccess: () => void }) {
           />
 
           <div className="flex justify-center">
-            <Button type="submit" size="lg" className="w-3/5">
+            <Button type="submit" size="lg" className="w-4/5 @lg:w-3/5">
               Save & Next
             </Button>
           </div>

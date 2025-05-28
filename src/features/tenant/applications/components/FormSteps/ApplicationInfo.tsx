@@ -151,7 +151,7 @@ export function ApplicationInfo({ onSuccess }: { onSuccess: () => void }) {
           />
 
           <div className="flex justify-center">
-            <Button type="submit" size="lg" className="w-3/5">
+            <Button type="submit" size="lg" className="w-4/5 @lg:w-3/5">
               Save & Next
             </Button>
           </div>

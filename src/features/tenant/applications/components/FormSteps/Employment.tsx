@@ -89,7 +89,7 @@ export function EmploymentDetails({ onSuccess }: { onSuccess: () => void }) {
       <form onSubmit={form.handleSubmit(submitHandler)} className="space-y-5">
         <div className="flex items-center gap-3">
           <IconRound icon={businessmanIcon} size="sm" />
-          <h2 className="text-2xl font-bold text-primary">Employment</h2>
+          <h2 className="text-primary text-2xl font-bold">Employment</h2>
         </div>
 
         <p>
@@ -100,7 +100,7 @@ export function EmploymentDetails({ onSuccess }: { onSuccess: () => void }) {
 
         {/*  Current Employer */}
         <div className="space-y-1">
-          <h3 className="text-xl text-primary font-semibold">
+          <h3 className="text-primary text-xl font-semibold">
             Current Employer
           </h3>
 
@@ -162,7 +162,7 @@ export function EmploymentDetails({ onSuccess }: { onSuccess: () => void }) {
 
         {/* Past Employer */}
         <div className="space-y-1">
-          <h3 className="text-xl text-primary font-semibold">Past Employer</h3>
+          <h3 className="text-primary text-xl font-semibold">Past Employer</h3>
 
           <FormField
             control={form.control}
@@ -232,7 +232,7 @@ export function EmploymentDetails({ onSuccess }: { onSuccess: () => void }) {
         </div>
 
         <div className="flex justify-center">
-          <Button type="submit" size="lg" className="w-3/5">
+          <Button type="submit" size="lg" className="w-4/5 @lg:w-3/5">
             Save & Next
           </Button>
         </div>
@@ -257,8 +257,8 @@ const EmployerDialog = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="h-screen min-w-screen overflow-scroll [&>button:last-child]:hidden">
-        <DialogHeader className="flex-row gap-3 items-center">
-          <DialogClose className="rounded-full flex justify-center items-center size-9 border">
+        <DialogHeader className="flex-row items-center gap-3">
+          <DialogClose className="flex size-9 items-center justify-center rounded-full border">
             <XIcon />
           </DialogClose>
           <DialogTitle className="text-2xl">
