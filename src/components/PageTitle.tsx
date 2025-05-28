@@ -14,7 +14,7 @@ export function PageTitle({
   className?: string;
 } & React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={cn("mb-5", className)} {...props}>
+    <div className={cn("mb-3 @lg:mb-5", className)} {...props}>
       <div className="flex items-center gap-5">
         {withBack && <BackButton />}
         <h2 className="text-2xl font-semibold">{title}</h2>
