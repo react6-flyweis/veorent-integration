@@ -28,6 +28,17 @@ import utilitiesIcon from "./assets/utilities.png";
 import keyIcon from "./assets/key.png";
 import maintenanceIcon from "./assets/cog-wrench.png";
 
+// Import utility icons
+import electricityIcon from "./assets/icons/light-bulb.png";
+import internetIcon from "./assets/icons/internet.png";
+import waterIcon from "./assets/icons/water.png";
+import cableIcon from "./assets/icons/tv.png";
+import gasIcon from "./assets/icons/fire.png";
+import sewerIcon from "./assets/icons/seawage.png";
+import lawnCareIcon from "./assets/icons/lawn.png";
+import snowRemovalIcon from "./assets/icons/snow-removal.png";
+import condoIcon from "./assets/icons/condo-ee.png";
+
 // Define schema for the form
 const utilitiesServicesSchema = z.object({
   // Utilities section
@@ -102,19 +113,21 @@ export default function UtilitiesServices() {
             <RadioGroup
               onValueChange={field.onChange}
               defaultValue={field.value}
-              className="flex space-x-4"
+              className="flex flex-col gap-3 pl-5 sm:flex-row sm:gap-4"
             >
               <FormItem className="flex items-center space-x-2">
                 <FormControl>
                   <RadioGroupItem value="tenant" />
                 </FormControl>
-                <FormLabel className="font-normal text-base">Tenant</FormLabel>
+                <FormLabel className="text-sm font-normal sm:text-base">
+                  Tenant
+                </FormLabel>
               </FormItem>
               <FormItem className="flex items-center space-x-2">
                 <FormControl>
                   <RadioGroupItem value="landlord" />
                 </FormControl>
-                <FormLabel className="font-normal text-base">
+                <FormLabel className="text-sm font-normal sm:text-base">
                   Landlord
                 </FormLabel>
               </FormItem>
@@ -122,7 +135,9 @@ export default function UtilitiesServices() {
                 <FormControl>
                   <RadioGroupItem value="n/a" />
                 </FormControl>
-                <FormLabel className="font-normal text-base">N/A</FormLabel>
+                <FormLabel className="text-sm font-normal sm:text-base">
+                  N/A
+                </FormLabel>
               </FormItem>
             </RadioGroup>
           </FormControl>
@@ -137,168 +152,251 @@ export default function UtilitiesServices() {
       description="Specify who will be responsible for utilities and services, and detail key arrangements."
     >
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-6 sm:space-y-8"
+        >
           {/* Utilities Section */}
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div className="flex items-center gap-2 font-medium">
               <img src={utilitiesIcon} alt="Utilities" className="size-10" />
-              <p className="text-xl">Utilities & Services</p>
+              <p className="text-lg sm:text-xl">Utilities & Services</p>
             </div>
 
-            <p className="font-medium mb-4">
+            <p className="mb-6 text-sm font-medium sm:text-base">
               Indicate who is responsible for the followings:
             </p>
 
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 gap-4">
+            <div className="space-y-6 sm:space-y-6">
+              <div className="grid grid-cols-1 gap-6 sm:gap-4">
                 {/* Electricity */}
-                <div className="flex items-center gap-4">
-                  <div className="w-24 flex items-center gap-2">
-                    <span className="text-lg">⚡</span>
-                    <span>Electricity</span>
+                <div className="flex flex-col gap-3 rounded-lg bg-gray-50 p-3 sm:flex-row sm:items-center sm:gap-4 sm:rounded-none sm:bg-transparent sm:p-0">
+                  <div className="flex w-full items-center gap-2 sm:w-32">
+                    <img
+                      src={electricityIcon}
+                      alt="Electricity"
+                      className="max-h-7 max-w-7"
+                    />
+                    <span className="text-sm font-medium sm:text-base sm:font-normal">
+                      Electricity
+                    </span>
                   </div>
-                  <ResponsibilityRadios name="electricity" />
+                  <div className="flex-1">
+                    <ResponsibilityRadios name="electricity" />
+                  </div>
                 </div>
 
                 {/* Internet */}
-                <div className="flex items-center gap-4">
-                  <div className="w-24 flex items-center gap-2">
-                    <span className="text-lg">🌐</span>
-                    <span>Internet</span>
+                <div className="flex flex-col gap-3 rounded-lg bg-gray-50 p-3 sm:flex-row sm:items-center sm:gap-4 sm:rounded-none sm:bg-transparent sm:p-0">
+                  <div className="flex w-full items-center gap-2 sm:w-32">
+                    <img
+                      src={internetIcon}
+                      alt="Internet"
+                      className="max-h-7 max-w-7"
+                    />
+                    <span className="text-sm font-medium sm:text-base sm:font-normal">
+                      Internet
+                    </span>
                   </div>
-                  <ResponsibilityRadios name="internet" />
+                  <div className="flex-1">
+                    <ResponsibilityRadios name="internet" />
+                  </div>
                 </div>
 
                 {/* Water */}
-                <div className="flex items-center gap-4">
-                  <div className="w-24 flex items-center gap-2">
-                    <span className="text-lg">💧</span>
-                    <span>Water</span>
+                <div className="flex flex-col gap-3 rounded-lg bg-gray-50 p-3 sm:flex-row sm:items-center sm:gap-4 sm:rounded-none sm:bg-transparent sm:p-0">
+                  <div className="flex w-full items-center gap-2 sm:w-32">
+                    <img
+                      src={waterIcon}
+                      alt="Water"
+                      className="max-h-7 max-w-7"
+                    />
+                    <span className="text-sm font-medium sm:text-base sm:font-normal">
+                      Water
+                    </span>
                   </div>
-                  <ResponsibilityRadios name="water" />
+                  <div className="flex-1">
+                    <ResponsibilityRadios name="water" />
+                  </div>
                 </div>
 
                 {/* Cable */}
-                <div className="flex items-center gap-4">
-                  <div className="w-24 flex items-center gap-2">
-                    <span className="text-lg">📺</span>
-                    <span>Cable</span>
+                <div className="flex flex-col gap-3 rounded-lg bg-gray-50 p-3 sm:flex-row sm:items-center sm:gap-4 sm:rounded-none sm:bg-transparent sm:p-0">
+                  <div className="flex w-full items-center gap-2 sm:w-32">
+                    <img
+                      src={cableIcon}
+                      alt="Cable"
+                      className="max-h-7 max-w-7"
+                    />
+                    <span className="text-sm font-medium sm:text-base sm:font-normal">
+                      Cable
+                    </span>
                   </div>
-                  <ResponsibilityRadios name="cable" />
+                  <div className="flex-1">
+                    <ResponsibilityRadios name="cable" />
+                  </div>
                 </div>
 
                 {/* Gas */}
-                <div className="flex items-center gap-4">
-                  <div className="w-24 flex items-center gap-2">
-                    <span className="text-lg">🔥</span>
-                    <span>Gas</span>
+                <div className="flex flex-col gap-3 rounded-lg bg-gray-50 p-3 sm:flex-row sm:items-center sm:gap-4 sm:rounded-none sm:bg-transparent sm:p-0">
+                  <div className="flex w-full items-center gap-2 sm:w-32">
+                    <img src={gasIcon} alt="Gas" className="max-h-7 max-w-7" />
+                    <span className="text-sm font-medium sm:text-base sm:font-normal">
+                      Gas
+                    </span>
                   </div>
-                  <ResponsibilityRadios name="gas" />
+                  <div className="flex-1">
+                    <ResponsibilityRadios name="gas" />
+                  </div>
                 </div>
 
                 {/* Trash */}
-                <div className="flex items-center gap-4">
-                  <div className="w-24 flex items-center gap-2">
+                <div className="flex flex-col gap-3 rounded-lg bg-gray-50 p-3 sm:flex-row sm:items-center sm:gap-4 sm:rounded-none sm:bg-transparent sm:p-0">
+                  <div className="flex w-full items-center gap-2 sm:w-32">
                     <span className="text-lg">🗑️</span>
-                    <span>Trash</span>
+                    <span className="text-sm font-medium sm:text-base sm:font-normal">
+                      Trash
+                    </span>
                   </div>
-                  <ResponsibilityRadios name="trash" />
+                  <div className="flex-1">
+                    <ResponsibilityRadios name="trash" />
+                  </div>
                 </div>
 
                 {/* Sewer/Septic */}
-                <div className="flex items-center gap-4">
-                  <div className="w-24 flex items-center gap-2">
-                    <span className="text-lg">🚽</span>
-                    <span>Sewer/Septic</span>
+                <div className="flex flex-col gap-3 rounded-lg bg-gray-50 p-3 sm:flex-row sm:items-center sm:gap-4 sm:rounded-none sm:bg-transparent sm:p-0">
+                  <div className="flex w-full items-center gap-2 sm:w-32">
+                    <img
+                      src={sewerIcon}
+                      alt="Sewer/Septic"
+                      className="max-h-7 max-w-7"
+                    />
+                    <span className="text-sm font-medium sm:text-base sm:font-normal">
+                      Sewer/Septic
+                    </span>
                   </div>
-                  <ResponsibilityRadios name="sewerSeptic" />
+                  <div className="flex-1">
+                    <ResponsibilityRadios name="sewerSeptic" />
+                  </div>
                 </div>
 
                 {/* Lawn Care */}
-                <div className="flex items-center gap-4">
-                  <div className="w-24 flex items-center gap-2">
-                    <span className="text-lg">🌿</span>
-                    <span>Lawn Care</span>
+                <div className="flex flex-col gap-3 rounded-lg bg-gray-50 p-3 sm:flex-row sm:items-center sm:gap-4 sm:rounded-none sm:bg-transparent sm:p-0">
+                  <div className="flex w-full items-center gap-2 sm:w-32">
+                    <img
+                      src={lawnCareIcon}
+                      alt="Lawn Care"
+                      className="max-h-7 max-w-7"
+                    />
+                    <span className="text-sm font-medium sm:text-base sm:font-normal">
+                      Lawn Care
+                    </span>
                   </div>
-                  <ResponsibilityRadios name="lawnCare" />
+                  <div className="flex-1">
+                    <ResponsibilityRadios name="lawnCare" />
+                  </div>
                 </div>
 
                 {/* Snow Removal */}
-                <div className="flex items-center gap-4">
-                  <div className="w-24 flex items-center gap-2">
-                    <span className="text-lg">❄️</span>
-                    <span>Snow Removal</span>
+                <div className="flex flex-col gap-3 rounded-lg bg-gray-50 p-3 sm:flex-row sm:items-center sm:gap-4 sm:rounded-none sm:bg-transparent sm:p-0">
+                  <div className="flex w-full items-center gap-2 sm:w-32">
+                    <img
+                      src={snowRemovalIcon}
+                      alt="Snow Removal"
+                      className="max-h-7 max-w-7"
+                    />
+                    <span className="text-sm font-medium sm:text-base sm:font-normal">
+                      Snow Removal
+                    </span>
                   </div>
-                  <ResponsibilityRadios name="snowRemoval" />
+                  <div className="flex-1">
+                    <ResponsibilityRadios name="snowRemoval" />
+                  </div>
                 </div>
 
                 {/* HOA/Condo Fee */}
-                <div className="flex items-center gap-4">
-                  <div className="w-24 flex items-center gap-2">
-                    <span className="text-lg">🏢</span>
-                    <span>HOA/Condo Fee</span>
+                <div className="flex flex-col gap-3 rounded-lg bg-gray-50 p-3 sm:flex-row sm:items-center sm:gap-4 sm:rounded-none sm:bg-transparent sm:p-0">
+                  <div className="flex w-full items-center gap-2 sm:w-32">
+                    <img
+                      src={condoIcon}
+                      alt="HOA/Condo Fee"
+                      className="max-h-7 max-w-7"
+                    />
+                    <span className="text-sm font-medium sm:text-base sm:font-normal">
+                      HOA/Condo Fee
+                    </span>
                   </div>
-                  <ResponsibilityRadios name="hoaCondoFee" />
+                  <div className="flex-1">
+                    <ResponsibilityRadios name="hoaCondoFee" />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Keys Section */}
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div className="flex items-center gap-2 font-medium">
               <img src={keyIcon} alt="Keys" className="size-10" />
-              <p className="text-xl">Keys</p>
+              <p className="text-lg sm:text-xl">Keys</p>
             </div>
 
-            <p>Which keys will your tenant(s) receive?</p>
+            <p className="mb-2 text-sm sm:text-base">
+              Which keys will your tenant(s) receive?
+            </p>
 
-            <FormField
-              control={form.control}
-              name="keyType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Key Type</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-4">
+              <FormField
+                control={form.control}
+                name="keyType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm sm:text-base">
+                      Key Type
+                    </FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Key Type..." />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="house">House Key</SelectItem>
+                        <SelectItem value="apartment">Apartment Key</SelectItem>
+                        <SelectItem value="mailbox">Mailbox Key</SelectItem>
+                        <SelectItem value="garage">Garage Key</SelectItem>
+                        <SelectItem value="gate">Gate Key</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="keyCopies"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm sm:text-base">
+                      Copies
+                    </FormLabel>
                     <FormControl>
-                      <SelectTrigger className="max-w-64">
-                        <SelectValue placeholder="Key Type..." />
-                      </SelectTrigger>
+                      <Input {...field} className="w-full" />
                     </FormControl>
-                    <SelectContent>
-                      <SelectItem value="house">House Key</SelectItem>
-                      <SelectItem value="apartment">Apartment Key</SelectItem>
-                      <SelectItem value="mailbox">Mailbox Key</SelectItem>
-                      <SelectItem value="garage">Garage Key</SelectItem>
-                      <SelectItem value="gate">Gate Key</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="keyCopies"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Copies</FormLabel>
-                  <FormControl>
-                    <Input {...field} className="max-w-64" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
 
           {/* Maintenance Section */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-2 font-medium text-lg">
+          <div className="space-y-6">
+            <div className="flex items-center gap-2 text-lg font-medium sm:text-xl">
               <img
                 src={maintenanceIcon}
                 alt="Maintenance"
@@ -307,7 +405,7 @@ export default function UtilitiesServices() {
               <span>Maintenance</span>
             </div>
 
-            <Card className="bg-blue-50 p-3 text-sm text-blue-800">
+            <Card className="bg-blue-50 p-4 text-xs text-blue-800 sm:p-3 sm:text-sm">
               <p>
                 Lorem Ipsum is simply dummy text of the printing and typesetting
                 industry. Lorem Ipsum has been the industry's standard dummy
@@ -321,26 +419,26 @@ export default function UtilitiesServices() {
               name="maintenanceOptions"
               render={() => (
                 <FormItem>
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-2">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-3">
+                    <div className="flex items-center space-x-2 p-2 sm:p-0">
                       <Checkbox id="mail" value="mail" />
                       <label htmlFor="mail" className="text-sm font-medium">
                         Mail
                       </label>
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2 p-2 sm:p-0">
                       <Checkbox id="email" value="email" />
                       <label htmlFor="email" className="text-sm font-medium">
                         E-Mail
                       </label>
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2 p-2 sm:p-0">
                       <Checkbox id="textmail" value="textmail" />
                       <label htmlFor="textmail" className="text-sm font-medium">
                         Text Mail
                       </label>
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2 p-2 sm:p-0">
                       <Checkbox id="other" value="other" />
                       <label htmlFor="other" className="text-sm font-medium">
                         Other
@@ -352,11 +450,11 @@ export default function UtilitiesServices() {
             />
           </div>
 
-          <div className="flex justify-center pt-4">
+          <div className="flex justify-center pt-6 sm:pt-4">
             <LoadingButton
               isLoading={isSubmitting}
               size="lg"
-              className="w-3/5 rounded-lg"
+              className="w-full max-w-md rounded-lg sm:w-3/5"
               type="submit"
             >
               {isSubmitting ? "Saving..." : "Save & Next"}
