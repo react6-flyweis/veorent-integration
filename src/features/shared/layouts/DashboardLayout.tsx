@@ -64,7 +64,7 @@ export function DashboardLayout() {
             isMobile && (
               <SidebarTrigger
                 variant="default"
-                className="fixed top-0 left-0 rounded-t-none rounded-l-none rounded-br-xl md:hidden"
+                className="fixed top-0 left-0 size-7 rounded-t-none rounded-l-none rounded-br-xl md:hidden [&>svg]:size-5!"
               />
             )
           }
