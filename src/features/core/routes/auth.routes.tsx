@@ -7,6 +7,7 @@ import { ResetPasswordPage } from "@/features/core/auth/ResetPassword";
 import Personalize from "@/features/core/auth/Personalize";
 import { Navigate } from "react-router-dom";
 import { AuthWrapper } from "@/features/core/auth/AuthWrapper";
+import SingUpLandlord from "../auth/SignUpLandlord";
 
 export const authRoutes: RouteObject[] = [
   // Redirect from root to personalize if no user preference has been set
@@ -29,6 +30,10 @@ export const authRoutes: RouteObject[] = [
   {
     path: "/signup",
     element: <SingUpPage />,
+  },
+  {
+    path: "/signup-landlord",
+    element: <SingUpLandlord />,
   },
   {
     path: "/forgot-password",
