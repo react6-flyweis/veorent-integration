@@ -74,7 +74,10 @@ export function AccountForm() {
     <div className="w-full">
       <h2 className="mb-4 text-xl font-bold sm:mb-6">My Information</h2>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-4 sm:space-y-6"
+        >
           {/* Name Fields */}
           <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2">
             <FormField
@@ -155,7 +158,7 @@ export function AccountForm() {
           {/* Address Section */}
           <div className="space-y-4">
             <h3 className="text-lg font-medium">Address</h3>
-            
+
             {/* Street Address and Unit */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               <div className="sm:col-span-2">
@@ -164,7 +167,9 @@ export function AccountForm() {
                   name="streetAddress"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-medium">Street Address</FormLabel>
+                      <FormLabel className="font-medium">
+                        Street Address
+                      </FormLabel>
                       <FormControl>
                         <Input {...field} className="w-full" />
                       </FormControl>
@@ -267,10 +272,7 @@ export function AccountForm() {
 
           {/* Submit Button */}
           <div className="flex justify-end pt-4">
-            <Button
-              type="submit"
-              className="w-full bg-blue-900 px-8 text-white hover:bg-blue-800 sm:w-auto"
-            >
+            <Button type="submit" className="w-full sm:w-auto">
               SAVE CHANGES
             </Button>
           </div>
