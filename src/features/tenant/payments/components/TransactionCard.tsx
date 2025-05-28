@@ -1,7 +1,8 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { EuroIcon, MinusIcon, PlusIcon } from "lucide-react";
+import { MinusIcon, PlusIcon } from "lucide-react";
 import type { ITransaction } from "./Transactions";
+import { CurrencyIcon } from "@/components/CurrencyIcon";
 
 export function TransactionCard({
   data: { amount, description, id, type, status, method },
@@ -11,10 +12,10 @@ export function TransactionCard({
   showSymbol?: boolean;
 }) {
   return (
-    <Card key={id} className="border mt-1 py-0">
-      <CardContent className="p-3! flex items-center justify-between">
+    <Card key={id} className="mt-1 border py-0">
+      <CardContent className="flex items-center justify-between p-3!">
         <div>
-          <p className="text-lg font-bold text-primary">TransactionId #{id}</p>
+          <p className="text-primary text-lg font-bold">TransactionId #{id}</p>
           <p className="text-muted-foreground">{description}</p>
           <p className="text-muted-foreground">
             {method} - {status}
@@ -22,7 +23,7 @@ export function TransactionCard({
         </div>
         <p
           className={cn(
-            type.toLowerCase() === "credit" ? "text-green-500" : "text-red-500"
+            type.toLowerCase() === "credit" ? "text-green-500" : "text-red-500",
           )}
         >
           {type}
@@ -34,8 +35,11 @@ export function TransactionCard({
             ) : (
               <MinusIcon className="text-red-500" />
             ))}
-          <EuroIcon />
-          <p className="text-2xl font-semibold">{amount}</p>
+
+          <div className="flex items-center gap-1">
+            <CurrencyIcon />
+            <p className="text-2xl font-semibold">{amount}</p>
+          </div>
         </div>
       </CardContent>
     </Card>

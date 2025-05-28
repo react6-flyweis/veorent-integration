@@ -8,13 +8,14 @@ import {
 } from "@/components/ui/ghost-tabs";
 
 import balanceImg from "@/assets/images/balance.png";
-import { BadgeEuroIcon, InfoIcon } from "lucide-react";
+import { InfoIcon } from "lucide-react";
 import { Transactions } from "./components/Transactions";
 import { RecentActivity } from "./components/RecentActivity";
+import { CurrencyIcon } from "@/components/CurrencyIcon";
 
 export default function Payments() {
   return (
-    <div className="flex flex-col gap-5 h-full">
+    <div className="flex h-full flex-col">
       <PageTitle title="Payments" />
       <Tabs className="flex-1" defaultValue="balance">
         <TabsList>
@@ -24,34 +25,38 @@ export default function Payments() {
         </TabsList>
 
         <TabsContent value="balance" className="flex flex-col gap-3">
-          <div className="flex gap-2 items-center">
+          <div className="flex items-center gap-2">
             <IconRound icon={balanceImg} size="xs" />
-            <p className="text-2xl text-primary">Account balance</p>
+            <p className="text-primary text-2xl">Account balance</p>
           </div>
           <div className="flex items-center text-xl font-bold">
-            <span>Your Current Balance is:</span>
-            <BadgeEuroIcon className="size-4 ml-1" />
-            <span>100.00</span>
+            <span className="mr-2">Your Current Balance is:</span>
+            <div className="flex items-center">
+              <CurrencyIcon size="sm" />
+              <span>100.00</span>
+            </div>
           </div>
           <Transactions />
         </TabsContent>
 
         <TabsContent value="activity" className="flex flex-col gap-3">
-          <div className="flex gap-2 items-center">
+          <div className="flex items-center gap-2">
             <IconRound icon={balanceImg} size="xs" />
-            <p className="text-2xl text-primary">Account Activity</p>
+            <p className="text-primary text-2xl">Account Activity</p>
           </div>
           <div className="flex items-center text-xl font-bold">
             <span>Your Current Balance is:</span>
-            <BadgeEuroIcon className="size-4 ml-1" />
-            <span>100.00</span>
+            <div className="flex items-center">
+              <CurrencyIcon size="sm" />
+              <span>100.00</span>
+            </div>
           </div>
           <RecentActivity />
         </TabsContent>
 
         <TabsContent
           value="account"
-          className="flex-1 flex flex-col items-center justify-center text-center gap-3"
+          className="flex flex-1 flex-col items-center justify-center gap-3 text-center"
         >
           <InfoIcon className="size-28 stroke-1" />
           <h3 className="text-3xl">Important Information</h3>
