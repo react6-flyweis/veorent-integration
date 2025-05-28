@@ -1,5 +1,5 @@
 import { PageTitle } from "@/components/PageTitle";
-import ContactForm from "./components/ContactForm";
+import { ContactForm } from "./components/ContactForm";
 import supportImg from "@/assets/images/support.jpg";
 
 export default function Support() {

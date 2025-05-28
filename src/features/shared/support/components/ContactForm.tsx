@@ -13,17 +13,15 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 
-// ✅ Zod Schema
 const formSchema = z.object({
   phone: z.string().min(10, "Enter a valid phone number"),
   email: z.string().email("Invalid email address"),
   message: z.string().min(5, "Message must be at least 5 characters"),
 });
 
-// ✅ Type Inference
 type ContactFormData = z.infer<typeof formSchema>;
 
-export default function ContactForm() {
+export function ContactForm() {
   const form = useForm<ContactFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -98,13 +96,13 @@ export default function ContactForm() {
         />
 
         {/* Buttons */}
-        <div className="flex justify-between pt-4">
-          <Button type="submit" className="w-44">
+        <div className="flex flex-col justify-between gap-2 pt-4 @lg:flex-row">
+          <Button type="submit" className="w-full @lg:w-44">
             Send
           </Button>
           <Button
             type="button"
-            className="bg-green-600 w-44"
+            className="w-full bg-green-600 @lg:w-44"
             onClick={() => {
               alert("Calling...");
             }}
