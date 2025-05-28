@@ -23,6 +23,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import { cn } from "@/lib/utils";
 
@@ -51,6 +58,7 @@ const schema = z.object({
   moveStart: z.date(),
   moveEnd: z.date(),
   isFlexible: z.enum(["yes", "no"]),
+  flexibilityDuration: z.enum(["30m", "1hr", "2hr"]).optional(),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -66,6 +74,7 @@ export function BookMyMoveForm({
       leaseType: "fixed",
       newLeaseType: "fixed",
       isFlexible: "no",
+      flexibilityDuration: "30m",
     },
   });
 
@@ -87,7 +96,7 @@ export function BookMyMoveForm({
             variant="outline"
             className={cn(
               "w-full pl-3 text-left font-normal",
-              !value && "text-muted-foreground"
+              !value && "text-muted-foreground",
             )}
           >
             {value ? format(value, "PPP") : <span>Select date</span>}
@@ -110,7 +119,7 @@ export function BookMyMoveForm({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         {/* Current Property Address */}
-        <h3 className="font-semibold text-lg">🏠 Current Property Address</h3>
+        <h3 className="text-lg font-semibold">🏠 Current Property Address</h3>
         <div className="grid grid-cols-2 gap-4">
           <FormField
             name="currentStreet"
@@ -179,7 +188,7 @@ export function BookMyMoveForm({
         </div>
 
         {/* Lease Term */}
-        <h3 className="font-semibold text-lg">📃 Lease Term (Optional)</h3>
+        <h3 className="text-lg font-semibold">📃 Lease Term (Optional)</h3>
         <FormField
           name="leaseType"
           control={form.control}
@@ -233,7 +242,7 @@ export function BookMyMoveForm({
         </div>
 
         {/* New Property Address */}
-        <h3 className="font-semibold text-lg">🏗 New Property Address</h3>
+        <h3 className="text-lg font-semibold">🏗 New Property Address</h3>
         <div className="grid grid-cols-2 gap-4">
           <FormField
             name="newStreet"
@@ -302,7 +311,7 @@ export function BookMyMoveForm({
         </div>
 
         {/* Lease Term for New Address */}
-        <h3 className="font-semibold text-lg">📃 Lease Term</h3>
+        <h3 className="text-lg font-semibold">📃 Lease Term</h3>
         <FormField
           name="newLeaseType"
           control={form.control}
@@ -352,7 +361,7 @@ export function BookMyMoveForm({
         </div>
 
         {/* Move-In Date */}
-        <h3 className="font-semibold text-lg">📦 Move In Date & Time</h3>
+        <h3 className="text-lg font-semibold">📦 Move In Date & Time</h3>
         <div className="grid grid-cols-2 gap-4">
           <FormField
             name="moveStart"
@@ -403,12 +412,40 @@ export function BookMyMoveForm({
           )}
         />
 
-        <Button
-          type="submit"
-          className="w-full bg-blue-900 text-white hover:bg-blue-800"
-        >
-          Save & Next
-        </Button>
+        {/* Flexibility Duration - Only show when isFlexible is "yes" */}
+        {form.watch("isFlexible") === "yes" && (
+          <FormField
+            name="flexibilityDuration"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="sr-only">Flexibility Duration</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormItem className="flex items-center space-x-2">
+                      <SelectTrigger>
+                        <SelectValue placeholder="Flexible for.." />
+                      </SelectTrigger>
+                    </FormItem>
+                    <SelectContent>
+                      <SelectItem value="30m">30 Minutes</SelectItem>
+                      <SelectItem value="1hr">1 Hour</SelectItem>
+                      <SelectItem value="2hr">2 Hours</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        )}
+        <div className="flex items-center justify-center">
+          <Button type="submit" className="w-4/5 @xl:w-3/5">
+            Save & Next
+          </Button>
+        </div>
       </form>
     </Form>
   );
