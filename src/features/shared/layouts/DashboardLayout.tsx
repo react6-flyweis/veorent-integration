@@ -58,10 +58,15 @@ export function DashboardLayout() {
           navigationItems={navigationItems}
           onLogout={handleLogout}
         />
-        <SidebarInset className="@container flex flex-1 flex-col p-5 md:p-10">
+        <SidebarInset className="@container relative flex flex-1 flex-col p-5 md:p-10">
           {
             // Show sidebar trigger only on mobile devices
-            isMobile && <SidebarTrigger className="md:hidden" />
+            isMobile && (
+              <SidebarTrigger
+                variant="default"
+                className="fixed top-0 left-0 rounded-t-none rounded-l-none rounded-br-xl md:hidden"
+              />
+            )
           }
           <Outlet />
         </SidebarInset>
