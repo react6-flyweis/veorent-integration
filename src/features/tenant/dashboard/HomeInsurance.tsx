@@ -132,6 +132,7 @@ export default function HomeInsuranceForm() {
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     console.log("Form Data:", data);
+    navigate("/tenant/insurance-plans");
   };
 
   return (
@@ -158,7 +159,11 @@ export default function HomeInsuranceForm() {
                 </div>
               </div>
             </MultiStepperHeader>
-            <MultiStepperStep>
+            <MultiStepperStep
+              onValidate={() =>
+                form.trigger(["firstName", "lastName", "email", "phone"])
+              }
+            >
               <>
                 <FormField
                   control={form.control}
@@ -215,7 +220,7 @@ export default function HomeInsuranceForm() {
               </>
             </MultiStepperStep>
 
-            <MultiStepperStep>
+            <MultiStepperStep onValidate={() => form.trigger("propertyType")}>
               <FormField
                 control={form.control}
                 name="propertyType"
@@ -225,13 +230,13 @@ export default function HomeInsuranceForm() {
                     <RadioGroup
                       onValueChange={field.onChange}
                       defaultValue={field.value}
-                      className="grid grid-cols-4 gap-4 mt-2"
+                      className="mt-2 grid grid-cols-2 gap-4 @md:grid-cols-3 @lg:grid-cols-4"
                     >
                       {propertyTypes.map((type) => (
                         <label htmlFor={type.key} className="cursor-pointer">
                           <Card
                             key={type.key}
-                            className={`cursor-pointer border gap-0 p-2 border-input ${
+                            className={`border-input cursor-pointer gap-0 border p-2 ${
                               field.value === type.key &&
                               "border-primary bg-blue-50"
                             }`}
@@ -243,7 +248,7 @@ export default function HomeInsuranceForm() {
                                 alt=""
                                 className="size-12"
                               />
-                              <span className="text-lg text-primary">
+                              <span className="text-primary text-lg">
                                 {type.label}
                               </span>
                             </CardContent>
@@ -318,7 +323,7 @@ export default function HomeInsuranceForm() {
                     <FormItem>
                       <FormLabel>Zip Code</FormLabel>
                       <FormControl>
-                        <Input type="number" min={6} max={6} {...field} />
+                        <Input {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
