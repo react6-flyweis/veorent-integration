@@ -18,17 +18,24 @@ export function ChatSidebarItem({
     <div
       onClick={onClick}
       className={cn(
-        "flex items-center space-x-3 cursor-pointer py-2 border-b px-2 rounded-lg transition-colors hover:bg-blue-50",
+        "flex cursor-pointer items-center space-x-3 rounded-lg border-b px-2 transition-colors hover:bg-blue-50",
+        "py-3 @lg:py-2", // More padding in smaller containers
         isSelected && "bg-blue-100",
-        className
+        className,
       )}
     >
       <ChatAvatarImage avatar={chat.avatar} name={chat.name} />
-      <div className="flex-1 min-w-0">
-        <p className="font-semibold text-sm truncate">{chat.name}</p>
-        <p className="text-xs text-gray-500 truncate">{chat.message}</p>
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-base font-semibold @lg:text-sm">
+          {chat.name}
+        </p>
+        <p className="truncate text-sm text-gray-500 @lg:text-xs">
+          {chat.message}
+        </p>
       </div>
-      <span className="text-xs text-gray-400 flex-shrink-0">{chat.time}</span>
+      <span className="flex-shrink-0 text-sm text-gray-400 @lg:text-xs">
+        {chat.time}
+      </span>
     </div>
   );
 }

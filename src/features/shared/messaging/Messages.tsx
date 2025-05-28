@@ -123,14 +123,25 @@ const conversations: IConversation[] = [
 
 export default function Messages() {
   const [selectedChatIndex, setSelectedChatIndex] = useState(0);
+  const [showMainChat, setShowMainChat] = useState(false);
   const selectedChat = conversations[selectedChatIndex];
+
+  const handleChatSelect = (idx: number) => {
+    setSelectedChatIndex(idx);
+    // Show main chat in mobile/small container view
+    setShowMainChat(true);
+  };
+
+  const handleBackToSidebar = () => {
+    setShowMainChat(false);
+  };
 
   return (
     <ChatLayout>
       <ChatLayoutHeader className="mb-4">
-        <PageTitle title="Message" />
+        <PageTitle title="Message" className="hidden @md:flex" />
       </ChatLayoutHeader>
-      <ChatLayoutSidebar>
+      <ChatLayoutSidebar showOnMobile={!showMainChat}>
         <ChatSidebar>
           <ChatSidebarContent>
             {conversations.map((chat, idx) => (
@@ -138,15 +149,18 @@ export default function Messages() {
                 key={idx}
                 chat={chat}
                 isSelected={selectedChatIndex === idx}
-                onClick={() => setSelectedChatIndex(idx)}
+                onClick={() => handleChatSelect(idx)}
               />
             ))}
           </ChatSidebarContent>
         </ChatSidebar>
       </ChatLayoutSidebar>
 
-      <ChatLayoutMain>
-        <ChatMain selectedChat={selectedChat} />
+      <ChatLayoutMain showOnMobile={showMainChat}>
+        <ChatMain
+          selectedChat={selectedChat}
+          onBackClick={handleBackToSidebar}
+        />
       </ChatLayoutMain>
     </ChatLayout>
   );

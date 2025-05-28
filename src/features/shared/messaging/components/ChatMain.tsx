@@ -4,13 +4,14 @@ import { ChatToolbar } from "./ChatToolbar";
 
 interface ChatMainProps {
   selectedChat: IConversation;
+  onBackClick?: () => void;
 }
 
-export function ChatMain({ selectedChat }: ChatMainProps) {
+export function ChatMain({ selectedChat, onBackClick }: ChatMainProps) {
   return (
-    <div className="bg-blue-50 rounded-xl flex flex-col">
-      <ChatHeader chat={selectedChat} />
-      <ScrollArea className="flex-1 p-4 space-y-4">
+    <div className="flex h-full flex-col rounded-xl bg-blue-50">
+      <ChatHeader chat={selectedChat} onBackClick={onBackClick} />
+      <ScrollArea className="flex-1 space-y-4 p-4">
         <div className="text-center text-xs text-gray-400">Sunday</div>
         {selectedChat.messages.map((msg, idx) => (
           <div
@@ -20,7 +21,7 @@ export function ChatMain({ selectedChat }: ChatMainProps) {
             }`}
           >
             <div
-              className={`rounded-lg px-4 py-2 max-w-xs text-sm ${
+              className={`max-w-xs rounded-lg px-4 py-2 text-sm ${
                 msg.sender === "me"
                   ? "bg-blue-900 text-white"
                   : "bg-white text-gray-800"
@@ -28,7 +29,7 @@ export function ChatMain({ selectedChat }: ChatMainProps) {
             >
               {msg.content}
             </div>
-            <span className="text-xs text-gray-400 self-end ml-2">
+            <span className="ml-2 self-end text-xs text-gray-400">
               {msg.time}
             </span>
           </div>
