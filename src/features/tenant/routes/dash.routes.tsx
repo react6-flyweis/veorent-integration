@@ -19,6 +19,8 @@ import Payments from "@/features/tenant/payments/Payments";
 import PaymentSuccessful from "@/features/shared/payments/PaymentSuccessful";
 import Settings from "@/features/tenant/settings/Settings";
 import SignDocuments from "@/features/tenant/documents/sign-documents/SignDocuments";
+import InsurancePlans from "../dashboard/InsurancePlan";
+import PlanDetails from "../dashboard/PlanDetails";
 import { type RouteObject } from "react-router-dom";
 
 export const dashRoutes: RouteObject[] = [
@@ -49,6 +51,14 @@ export const dashRoutes: RouteObject[] = [
   {
     path: "/home-insurance",
     element: <HomeInsuranceForm />,
+  },
+  {
+    path: "/insurance-plans",
+    element: <InsurancePlans />,
+  },
+  {
+    path: "/insurance-plans/:id",
+    element: <PlanDetails />,
   },
   {
     path: "/messages",
