@@ -2,7 +2,7 @@ import { Outlet } from "react-router";
 
 export function FullLayout() {
   return (
-    <main className="p-10 h-full flex flex-col">
+    <main className="@container flex h-full flex-col p-5 md:p-10">
       <Outlet />
     </main>
   );

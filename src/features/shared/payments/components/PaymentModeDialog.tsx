@@ -37,8 +37,8 @@ export function PaymentModeDialog({ amount }: { amount: string }) {
     : `/payment/success`;
 
   return (
-    <div className="">
-      <DialogTitle className="text-left text-xl font-bold">
+    <div className="flex h-full max-h-[90vh] flex-col overflow-hidden">
+      <DialogTitle className="mb-4 flex-shrink-0 text-left text-xl font-bold">
         Payment Mode
       </DialogTitle>
 
@@ -72,16 +72,15 @@ export function PaymentModeDialog({ amount }: { amount: string }) {
       </div>
 
       <div className="pt-6">
-        <Button
-          className="w-full bg-[#001F4D] py-6 text-base font-bold text-white"
-          asChild
-        >
+        <Button className="h-14 w-full font-bold" asChild>
           <Link to={paymentSuccessUrl}>
-            CONFIRM &rsaquo;
-            <span className="ml-2 block text-sm font-normal text-white">
-              Pay ${amount} using{" "}
-              {paymentOptions.find((p) => p.id === selected)?.label}
-            </span>
+            <div className="flex flex-col items-center">
+              <span>CONFIRM &rsaquo;</span>
+              <span className="text-sm font-normal text-white/90">
+                Pay ${amount} using{" "}
+                {paymentOptions.find((p) => p.id === selected)?.label}
+              </span>
+            </div>
           </Link>
         </Button>
       </div>

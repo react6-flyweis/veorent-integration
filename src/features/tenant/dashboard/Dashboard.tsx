@@ -29,16 +29,16 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col gap-5">
       {/* Header and Search */}
-      <header className="flex items-center justify-between">
+      <header className="flex flex-col items-center justify-between @md:flex-row">
         <h1 className="text-xl font-semibold">Hello, Kaiya</h1>
         <div className="relative w-full max-w-sm">
           <Input placeholder="Search property" className="pr-10" />
-          <SearchIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
+          <SearchIcon className="absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 transform text-gray-500" />
         </div>
       </header>
 
       {/* User Card + Rental Application */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-5">
         {/* User Info Card */}
         <Card className="md:col-span-3">
           <CardHeader className="flex flex-row items-center space-x-4">
@@ -48,7 +48,7 @@ export default function Dashboard() {
               className="size-16 rounded-full object-cover"
             />
             <div>
-              <CardTitle className="text-2xl text-primary">
+              <CardTitle className="text-primary text-2xl">
                 Kaiya Lipshutz
               </CardTitle>
               <CardDescription className="text-lg">
@@ -59,19 +59,23 @@ export default function Dashboard() {
           <CardContent className="flex flex-col">
             <div className="flex justify-between">
               <h3 className="text-2xl font-bold">Account Balance</h3>
-              <div className="text-2xl font-bold text-primary">
+              <div className="text-primary text-2xl font-bold">
                 <EuroIcon />
                 <span>200.00</span>
               </div>
             </div>
           </CardContent>
-          <CardFooter className="gap-1">
-            <Button size="lg" className="flex-1" asChild>
-              <Link to="/make-payment"> Make Payment</Link>
-            </Button>
-            <Button variant="outline" size="lg" className="flex-1" asChild>
-              <Link to="/auto-pay">Auto Pay</Link>
-            </Button>
+          <CardFooter className="flex-col gap-2 @md:flex-row">
+            <Link to="/tenant/make-payment" className="w-full flex-1">
+              <Button size="lg" className="w-full">
+                Make Payment
+              </Button>
+            </Link>
+            <Link to="/tenant/auto-pay" className="w-full flex-1">
+              <Button variant="outline" size="lg" className="w-full">
+                Auto Pay
+              </Button>
+            </Link>
           </CardFooter>
         </Card>
 
@@ -83,20 +87,20 @@ export default function Dashboard() {
             Lorem Ipsum is simply dummy text"
           icon={applicationsIcon}
           actionText="Finish My Application"
-          url="/applying"
+          url="/tenant/applying"
         />
       </div>
 
       {/* Landlord Card */}
-      <Card className="p-0 gap-0">
+      <Card className="gap-0 p-0">
         <CardContent className="flex items-center space-x-4 p-5">
           <img
             src={userImage}
             alt="Landlord"
-            className="w-12 h-12 rounded-full object-cover"
+            className="h-12 w-12 rounded-full object-cover"
           />
           <div className="space-y-1">
-            <CardDescription className="uppercase font-bold">
+            <CardDescription className="font-bold uppercase">
               Landlord
             </CardDescription>
             <CardTitle className="text-primary">Donna VanAntwerp</CardTitle>
@@ -104,7 +108,7 @@ export default function Dashboard() {
           </div>
         </CardContent>
         <CardFooter className="px-0">
-          <div className="grid grid-cols-3 w-full">
+          <div className="grid w-full grid-cols-3">
             <Button variant="outline">Email</Button>
             <AlertDialog>
               <AlertDialogTrigger asChild>
@@ -117,25 +121,25 @@ export default function Dashboard() {
                     Please download the app by clicking this link.
                   </AlertDialogTitle>
                 </AlertDialogHeader>
-                <AlertDialogFooter className="justify-center! w-full">
+                <AlertDialogFooter className="w-full justify-center!">
                   <AlertDialogAction>Click here</AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
             <Button variant="outline" asChild>
-              <Link to="/messages">Message</Link>
+              <Link to="/tenant/messages">Message</Link>
             </Button>
           </div>
         </CardFooter>
       </Card>
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid gap-5 @md:grid-cols-2">
         <IconCard
           title="Ready to move? We got you covered."
           description="
             Lorem Ipsum is simply dummy text"
           icon={truckImgIcon}
           actionText="Book My Move"
-          url="/book-move"
+          url="/tenant/book-move"
         />
         <IconCard
           title="Know You’re Covered!"
@@ -143,7 +147,7 @@ export default function Dashboard() {
             Lorem Ipsum is simply dummy text"
           icon={insuranceImgIcon}
           actionText="Purchase Insurance"
-          url="/home-insurance"
+          url="/tenant/home-insurance"
         />
       </div>
     </div>

@@ -77,7 +77,7 @@ export default function MakePayment() {
             <MultiStepperHeader>
               <div className="flex items-center gap-2">
                 <MultiStepperBackButton routeBack={() => navigate(-1)} />
-                <PageTitle title="Make Payment" />
+                <PageTitle title="Make Payment" className="mb-0" />
               </div>
             </MultiStepperHeader>
 

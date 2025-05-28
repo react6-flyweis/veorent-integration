@@ -7,8 +7,10 @@ import { Button } from "@/components/ui/button";
 import paymentMethodImg from "@/assets/images/payment-method.png";
 import rentIconImg from "@/assets/icons/rent.png";
 import { DownloadIcon, EuroIcon } from "lucide-react";
+import { useGoBack } from "@/hooks/useGoBack";
 
 export default function AutoPay() {
+  const goBack = useGoBack();
   return (
     <div className="space-y-5">
       <PageTitle title="Rent Payment Method" withBack />
@@ -33,10 +35,10 @@ export default function AutoPay() {
         <Switch id="auto-pay" />
         <Label htmlFor="auto-pay">On</Label>
       </div>
-      <Card className="py-2 gap-2">
+      <Card className="gap-2 py-2">
         <CardHeader className="flex gap-2 px-2">
           <img className="size-8" src={rentIconImg} alt="" />
-          <p className="font-semibold text-2xl text-primary">Rent</p>
+          <p className="text-primary text-2xl font-semibold">Rent</p>
         </CardHeader>
         <CardContent className="px-2">
           <div className="flex justify-between">
@@ -45,7 +47,7 @@ export default function AutoPay() {
                 <span>Date: </span>
                 <span>August 1,2004</span>
               </div>
-              <div className="flex gap-1 items-center">
+              <div className="flex items-center gap-1">
                 <span>Rent: </span>
                 <EuroIcon className="size-3" />
                 <span>2,000</span>
@@ -64,8 +66,8 @@ export default function AutoPay() {
           </div>
         </CardContent>
       </Card>
-      <div className="w-full flex justify-center">
-        <Button size="lg" className="w-3/5">
+      <div className="flex w-full justify-center">
+        <Button onClick={goBack} size="lg" className="w-3/5">
           Back
         </Button>
       </div>
