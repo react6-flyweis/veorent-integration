@@ -1,4 +1,3 @@
-import { Link, useNavigate } from "react-router";
 import {
   MultiStepper,
   MultiStepperBackButton,
@@ -17,11 +16,24 @@ import { BackgroundInfo } from "./components/FormSteps/Background";
 import EmergencyContactForm from "./components/FormSteps/OtherInfo";
 import UploadDocumentsForm from "./components/FormSteps/UploadDocuments";
 import { PaymentFee } from "./components/FormSteps/PaymentFee";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { AlertDialog } from "@/components/ui/alert-dialog";
+import { AlertDialogTrigger } from "@radix-ui/react-alert-dialog";
+import { SaveAndFinishDialog } from "./components/SaveAndFinishDialog";
+import { ApplicationSavedDialog } from "./components/ApplicationSavedDialog";
+import { useGoBack } from "@/hooks/useGoBack";
 
 export default function ApplicationProcess() {
-  const navigate = useNavigate();
+  const goBack = useGoBack();
   const stepperRef = useRef<MultiStepperRef>(null);
+  const [isApplicationSavedOpen, setIsApplicationSavedOpen] = useState(false);
+
+  const showSavedDialog = () => {
+    setIsApplicationSavedOpen(true);
+    setTimeout(() => {
+      setIsApplicationSavedOpen(false);
+    }, 3000); // Auto-close after 3 seconds
+  };
 
   const handleExternalNext = () => {
     stepperRef.current?.goNext();
@@ -29,13 +41,22 @@ export default function ApplicationProcess() {
   return (
     <MultiStepper ref={stepperRef}>
       <MultiStepperHeader>
-        <div className="flex justify-between items-center">
-          <MultiStepperBackButton routeBack={() => navigate(-1)} />
-          <Button variant="ghost" asChild>
-            <Link to="/">
-              <span>Save & Finish Later</span>
-            </Link>
-          </Button>
+        <div className="flex items-center justify-between">
+          <MultiStepperBackButton routeBack={goBack} />
+
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="ghost" asChild>
+                <span>Save & Finish Later</span>
+              </Button>
+            </AlertDialogTrigger>
+            <SaveAndFinishDialog onSuccess={showSavedDialog} />
+          </AlertDialog>
+
+          <ApplicationSavedDialog
+            open={isApplicationSavedOpen}
+            onOpenChange={setIsApplicationSavedOpen}
+          />
         </div>
         <MultiStepperIndicator showBackButton={false} />
       </MultiStepperHeader>
