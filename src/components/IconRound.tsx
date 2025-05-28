@@ -1,18 +1,21 @@
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
-const iconRoundVariants = cva("rounded-full flex justify-center items-center", {
-  variants: {
-    size: {
-      xs: "size-8 sm:size-9 md:size-10", // fully responsive xs size
-      sm: "size-9 sm:size-10 md:size-11 lg:size-12", // fully responsive sm size
-      lg: "size-12 sm:size-14 lg:size-16", // fully responsive lg size
+const iconRoundVariants = cva(
+  "rounded-full flex justify-center items-center bg-blue-50",
+  {
+    variants: {
+      size: {
+        xs: "size-8 sm:size-9 md:size-10", // fully responsive xs size
+        sm: "size-9 sm:size-10 md:size-11 lg:size-12", // fully responsive sm size
+        lg: "size-12 sm:size-14 lg:size-16", // fully responsive lg size
+      },
+    },
+    defaultVariants: {
+      size: "lg",
     },
   },
-  defaultVariants: {
-    size: "lg",
-  },
-});
+);
 
 const iconImageVariants = cva("", {
   variants: {
