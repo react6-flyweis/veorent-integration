@@ -12,7 +12,7 @@ import { Link } from "react-router";
 
 function Leases() {
   return (
-    <div className="flex-1 flex flex-col gap-4">
+    <div className="flex flex-1 flex-col">
       <PageTitle title="Leases" />
       <Tabs defaultValue="open" className="flex-1">
         <TabsList>
@@ -20,11 +20,11 @@ function Leases() {
           <TabsTrigger value="all">Requests History</TabsTrigger>
         </TabsList>
         <TabsContent value="open">
-          <div className="relative h-full flex justify-center items-center">
+          <div className="relative flex h-full items-center justify-center">
             You don&apos;t have any open leasing request at this time. Add one
             by clicking on the “+” button!
             <Button
-              className="absolute bottom-1 right-1 size-11 rounded-full"
+              className="absolute right-1 bottom-1 size-11 rounded-full"
               asChild
             >
               <Link to="/create-lease-request">

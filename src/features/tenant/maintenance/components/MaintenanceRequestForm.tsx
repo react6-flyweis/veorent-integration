@@ -132,13 +132,13 @@ export function MaintenanceRequestForm() {
         />
 
         {/* Add Photo */}
-        <Card className="p-4 flex justify-center items-center border-dashed border-2 h-20 border-gray-300">
+        <Card className="flex h-20 items-center justify-center border-2 border-dashed border-gray-300 p-4">
           <p className="text-sm text-gray-500">CLICK OR DRAG TO UPLOAD</p>
         </Card>
 
         {/* Voice Memo */}
         <Button className="w-40" type="button">
-          <div className="rounded-full bg-white size-5 flex justify-center items-center">
+          <div className="flex size-5 items-center justify-center rounded-full bg-white">
             <MicIcon className="text-primary" />
           </div>
           <span className="text-base"> Voice Memo</span>
@@ -146,11 +146,11 @@ export function MaintenanceRequestForm() {
 
         {/* Property Access */}
         <div>
-          <div className="flex items-center gap-2 my-2">
+          <div className="my-2 flex items-center gap-2">
             <IconRound icon={accessIcon} size="xs" />
             <h3 className="text-lg font-bold">Property Access</h3>
           </div>
-          <p className="text-lg text-primary">
+          <p className="text-primary text-lg">
             The service team may arrive when you are not home:
           </p>
           <FormField
@@ -202,11 +202,11 @@ export function MaintenanceRequestForm() {
 
         {/* Additional Info */}
         <div>
-          <div className="flex items-center gap-2 my-2">
+          <div className="my-2 flex items-center gap-2">
             <IconRound icon={infoIcon} size="xs" />
             <h3 className="text-lg font-bold">Additional INFO</h3>
           </div>
-          <p className="text-lg text-primary">
+          <p className="text-primary text-lg">
             Are there animal(s) in the unit?
           </p>
           <FormField
@@ -238,7 +238,7 @@ export function MaintenanceRequestForm() {
         </div>
 
         <div className="flex justify-center">
-          <LoadingButton type="submit" size="lg" className="w-2/3">
+          <LoadingButton type="submit" size="lg" className="w-4/5 @lg:w-3/5">
             Submit
           </LoadingButton>
         </div>

@@ -10,19 +10,19 @@ export function DocumentCard({
   name: string;
 }) {
   return (
-    <Card className="p-0">
+    <Card className="relative p-0 w-full">
       <CardContent className="p-3">
-        <div className="space-x-2">
-          <span className="font-bold text-primary">Date:</span>
-          <span className="">{date}</span>
+        <div className="flex flex-wrap gap-1 mb-1">
+          <span className="text-primary font-bold shrink-0">Date:</span>
+          <span className="break-all">{date}</span>
         </div>
-        <div className="space-x-2">
-          <span className="font-bold text-primary">Description:</span>
-          <span className="">{description}</span>
+        <div className="flex flex-wrap gap-1 mb-1">
+          <span className="text-primary font-bold shrink-0">Description:</span>
+          <span className="break-all">{description}</span>
         </div>
-        <div className="space-x-2">
-          <span className="font-bold text-primary">File Name:</span>
-          <span className="truncate">{name}</span>
+        <div className="flex flex-wrap gap-1">
+          <span className="text-primary font-bold shrink-0">File Name:</span>
+          <span className="break-all">{name}</span>
         </div>
       </CardContent>
     </Card>

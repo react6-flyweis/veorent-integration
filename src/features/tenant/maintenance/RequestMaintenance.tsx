@@ -3,20 +3,23 @@ import { MaintenanceRequestForm } from "./components/MaintenanceRequestForm";
 import { XIcon } from "lucide-react";
 import { IconRound } from "@/components/IconRound";
 import pullImg from "@/assets/images/pull.png";
-import { Link } from "react-router";
+import { useGoBack } from "@/hooks/useGoBack";
 
 export default function RequestMaintenance() {
+  const goBack = useGoBack();
   return (
     <div>
-      <div className="flex gap-3 items-center">
-        <Button variant="outline" className="rounded-full size-8" asChild>
-          <Link to="/maintenance">
-            <XIcon className="size-5!" />
-          </Link>
+      <div className="flex items-center gap-3">
+        <Button
+          variant="outline"
+          className="size-8 rounded-full"
+          onClick={goBack}
+        >
+          <XIcon className="size-5!" />
         </Button>
         <h2 className="text-2xl">Create A New Request</h2>
       </div>
-      <div className="flex items-center gap-2 my-4">
+      <div className="my-4 flex items-center gap-2">
         <IconRound icon={pullImg} size="xs" />
         <h3 className="text-2xl font-bold">New Request</h3>
       </div>
