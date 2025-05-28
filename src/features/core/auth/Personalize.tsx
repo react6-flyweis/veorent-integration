@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 export default function Personalize() {
   const { setUserType } = useUserPreferenceStore();
   const [selectedType, setSelectedType] = useState<"tenant" | "landlord">(
-    "tenant"
+    "tenant",
   );
   const navigate = useNavigate();
 
@@ -24,16 +24,18 @@ export default function Personalize() {
 
   return (
     <div className="h-full pt-10">
-      <div className="flex justify-between items-center mb-8 gap-5">
+      <div className="mb-8 flex flex-col items-center justify-between gap-5 @lg:flex-row">
         <img src="/logo-dark.png" alt="Veorent Logo" className="h-6" />
-        <div className="rounded border border-primary flex justify-center items-center px-3 py-2">
-          <span className="text-xl font-semibold">Tenant Login</span>
-        </div>
-        <div className="rounded border border-primary flex justify-center items-center px-3 py-2">
-          <span className="text-xl font-semibold">Landlord Login</span>
+        <div className="flex gap-5">
+          <div className="border-primary flex items-center justify-center rounded border px-3 py-2">
+            <span className="text-xl font-semibold">Tenant Login</span>
+          </div>
+          <div className="border-primary flex items-center justify-center rounded border px-3 py-2">
+            <span className="text-xl font-semibold">Landlord Login</span>
+          </div>
         </div>
       </div>
-      <h2 className="text-3xl font-semibold my-5">
+      <h2 className="my-5 text-3xl font-semibold">
         Lets personalize your experience.
       </h2>
 
@@ -42,9 +44,9 @@ export default function Personalize() {
         onValueChange={handleTypeChange}
         value={selectedType}
       >
-        <div className="flex gap-5 px-5 justify-between">
-          <label htmlFor="tenant" className="cursor-pointer flex-1">
-            <div className="rounded-2xl border border-primary flex flex-col justify-center items-center px-3 py-2 cursor-pointer">
+        <div className="flex flex-col justify-between gap-5 px-5 @lg:flex-row">
+          <label htmlFor="tenant" className="flex-1 cursor-pointer">
+            <div className="border-primary flex cursor-pointer flex-col items-center justify-center rounded-2xl border px-3 py-2">
               <div className="w-full">
                 <RadioGroupItem value="tenant" id="tenant" />
               </div>
@@ -53,8 +55,8 @@ export default function Personalize() {
             </div>
           </label>
 
-          <label htmlFor="landlord" className="cursor-pointer flex-1">
-            <div className="rounded-2xl  border border-primary flex flex-col justify-center items-center px-3 py-2 cursor-pointer">
+          <label htmlFor="landlord" className="flex-1 cursor-pointer">
+            <div className="border-primary flex cursor-pointer flex-col items-center justify-center rounded-2xl border px-3 py-2">
               <div className="w-full">
                 <RadioGroupItem value="landlord" id="landlord" />
               </div>
@@ -66,7 +68,7 @@ export default function Personalize() {
       </RadioGroup>
 
       <div className="flex justify-center py-10">
-        <Button className="w-3/5" size="lg" onClick={handleContinue}>
+        <Button className="w-4/5 @lg:w-3/5" size="lg" onClick={handleContinue}>
           Continue
         </Button>
       </div>

@@ -4,12 +4,12 @@ export function AuthLayout() {
   return (
     <div className="flex h-screen w-full">
       {/* Left Form Panel */}
-      <div className="flex-1 flex justify-center items-center">
+      <div className="@container flex flex-1 items-center justify-center p-2">
         <Outlet />
       </div>
 
       {/* Right Image Panel */}
-      <div className="hidden  md:block w-2/5 overflow-hidden">
+      <div className="hidden w-2/5 overflow-hidden md:block">
         <img src="/scene.jpg" alt="Interior" className="object-cover" />
       </div>
     </div>
