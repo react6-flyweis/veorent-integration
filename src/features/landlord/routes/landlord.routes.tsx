@@ -47,6 +47,7 @@ import SubscriptionDetails from "../subscription/SubscriptionDetails";
 import Setting from "../settings/Setting";
 import PaymentSuccessful from "@/features/shared/payments/PaymentSuccessful";
 import Properties from "../properties/Properties";
+import PropertyDetail from "../properties/PropertyDetail";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -116,6 +117,10 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "/properties",
     element: <Properties />,
+  },
+  {
+    path: "/properties/:id",
+    element: <PropertyDetail />,
   },
   {
     path: "/maintenance",
