@@ -22,42 +22,42 @@ type ListingProps = {
 export function RentalListingCard({ data }: ListingProps) {
   return (
     <Card className="flex gap-4 p-3">
-      <CardContent className="flex p-0 gap-2">
+      <CardContent className="flex gap-2 p-0">
         <img
           src={data.imageUrl}
           alt={data.title}
-          className="w-32 h-24 rounded-md object-cover"
+          className="h-24 w-32 rounded-md object-cover"
         />
-        <div className="flex justify-between flex-1">
+        <div className="flex flex-1 justify-between">
           <div className="">
             <div className="flex items-center gap-2">
               <Badge variant="outline">{data.type}</Badge>
             </div>
-            <h3 className="font-semibold text-base mt-1">{data.title}</h3>
-            <p className="text-sm text-muted-foreground">{data.address}</p>
+            <h3 className="mt-1 text-base font-semibold">{data.title}</h3>
+            <p className="text-muted-foreground text-sm">{data.address}</p>
 
-            <div className="flex gap-4 text-sm mt-2 text-muted-foreground">
+            <div className="text-muted-foreground mt-2 flex gap-4 text-sm">
               <span className="flex items-center gap-1">
-                <BedDoubleIcon className="w-4 h-4" /> {data.beds} Beds
+                <BedDoubleIcon className="h-4 w-4" /> {data.beds} Beds
               </span>
               <span className="flex items-center gap-1">
-                <BathIcon className="w-4 h-4" /> {data.baths} Baths
+                <BathIcon className="h-4 w-4" /> {data.baths} Baths
               </span>
               <span className="flex items-center gap-1">
-                <CalendarIcon className="w-4 h-4" /> {data.available}
+                <CalendarIcon className="h-4 w-4" /> {data.available}
               </span>
             </div>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-muted-foreground mt-1 text-xs">
               Landlord: <span className="font-medium">{data.landlord}</span>
             </p>
           </div>
           <div className="flex flex-col">
             <div className="">
               <span className="text-lg font-bold">{data.price}</span>
-              <span className="text-lg ">/MO</span>
+              <span className="text-lg">/MO</span>
             </div>
             <Button className="rounded-full" size="sm" asChild>
-              <Link to={"/listing/" + data.id}>View Listing</Link>
+              <Link to={"/tenant/listing/" + data.id}>View Listing</Link>
             </Button>
           </div>
         </div>

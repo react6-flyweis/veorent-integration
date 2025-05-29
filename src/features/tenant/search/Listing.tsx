@@ -41,18 +41,18 @@ export default function PropertyListingDetail() {
         <BackButton />
         <Logo />
       </div>
-      <div className="mx-auto grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div className="mx-auto grid grid-cols-1 gap-5 md:grid-cols-3">
         {/* Left: Listing Info */}
-        <div className="md:col-span-2 space-y-4">
+        <div className="space-y-4 md:col-span-2">
           <div className="relative">
             <img
               src="/listing.jpg"
               alt="Brighton Lake"
-              className="w-full h-64 object-cover rounded-xl"
+              className="h-64 w-full rounded-xl object-cover"
             />
             <Button
               variant="ghost"
-              className="absolute bottom-2 right-2 rounded-full bg-white"
+              className="absolute right-2 bottom-2 rounded-full bg-white"
             >
               <GalleryHorizontalEndIcon className="rotate-180" />
               <span className="font-semibold">29 photos</span>
@@ -64,12 +64,12 @@ export default function PropertyListingDetail() {
               Brighton Lake Front Fully Furnished 7 month lease
             </h2>
             <div className="flex gap-1">
-              <a href="#" className="text-blue-600 text-lg tracking-wide">
+              <a href="#" className="text-lg tracking-wide text-blue-600">
                 3110 Causeway Dr, Brighton, MI 48114
               </a>
               <MapIcon className="text-blue-600" />
             </div>
-            <div className="w-full flex items-end justify-around mt-2 text-gray-700">
+            <div className="mt-2 flex w-full items-end justify-around text-gray-700">
               <div className="flex flex-col items-center gap-1">
                 <BedDoubleIcon className="size-7" />
                 <span> 3 Beds</span>
@@ -92,7 +92,7 @@ export default function PropertyListingDetail() {
           {/* Description */}
           <div>
             <h3 className="text-xl font-semibold">Description</h3>
-            <p className="mt-2 text-muted-foreground">
+            <p className="text-muted-foreground mt-2">
               Beautiful views from this recently remodeled home. Stainless steel
               appliances, new windows, hardwood/ceramic plank flooring. Renter
               must sign lease for no more than a 7 month period. No animals.
@@ -103,8 +103,8 @@ export default function PropertyListingDetail() {
 
           {/* Features */}
           <div>
-            <h3 className="text-xl font-semibold mt-4">Features</h3>
-            <div className="flex flex-wrap gap-5 mt-2">
+            <h3 className="mt-4 text-xl font-semibold">Features</h3>
+            <div className="mt-2 flex flex-wrap gap-5">
               <span className="flex items-center gap-1">
                 <DogIcon className="size-5" /> Small Dogs Allowed
               </span>
@@ -119,8 +119,8 @@ export default function PropertyListingDetail() {
 
           {/* Utilities */}
           <div>
-            <h3 className="text-xl font-semibold mt-4">Utilities Included</h3>
-            <div className="flex flex-wrap gap-5 mt-2">
+            <h3 className="mt-4 text-xl font-semibold">Utilities Included</h3>
+            <div className="mt-2 flex flex-wrap gap-5">
               <span className="flex items-center gap-1">
                 <DropletsIcon className="size-5" /> Water
               </span>
@@ -135,8 +135,8 @@ export default function PropertyListingDetail() {
 
           {/* Amenities */}
           <div>
-            <h3 className="text-xl font-semibold mt-4">Amenities</h3>
-            <div className="flex flex-wrap gap-5 mt-2">
+            <h3 className="mt-4 text-xl font-semibold">Amenities</h3>
+            <div className="mt-2 flex flex-wrap gap-5">
               <span className="flex items-center gap-1">
                 <SofaIcon className="size-5" /> Furnished
               </span>
@@ -163,8 +163,8 @@ export default function PropertyListingDetail() {
 
           {/* Appliances */}
           <div>
-            <h3 className="text-xl font-semibold mt-4">Appliances</h3>
-            <div className="flex flex-wrap gap-5 mt-2">
+            <h3 className="mt-4 text-xl font-semibold">Appliances</h3>
+            <div className="mt-2 flex flex-wrap gap-5">
               <span className="flex items-center gap-1">
                 <WashingMachineIcon className="size-5" /> Washer
               </span>
@@ -186,7 +186,7 @@ export default function PropertyListingDetail() {
 
         {/* Right: Sidebar */}
         <div className="space-y-4">
-          <Card className="bg-gray-50 gap-2 p-3 shadow-none rounded">
+          <Card className="gap-2 rounded bg-gray-50 p-3 shadow-none">
             <CardHeader className="px-1">
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground text-xl">Rent</span>
@@ -203,25 +203,25 @@ export default function PropertyListingDetail() {
                   <span className="">€2400</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground ">Available</span>
+                  <span className="text-muted-foreground">Available</span>
                   <span className="">10/01/2024</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground ">Lease Terms</span>
+                  <span className="text-muted-foreground">Lease Terms</span>
                   <span className="">Six Months</span>
                 </div>
               </div>
             </CardContent>
             <CardFooter className="flex justify-center">
               <Button size="sm" className="rounded-full">
-                <Link to={`/listing/${id}/apply`}>Apply Now</Link>
+                <Link to={`/tenant/listing/${id}/apply`}>Apply Now</Link>
               </Button>
             </CardFooter>
           </Card>
 
           {/* Contact Form */}
-          <Card className="bg-gray-50 gap-2 p-3 shadow-none rounded">
-            <CardContent className="px-3 space-y-3">
+          <Card className="gap-2 rounded bg-gray-50 p-3 shadow-none">
+            <CardContent className="space-y-3 px-3">
               <div className="space-y-1">
                 <h3 className="text-xl font-semibold">Contact the Landlord</h3>
                 <p>

@@ -31,10 +31,12 @@ export default function Dashboard() {
       {/* Header and Search */}
       <header className="flex flex-col items-center justify-between @md:flex-row">
         <h1 className="text-xl font-semibold">Hello, Kaiya</h1>
-        <div className="relative w-full max-w-sm">
-          <Input placeholder="Search property" className="pr-10" />
-          <SearchIcon className="absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 transform text-gray-500" />
-        </div>
+        <Link to="/tenant/search">
+          <div className="relative w-full max-w-sm">
+            <Input placeholder="Search property" className="pr-10" />
+            <SearchIcon className="absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 transform text-gray-500" />
+          </div>
+        </Link>
       </header>
 
       {/* User Card + Rental Application */}
