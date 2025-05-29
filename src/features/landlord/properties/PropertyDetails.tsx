@@ -13,43 +13,37 @@ import { LoadingButton } from "@/components/ui/loading-button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { HouseIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 import * as z from "zod";
 
 const formSchema = z.object({
   roomName: z.string().min(1, "Room name is required"),
-  beds: z.string().min(1, "Number of beds is required"),
-  baths: z.string().min(1, "Number of baths is required"),
-  apartmentUnit: z.string().optional(),
-  studioUnit: z.string().optional(),
-  roomsUnit: z.string().optional(),
-  targetRent: z.string().min(1, "Target rent is required"),
-  targetDeposit: z.string().min(1, "Target deposit is required"),
+  beds: z.number().min(1, "Number of beds must be at least 1"),
+  baths: z.number().min(1, "Number of baths must be at least 1"),
+  unitNumber: z.string().optional(),
+  targetRent: z.number().min(1, "Target rent must be greater than 0"),
+  targetDeposit: z.number().min(1, "Target deposit must be greater than 0"),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
-interface PropertyDetailsProps {
-  onSuccess?: () => void;
-}
-
-export function PropertyDetails({ onSuccess }: PropertyDetailsProps) {
+export function PropertyDetails() {
+  const navigate = useNavigate();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      beds: "",
-      baths: "",
-      apartmentUnit: "",
-      studioUnit: "",
-      roomsUnit: "",
-      targetRent: "",
-      targetDeposit: "",
+      roomName: "",
+      beds: 1,
+      baths: 1,
+      unitNumber: "",
+      targetRent: 0,
+      targetDeposit: 0,
     },
   });
 
   const onSubmit = (values: FormValues) => {
     console.log(values);
-    // Handle form submission
-    onSuccess?.();
+    navigate("/landlord/properties/setup-prompt");
   };
 
   return (
@@ -68,12 +62,49 @@ export function PropertyDetails({ onSuccess }: PropertyDetailsProps) {
             <div className="grid grid-cols-1 gap-4 @lg:grid-cols-2">
               <FormField
                 control={form.control}
+                name="roomName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Room Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter room name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="unitNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Unit Number</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter unit number (optional)"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
                 name="beds"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Beds</FormLabel>
                     <FormControl>
-                      <Input placeholder="Number of beds" {...field} />
+                      <Input
+                        type="number"
+                        min="1"
+                        placeholder="Number of beds"
+                        {...field}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -87,49 +118,13 @@ export function PropertyDetails({ onSuccess }: PropertyDetailsProps) {
                   <FormItem>
                     <FormLabel>Baths</FormLabel>
                     <FormControl>
-                      <Input placeholder="Number of baths" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="apartmentUnit"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Apartment Unit</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Apartment unit details" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="studioUnit"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Studio Unit</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Studio unit details" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="roomsUnit"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Rooms Unit</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Rooms unit details" {...field} />
+                      <Input
+                        type="number"
+                        min="1"
+                        placeholder="Number of baths"
+                        {...field}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -141,9 +136,16 @@ export function PropertyDetails({ onSuccess }: PropertyDetailsProps) {
                 name="targetRent"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Target Rent</FormLabel>
+                    <FormLabel>Target Rent ($)</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter target rent" {...field} />
+                      <Input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        placeholder="Enter target rent"
+                        {...field}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -155,9 +157,16 @@ export function PropertyDetails({ onSuccess }: PropertyDetailsProps) {
                 name="targetDeposit"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Target Deposit</FormLabel>
+                    <FormLabel>Target Deposit ($)</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter target deposit" {...field} />
+                      <Input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        placeholder="Enter target deposit"
+                        {...field}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -177,7 +186,6 @@ export function PropertyDetails({ onSuccess }: PropertyDetailsProps) {
             <div className="flex items-center justify-center">
               <LoadingButton
                 isLoading={form.formState.isSubmitting}
-                type="submit"
                 size="lg"
                 className="w-4/5 @lg:w-3/5"
               >

@@ -25,7 +25,7 @@ export default function AddProperty() {
           <PropertyAddress onSuccess={handleSuccess} />
         </MultiStepperStep>
         <MultiStepperStep>
-          <PropertyDetails onSuccess={handleSuccess} />
+          <PropertyDetails />
         </MultiStepperStep>
       </MultiStepper>
     </div>
