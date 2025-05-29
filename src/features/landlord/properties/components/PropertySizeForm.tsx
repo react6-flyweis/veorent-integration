@@ -12,6 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import propertySizeIcon from "../assets/property-size.png";
+import { LoadingButton } from "@/components/ui/loading-button";
 
 const propertySizeSchema = z.object({
   beds: z.string().min(1, { message: "Number of beds is required" }),
@@ -115,6 +116,17 @@ export const PropertySizeForm = ({
                 </FormItem>
               )}
             />
+          </div>
+
+          <div className="flex items-center justify-center">
+            <LoadingButton
+              type="submit"
+              className="w-4/5 @lg:w-3/5"
+              isLoading={form.formState.isSubmitting}
+              size="lg"
+            >
+              Next
+            </LoadingButton>
           </div>
         </div>
       </form>

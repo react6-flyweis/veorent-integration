@@ -15,6 +15,7 @@ import permissionsIcon from "../assets/permissions.png";
 import smokingIcon from "../assets/smoking.png";
 import petsIcon from "../assets/pets.png";
 import occupancyIcon from "../assets/occupancy.png";
+import { LoadingButton } from "@/components/ui/loading-button";
 
 const permissionsSchema = z.object({
   smoking: z.enum(["yes", "no", "outsideOnly"], {
@@ -207,6 +208,16 @@ export const PermissionsForm = ({
                 </FormItem>
               )}
             />
+          </div>
+          <div className="flex items-center justify-center">
+            <LoadingButton
+              type="submit"
+              className="w-4/5 @lg:w-3/5"
+              isLoading={form.formState.isSubmitting}
+              size="lg"
+            >
+              Next
+            </LoadingButton>
           </div>
         </div>
       </form>

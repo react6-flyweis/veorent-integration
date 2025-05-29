@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import rentIcon from "../assets/rent.png";
 import rentLeaseIcon from "../assets/rent-lease.png";
+import { LoadingButton } from "@/components/ui/loading-button";
 
 const leasingBasicsSchema = z.object({
   address: z.string().min(1, { message: "Address is required" }),
@@ -169,7 +170,7 @@ export const LeasingBasicsForm = ({
             Rent & Deposit
           </h3>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="mb-4 grid grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="targetRent"
@@ -207,6 +208,16 @@ export const LeasingBasicsForm = ({
                 </FormItem>
               )}
             />
+          </div>
+          <div className="flex items-center justify-center">
+            <LoadingButton
+              type="submit"
+              className="w-4/5 @lg:w-3/5"
+              isLoading={form.formState.isSubmitting}
+              size="lg"
+            >
+              Next
+            </LoadingButton>
           </div>
         </div>
       </form>

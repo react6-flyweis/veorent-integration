@@ -16,6 +16,7 @@ import utilitiesCoveredIcon from "../assets/utilities-covered.png";
 import amenititesIcon from "../assets/amenitites.png";
 import appliancesIcon from "../assets/appliances.png";
 import floorCoveringIcon from "../assets/floor-covering.png";
+import { LoadingButton } from "@/components/ui/loading-button";
 
 const utilitiesAmenitiesSchema = z.object({
   // Utilities fields
@@ -1163,6 +1164,17 @@ export const UtilitiesAmenitiesForm = ({
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div className="flex items-center justify-center">
+              <LoadingButton
+                type="submit"
+                className="w-4/5 @lg:w-3/5"
+                isLoading={form.formState.isSubmitting}
+                size="lg"
+              >
+                Next
+              </LoadingButton>
             </div>
           </div>
         </div>

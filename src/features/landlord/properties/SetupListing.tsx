@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import {
   MultiStepper,
-  MultiStepperButton,
   MultiStepperIndicator,
   MultiStepperStep,
   type MultiStepperRef,
@@ -11,6 +10,11 @@ import { PropertySizeForm } from "./components/PropertySizeForm";
 import { LeasingBasicsForm } from "./components/LeasingBasicsForm";
 import { PermissionsForm } from "./components/PermissionsForm";
 import { UtilitiesAmenitiesForm } from "./components/UtilitiesAmenitiesForm";
+import { ListingDescriptionForm } from "./components/ListingDescriptionForm";
+import { PhotosVideosForm } from "./components/PhotosVideosForm";
+import { PhoneVerificationForm } from "./components/PhoneVerificationForm";
+import { PublishListingForm } from "./components/PublishListingForm";
+import { ListingSuccessScreen } from "./components/ListingSuccessScreen";
 
 export default function SetupListing() {
   const goBack = useGoBack();
@@ -43,7 +47,25 @@ export default function SetupListing() {
         <UtilitiesAmenitiesForm onSuccess={handleSuccess} />
       </MultiStepperStep>
 
-      <MultiStepperButton />
+      <MultiStepperStep>
+        <ListingDescriptionForm onSuccess={handleSuccess} />
+      </MultiStepperStep>
+
+      <MultiStepperStep>
+        <PhotosVideosForm onSuccess={handleSuccess} />
+      </MultiStepperStep>
+
+      <MultiStepperStep>
+        <PhoneVerificationForm onSuccess={handleSuccess} />
+      </MultiStepperStep>
+
+      <MultiStepperStep>
+        <PublishListingForm onSuccess={handleSuccess} />
+      </MultiStepperStep>
+
+      <MultiStepperStep>
+        <ListingSuccessScreen />
+      </MultiStepperStep>
     </MultiStepper>
   );
 }
