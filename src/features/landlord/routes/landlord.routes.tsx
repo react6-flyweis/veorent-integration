@@ -49,6 +49,8 @@ import PaymentSuccessful from "@/features/shared/payments/PaymentSuccessful";
 import Properties from "../properties/Properties";
 import PropertyDetail from "../properties/PropertyDetail";
 import AddProperty from "../properties/AddProperty";
+import SetupListing from "../properties/SetupListing";
+import SetupListingPrompt from "../properties/SetupListingPrompt";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -118,6 +120,14 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "/properties",
     element: <Properties />,
+  },
+  {
+    path: "/properties/setup",
+    element: <SetupListing />,
+  },
+  {
+    path: "/properties/setup-prompt",
+    element: <SetupListingPrompt />,
   },
   {
     path: "/properties/:id",
