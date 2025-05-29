@@ -18,6 +18,11 @@ export const landlordNavigation: SidebarItem[] = [
     url: "/landlord/properties",
   },
   {
+    title: "Booking Calendar",
+    icon: "calendar.png",
+    url: "/landlord/calendar",
+  },
+  {
     title: "Maintenance",
     icon: "maintenance.png",
     url: "/landlord/maintenance",
