@@ -14,9 +14,10 @@ import { useGoBack } from "@/hooks/useGoBack";
 
 import monthlyChargeIcon from "./assets/monthly-charge.png";
 import paydayIcon from "./assets/payday.png";
+import dailyChargeIcon from "./assets/daily-charge.png";
 import { Link } from "react-router";
 
-type ChargeType = "monthly" | "one-time";
+type ChargeType = "monthly" | "one-time" | "daily";
 
 const CreateCharge: React.FC = () => {
   const goBack = useGoBack();
@@ -56,7 +57,7 @@ const CreateCharge: React.FC = () => {
 
         <div>
           <h2 className="mb-4 text-lg font-medium">What type of Charge?</h2>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {[
               {
                 type: "monthly" as ChargeType,
@@ -65,6 +66,14 @@ const CreateCharge: React.FC = () => {
                   "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's",
                 icon: monthlyChargeIcon,
                 path: "/landlord/payments/monthly-charge",
+              },
+              {
+                type: "daily" as ChargeType,
+                title: "Daily Charge",
+                description:
+                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's",
+                icon: dailyChargeIcon,
+                path: "/landlord/payments/daily-charge",
               },
               {
                 type: "one-time" as ChargeType,
