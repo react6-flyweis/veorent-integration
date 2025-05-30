@@ -24,6 +24,7 @@ import amendmentIcon from "./assets/amendment.png";
 import calendarIcon from "./assets/calendar.png";
 import monthIcon from "./assets/month.png";
 import dateIcon from "./assets/date.png";
+import { useNavigate } from "react-router";
 
 // Define Zod validation schema
 const formSchema = z.object({
@@ -36,6 +37,7 @@ const formSchema = z.object({
 });
 
 export default function CreateLeaseAddendum() {
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -54,6 +56,7 @@ export default function CreateLeaseAddendum() {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       console.log("Lease Addendum data:", data);
       // Handle navigation or success
+      navigate("/landlord");
     } catch (error) {
       console.error("Error submitting form:", error);
     }
@@ -100,7 +103,7 @@ export default function CreateLeaseAddendum() {
             {/* Tenants Section */}
             <div className="space-y-2">
               <h3 className="text-lg font-medium text-black">Tenants</h3>
-              <div className="rounded-md border p-4 text-center">
+              <div className="rounded-md border p-4 text-center shadow">
                 <p className="text-lg font-bold">You Don't Have Any Tenants!</p>
                 <p className="text-sm">
                   Lorem Ipsum is simply dummy text of the printing and
@@ -109,7 +112,7 @@ export default function CreateLeaseAddendum() {
                   printer took a galley of type and scrambled it to make a type
                   specimen book.
                 </p>
-                <Button className="mt-3" variant="outline">
+                <Button className="mt-3 w-52" variant="outlinePrimary">
                   Go To My Lease
                 </Button>
               </div>
@@ -118,8 +121,8 @@ export default function CreateLeaseAddendum() {
             {/* Landlord Section */}
             <div className="space-y-4">
               <h3 className="text-lg font-medium text-black">Landlord</h3>
-              <div className="flex items-start gap-3">
-                <Avatar>
+              <div className="flex items-start gap-4">
+                <Avatar className="size-10">
                   <AvatarImage src="#" alt="Landlord" />
                   <AvatarFallback>AD</AvatarFallback>
                 </Avatar>
@@ -140,8 +143,14 @@ export default function CreateLeaseAddendum() {
                       <FormLabel>
                         When was the original lease agreement dated?
                       </FormLabel>
+                      <p className="text-primary">
+                        Lorem Ipsum is simply dummy text of the printing and
+                        typesetting industry. Lorem Ipsum has been the
+                        industry's standard dummy text ever since the 1500s,
+                        when an unknown
+                      </p>
                       <FormControl>
-                        <DateInput {...field} />
+                        <DateInput className="@md:w-1/2" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -181,7 +190,7 @@ export default function CreateLeaseAddendum() {
                       </RadioGroup>
                     </FormControl>
                     <FormMessage />
-                    <div className="mt-2 rounded-md bg-blue-100 p-3 text-sm">
+                    <div className="text-primary mt-2 rounded-md bg-blue-100 p-3 text-sm">
                       <p>
                         Lorem Ipsum is simply dummy text of the printing and
                         typesetting industry. Lorem Ipsum has been the
@@ -226,7 +235,7 @@ export default function CreateLeaseAddendum() {
                     </RadioGroup>
                   </FormControl>
                   <FormMessage />
-                  <div className="mt-2 rounded-md bg-blue-100 p-3 text-sm">
+                  <div className="text-primary mt-2 rounded-md bg-blue-100 p-3 text-sm">
                     <p>
                       Lorem Ipsum is simply dummy text of the printing and
                       typesetting industry. Lorem Ipsum has been the industry's
@@ -270,7 +279,7 @@ export default function CreateLeaseAddendum() {
                     </RadioGroup>
                   </FormControl>
                   <FormMessage />
-                  <div className="mt-2 rounded-md bg-blue-100 p-3 text-sm">
+                  <div className="text-primary mt-2 rounded-md bg-blue-100 p-3 text-sm">
                     <p>
                       Lorem Ipsum is simply dummy text of the printing and
                       typesetting industry. Lorem Ipsum has been the industry's
@@ -319,7 +328,7 @@ export default function CreateLeaseAddendum() {
                     </RadioGroup>
                   </FormControl>
                   <FormMessage />
-                  <div className="mt-2 rounded-md bg-blue-100 p-3 text-sm">
+                  <div className="text-primary mt-2 rounded-md bg-blue-100 p-3 text-sm">
                     <p>
                       Lorem Ipsum is simply dummy text of the printing and
                       typesetting industry. Lorem Ipsum has been the industry's
@@ -345,10 +354,10 @@ export default function CreateLeaseAddendum() {
                 <FormItem>
                   <FormLabel>When does this addendum take effect?</FormLabel>
                   <FormControl>
-                    <DateInput {...field} />
+                    <DateInput className="@lg:w-1/2" {...field} />
                   </FormControl>
                   <FormMessage />
-                  <div className="mt-2 rounded-md bg-blue-100 p-3 text-sm">
+                  <div className="text-primary mt-2 rounded-md bg-blue-100 p-3 text-sm">
                     <p>
                       Lorem Ipsum is simply dummy text of the printing and
                       typesetting industry. Lorem Ipsum has been the industry's

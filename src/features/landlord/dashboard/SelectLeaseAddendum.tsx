@@ -137,11 +137,11 @@ export default function SelectLeaseAddendum() {
                     <img
                       src={item.icon}
                       alt={item.title}
-                      className="mr-4 max-h-8 max-w-9 flex-shrink-0"
+                      className="mr-4 max-h-12 max-w-12 flex-shrink-0"
                     />
                     <div>
-                      <h4 className="font-semibold">{item.title}</h4>
-                      <p className="text-primary text-sm">{item.description}</p>
+                      <h4 className="text-xl font-semibold">{item.title}</h4>
+                      <p className="text-primary">{item.description}</p>
                     </div>
                   </div>
                 ))}
