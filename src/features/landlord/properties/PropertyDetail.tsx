@@ -239,13 +239,13 @@ export default function PropertyDetail() {
 
         {property.status === undefined && (
           <div className="rounded-md p-4">
-            <h3 className="mb-2 text-lg font-medium">
+            <h3 className="mb-2 text-2xl font-bold">
               Market My Rental For Free
             </h3>
 
             <div className="mt-4 flex flex-col gap-3">
               <div className="flex items-center gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-900 text-white">
+                <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-full text-white">
                   <UserIcon className="h-4 w-4" />
                 </div>
                 <p className="text-sm">
@@ -254,7 +254,7 @@ export default function PropertyDetail() {
               </div>
 
               <div className="flex items-center gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-900 text-white">
+                <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-full text-white">
                   <LinkIcon className="h-4 w-4" />
                 </div>
                 <p className="text-sm">
@@ -263,7 +263,7 @@ export default function PropertyDetail() {
               </div>
 
               <div className="flex items-center gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-900 text-white">
+                <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-full text-white">
                   <UserIcon className="h-4 w-4" />
                 </div>
                 <p className="text-sm">
@@ -271,24 +271,31 @@ export default function PropertyDetail() {
                 </p>
               </div>
             </div>
-
-            <Button className="mt-4 w-full">Create My Listing</Button>
           </div>
         )}
 
         {property.status === "incomplete" && (
-          <div className="rounded-md bg-orange-50 p-4">
+          <div className="p-4">
             <h3 className="mb-2 text-lg font-medium">Marketing Online: OFF</h3>
             <p className="text-muted-foreground text-sm">
               Your listing is almost ready!
             </p>
             <p className="mt-2 text-sm">{property.description}</p>
-            <Button className="mt-4 w-full">Complete My Listing</Button>
           </div>
         )}
       </Card>
 
       {/* Action Buttons */}
+      {property.status === "incomplete" ||
+        (!property.status && (
+          <div className="flex justify-center">
+            <Link className="w-4/5" to="/landlord/properties/setup">
+              <Button size="lg" className="mt-4 w-full">
+                {property.status ? "Complete" : "Create"} My Listing
+              </Button>
+            </Link>
+          </div>
+        ))}
       {property.status === "marketing" && (
         <Card className="py-4">
           <CardContent className="space-y-5 px-4">
