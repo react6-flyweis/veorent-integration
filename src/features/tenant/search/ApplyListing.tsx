@@ -27,6 +27,7 @@ import { Input } from "@/components/ui/input";
 
 import { cn } from "@/lib/utils";
 import { DateInput } from "@/components/ui/date-input";
+import { useNavigate } from "react-router";
 
 const applicationSchema = z.object({
   role: z.enum(["tenant", "cosigner"], {
@@ -42,6 +43,7 @@ const applicationSchema = z.object({
 type ApplicationFormValues = z.infer<typeof applicationSchema>;
 
 export default function ApplyListing() {
+  const navigate = useNavigate();
   const form = useForm<ApplicationFormValues>({
     resolver: zodResolver(applicationSchema),
     defaultValues: {
@@ -56,6 +58,7 @@ export default function ApplyListing() {
 
   function onSubmit(values: ApplicationFormValues) {
     console.log("Submitted:", values);
+    navigate("/tenant/applying");
   }
   return (
     <div className="space-y-5">
@@ -67,18 +70,18 @@ export default function ApplyListing() {
       <div className="">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-            <div className="mx-auto grid grid-cols-1 md:grid-cols-5 gap-5">
+            <div className="mx-auto grid grid-cols-1 gap-5 md:grid-cols-5">
               {/* Left: Listing Info */}
-              <div className="md:col-span-3 space-y-4">
+              <div className="space-y-4 md:col-span-3">
                 <div className="relative">
                   <img
                     src="/listing.jpg"
                     alt="Brighton Lake"
-                    className="w-full h-64 object-cover rounded-xl"
+                    className="h-64 w-full rounded-xl object-cover"
                   />
                   <Button
                     variant="ghost"
-                    className="absolute bottom-2 right-2 rounded-full bg-white"
+                    className="absolute right-2 bottom-2 rounded-full bg-white"
                   >
                     <GalleryHorizontalEndIcon className="rotate-180" />
                     <span className="font-semibold">29 photos</span>
@@ -90,12 +93,12 @@ export default function ApplyListing() {
                     Brighton Lake Front Fully Furnished 7 month lease
                   </h2>
                   <div className="flex gap-1">
-                    <a href="#" className="text-blue-600 text-lg tracking-wide">
+                    <a href="#" className="text-lg tracking-wide text-blue-600">
                       3110 Causeway Dr, Brighton, MI 48114
                     </a>
                     <MapIcon className="text-blue-600" />
                   </div>
-                  <div className="w-full flex items-end justify-around mt-2 text-gray-700">
+                  <div className="mt-2 flex w-full items-end justify-around text-gray-700">
                     <div className="flex flex-col items-center gap-1">
                       <BedDoubleIcon className="size-7" />
                       <span> 3 Beds</span>
@@ -116,14 +119,14 @@ export default function ApplyListing() {
                 </div>
 
                 <div className="">
-                  <span className="uppercase font-semibold">Landlord:</span>
+                  <span className="font-semibold uppercase">Landlord:</span>
                   <span className="">Donna VanAntwerp</span>
                 </div>
               </div>
 
               {/* Right: Sidebar */}
               <div className="space-y-4 md:col-span-2">
-                <Card className="gap-2 p-3  rounded">
+                <Card className="gap-2 rounded p-3">
                   <CardHeader className="px-1">
                     <CardTitle className="text-center text-xl">
                       Start My Application
@@ -160,17 +163,17 @@ export default function ApplyListing() {
                           What are you applying as?
                         </FormLabel>
                         <FormControl>
-                          <div className="flex gap-2 border p-2 rounded">
+                          <div className="flex gap-2 rounded border p-2">
                             {["tenant", "cosigner"].map((value) => (
                               <button
                                 key={value}
                                 type="button"
                                 onClick={() => field.onChange(value)}
                                 className={cn(
-                                  "rounded-md text-sm px-4 py-1 border",
+                                  "rounded-md border px-4 py-1 text-sm",
                                   field.value === value
                                     ? "bg-primary text-white"
-                                    : "bg-muted text-foreground"
+                                    : "bg-muted text-foreground",
                                 )}
                               >
                                 {value === "tenant" ? "Tenant" : "Co-Signer"}
@@ -269,7 +272,7 @@ export default function ApplyListing() {
             </div>
             <div className="flex justify-center">
               <Button size="lg" type="submit" className="w-3/5">
-                Submit Application
+                Next
               </Button>
             </div>
           </form>

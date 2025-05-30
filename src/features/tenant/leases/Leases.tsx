@@ -27,7 +27,7 @@ function Leases() {
               className="absolute right-1 bottom-1 size-11 rounded-full"
               asChild
             >
-              <Link to="/create-lease-request">
+              <Link to="/tenant/create-lease-request">
                 <PlusIcon className="size-6! stroke-3" />
               </Link>
             </Button>
