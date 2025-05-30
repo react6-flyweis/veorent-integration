@@ -24,6 +24,7 @@ import { ImageUpload } from "@/components/ui/image-upload";
 import { useNavigate } from "react-router";
 import { PageTitle } from "@/components/PageTitle";
 import { LoadingButton } from "@/components/ui/loading-button";
+import { useToast } from "@/hooks/useAlertToast";
 
 // Define the form schema with Zod
 const formSchema = z.object({
@@ -68,7 +69,8 @@ type FormValues = z.infer<typeof formSchema>;
 
 export function CreateMaintenance() {
   const navigate = useNavigate();
-  // Set default values for the form
+
+  const { showToast } = useToast();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -86,7 +88,10 @@ export function CreateMaintenance() {
   const onSubmit = (data: FormValues) => {
     console.log("Form submitted with data:", data);
     // Add your API call here to submit the form data
-    navigate("/landlord/maintenance/_id_");
+    showToast("Maintenance request created successfully!", "success");
+    setTimeout(() => {
+      navigate("/landlord/maintenance/_id_");
+    }, 1000); // Simulate API call delay
   };
 
   return (
