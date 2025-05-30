@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,7 +9,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Link } from "react-router";
 
@@ -32,6 +31,7 @@ export function TenantCard({
   unit,
   room,
 }: TenantCardProps) {
+  const [dialogOpen, setDialogOpen] = useState(false);
   const formattedAddress = useMemo(() => {
     return [address, unit && `Unit ${unit}`, room && `Room ${room}`]
       .filter(Boolean)
@@ -65,32 +65,38 @@ export function TenantCard({
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-3 p-0">
-        <Button variant="outline" size="sm">
+        <Button onClick={(e) => e.preventDefault()} variant="outline" size="sm">
           Email
         </Button>
 
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button variant="outline" size="sm">
-              Call
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle className="text-center">
-                This feature is only accessible through our mobile app. Please
-                download the app by clicking this link.
-              </AlertDialogTitle>
-            </AlertDialogHeader>
-            <AlertDialogFooter className="w-full justify-center!">
-              <AlertDialogAction>Click here</AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+        <Button
+          onClick={(e) => {
+            e.preventDefault();
+            setDialogOpen(true);
+          }}
+          variant="outline"
+          size="sm"
+        >
+          Call
+        </Button>
+
         <Button variant="outline" size="sm" asChild>
           <Link to="/landlord/messages">Message</Link>
         </Button>
       </CardFooter>
+      <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-center">
+              This feature is only accessible through our mobile app. Please
+              download the app by clicking this link.
+            </AlertDialogTitle>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="w-full justify-center!">
+            <AlertDialogAction>Click here</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Card>
   );
 }
