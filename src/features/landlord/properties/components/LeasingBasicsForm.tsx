@@ -142,6 +142,14 @@ export const LeasingBasicsForm = ({
                     </FormItem>
                     <FormItem className="flex items-center space-y-0 space-x-3">
                       <FormControl>
+                        <RadioGroupItem value="daily" />
+                      </FormControl>
+                      <FormLabel className="text-base font-normal">
+                        Daily
+                      </FormLabel>
+                    </FormItem>
+                    <FormItem className="flex items-center space-y-0 space-x-3">
+                      <FormControl>
                         <RadioGroupItem value="rentToOwn" />
                       </FormControl>
                       <FormLabel className="text-base font-normal">
@@ -166,7 +174,7 @@ export const LeasingBasicsForm = ({
 
         <div className="mb-4">
           <h3 className="mb-2 flex items-center gap-2 text-base font-medium">
-            <IconRound icon={rentIcon} size="xs" />
+            <IconRound icon={rentLeaseIcon} size="xs" />
             Rent & Deposit
           </h3>
 
