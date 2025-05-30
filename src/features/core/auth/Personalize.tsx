@@ -45,23 +45,22 @@ export default function Personalize() {
         value={selectedType}
       >
         <div className="flex flex-col justify-between gap-5 px-5 @lg:flex-row">
-          <label htmlFor="tenant" className="flex-1 cursor-pointer">
-            <div className="border-primary flex cursor-pointer flex-col items-center justify-center rounded-2xl border px-3 py-2">
-              <div className="w-full">
-                <RadioGroupItem value="tenant" id="tenant" />
-              </div>
-              <img className="size-11" src={tenantIcon} alt="" />
-              <span className="text-2xl font-semibold">Tenant Login</span>
-            </div>
-          </label>
-
           <label htmlFor="landlord" className="flex-1 cursor-pointer">
             <div className="border-primary flex cursor-pointer flex-col items-center justify-center rounded-2xl border px-3 py-2">
               <div className="w-full">
                 <RadioGroupItem value="landlord" id="landlord" />
               </div>
               <img className="size-11" src={landlordIcon} alt="" />
-              <span className="text-2xl font-semibold">Landlord Login</span>
+              <span className="text-2xl font-semibold">Landlord </span>
+            </div>
+          </label>
+          <label htmlFor="tenant" className="flex-1 cursor-pointer">
+            <div className="border-primary flex cursor-pointer flex-col items-center justify-center rounded-2xl border px-3 py-2">
+              <div className="w-full">
+                <RadioGroupItem value="tenant" id="tenant" />
+              </div>
+              <img className="size-11" src={tenantIcon} alt="" />
+              <span className="text-2xl font-semibold">Tenant </span>
             </div>
           </label>
         </div>
