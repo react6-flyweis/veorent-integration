@@ -9,6 +9,9 @@ import { ChatSidebar, ChatSidebarContent } from "./components/ChatSidebar";
 import { ChatSidebarItem } from "./components/ChatSidebarItem";
 import { ChatMain } from "./components/ChatMain";
 import { PageTitle } from "@/components/PageTitle";
+import { CreateButton } from "@/components/CreateButton";
+import { Link } from "react-router";
+import { useUserPreferenceStore } from "@/store/useUserPreferenceStore";
 
 const conversations: IConversation[] = [
   {
@@ -122,6 +125,8 @@ const conversations: IConversation[] = [
 ];
 
 export default function Messages() {
+  const userPref = useUserPreferenceStore((state) => state.userType);
+
   const [selectedChatIndex, setSelectedChatIndex] = useState(0);
   const [showMainChat, setShowMainChat] = useState(false);
   const selectedChat = conversations[selectedChatIndex];
@@ -139,7 +144,14 @@ export default function Messages() {
   return (
     <ChatLayout>
       <ChatLayoutHeader className="mb-4">
-        <PageTitle title="Message" className="hidden @md:flex" />
+        <div className="flex items-center justify-between">
+          <PageTitle title="Message" className="mb-0 hidden @md:flex" />
+          <Link to="add">
+            <CreateButton
+              label={`Add ${userPref === "landlord" ? "Renters" : "Contacts"}`}
+            />
+          </Link>
+        </div>
       </ChatLayoutHeader>
       <ChatLayoutSidebar showOnMobile={!showMainChat}>
         <ChatSidebar>

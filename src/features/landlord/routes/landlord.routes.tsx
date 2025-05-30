@@ -53,6 +53,7 @@ import AddProperty from "../properties/AddProperty";
 import SetupListing from "../properties/SetupListing";
 import SetupListingPrompt from "../properties/SetupListingPrompt";
 import BookingCalendar from "../calendar/BookingCalendar";
+import AddContacts from "@/features/shared/messaging/AddContacts";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -118,6 +119,10 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "/messages",
     element: <Messages />,
+  },
+  {
+    path: "/messages/add",
+    element: <AddContacts />,
   },
   {
     path: "/properties",

@@ -22,6 +22,7 @@ import SignDocuments from "@/features/tenant/documents/sign-documents/SignDocume
 import InsurancePlans from "../dashboard/InsurancePlan";
 import PlanDetails from "../dashboard/PlanDetails";
 import { type RouteObject } from "react-router-dom";
+import AddContacts from "@/features/shared/messaging/AddContacts";
 
 export const dashRoutes: RouteObject[] = [
   {
@@ -63,6 +64,10 @@ export const dashRoutes: RouteObject[] = [
   {
     path: "/messages",
     element: <Messages />,
+  },
+  {
+    path: "/messages/add",
+    element: <AddContacts />,
   },
   {
     path: "/maintenance",
