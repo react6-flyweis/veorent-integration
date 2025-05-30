@@ -1,4 +1,3 @@
-import { useState } from "react";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,6 +17,7 @@ import houseIcon from "./assets/house.png";
 import leaseIcon from "./assets/deal.png";
 import { BuilderLayout } from "./components/BuilderLayout";
 import { DateInput } from "@/components/ui/date-input";
+import { useNavigate } from "react-router";
 
 const leaseSpecificSchema = z.object({
   streetAddress: z.string().min(1, "Street address is required"),
@@ -36,7 +36,7 @@ const leaseSpecificSchema = z.object({
 type LeaseSpecificFormValues = z.infer<typeof leaseSpecificSchema>;
 
 export default function LeaseSpecific() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   const form = useForm<LeaseSpecificFormValues>({
     resolver: zodResolver(leaseSpecificSchema),
@@ -52,14 +52,12 @@ export default function LeaseSpecific() {
   });
 
   const onSubmit = async (values: LeaseSpecificFormValues) => {
-    setIsSubmitting(true);
     try {
       console.log(values);
       // TODO: Save lease information and move to next step
+      navigate("/landlord/lease-agreement/rent-deposit-fee");
     } catch (error) {
       console.error("Error saving lease information:", error);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -72,7 +70,7 @@ export default function LeaseSpecific() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {/* Rental Property Section */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2 font-medium text-lg">
+            <div className="flex items-center gap-2 text-lg font-medium">
               <img src={houseIcon} className="size-10" />
               <span>Rental Property</span>
             </div>
@@ -152,7 +150,7 @@ export default function LeaseSpecific() {
 
           {/* Lease Term Section */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2 font-medium text-lg">
+            <div className="flex items-center gap-2 text-lg font-medium">
               <img src={leaseIcon} className="size-10" />
               <span>Lease Term</span>
             </div>
@@ -209,12 +207,12 @@ export default function LeaseSpecific() {
 
           <div className="flex justify-center">
             <LoadingButton
-              isLoading={isSubmitting}
+              isLoading={form.formState.isSubmitting}
               size="lg"
-              className="w-3/5 rounded-lg"
+              className="w-4/5 rounded-lg @lg:w-3/5"
               type="submit"
             >
-              {isSubmitting ? "Saving..." : "Save & Next"}
+              {form.formState.isSubmitting ? "Saving..." : "Save & Next"}
             </LoadingButton>
           </div>
         </form>

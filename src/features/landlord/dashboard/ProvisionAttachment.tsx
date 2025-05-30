@@ -6,6 +6,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { BuilderLayout } from "./components/BuilderLayout";
@@ -15,6 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import additionalTermsIcon from "./assets/additional.png";
 import attachmentIcon from "./assets/attachment.png";
 import { ImageUpload } from "@/components/ui/image-upload";
+import { useNavigate } from "react-router";
 
 // Define schema for the form
 const provisionAttachmentSchema = z.object({
@@ -25,6 +27,8 @@ const provisionAttachmentSchema = z.object({
 type ProvisionAttachmentValues = z.infer<typeof provisionAttachmentSchema>;
 
 export default function ProvisionAttachment() {
+  const navigate = useNavigate();
+
   const form = useForm<ProvisionAttachmentValues>({
     resolver: zodResolver(provisionAttachmentSchema),
     defaultValues: {
@@ -41,6 +45,7 @@ export default function ProvisionAttachment() {
     try {
       console.log(values);
       // TODO: Save provisions and attachments and move to next step
+      navigate("/landlord/lease-agreement/create");
     } catch (error) {
       console.error("Error saving information:", error);
     }
@@ -54,39 +59,57 @@ export default function ProvisionAttachment() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           {/* Additional Terms Section */}
-          <div className="space-y-4">
-            <div>
-              <div className="flex items-center gap-2 font-medium">
-                <img src={additionalTermsIcon} alt="Keys" className="size-10" />
-                <h3 className="text-xl">
-                  Additional Terms
-                  <span className="text-muted-foreground">(Optional)</span>
-                </h3>
-              </div>
-              <p className="mb-4 text-gray-600">
+          <div>
+            <div className="flex items-center gap-2 font-medium">
+              <img src={additionalTermsIcon} alt="Keys" className="size-10" />
+              <h3 className="text-xl">Additional Terms</h3>
+            </div>
+            <div className="text-primary mt-2 mb-4 space-y-2 font-semibold">
+              <p className="text-black">
                 Are there any additional terms you'd like to add to this
                 agreement?
               </p>
-              <FormField
-                control={form.control}
-                name="additionalTerms"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <div>
-                        <Textarea className="min-h-28" {...field} />
-                        <div className="mt-1 flex">
-                          <span className="text-muted-foreground">
-                            {field.value.length}/10000 characters used
-                          </span>
-                        </div>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <p>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and scrambled it to make a type specimen book. It has
+                survived not only
+              </p>
+              <p>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown
+              </p>
+              <p>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's
+              </p>
             </div>
+
+            <FormField
+              control={form.control}
+              name="additionalTerms"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    <span className="text-xl uppercase">Additional Terms</span>
+                    <span className="text-muted-foreground"> (Optional)</span>
+                  </FormLabel>
+                  <FormControl>
+                    <div>
+                      <Textarea className="min-h-28" {...field} />
+                      <div className="mt-1 flex">
+                        <span className="text-muted-foreground">
+                          {field.value.length}/10000 characters used
+                        </span>
+                      </div>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
 
           {/* Attachments Section */}

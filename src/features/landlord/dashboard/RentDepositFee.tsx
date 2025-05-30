@@ -9,7 +9,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { BuilderLayout } from "./components/BuilderLayout";
@@ -29,6 +28,8 @@ import moneyIcon from "./assets/money.png";
 import moneyLeaseIcon from "./assets/money-lease.png";
 import moneyDepositIcon from "./assets/money-deposit.png";
 import exchangeIcon from "./assets/exchange.png";
+import { CurrencyInput } from "@/components/CurrencyInput";
+import { useNavigate } from "react-router";
 
 const rentDepositFeeSchema = z.object({
   monthlyRent: z.string().min(1, "Monthly rent is required"),
@@ -46,6 +47,8 @@ const rentDepositFeeSchema = z.object({
 type RentDepositFeeValues = z.infer<typeof rentDepositFeeSchema>;
 
 export default function RentDepositFee() {
+  const navigate = useNavigate();
+
   const form = useForm<RentDepositFeeValues>({
     resolver: zodResolver(rentDepositFeeSchema),
     defaultValues: {
@@ -68,6 +71,7 @@ export default function RentDepositFee() {
     try {
       console.log(values);
       // TODO: Save rent, deposit, and fee information and move to next step
+      navigate("/landlord/lease-agreement/people-on-lease");
     } catch (error) {
       console.error("Error saving information:", error);
     }
@@ -82,7 +86,7 @@ export default function RentDepositFee() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           {/* Monthly Base Rent Section */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2 font-medium text-lg">
+            <div className="flex items-center gap-2 text-lg font-medium">
               <img src={moneyDepositIcon} alt="Rent" className="size-10" />
               <span>Monthly Base Rent</span>
             </div>
@@ -92,15 +96,12 @@ export default function RentDepositFee() {
               name="monthlyRent"
               render={({ field }) => (
                 <FormItem>
-                  <div className="flex items-center mb-1">
-                    <FormLabel className="mr-2">$</FormLabel>
-                    <FormControl>
-                      <Input {...field} className="max-w-64" />
-                    </FormControl>
-                    {/* <InfoCircledIcon className="ml-2 text-gray-400 size-5" /> */}
-                  </div>
+                  <FormLabel className="mr-2">Monthly Base Rent</FormLabel>
+                  <FormControl>
+                    <CurrencyInput {...field} className="max-w-64" />
+                  </FormControl>
                   <FormMessage />
-                  <Card className="bg-blue-50 p-3 mt-2 text-sm text-blue-800">
+                  <Card className="mt-2 bg-blue-50 p-3 text-sm text-blue-800">
                     <p>
                       Late Fee: Late is 5% of the Base rent, and every month if
                       rent is not received on or before the 5th day of each
@@ -117,7 +118,10 @@ export default function RentDepositFee() {
               control={form.control}
               name="chargePerRoom"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center space-x-3 space-y-0">
+                <FormItem>
+                  <FormLabel className="font-normal">
+                    Will you charge per room?
+                  </FormLabel>
                   <FormControl>
                     <RadioGroup
                       onValueChange={(value) => field.onChange(value === "yes")}
@@ -138,14 +142,11 @@ export default function RentDepositFee() {
                       </FormItem>
                     </RadioGroup>
                   </FormControl>
-                  <FormLabel className="font-normal">
-                    Will you charge per room?
-                  </FormLabel>
                 </FormItem>
               )}
             />
 
-            <div className="bg-blue-50 p-3 text-sm text-blue-800 rounded">
+            <div className="rounded bg-blue-50 p-3 text-sm text-blue-800">
               <p className="font-medium">Move-In Rent Date</p>
               <p>
                 If the "move-in date" is any day other than the first day of
@@ -157,7 +158,7 @@ export default function RentDepositFee() {
 
           {/* Prorated Rent Section */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2 font-medium text-lg">
+            <div className="flex items-center gap-2 text-lg font-medium">
               <img src={houseIcon} alt="Prorated Rent" className="size-10" />
               <span>Prorated Rent</span>
             </div>
@@ -177,7 +178,7 @@ export default function RentDepositFee() {
 
           {/* Deposit Section */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2 font-medium text-lg">
+            <div className="flex items-center gap-2 text-lg font-medium">
               <img src={coinBagIcon} alt="Deposit" className="size-10" />
               <span>Deposit(s)</span>
             </div>
@@ -189,13 +190,9 @@ export default function RentDepositFee() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Security Deposit</FormLabel>
-                    <div className="flex items-center">
-                      <FormLabel className="mr-2">$</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      {/* <InfoCircledIcon className="ml-2 text-gray-400 size-5" /> */}
-                    </div>
+                    <FormControl>
+                      <CurrencyInput {...field} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -207,13 +204,9 @@ export default function RentDepositFee() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Other Deposit</FormLabel>
-                    <div className="flex items-center">
-                      <FormLabel className="mr-2">$</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      {/* <InfoCircledIcon className="ml-2 text-gray-400 size-5" /> */}
-                    </div>
+                    <FormControl>
+                      <CurrencyInput {...field} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -224,7 +217,10 @@ export default function RentDepositFee() {
               control={form.control}
               name="requirePetDeposit"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center space-x-3 space-y-0">
+                <FormItem>
+                  <FormLabel className="font-normal">
+                    Do you require a pet deposit?
+                  </FormLabel>
                   <FormControl>
                     <RadioGroup
                       onValueChange={(value) => field.onChange(value === "yes")}
@@ -245,9 +241,6 @@ export default function RentDepositFee() {
                       </FormItem>
                     </RadioGroup>
                   </FormControl>
-                  <FormLabel className="font-normal">
-                    Do you require a pet deposit?
-                  </FormLabel>
                 </FormItem>
               )}
             />
@@ -265,7 +258,7 @@ export default function RentDepositFee() {
 
           {/* One Time Fees Section */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2 font-medium text-lg">
+            <div className="flex items-center gap-2 text-lg font-medium">
               <img src={moneyLeaseIcon} alt="Fees" className="size-10" />
               <span>One Time Fees</span>
             </div>
@@ -274,7 +267,11 @@ export default function RentDepositFee() {
               control={form.control}
               name="oneTimeFees"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center space-x-3 space-y-0">
+                <FormItem>
+                  <FormLabel className="font-normal">
+                    Do you charge any one time, non-refundable fee due at move
+                    in?
+                  </FormLabel>
                   <FormControl>
                     <RadioGroup
                       onValueChange={(value) => field.onChange(value === "yes")}
@@ -295,10 +292,6 @@ export default function RentDepositFee() {
                       </FormItem>
                     </RadioGroup>
                   </FormControl>
-                  <FormLabel className="font-normal">
-                    Do you charge any one time, non-refundable fee due at move
-                    in?
-                  </FormLabel>
                 </FormItem>
               )}
             />
@@ -315,7 +308,7 @@ export default function RentDepositFee() {
 
           {/* Payment Accepted Section */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2 font-medium text-lg">
+            <div className="flex items-center gap-2 text-lg font-medium">
               <img src={exchangeIcon} alt="Payment" className="size-10" />
               <span>Payment Accepted</span>
             </div>
@@ -336,13 +329,11 @@ export default function RentDepositFee() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="chase">Chase Bank Account</SelectItem>
-                      <SelectItem value="wellsfargo">
-                        Wells Fargo Account
+                      <SelectItem value="standard">
+                        Standard Bank Group
                       </SelectItem>
-                      <SelectItem value="bankofamerica">
-                        Bank of America Account
-                      </SelectItem>
+                      <SelectItem value="firstrand">FirstRand</SelectItem>
+                      <SelectItem value="absa">Absa Group</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -351,7 +342,7 @@ export default function RentDepositFee() {
             />
 
             <div className="space-y-4">
-              <div className="flex items-center gap-2 font-medium text-lg">
+              <div className="flex items-center gap-2 text-lg font-medium">
                 <img src={moneyIcon} alt="Payment" className="size-10" />
                 <span>Other payment method</span>
               </div>
@@ -360,24 +351,23 @@ export default function RentDepositFee() {
                 name="paymentMethods"
                 render={() => (
                   <FormItem>
-                    <FormLabel>Other Payment methods</FormLabel>
                     <div className="space-y-2">
-                      <div className="flex items-center space-x-2">
-                        <Checkbox id="cash" value="cash" />
-                        <label htmlFor="cash" className="text-sm font-medium">
-                          Cash
+                      <div className="flex items-center space-x-4">
+                        <Checkbox id="card" value="card" />
+                        <label htmlFor="card" className="font-medium">
+                          Card
                         </label>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox id="ach" value="ach" />
-                        <label htmlFor="ach" className="text-sm font-medium">
-                          ACH / mobile pay
+                      <div className="flex items-center space-x-4">
+                        <Checkbox id="mtn" value="mtn" />
+                        <label htmlFor="mtn" className="font-medium">
+                          MTN money Pay
                         </label>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox id="venmo" value="venmo" />
-                        <label htmlFor="venmo" className="text-sm font-medium">
-                          Venmo / money pay
+                      <div className="flex items-center space-x-4">
+                        <Checkbox id="orange" value="orange" />
+                        <label htmlFor="orange" className="font-medium">
+                          Orange money pay
                         </label>
                       </div>
                     </div>

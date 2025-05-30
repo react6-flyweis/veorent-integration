@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { PageTitle } from "@/components/PageTitle";
+import { Link } from "react-router";
 
 interface BuilderLayoutProps {
   title: string;
@@ -20,9 +21,11 @@ export function BuilderLayout({
       <div className="mb-3 flex items-center justify-between">
         <PageTitle title={title} withBack className="mb-0" />
 
-        <Button variant="ghost" onClick={onSave}>
-          Save &amp; Exit
-        </Button>
+        <Link to="/landlord">
+          <Button variant="ghost" onClick={onSave}>
+            Save &amp; Exit
+          </Button>
+        </Link>
       </div>
       <p className="mb-5 text-lg">{description}</p>
 
