@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/useAlertToast";
 
 const formSchema = z.object({
   phone: z.string().min(10, "Enter a valid phone number"),
@@ -22,6 +23,7 @@ const formSchema = z.object({
 type ContactFormData = z.infer<typeof formSchema>;
 
 export function ContactForm() {
+  const { showToast } = useToast();
   const form = useForm<ContactFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,6 +35,7 @@ export function ContactForm() {
 
   const onSubmit = (data: ContactFormData) => {
     console.log("Submitted data:", data);
+    showToast("Your message is sent successfully!", "success");
   };
 
   return (
