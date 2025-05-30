@@ -39,7 +39,10 @@ export default function RentersLeads() {
 
       <div className="">
         {leads.map((renter, index) => (
-          <Link to={"leads/" + renter.name.replace(/\s+/g, "-")} key={index}>
+          <Link
+            to={"/landlord/renters/leads/" + renter.name.replace(/\s+/g, "-")}
+            key={index}
+          >
             <RenterItem
               key={index}
               name={renter.name}
