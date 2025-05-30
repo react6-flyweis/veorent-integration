@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Play } from "lucide-react";
+import { Link } from "react-router";
 
 interface EducationCardProps {
   title: string;
@@ -31,7 +32,9 @@ export function EducationCard({
           <h3 className="text-primary mb-2 text-xl font-bold">{title}</h3>
           <p className="text-gray-600">{description}</p>
         </div>
-        <Button className="mt-4 w-36">Learn More</Button>
+        <Link to="/landlord/lease-agreement">
+          <Button className="mt-4 w-36">Learn More</Button>
+        </Link>
       </div>
     </div>
   );
