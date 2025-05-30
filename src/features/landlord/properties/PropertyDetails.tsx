@@ -1,3 +1,4 @@
+import { CurrencyInput } from "@/components/CurrencyInput";
 import { PageTitle } from "@/components/PageTitle";
 import { Card } from "@/components/ui/card";
 import {
@@ -18,11 +19,13 @@ import * as z from "zod";
 
 const formSchema = z.object({
   roomName: z.string().min(1, "Room name is required"),
-  beds: z.number().min(1, "Number of beds must be at least 1"),
-  baths: z.number().min(1, "Number of baths must be at least 1"),
+  beds: z.coerce.number().min(1, "Number of beds must be at least 1"),
+  baths: z.coerce.number().min(1, "Number of baths must be at least 1"),
   unitNumber: z.string().optional(),
-  targetRent: z.number().min(1, "Target rent must be greater than 0"),
-  targetDeposit: z.number().min(1, "Target deposit must be greater than 0"),
+  targetRent: z.coerce.number().min(1, "Target rent must be greater than 0"),
+  targetDeposit: z.coerce
+    .number()
+    .min(1, "Target deposit must be greater than 0"),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -64,7 +67,7 @@ export function PropertyDetails() {
                 control={form.control}
                 name="roomName"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="col-span-2">
                     <FormLabel>Room Name</FormLabel>
                     <FormControl>
                       <Input placeholder="Enter room name" {...field} />
@@ -136,16 +139,9 @@ export function PropertyDetails() {
                 name="targetRent"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Target Rent ($)</FormLabel>
+                    <FormLabel>Target Rent</FormLabel>
                     <FormControl>
-                      <Input
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        placeholder="Enter target rent"
-                        {...field}
-                        onChange={(e) => field.onChange(Number(e.target.value))}
-                      />
+                      <CurrencyInput {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -157,16 +153,9 @@ export function PropertyDetails() {
                 name="targetDeposit"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Target Deposit ($)</FormLabel>
+                    <FormLabel>Target Deposit</FormLabel>
                     <FormControl>
-                      <Input
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        placeholder="Enter target deposit"
-                        {...field}
-                        onChange={(e) => field.onChange(Number(e.target.value))}
-                      />
+                      <CurrencyInput {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -174,12 +163,13 @@ export function PropertyDetails() {
               />
             </div>
 
-            <Card className="border-blue-100 bg-blue-50 p-4">
+            <Card className="rounded-none border-0 bg-blue-200 p-4">
               <p className="text-primary text-sm">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when an unknown printer took a galley
-                of type and scrambled it to make a type specimen book.
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui
+                harum distinctio, quidem dicta perspiciatis eveniet sapiente
+                mollitia culpa. Iure vero debitis magni iusto obcaecati velit at
+                suscipit libero, voluptas praesentium ut eum reiciendis ullam
+                incidunt vel vitae accusantium doloremque commodi!
               </p>
             </Card>
 
@@ -189,7 +179,7 @@ export function PropertyDetails() {
                 size="lg"
                 className="w-4/5 @lg:w-3/5"
               >
-                Continue
+                Next
               </LoadingButton>
             </div>
           </form>
