@@ -1,3 +1,4 @@
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import {
   Children,
@@ -20,9 +21,9 @@ function ChatLayout({ children }: PropsWithChildren) {
   ) as ReactElement | undefined;
 
   return (
-    <div className="@container flex flex-1 flex-col">
+    <div className="@container flex max-h-[calc(100vh-3rem)] flex-1 flex-col overflow-hidden md:max-h-[calc(100vh-6rem)]">
       {header && <>{header}</>}
-      <div className="flex flex-1 flex-col gap-5 bg-white @2xl:flex-row">
+      <div className="flex flex-1 flex-col gap-5 overflow-hidden bg-white @2xl:flex-row">
         {/* sidebar */}
         {sidebar && <>{sidebar}</>}
         {/* main */}
@@ -54,7 +55,7 @@ function ChatLayoutSidebar({
         className,
       )}
     >
-      {children}
+      <ScrollArea className="h-full">{children}</ScrollArea>
     </div>
   );
 }
