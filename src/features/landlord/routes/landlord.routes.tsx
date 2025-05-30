@@ -58,6 +58,7 @@ import MarketingExtended from "../properties/MarketingExtended";
 import EditProperty from "../properties/EditProperty";
 import EditPropertySize from "../properties/EditPropertySize";
 import EditPropertyAddress from "../properties/EditPropertyAdress";
+import PropertyUnits from "../properties/PropertyUnits";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -143,6 +144,10 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "/properties/:id",
     element: <PropertyDetail />,
+  },
+  {
+    path: "/properties/:id/units",
+    element: <PropertyUnits />,
   },
   {
     path: "/properties/:id/edit",
