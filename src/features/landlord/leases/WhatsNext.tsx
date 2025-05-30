@@ -60,9 +60,11 @@ export default function WhatsNext() {
       </div>
 
       <div className="flex justify-center">
-        <Button size="lg" className="w-3/5">
-          Skip For Now
-        </Button>
+        <Link to="/landlord/leases" className="w-4/5 @lg:w-3/5">
+          <Button className="w-full" size="lg">
+            Skip For Now
+          </Button>
+        </Link>
       </div>
     </div>
   );

@@ -12,6 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { ImageUpload } from "@/components/ui/image-upload";
+import { useNavigate } from "react-router";
 
 const formSchema = z.object({
   document: z.array(
@@ -24,6 +25,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export default function UploadLeaseDocument() {
+  const navigate = useNavigate();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -35,6 +37,7 @@ export default function UploadLeaseDocument() {
     // Handle form submission with the document file
     console.log(data);
     // Here you would typically upload the file to a server
+    navigate("/landlord/leases/whats-next");
   };
 
   return (
