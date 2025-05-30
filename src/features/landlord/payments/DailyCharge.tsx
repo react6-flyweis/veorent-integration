@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
   SelectContent,
@@ -11,7 +10,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
 import { PageTitle } from "@/components/PageTitle";
 import { DateInput } from "@/components/ui/date-input";
 import { z } from "zod";
@@ -35,6 +33,8 @@ import {
   MultiStepperStep,
 } from "@/components/MultiStepper";
 import { useGoBack } from "@/hooks/useGoBack";
+import { useToast } from "@/hooks/useAlertToast";
+import { useNavigate } from "react-router";
 
 // Form schema
 const formSchema = z.object({
@@ -48,26 +48,29 @@ const formSchema = z.object({
   }),
   endDate: z.date().optional(),
   hasEndDate: z.boolean(),
-  doesRepeat: z.enum(["yes", "no"]),
   maxDays: z.coerce.number().min(1, "Must be at least 1 day").optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 const DailyCharge: React.FC = () => {
+  const { showToast } = useToast();
   const goBack = useGoBack();
+  const navigate = useNavigate();
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       description: "",
       hasEndDate: false,
-      doesRepeat: "no",
     },
   });
 
   const onSubmit = (data: FormValues) => {
     console.log(data);
     // Handle form submission
+    showToast("Your monthly charge is create successfully.", "success");
+    navigate("/landlord/payments/create-charge");
   };
 
   return (
@@ -76,7 +79,7 @@ const DailyCharge: React.FC = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <MultiStepper>
             <MultiStepperHeader>
-              <div className="flex items-center gap-5 border-b-3 pb-3">
+              <div className="flex items-center gap-5 border-b-3 border-gray-700 pb-3">
                 <MultiStepperBackButton routeBack={goBack} />
                 <PageTitle title="Daily Charge" className="mb-0" />
               </div>
@@ -271,38 +274,9 @@ const DailyCharge: React.FC = () => {
                       )}
                     />
                   </div>
-
-                  <div className="mt-4">
-                    <FormField
-                      control={form.control}
-                      name="doesRepeat"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Does this repeat?</FormLabel>
-                          <FormControl>
-                            <RadioGroup
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                              className="flex gap-6"
-                            >
-                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="yes" id="yes" />
-                                <Label htmlFor="yes">Yes</Label>
-                              </div>
-                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="no" id="no" />
-                                <Label htmlFor="no">No</Label>
-                              </div>
-                            </RadioGroup>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
                 </section>
 
-                <div className="rounded-md bg-blue-50 p-4 text-sm text-blue-800">
+                <div className="text-primary mt-5 rounded-sm bg-blue-200 p-4 text-sm">
                   <p>
                     Lorem Ipsum is simply dummy text of the printing and
                     typesetting industry. Lorem Ipsum has been the industry's

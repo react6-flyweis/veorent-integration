@@ -33,6 +33,7 @@ import {
 } from "@/components/MultiStepper";
 import { useGoBack } from "@/hooks/useGoBack";
 import { useToast } from "@/hooks/useAlertToast";
+import { useNavigate } from "react-router";
 
 // Form schema
 const formSchema = z.object({
@@ -52,6 +53,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export default function OneTimeCharge() {
+  const navigate = useNavigate();
   const { showToast } = useToast();
   const goBack = useGoBack();
   const form = useForm<FormValues>({
@@ -62,9 +64,10 @@ export default function OneTimeCharge() {
   });
 
   const onSubmit = (data: FormValues) => {
-    showToast("One-time charge created successfully!", "success");
     console.log(data);
     // Handle form submission
+    showToast("One-time charge created successfully!", "success");
+    navigate("/landlord/payments/create-charge");
   };
 
   return (
@@ -73,7 +76,7 @@ export default function OneTimeCharge() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <MultiStepper>
             <MultiStepperHeader>
-              <div className="flex items-center gap-5 border-b-3 pb-3">
+              <div className="flex items-center gap-5 border-b-3 border-gray-700 pb-3">
                 <MultiStepperBackButton routeBack={goBack} />
                 <PageTitle title="One-Time Charge" className="mb-0" />
               </div>
@@ -218,17 +221,11 @@ export default function OneTimeCharge() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectGroup>
-                              <SelectItem value="account1">
-                                Bank Account 1
-                              </SelectItem>
-                              <SelectItem value="account2">
-                                Bank Account 2
-                              </SelectItem>
-                              <SelectItem value="account3">
-                                Bank Account 3
-                              </SelectItem>
-                            </SelectGroup>
+                            <SelectItem value="standard">
+                              Standard Bank Group
+                            </SelectItem>
+                            <SelectItem value="firstrand">FirstRand</SelectItem>
+                            <SelectItem value="absa">Absa Group</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -236,8 +233,7 @@ export default function OneTimeCharge() {
                     )}
                   />
                 </section>
-
-                <div className="text-primary rounded-md bg-blue-100 p-4 text-sm">
+                <div className="text-primary mt-5 rounded-sm bg-blue-200 p-4 text-sm">
                   <p>
                     Lorem Ipsum is simply dummy text of the printing and
                     typesetting industry. Lorem Ipsum has been the industry's

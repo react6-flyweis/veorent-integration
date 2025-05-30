@@ -35,6 +35,9 @@ import {
   MultiStepperStep,
 } from "@/components/MultiStepper";
 import { useGoBack } from "@/hooks/useGoBack";
+import { CurrencyInput } from "@/components/CurrencyInput";
+import { useToast } from "@/hooks/useAlertToast";
+import { useNavigate } from "react-router";
 
 // Form schema
 const formSchema = z.object({
@@ -54,24 +57,38 @@ const formSchema = z.object({
   }),
   hasEndDate: z.boolean(),
   doesRepeat: z.enum(["yes", "no"]),
+  lateFeeType: z.enum(["flat", "percentage"]).optional(),
+  lateFeeAmount: z.coerce.number().optional(),
+  lateFeeFor: z.enum(["sameDay", "oneDay", "oneWeek"]).optional(),
+  bankAccount: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 const MonthlyCharge: React.FC = () => {
+  const { showToast } = useToast();
   const goBack = useGoBack();
+  const navigate = useNavigate();
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       description: "",
       hasEndDate: false,
       doesRepeat: "no",
+      lateFeeType: "flat",
     },
   });
+
+  // Watch values to conditionally render UI elements
+  const lateFeeType = form.watch("lateFeeType");
+  const doesRepeat = form.watch("doesRepeat");
 
   const onSubmit = (data: FormValues) => {
     console.log(data);
     // Handle form submission
+    showToast("Your monthly charge is create successfully.", "success");
+    navigate("/landlord/payments/create-charge");
   };
 
   return (
@@ -80,7 +97,7 @@ const MonthlyCharge: React.FC = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <MultiStepper>
             <MultiStepperHeader>
-              <div className="flex items-center gap-5 border-b-3 pb-3">
+              <div className="flex items-center gap-5 border-b-3 border-gray-700 pb-3">
                 <MultiStepperBackButton routeBack={goBack} />
                 <PageTitle title="Monthly Charge" className="mb-0" />
               </div>
@@ -308,7 +325,6 @@ const MonthlyCharge: React.FC = () => {
                       name="doesRepeat"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Does this repeat?</FormLabel>
                           <FormControl>
                             <RadioGroup
                               onValueChange={field.onChange}
@@ -330,17 +346,150 @@ const MonthlyCharge: React.FC = () => {
                       )}
                     />
                   </div>
-                </section>
 
-                <div className="rounded-md bg-blue-50 p-4 text-sm text-blue-800">
-                  <p>
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s, when an unknown
-                    printer took a galley of type and scrambled it to make a
-                    type specimen book.
-                  </p>
-                </div>
+                  {doesRepeat === "yes" && (
+                    <div className="mt-6 space-y-6">
+                      <div className="flex items-center justify-between">
+                        <FormField
+                          control={form.control}
+                          name="lateFeeType"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <div className="flex space-x-2">
+                                  <Button
+                                    type="button"
+                                    variant={
+                                      lateFeeType === "flat"
+                                        ? "default"
+                                        : "outline"
+                                    }
+                                    className="w-1/2"
+                                    onClick={() => field.onChange("flat")}
+                                  >
+                                    Flat
+                                  </Button>
+                                  <Button
+                                    type="button"
+                                    variant={
+                                      lateFeeType === "percentage"
+                                        ? "default"
+                                        : "outline"
+                                    }
+                                    className="w-1/2"
+                                    onClick={() => field.onChange("percentage")}
+                                  >
+                                    % Unpaid
+                                  </Button>
+                                </div>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="lateFeeAmount"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Amount</FormLabel>
+                              <FormControl>
+                                {lateFeeType === "percentage" ? (
+                                  <div className="relative">
+                                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                      <span className="text-gray-500">%</span>
+                                    </div>
+                                    <Input
+                                      type="number"
+                                      className="pr-8"
+                                      {...field}
+                                    />
+                                  </div>
+                                ) : (
+                                  <CurrencyInput {...field} />
+                                )}
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <FormField
+                        control={form.control}
+                        name="lateFeeFor"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Apply Late Fee</FormLabel>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Apply Late Fee" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="sameDay">
+                                  Same day
+                                </SelectItem>
+                                <SelectItem value="oneDay">
+                                  1 day after rent is due
+                                </SelectItem>
+                                <SelectItem value="oneWeek">
+                                  1 week after rent is due
+                                </SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="bankAccount"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Bank Account</FormLabel>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Choose your bank account..." />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="standard">
+                                  Standard Bank Group
+                                </SelectItem>
+                                <SelectItem value="firstrand">
+                                  FirstRand
+                                </SelectItem>
+                                <SelectItem value="absa">Absa Group</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  )}
+
+                  <div className="text-primary mt-5 rounded-sm bg-blue-200 p-4 text-sm">
+                    <p>
+                      Lorem Ipsum is simply dummy text of the printing and
+                      typesetting industry. Lorem Ipsum has been the industry's
+                      standard dummy text ever since the 1500s, when an unknown
+                      printer took a galley of type and scrambled it to make a
+                      type specimen book.
+                    </p>
+                  </div>
+                </section>
               </div>
             </MultiStepperStep>
 

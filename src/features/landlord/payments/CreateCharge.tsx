@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -17,12 +16,8 @@ import paydayIcon from "./assets/payday.png";
 import dailyChargeIcon from "./assets/daily-charge.png";
 import { Link } from "react-router";
 
-type ChargeType = "monthly" | "one-time" | "daily";
-
 const CreateCharge: React.FC = () => {
   const goBack = useGoBack();
-  const [selectedChargeType, setSelectedChargeType] =
-    useState<ChargeType | null>(null);
 
   return (
     <div className="">
@@ -60,7 +55,7 @@ const CreateCharge: React.FC = () => {
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {[
               {
-                type: "monthly" as ChargeType,
+                type: "monthly",
                 title: "Monthly Charge",
                 description:
                   "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's",
@@ -68,7 +63,7 @@ const CreateCharge: React.FC = () => {
                 path: "/landlord/payments/monthly-charge",
               },
               {
-                type: "daily" as ChargeType,
+                type: "daily",
                 title: "Daily Charge",
                 description:
                   "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's",
@@ -76,7 +71,7 @@ const CreateCharge: React.FC = () => {
                 path: "/landlord/payments/daily-charge",
               },
               {
-                type: "one-time" as ChargeType,
+                type: "one-time",
                 title: "One-Time Charge",
                 description:
                   "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's",
@@ -85,12 +80,7 @@ const CreateCharge: React.FC = () => {
               },
             ].map((charge) => (
               <Link key={charge.type} to={charge.path}>
-                <Card
-                  className={`cursor-pointer border-2 py-2 ${
-                    selectedChargeType === charge.type ? "border-blue-500" : ""
-                  }`}
-                  onClick={() => setSelectedChargeType(charge.type)}
-                >
+                <Card>
                   <CardContent className="flex items-center gap-3 p-4">
                     <img
                       src={charge.icon}
