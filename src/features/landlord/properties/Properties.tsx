@@ -85,11 +85,15 @@ export default function Properties() {
         </Link>
       </div>
       <div className="flex flex-col gap-4">
-        {properties.map((property) => (
-          <Link to={`/landlord/properties/${property.id}`} key={property.id}>
+        {properties.map((property) =>
+          property.type !== "single" ? (
             <PropertyCard property={property} />
-          </Link>
-        ))}
+          ) : (
+            <Link to={`/landlord/properties/${property.id}`} key={property.id}>
+              <PropertyCard property={property} />
+            </Link>
+          ),
+        )}
       </div>
 
       <Link to="/landlord/properties/add">
