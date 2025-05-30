@@ -23,6 +23,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useGoBack } from "@/hooks/useGoBack";
 import { XIcon } from "lucide-react";
+import { useNavigate } from "react-router";
 
 // Define form schema with zod
 const formSchema = z.object({
@@ -37,6 +38,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 export default function NeedsWork() {
   const goBack = useGoBack();
+  const navigate = useNavigate();
 
   // Initialize form with react-hook-form and zod validation
   const form = useForm<FormValues>({
@@ -53,6 +55,7 @@ export default function NeedsWork() {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
       console.log("Form submitted:", data);
+      navigate("/landlord");
     } catch (error) {
       console.error("Error submitting feedback:", error);
     }
@@ -106,10 +109,11 @@ export default function NeedsWork() {
                   </FormControl>
                   <SelectContent>
                     <SelectItem value="feedback">Provide Feedback</SelectItem>
-                    <SelectItem value="bug">Report a Bug</SelectItem>
-                    <SelectItem value="feature">Feature Request</SelectItem>
-                    <SelectItem value="question">General Question</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
+                    <SelectItem value="bug">Report a bug</SelectItem>
+                    <SelectItem value="question">
+                      Ask a question about Veorent
+                    </SelectItem>
+                    <SelectItem value="other">Something else</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
