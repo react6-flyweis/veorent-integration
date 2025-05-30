@@ -27,6 +27,7 @@ import { IconRound } from "@/components/IconRound";
 import infoIcon from "@/assets/icons/info.png";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/useAlertToast";
 
 const formSchema = z.object({
   priority: z.string().min(1, "Select a priority"),
@@ -36,6 +37,7 @@ const formSchema = z.object({
 });
 
 export function LeasingRequestForm() {
+  const { showToast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -48,6 +50,7 @@ export function LeasingRequestForm() {
 
   function onSubmit(data: z.infer<typeof formSchema>) {
     console.log(data);
+    showToast("Your request created successfully!", "success");
   }
 
   return (
@@ -127,13 +130,13 @@ export function LeasingRequestForm() {
         />
 
         {/* Add Photo */}
-        <Card className="p-4 flex justify-center items-center border-dashed border-2 h-20 border-gray-300">
+        <Card className="flex h-20 items-center justify-center border-2 border-dashed border-gray-300 p-4">
           <p className="text-sm text-gray-500">CLICK OR DRAG TO UPLOAD</p>
         </Card>
 
         {/* Voice Memo */}
         <Button className="w-40" type="button">
-          <div className="rounded-full bg-white size-5 flex justify-center items-center">
+          <div className="flex size-5 items-center justify-center rounded-full bg-white">
             <MicIcon className="text-primary" />
           </div>
           <span className="text-base"> Voice Memo</span>
@@ -141,11 +144,11 @@ export function LeasingRequestForm() {
 
         {/* Additional Info */}
         <div>
-          <div className="flex items-center gap-2 my-2">
+          <div className="my-2 flex items-center gap-2">
             <IconRound icon={infoIcon} size="xs" />
             <h3 className="text-lg font-bold">Additional INFO</h3>
           </div>
-          <p className="text-lg text-primary">
+          <p className="text-primary text-lg">
             Are there animal(s) in the unit?
           </p>
           <FormField

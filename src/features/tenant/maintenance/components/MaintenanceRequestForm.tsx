@@ -28,6 +28,7 @@ import accessIcon from "@/assets/icons/access.png";
 import infoIcon from "@/assets/icons/info.png";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/useAlertToast";
 
 const formSchema = z.object({
   priority: z.string().min(1, "Select a priority"),
@@ -39,6 +40,7 @@ const formSchema = z.object({
 });
 
 export function MaintenanceRequestForm() {
+  const { showToast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -53,6 +55,7 @@ export function MaintenanceRequestForm() {
 
   function onSubmit(data: z.infer<typeof formSchema>) {
     console.log(data);
+    showToast("Your Request created successfully", "success");
   }
 
   return (
