@@ -60,34 +60,23 @@ export default function ESign() {
         </h3>
 
         <div className="space-y-4">
-          {/* Step 1 */}
-          <div className="flex items-start gap-4">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 text-white">
-              1
+          {[
+            "Upload the document(s) and select where everyone signs and dates.",
+            "We send it off to your tenants",
+            "You sign once they're done, then everyone gets emailed a copy! We'll save it to your account too.",
+          ].map((step, index) => (
+            <div key={index} className="flex items-start gap-4">
+              <div
+                className={`flex h-8 w-8 items-center justify-center rounded-full shadow-md ${index % 2 === 0 ? "bg-blue-500" : "bg-black"} text-white`}
+              >
+                <span className="text-2xl font-extrabold text-shadow-[2px_2px_4px_rgba(0,0,0,0.5)]">
+                  {" "}
+                  {index + 1}
+                </span>
+              </div>
+              <p className="mt-1">{step}</p>
             </div>
-            <p className="mt-1">
-              Upload the document(s) and select where everyone signs and dates.
-            </p>
-          </div>
-
-          {/* Step 2 */}
-          <div className="flex items-start gap-4">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 text-white">
-              2
-            </div>
-            <p className="mt-1">We send it off to your tenants</p>
-          </div>
-
-          {/* Step 3 */}
-          <div className="flex items-start gap-4">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 text-white">
-              3
-            </div>
-            <p className="mt-1">
-              You sign once they're done, then everyone gets emailed a copy!
-              We'll save it to your account too.
-            </p>
-          </div>
+          ))}
         </div>
 
         <Form {...form}>
