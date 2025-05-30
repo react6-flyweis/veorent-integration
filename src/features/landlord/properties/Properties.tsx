@@ -3,6 +3,7 @@ import { HouseIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
 import { PropertyCard } from "./components/PropertyCard";
+import { CreateButton } from "@/components/CreateButton";
 export interface PropertyType {
   id: string;
   name: string;
@@ -77,8 +78,11 @@ export default function Properties() {
 
   return (
     <div>
-      <div className="mb-6">
-        <PageTitle title="Properties" />
+      <div className="mb-6 flex items-center justify-between">
+        <PageTitle title="Properties" className="mb-0" />
+        <Link to="/landlord/properties/add">
+          <CreateButton label="Add new property" />
+        </Link>
       </div>
       <div className="flex flex-col gap-4">
         {properties.map((property) => (
