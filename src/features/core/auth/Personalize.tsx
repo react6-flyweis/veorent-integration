@@ -40,15 +40,31 @@ export default function Personalize() {
     setLandlordData(data);
   };
 
+  const handleTenantLogin = () => {
+    setUserType("tenant");
+    navigate(`/login`);
+  };
+
+  const handleLandlordLogin = () => {
+    setUserType("landlord");
+    navigate(`/login`);
+  };
+
   return (
     <div className="h-full pt-10">
       <div className="mb-8 flex flex-col items-center justify-between gap-5 @lg:flex-row">
         <img src="/logo-dark.png" alt="Veorent Logo" className="h-6" />
         <div className="flex gap-5">
-          <div className="border-primary flex items-center justify-center rounded border px-3 py-2">
+          <div
+            onClick={handleTenantLogin}
+            className="border-primary flex cursor-pointer items-center justify-center rounded border px-3 py-2"
+          >
             <span className="text-xl font-semibold">Tenant Login</span>
           </div>
-          <div className="border-primary flex items-center justify-center rounded border px-3 py-2">
+          <div
+            onClick={handleLandlordLogin}
+            className="border-primary flex cursor-pointer items-center justify-center rounded border px-3 py-2"
+          >
             <span className="text-xl font-semibold">Landlord Login</span>
           </div>
         </div>

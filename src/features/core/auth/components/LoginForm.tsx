@@ -12,7 +12,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { LoadingButton } from "@/components/ui/loading-button";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useUserPreferenceStore } from "@/store/useUserPreferenceStore";
 
 const loginSchema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -22,6 +23,8 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
+  const { userType } = useUserPreferenceStore();
+  const navigate = useNavigate();
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -32,6 +35,7 @@ export function LoginForm() {
 
   const onSubmit = (data: LoginFormValues) => {
     console.log("Login Data:", data);
+    navigate(`/${userType}`);
   };
 
   return (
