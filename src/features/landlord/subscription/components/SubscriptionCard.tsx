@@ -35,9 +35,8 @@ export function SubscriptionCard({ plan }: SubscriptionCardProps) {
         <h3 className="text-lg font-semibold">{plan.title}</h3>
         <div className="mt-2">
           <span className="text-3xl font-bold">{plan.price}</span>
-          {plan.price !== "Free" && (
-            <span className="text-muted-foreground text-sm"> / Monthly</span>
-          )}
+
+          <span className="text-muted-foreground text-sm"> / Monthly</span>
         </div>
       </CardHeader>
       <CardContent className="flex-grow">
