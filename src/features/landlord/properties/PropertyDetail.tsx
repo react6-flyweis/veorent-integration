@@ -14,7 +14,7 @@ import {
   LinkIcon,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 
 type PropertyDetailType = {
@@ -103,7 +103,8 @@ const properties: PropertyDetailType[] = [
 ];
 
 export default function PropertyDetail() {
-  const { propertyId } = useParams();
+  const { id: propertyId } = useParams();
+  const navigate = useNavigate();
 
   const [extended, setExtended] = useState(false);
 
@@ -130,6 +131,9 @@ export default function PropertyDetail() {
                 size="icon"
                 variant="secondary"
                 className="rounded-full bg-white"
+                onClick={() =>
+                  navigate(`/landlord/properties/${propertyId}/edit`)
+                }
               >
                 <EditIcon className="size-5" />
               </Button>
