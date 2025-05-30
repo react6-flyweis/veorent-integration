@@ -21,25 +21,47 @@ import {
 import { useNavigate } from "react-router";
 
 // Define Zod validation schema
-const formSchema = z.object({
-  addTenantsLater: z.boolean(),
-  tenantSearch: z.string().optional(),
-  hasAdditionalOccupants: z.boolean(),
-  occupantType: z.enum(["landlord", "company"]),
-  landlordFirstName: z.string().min(1, "First name is required"),
-  landlordLastName: z.string().min(1, "Last name is required"),
-  landlordEmail: z.string().email("Invalid email address"),
-  landlordPhone: z.string().min(1, "Phone number is required"),
-  addAnotherLandlord: z.boolean(),
-  // Landlord mailing address fields
-  landlordStreetAddress: z.string().optional(),
-  landlordUnit: z.string().optional(),
-  landlordCity: z.string().optional(),
-  landlordRegion: z.string().optional(),
-  landlordZipCode: z.string().optional(),
-  hasDifferentAddress: z.boolean(),
-  hasAdditionalAspects: z.boolean(),
-});
+const formSchema = z
+  .object({
+    addTenantsLater: z.boolean(),
+    tenantSearch: z.string().optional(),
+    hasAdditionalOccupants: z.boolean(),
+    occupantType: z.enum(["individual", "company"]),
+    // Individual fields
+    landlordFirstName: z.string().min(1, "First name is required").optional(),
+    landlordLastName: z.string().min(1, "Last name is required").optional(),
+    // Company fields
+    companyName: z.string().min(1, "Company name is required").optional(),
+    // Common fields
+    landlordEmail: z.string().email("Invalid email address"),
+    landlordPhone: z.string().min(1, "Phone number is required"),
+    addAnotherLandlord: z.boolean(),
+    // Landlord mailing address fields
+    landlordStreetAddress: z.string().optional(),
+    landlordUnit: z.string().optional(),
+    landlordCity: z.string().optional(),
+    landlordRegion: z.string().optional(),
+    landlordZipCode: z.string().optional(),
+    hasDifferentAddress: z.boolean(),
+    hasAdditionalAspects: z.boolean(),
+  })
+  .refine(
+    (data) => {
+      // If type is individual, require first and last name
+      if (data.occupantType === "individual") {
+        return !!data.landlordFirstName && !!data.landlordLastName;
+      }
+      // If type is company, require company name
+      if (data.occupantType === "company") {
+        return !!data.companyName;
+      }
+      return true;
+    },
+    {
+      message: "Please complete all required fields",
+      path: ["occupantType"],
+    },
+  );
 
 type FormValues = z.infer<typeof formSchema>;
 
@@ -51,7 +73,7 @@ export default function PeopleOnLease() {
     defaultValues: {
       addTenantsLater: false,
       hasAdditionalOccupants: false,
-      occupantType: "landlord",
+      occupantType: "individual",
       hasDifferentAddress: false,
       hasAdditionalAspects: false,
       addAnotherLandlord: false,
@@ -60,10 +82,12 @@ export default function PeopleOnLease() {
       landlordCity: "",
       landlordRegion: "",
       landlordZipCode: "",
+      companyName: "",
     },
   });
 
   const { handleSubmit } = form;
+  const occupantType = form.watch("occupantType");
 
   const onSubmit = async (data: FormValues) => {
     // Simulate submission
@@ -218,8 +242,11 @@ export default function PeopleOnLease() {
                         onValueChange={field.onChange}
                       >
                         <div className="flex items-center space-x-2">
-                          <RadioGroupItem id="landlord-type" value="landlord" />
-                          <label htmlFor="landlord-type">Landlord</label>
+                          <RadioGroupItem
+                            id="individual-type"
+                            value="individual"
+                          />
+                          <label htmlFor="individual-type">Individual</label>
                         </div>
                         <div className="flex items-center space-x-2">
                           <RadioGroupItem id="company-type" value="company" />
@@ -231,43 +258,65 @@ export default function PeopleOnLease() {
                 )}
               />
 
-              <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="landlordFirstName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sm font-medium">
-                        Legal First Name
-                      </FormLabel>
-                      <FormControl>
-                        <Input className="mt-1" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="landlordLastName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sm font-medium">
-                        Last Name
-                      </FormLabel>
-                      <FormControl>
-                        <Input className="mt-1" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              {occupantType === "individual" ? (
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="landlordFirstName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium">
+                          Legal First Name
+                        </FormLabel>
+                        <FormControl>
+                          <Input className="mt-1" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="landlordLastName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium">
+                          Last Name
+                        </FormLabel>
+                        <FormControl>
+                          <Input className="mt-1" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="companyName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium">
+                          Company Name
+                        </FormLabel>
+                        <FormControl>
+                          <Input className="mt-1" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              )}
 
+              <div className="grid grid-cols-1 gap-4">
                 <FormField
                   control={form.control}
                   name="landlordEmail"
                   render={({ field }) => (
-                    <FormItem className="col-span-2">
+                    <FormItem>
                       <FormLabel className="text-sm font-medium">
                         Email
                       </FormLabel>
@@ -295,6 +344,46 @@ export default function PeopleOnLease() {
                   )}
                 />
               </div>
+
+              {occupantType === "company" && (
+                <div className="pt-4">
+                  <h3 className="mb-4 text-base font-medium">
+                    OWNER INFORMATION
+                  </h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="landlordFirstName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-sm font-medium">
+                            Legal First Name
+                          </FormLabel>
+                          <FormControl>
+                            <Input className="mt-1" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="landlordLastName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-sm font-medium">
+                            Last Name
+                          </FormLabel>
+                          <FormControl>
+                            <Input className="mt-1" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+              )}
 
               <FormField
                 control={form.control}
