@@ -12,7 +12,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { LoadingButton } from "@/components/ui/loading-button";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useUserPreferenceStore } from "@/store/useUserPreferenceStore";
 
 const signUpSchema = z.object({
   fName: z.string().min(2, "First name is required."),
@@ -24,6 +25,8 @@ const signUpSchema = z.object({
 type SignUpFormValues = z.infer<typeof signUpSchema>;
 
 export function SignUpForm() {
+  const { userType } = useUserPreferenceStore();
+  const navigate = useNavigate();
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -34,6 +37,9 @@ export function SignUpForm() {
 
   const onSubmit = (data: SignUpFormValues) => {
     console.log("SignUp Data:", data);
+    //
+    // get user preferences from the store
+    navigate(userType === "landlord" ? "/signup-landlord" : "/tenant/search");
   };
 
   return (
