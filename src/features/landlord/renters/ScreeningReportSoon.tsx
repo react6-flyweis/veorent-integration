@@ -1,12 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { useGoBack } from "@/hooks/useGoBack";
+import checkAnimation from "./assets/check-celebrate.gif";
 
 const ScreeningReportSoon = () => {
   const goBack = useGoBack();
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-white p-6">
-      <div className="w-full max-w-2xl text-center">
+    <div className="flex flex-1 flex-col items-center justify-center bg-white p-6">
+      <div className="flex flex-col items-center text-center">
+        <img src={checkAnimation} alt="Check Animation" className="size-28" />
         <h1 className="mb-6 text-3xl font-bold text-gray-800">
           The screening report will be available soon!
         </h1>
