@@ -15,7 +15,7 @@ export function CreateButton({ label, ...props }: CreateButtonProps) {
     >
       {label && (
         <div className="max-w-0 overflow-hidden font-semibold whitespace-nowrap opacity-0 transition-all duration-300 ease-in-out group-hover:mr-1 group-hover:max-w-sm group-hover:opacity-100">
-          <span className="pl-2"> {label}</span>
+          <span className="pl-2 uppercase"> {label}</span>
         </div>
       )}
       <PlusIcon className="size-6 transition-all duration-300 ease-in-out group-hover:-rotate-90" />
