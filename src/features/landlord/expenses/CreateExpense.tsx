@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { CurrencyIcon } from "@/components/CurrencyIcon";
 import {
   Form,
   FormControl,
@@ -18,13 +17,15 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
 import { DateInput } from "@/components/ui/date-input";
 import { ImageUpload } from "@/components/ui/image-upload";
 import { DialogClose } from "@/components/ui/dialog";
+import { CurrencyInput } from "@/components/CurrencyInput";
+import { useToast } from "@/hooks/useAlertToast";
+import { LoadingButton } from "@/components/ui/loading-button";
 
 const formSchema = z.object({
   date: z.date(),
@@ -41,7 +42,7 @@ type ExpenseFormValues = z.infer<typeof formSchema>;
 
 const CreateExpense = () => {
   const navigate = useNavigate();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { showToast } = useToast();
 
   const form = useForm<ExpenseFormValues>({
     resolver: zodResolver(formSchema),
@@ -54,13 +55,11 @@ const CreateExpense = () => {
   });
 
   const onSubmit = async (values: ExpenseFormValues) => {
-    setIsSubmitting(true);
     console.log("Form values:", values);
 
     // Here you would typically call an API to save the expense
-
+    showToast("Your new expense has been added successfully!", "success");
     setTimeout(() => {
-      setIsSubmitting(false);
       navigate("/landlord/expenses");
     }, 1000);
   };
@@ -90,16 +89,7 @@ const CreateExpense = () => {
               <FormItem className="gap-1">
                 <FormLabel className="text-base">Amount Paid</FormLabel>
                 <FormControl>
-                  <div className="relative flex items-center">
-                    <CurrencyIcon className="absolute top-1/2 left-3 -translate-y-1/2" />
-                    <Input
-                      type="number"
-                      step="0.01"
-                      placeholder="0.00"
-                      className="pl-9"
-                      {...field}
-                    />
-                  </div>
+                  <CurrencyInput {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -186,9 +176,13 @@ const CreateExpense = () => {
               CANCEL
             </Button>
           </DialogClose>
-          <Button type="submit" className="min-w-[120px]">
-            {isSubmitting ? "Saving..." : "ADD EXPENSE"}
-          </Button>
+          <LoadingButton
+            isLoading={form.formState.isLoading}
+            type="submit"
+            className="w-32"
+          >
+            ADD EXPENSE
+          </LoadingButton>
         </div>
       </form>
     </Form>
