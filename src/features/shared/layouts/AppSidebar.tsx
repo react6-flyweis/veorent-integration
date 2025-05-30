@@ -23,10 +23,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { ChevronRight, CircleIcon } from "lucide-react";
-import { NavLink, type To } from "react-router-dom";
+import { NavLink, useNavigate, type To } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 import { useRef, useEffect, useState } from "react";
+import { LogoutConfirmDialog } from "@/components/LogoutConfirmDialog";
 
 export type SidebarSubItem = {
   title: string;
@@ -53,12 +54,15 @@ export interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   onLogout?: () => void;
 }
 
-export function AppSidebar({
-  navigationItems,
-  onLogout,
-  ...props
-}: AppSidebarProps) {
+export function AppSidebar({ navigationItems, ...props }: AppSidebarProps) {
+  const navigate = useNavigate();
   const { state } = useSidebar();
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+
+  const logoutHandler = () => {
+    setShowLogoutDialog(false);
+    navigate("/");
+  };
 
   // Component to handle individual text animations
   const AnimatedText = ({
@@ -294,7 +298,7 @@ export function AppSidebar({
                       "transition-all duration-300 ease-in-out",
                       "justify-center",
                     )}
-                    onClick={onLogout}
+                    onClick={() => setShowLogoutDialog(true)}
                   >
                     <img
                       src={"/icons/logout.png"}
@@ -314,7 +318,7 @@ export function AppSidebar({
                   "transition-all duration-300 ease-in-out",
                   "pl-5",
                 )}
-                onClick={onLogout}
+                onClick={() => setShowLogoutDialog(true)}
               >
                 <img
                   src={"/icons/logout.png"}
@@ -330,6 +334,12 @@ export function AppSidebar({
         </SidebarMenu>
       </SidebarContent>
       <SidebarRail />
+
+      <LogoutConfirmDialog
+        open={showLogoutDialog}
+        onOpenChange={setShowLogoutDialog}
+        onConfirm={logoutHandler}
+      />
     </Sidebar>
   );
 }
