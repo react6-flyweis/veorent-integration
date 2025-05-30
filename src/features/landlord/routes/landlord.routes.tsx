@@ -24,7 +24,6 @@ import AddLeaseDetails from "../leases/AddLeaseDetails";
 import WhatsNext from "../leases/WhatsNext";
 import UploadLeaseDocument from "../leases/UploadLeaseDocument";
 import Forms from "../forms/Forms";
-import Renters from "../renters/Renters";
 import RentersDetails from "../renters/RentersDetails";
 import ApplicationScreened from "../renters/ApplicationScreened";
 import ScreeningReportSoon from "../renters/ScreeningReportSoon";
@@ -59,6 +58,9 @@ import EditProperty from "../properties/EditProperty";
 import EditPropertySize from "../properties/EditPropertySize";
 import EditPropertyAddress from "../properties/EditPropertyAdress";
 import PropertyUnits from "../properties/PropertyUnits";
+import Applicants from "../renters/Applicants";
+import Tenants from "../renters/Tenants";
+import RentersLeads from "../renters/RentersLeads";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -203,11 +205,11 @@ export const landlordRoutes: RouteObject[] = [
   },
   {
     path: "/renters",
-    element: <Renters />,
+    element: <RentersLeads />,
   },
   {
     path: "/renters/leads",
-    element: <Renters />,
+    element: <RentersLeads />,
   },
   {
     path: "/renters/leads/:id",
@@ -215,7 +217,7 @@ export const landlordRoutes: RouteObject[] = [
   },
   {
     path: "/renters/applicants",
-    element: <Renters />,
+    element: <Applicants />,
   },
   {
     path: "/renters/add",
@@ -243,7 +245,7 @@ export const landlordRoutes: RouteObject[] = [
   },
   {
     path: "/renters/tenants",
-    element: <Renters />,
+    element: <Tenants />,
   },
   {
     path: "/renters/tenants/:id",
