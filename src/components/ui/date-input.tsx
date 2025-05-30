@@ -8,7 +8,7 @@ import { format, subYears } from "date-fns";
 import { useState } from "react";
 import { FormControl } from "./form";
 import { Button } from "./button";
-import { CalendarIcon } from "lucide-react";
+import { CalendarDaysIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { DropdownNavProps, DropdownProps } from "react-day-picker";
 import {
@@ -108,13 +108,13 @@ export function DateInput({
           <Button
             variant="outline"
             className={cn(
-              "border-input w-full pl-3 text-left font-normal",
+              "border-input w-full justify-start pl-3 text-left font-normal",
               !value && "text-muted-foreground",
               className,
             )}
           >
+            <CalendarDaysIcon className="mr-5 h-4 w-4 opacity-50" />
             {value ? format(value, "PPP") : <span>Select date</span>}
-            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
           </Button>
         </FormControl>
       </PopoverTrigger>
