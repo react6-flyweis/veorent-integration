@@ -56,6 +56,8 @@ import BookingCalendar from "../calendar/BookingCalendar";
 import AddContacts from "@/features/shared/messaging/AddContacts";
 import MarketingExtended from "../properties/MarketingExtended";
 import EditProperty from "../properties/EditProperty";
+import EditPropertySize from "../properties/EditPropertySize";
+import EditPropertyAddress from "../properties/EditPropertyAdress";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -145,6 +147,14 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "/properties/:id/edit",
     element: <EditProperty />,
+  },
+  {
+    path: "/properties/:id/edit-size",
+    element: <EditPropertySize />,
+  },
+  {
+    path: "/properties/:id/edit-address",
+    element: <EditPropertyAddress />,
   },
   {
     path: "/properties/marketing-extended",
