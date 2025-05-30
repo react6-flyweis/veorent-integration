@@ -10,12 +10,14 @@ export default function SetupListingPrompt() {
     <div>
       <PageTitle title="Set Up Your Property Listing" withBack />
 
-      <Card className="mb-5 bg-blue-50 p-3">
-        <p className="text-gray-700">
-          Creating a property listing helps you attract potential tenants and
-          manage your rental efficiently. You'll provide details about your
-          property, set rental terms, and upload photos to make your listing
-          stand out.
+      <Card className="rounded-none border-0 bg-blue-200 p-4">
+        <p className="text-primary text-sm">
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Magnam odio
+          omnis explicabo. Fuga adipisci sit totam quam fugit? Officiis autem,
+          natus laboriosam cumque pariatur vitae totam id dolores inventore
+          suscipit libero aspernatur veniam nobis ullam ipsa ipsum aut beatae
+          dolore architecto ut minus maiores quas aliquam? Fugiat asperiores
+          veritatis commodi.
         </p>
       </Card>
 
@@ -29,7 +31,7 @@ export default function SetupListingPrompt() {
 
       <div className="grid grid-cols-2 gap-4">
         <Link to="/landlord/properties">
-          <Button variant="outline" className="w-full">
+          <Button variant="outlinePrimary" className="w-full">
             Skip For Now
           </Button>
         </Link>
