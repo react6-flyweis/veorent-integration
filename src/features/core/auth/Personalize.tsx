@@ -3,6 +3,10 @@ import landlordIcon from "@/assets/icons/landlord.png";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useUserPreferenceStore } from "@/store/useUserPreferenceStore";
+import {
+  type LandlordFormData,
+  LandlordPersonalizeForm,
+} from "@/features/landlord/components/LandlordPersonalizeForm";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -11,15 +15,29 @@ export default function Personalize() {
   const [selectedType, setSelectedType] = useState<"tenant" | "landlord">(
     "tenant",
   );
+  const [landlordData, setLandlordData] = useState<LandlordFormData>({
+    rentalType: "own",
+    propertiesCount: 0,
+    managementExperience: "none-yet",
+    referralSource: "",
+  });
   const navigate = useNavigate();
 
   const handleContinue = () => {
     setUserType(selectedType);
-    navigate(`/${selectedType}`);
+    if (selectedType === "landlord") {
+      // Store landlord data if needed
+      console.log("Landlord data:", landlordData);
+    }
+    navigate(`/signup`);
   };
 
   const handleTypeChange = (value: string) => {
     setSelectedType(value as "tenant" | "landlord");
+  };
+
+  const handleLandlordFormChange = (data: LandlordFormData) => {
+    setLandlordData(data);
   };
 
   return (
@@ -46,7 +64,11 @@ export default function Personalize() {
       >
         <div className="flex flex-col justify-between gap-5 px-5 @lg:flex-row">
           <label htmlFor="landlord" className="flex-1 cursor-pointer">
-            <div className="border-primary flex cursor-pointer flex-col items-center justify-center rounded-2xl border px-3 py-2">
+            <div
+              className={`border-primary flex cursor-pointer flex-col items-center justify-center rounded-2xl border px-3 py-2 ${
+                selectedType === "landlord" ? "bg-blue-50" : ""
+              }`}
+            >
               <div className="w-full">
                 <RadioGroupItem value="landlord" id="landlord" />
               </div>
@@ -55,7 +77,11 @@ export default function Personalize() {
             </div>
           </label>
           <label htmlFor="tenant" className="flex-1 cursor-pointer">
-            <div className="border-primary flex cursor-pointer flex-col items-center justify-center rounded-2xl border px-3 py-2">
+            <div
+              className={`border-primary flex cursor-pointer flex-col items-center justify-center rounded-2xl border px-3 py-2 ${
+                selectedType === "tenant" ? "bg-blue-50" : ""
+              }`}
+            >
               <div className="w-full">
                 <RadioGroupItem value="tenant" id="tenant" />
               </div>
@@ -65,6 +91,16 @@ export default function Personalize() {
           </label>
         </div>
       </RadioGroup>
+
+      {selectedType === "landlord" && (
+        <div className="mt-8 px-5">
+          <LandlordPersonalizeForm
+            onSubmit={handleLandlordFormChange}
+            defaultData={landlordData}
+            submitButtonHidden={true}
+          />
+        </div>
+      )}
 
       <div className="flex justify-center py-10">
         <Button className="w-4/5 @lg:w-3/5" size="lg" onClick={handleContinue}>
