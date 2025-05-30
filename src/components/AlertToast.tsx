@@ -42,7 +42,7 @@ export function AlertToast({
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="flex h-12 items-center gap-5 rounded-full sm:max-w-md">
+      <AlertDialogContent className="flex h-12 items-center gap-5 rounded-full sm:max-w-lg">
         <AlertDialogHeader className="flex flex-row items-center space-x-2">
           <div className="flex size-7 items-center justify-center rounded-full bg-blue-400 p-1">
             <IconComponent className="h-6 w-6 text-white" />
