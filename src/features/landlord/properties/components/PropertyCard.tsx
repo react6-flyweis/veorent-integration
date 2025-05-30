@@ -12,6 +12,7 @@ import { Dialog } from "@/components/ui/dialog";
 import { ScreenMethodDialog } from "../../dashboard/components/ScreenMethodDialog";
 import type { PropertyType } from "../Properties";
 import { useState } from "react";
+import { Link } from "react-router";
 
 export function PropertyCard({ property }: { property: PropertyType }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -103,9 +104,14 @@ export function PropertyCard({ property }: { property: PropertyType }) {
             </Button>
           </div>
         ) : (
-          <Button className="w-full" variant="outline">
-            Show Units & Rooms
-          </Button>
+          <Link
+            className="w-full"
+            to={`/landlord/properties/${property.id}/units`}
+          >
+            <Button className="w-full" variant="outline">
+              Show Units & Rooms
+            </Button>
+          </Link>
         )}
       </CardFooter>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
