@@ -1,22 +1,21 @@
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { PageTitle } from "@/components/PageTitle";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CurrencyIcon } from "@/components/CurrencyIcon";
 import { BackButton } from "@/components/BackButton";
 import {
-  InfoIcon,
-  Link,
-  Share2Icon,
   Star,
   UserIcon,
-  MailIcon,
-  DownloadIcon,
   EditIcon,
-  CalendarIcon,
+  EllipsisVerticalIcon,
+  CopyIcon,
+  ForwardIcon,
+  PenLineIcon,
+  BadgeInfoIcon,
+  LinkIcon,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useState } from "react";
 
 type PropertyDetailType = {
   id: string;
@@ -39,81 +38,104 @@ type PropertyDetailType = {
   preScreenerUrl?: string;
 };
 
-export default function PropertyDetail() {
-  const { propertyId } = useParams();
-
-  // Mock data based on the provided images. In a real app, you would fetch this data from an API
-  const property: PropertyDetailType = {
-    id: propertyId || "",
-    name:
-      propertyId === "1"
-        ? "Ft. Collins Home"
-        : propertyId === "2"
-          ? "46 Bryant Way"
-          : "Family House in Santa Barbara",
-    address:
-      propertyId === "1"
-        ? "700 H St"
-        : propertyId === "2"
-          ? "46 Bryant Way"
-          : "2100 Circle Drive",
-    city:
-      propertyId === "1"
-        ? "Ft Collins"
-        : propertyId === "2"
-          ? "Denver"
-          : "Santa Barbara",
-    state: propertyId === "1" ? "CO" : propertyId === "2" ? "CO" : "CA",
-    zipCode:
-      propertyId === "1" ? "80992" : propertyId === "2" ? "80219" : "87692",
+const properties: PropertyDetailType[] = [
+  {
+    id: "1",
+    name: "Ft. Collins Home",
+    address: "700 H St",
+    city: "Ft Collins",
+    state: "CO",
+    zipCode: "80992",
     image: "/property.png",
-    baths: propertyId === "1" ? 2 : propertyId === "2" ? 2 : 1,
-    beds: propertyId === "1" ? 3 : propertyId === "2" ? 2 : 2,
-    rent: propertyId === "1" ? 900 : propertyId === "2" ? 4000 : 1500,
-    rating: propertyId === "1" ? 5 : undefined,
-    status:
-      propertyId === "1"
-        ? "marketing"
-        : propertyId === "2"
-          ? undefined
-          : "incomplete",
+    baths: 2,
+    beds: 3,
+    rent: 900,
+    rating: 5,
+    status: "marketing",
     type: "single",
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-    propertyId:
-      propertyId === "1" ? "742148" : propertyId === "2" ? "749289" : "742151",
+    propertyId: "742148",
     marketingExpires: "08/17/2024 (29 DAYS LEFT)",
     listingUrl: "https://example/examplewebsite.com",
     preScreenerUrl: "https://example/examplewebsite.com",
-  };
+  },
+  {
+    id: "2",
+    name: "46 Bryant Way",
+    address: "46 Bryant Way",
+    city: "Denver",
+    state: "CO",
+    zipCode: "80219",
+    image: "/property.png",
+    baths: 2,
+    beds: 2,
+    rent: 4000,
+    status: undefined,
+    type: "single",
+    description:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
+    propertyId: "749289",
+    marketingExpires: "08/17/2024 (29 DAYS LEFT)",
+    listingUrl: "https://example/examplewebsite.com",
+    preScreenerUrl: "https://example/examplewebsite.com",
+  },
+  {
+    id: "3",
+    name: "Family House in Santa Barbara",
+    address: "2100 Circle Drive",
+    city: "Santa Barbara",
+    state: "CA",
+    zipCode: "87692",
+    image: "/property.png",
+    baths: 1,
+    beds: 2,
+    rent: 1500,
+    status: "incomplete",
+    type: "single",
+    description:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
+    propertyId: "742151",
+    marketingExpires: "08/17/2024 (29 DAYS LEFT)",
+    listingUrl: "https://example/examplewebsite.com",
+    preScreenerUrl: "https://example/examplewebsite.com",
+  },
+];
+
+export default function PropertyDetail() {
+  const { propertyId } = useParams();
+
+  const [extended, setExtended] = useState(false);
+
+  const property = properties.find((p) => p.id === propertyId) || properties[0];
 
   return (
     <div className="flex flex-col gap-4 pb-8">
-      <div className="flex items-center gap-2">
-        <BackButton />
-        <PageTitle title={property.name} className="mb-0" />
-      </div>
+      <Card className="gap-0 rounded-sm p-0">
+        {/* Property Hero Section */}
+        <CardHeader className="px-0">
+          <div className="relative">
+            <div className="absolute top-2 left-2 z-10">
+              <BackButton />
+            </div>
+            <div className="absolute top-2 right-2 z-10 flex gap-2">
+              <Button
+                size="icon"
+                variant="secondary"
+                className="rounded-full bg-white"
+              >
+                <EllipsisVerticalIcon className="size-5" />
+              </Button>
+              <Button
+                size="icon"
+                variant="secondary"
+                className="rounded-full bg-white"
+              >
+                <EditIcon className="size-5" />
+              </Button>
+            </div>
 
-      {/* Property Hero Section */}
-      <div className="relative">
-        <div className="absolute top-2 right-2 z-10 flex gap-2">
-          <Button
-            size="icon"
-            variant="secondary"
-            className="rounded-full bg-white"
-          >
-            <InfoIcon className="size-5" />
-          </Button>
-          <Button
-            size="icon"
-            variant="secondary"
-            className="rounded-full bg-white"
-          >
-            <EditIcon className="size-5" />
-          </Button>
-        </div>
-
-        {property.status === "marketing" && (
+            {/* {property.status === "marketing" && (
           <Badge className="absolute top-2 left-2 z-10 bg-blue-500 text-white">
             Marketing
           </Badge>
@@ -123,203 +145,210 @@ export default function PropertyDetail() {
           <Badge className="absolute top-2 left-2 z-10 bg-orange-500 text-white">
             Incomplete
           </Badge>
-        )}
+        )} */}
 
-        <img
-          src={property.image}
-          alt={property.name}
-          className="h-64 w-full rounded-lg object-cover"
-        />
-      </div>
-
-      {/* Property Info Section */}
-      <Card>
-        <CardContent className="p-4">
+            <img
+              src={property.image}
+              alt={property.name}
+              className="h-64 w-full object-cover"
+            />
+          </div>
+        </CardHeader>
+        {/* Property Info Section */}
+        <CardContent className="px-4 py-2">
           <div className="flex flex-col gap-4">
             <div>
-              <h2 className="text-xl font-semibold">{property.address}</h2>
+              <div className="flex gap-2">
+                <h2 className="text-xl font-semibold">{property.address}</h2>
+                {property.rating && (
+                  <div className="mt-1 flex">
+                    {Array.from({ length: property.rating }).map((_, i) => (
+                      <Star
+                        key={i}
+                        className="size-3 fill-yellow-200 text-yellow-400"
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
               <p className="text-muted-foreground">
                 {property.city}, {property.state} {property.zipCode}
               </p>
-
-              {property.rating && (
-                <div className="mt-1 flex">
-                  {Array.from({ length: property.rating }).map((_, i) => (
-                    <Star
-                      key={i}
-                      className="h-4 w-4 fill-yellow-400 text-yellow-400"
-                    />
-                  ))}
-                </div>
-              )}
             </div>
 
             <div className="flex flex-wrap gap-6">
-              <div>
+              <div className="flex items-center gap-2">
                 <span className="text-muted-foreground text-sm">
                   Property ID
                 </span>
                 <p className="font-medium">{property.propertyId}</p>
               </div>
 
-              <div>
+              <div className="flex items-center gap-2">
                 <span className="text-muted-foreground text-sm">Rent</span>
                 <p className="flex items-center font-medium">
                   <CurrencyIcon size="sm" />
                   {property.rent?.toLocaleString()}.00
                 </p>
               </div>
-
-              <div>
-                <span className="text-muted-foreground text-sm">
-                  Beds/Baths
-                </span>
-                <p className="font-medium">
-                  {property.beds}/{property.baths}
-                </p>
-              </div>
             </div>
-
-            {/* Marketing Status Section */}
-            {property.status === "marketing" && (
-              <div className="rounded-md bg-blue-50 p-4">
-                <h3 className="mb-2 text-lg font-medium">
-                  Marketing Online: ON
-                </h3>
-                <p className="text-muted-foreground text-sm">
-                  EXPIRES ON {property.marketingExpires}
-                </p>
-                <Button className="mt-4 w-full" variant="outline">
-                  Turn Off
-                </Button>
-              </div>
-            )}
-
-            {property.status === undefined && (
-              <div className="rounded-md bg-blue-50 p-4">
-                <h3 className="mb-2 text-lg font-medium">
-                  Market My Rental For Free
-                </h3>
-
-                <div className="mt-4 flex flex-col gap-3">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-900 text-white">
-                      <UserIcon className="h-4 w-4" />
-                    </div>
-                    <p className="text-sm">
-                      Reach thousands of renters with a 5 minute setup
-                    </p>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-900 text-white">
-                      <Link className="h-4 w-4" />
-                    </div>
-                    <p className="text-sm">
-                      Post to the top listing sites from one place
-                    </p>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-900 text-white">
-                      <UserIcon className="h-4 w-4" />
-                    </div>
-                    <p className="text-sm">
-                      Fill your vacancy with the perfect tenant!
-                    </p>
-                  </div>
-                </div>
-
-                <Button className="mt-4 w-full">Create My Listing</Button>
-              </div>
-            )}
-
-            {property.status === "incomplete" && (
-              <div className="rounded-md bg-orange-50 p-4">
-                <h3 className="mb-2 text-lg font-medium">
-                  Marketing Online: OFF
-                </h3>
-                <p className="text-muted-foreground text-sm">
-                  Your listing is almost ready!
-                </p>
-                <p className="mt-2 text-sm">{property.description}</p>
-                <Button className="mt-4 w-full">Complete My Listing</Button>
-              </div>
-            )}
           </div>
         </CardContent>
       </Card>
 
-      {/* Property Details Section - Showing directly without tabs */}
-      <Card>
-        <CardContent className="p-4">
-          <h3 className="mb-3 text-lg font-medium">Property Description</h3>
+      {/* Property Description */}
+      <Card className="gap-0 rounded-sm py-2">
+        <CardHeader className="px-3">
+          <CardTitle className="text-xl">Description</CardTitle>
+        </CardHeader>
+        <CardContent className="px-3">
           <p className="text-muted-foreground">{property.description}</p>
+        </CardContent>
+      </Card>
 
-          <Separator className="my-4" />
+      {/* Marketing Status Section */}
+      <Card className="rounded-sm py-0">
+        {property.status === "marketing" && (
+          <div className="rounded-md p-4">
+            <h3 className="mb-2 text-lg font-medium">Marketing Online: ON</h3>
+            <p className="text-muted-foreground text-sm">
+              EXPIRES ON {property.marketingExpires}
+            </p>
+            <div className="mt-4 flex justify-around gap-5">
+              <Button className="flex-1" variant="outlinePrimary">
+                Turn Off
+              </Button>
 
-          <h3 className="mb-3 text-lg font-medium">Property Features</h3>
-          <div className="grid grid-cols-2 gap-2">
-            <div className="flex items-center gap-2">
-              <CalendarIcon className="text-muted-foreground h-4 w-4" />
-              <span className="text-sm">Built in 2010</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CalendarIcon className="text-muted-foreground h-4 w-4" />
-              <span className="text-sm">Available Now</span>
+              {!extended && (
+                <Link
+                  to="/landlord/properties/marketing-extended"
+                  className="flex-1"
+                >
+                  <Button onClick={() => setExtended(true)} className="w-full">
+                    Extend
+                  </Button>
+                </Link>
+              )}
             </div>
           </div>
-        </CardContent>
+        )}
+
+        {property.status === undefined && (
+          <div className="rounded-md p-4">
+            <h3 className="mb-2 text-lg font-medium">
+              Market My Rental For Free
+            </h3>
+
+            <div className="mt-4 flex flex-col gap-3">
+              <div className="flex items-center gap-3">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-900 text-white">
+                  <UserIcon className="h-4 w-4" />
+                </div>
+                <p className="text-sm">
+                  Reach thousands of renters with a 5 minute setup
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-900 text-white">
+                  <LinkIcon className="h-4 w-4" />
+                </div>
+                <p className="text-sm">
+                  Post to the top listing sites from one place
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-900 text-white">
+                  <UserIcon className="h-4 w-4" />
+                </div>
+                <p className="text-sm">
+                  Fill your vacancy with the perfect tenant!
+                </p>
+              </div>
+            </div>
+
+            <Button className="mt-4 w-full">Create My Listing</Button>
+          </div>
+        )}
+
+        {property.status === "incomplete" && (
+          <div className="rounded-md bg-orange-50 p-4">
+            <h3 className="mb-2 text-lg font-medium">Marketing Online: OFF</h3>
+            <p className="text-muted-foreground text-sm">
+              Your listing is almost ready!
+            </p>
+            <p className="mt-2 text-sm">{property.description}</p>
+            <Button className="mt-4 w-full">Complete My Listing</Button>
+          </div>
+        )}
       </Card>
 
       {/* Action Buttons */}
       {property.status === "marketing" && (
-        <Card>
-          <CardContent className="p-4">
-            <h3 className="mb-3 text-lg font-medium">Listing Page</h3>
-            <div className="mb-2 flex items-center justify-between rounded-md bg-gray-50 p-3">
-              <span className="text-sm text-blue-600">
-                {property.listingUrl}
-              </span>
-              <div className="flex gap-2">
-                <Button size="sm" variant="ghost">
-                  <Share2Icon className="h-4 w-4" />
+        <Card className="py-4">
+          <CardContent className="space-y-5 px-4">
+            <div className="space-y-1">
+              <h3 className="text-lg font-medium">Listing Page</h3>
+
+              <p className="text-blue-600">{property.listingUrl}</p>
+              <div className="flex gap-5">
+                <Button
+                  size="sm"
+                  className="text-primary h-6 bg-blue-200 hover:bg-blue-300"
+                >
+                  <ForwardIcon className="size-3" />
+                  <span className="ml-2">Share</span>
                 </Button>
-                <Button size="sm" variant="ghost">
-                  <DownloadIcon className="h-4 w-4" />
+                <Button
+                  size="sm"
+                  className="text-primary h-6 bg-blue-200 hover:bg-blue-300"
+                >
+                  <CopyIcon className="size-3" />
+                  <span className="ml-2">Copy</span>
+                </Button>
+                <Button
+                  size="sm"
+                  className="text-primary h-6 bg-blue-200 hover:bg-blue-300"
+                >
+                  <PenLineIcon className="size-3" />
+                  <span className="ml-2">Edit</span>
                 </Button>
               </div>
             </div>
 
-            <h3 className="mt-4 mb-3 text-lg font-medium">Pre-Screener</h3>
-            <div className="flex items-center justify-between rounded-md bg-gray-50 p-3">
-              <span className="text-sm text-blue-600">
-                {property.preScreenerUrl}
-              </span>
-              <div className="flex gap-2">
-                <Button size="sm" variant="ghost">
-                  <Share2Icon className="h-4 w-4" />
+            <Separator className="my-2" />
+
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <h3 className="text-lg font-medium">Pre-Screener</h3>
+                <BadgeInfoIcon className="size-4" />
+              </div>
+
+              <p className="text-blue-600">{property.listingUrl}</p>
+              <div className="flex gap-5">
+                <Button
+                  size="sm"
+                  className="text-primary h-6 bg-blue-200 hover:bg-blue-300"
+                >
+                  <ForwardIcon className="size-3" />
+                  <span className="ml-2">Share</span>
                 </Button>
-                <Button size="sm" variant="ghost">
-                  <MailIcon className="h-4 w-4" />
+                <Button
+                  size="sm"
+                  className="text-primary h-6 bg-blue-200 hover:bg-blue-300"
+                >
+                  <CopyIcon className="size-3" />
+                  <span className="ml-2">Copy</span>
                 </Button>
               </div>
             </div>
           </CardContent>
-
-          <CardFooter className="grid grid-cols-2 gap-4 p-4">
-            <Button variant="outline" className="w-full">
-              Share Listing
-            </Button>
-            <Button variant="outline" className="w-full">
-              Screen Tenant
-            </Button>
-          </CardFooter>
         </Card>
       )}
 
       {/* Footer action buttons for non-marketing properties */}
-      {property.status !== "marketing" && (
+      {/* {property.status !== "marketing" && (
         <Card>
           <CardFooter className="grid grid-cols-2 gap-4 p-4">
             <Button variant="outline" className="w-full">
@@ -330,7 +359,7 @@ export default function PropertyDetail() {
             </Button>
           </CardFooter>
         </Card>
-      )}
+      )} */}
     </div>
   );
 }
