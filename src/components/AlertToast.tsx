@@ -1,7 +1,7 @@
 import {
   AlertDialog,
   AlertDialogContent,
-  AlertDialogDescription,
+  // AlertDialogDescription,
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
@@ -20,11 +20,11 @@ const iconMap = {
   info: InfoIcon,
 };
 
-const titleMap = {
-  success: "Success",
-  error: "Error",
-  info: "Information",
-};
+// const titleMap = {
+//   success: "Success",
+//   error: "Error",
+//   info: "Information",
+// };
 
 export function AlertToast({
   open,
@@ -33,7 +33,7 @@ export function AlertToast({
   type,
 }: AlertToastProps) {
   const IconComponent = iconMap[type];
-  const title = titleMap[type];
+  // const title = titleMap[type];
 
   if (!open) {
     // Render based on the 'open' prop
@@ -47,9 +47,9 @@ export function AlertToast({
           <div className="flex size-7 items-center justify-center rounded-full bg-blue-400 p-1">
             <IconComponent className="h-6 w-6 text-white" />
           </div>
-          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogTitle>{message}</AlertDialogTitle>
         </AlertDialogHeader>
-        <AlertDialogDescription>{message}</AlertDialogDescription>
+        {/* <AlertDialogDescription>{message}</AlertDialogDescription> */}
         {/* AlertDialogFooter and AlertDialogAction/AlertDialogCancel can be added if needed */}
       </AlertDialogContent>
     </AlertDialog>
