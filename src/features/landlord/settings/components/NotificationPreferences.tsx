@@ -48,6 +48,7 @@ export const NotificationPreferences: FC = () => {
           <NotificationItem
             title="Messages from Renters"
             description="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            channels={["push", "email", "call"]}
           />
           <NotificationItem
             title="Property"
@@ -56,6 +57,13 @@ export const NotificationPreferences: FC = () => {
           <NotificationItem
             title="Leads"
             description="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            channels={[
+              "email",
+              {
+                type: "summary",
+                label: "New Leads Summary",
+              },
+            ]}
           />
           <NotificationItem
             title="Applicants"
@@ -68,6 +76,17 @@ export const NotificationPreferences: FC = () => {
           <NotificationItem
             title="Payments"
             description="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            channels={[
+              "email",
+              {
+                type: "summary",
+                label: "Daily Payments Summary",
+              },
+              {
+                type: "summary",
+                label: "Rent Payment Deposited",
+              },
+            ]}
           />
           <NotificationItem
             title="Check-ins & Maintenance Feedback"
