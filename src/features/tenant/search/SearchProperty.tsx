@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SearchIcon, ListFilterIcon } from "lucide-react";
+import { SearchIcon } from "lucide-react";
 import { RentalListingCard } from "./components/ListingCard";
+import { FilterDialog } from "./components/FilterDialog";
 
 const listings = [
   {
@@ -48,16 +49,13 @@ export default function SearchProperty() {
       {/* Header */}
       <div className="flex items-center justify-between gap-4">
         <img src="/logo-dark.png" alt="Veorent Logo" className="h-8" />
-        <div className="flex items-center w-full border border-primary">
+        <div className="border-primary flex w-full items-center border">
           <Input placeholder="Search rentals..." className="w-full border-0" />
           <Button size="icon" className="rounded-none border-0">
             <SearchIcon className="size-4" />
           </Button>
         </div>
-        <Button variant="ghost" className="shrink-0">
-          <ListFilterIcon className="size-5" />
-          <span className="text-lg">Filter</span>
-        </Button>
+        <FilterDialog />
       </div>
 
       {/* Listings */}
