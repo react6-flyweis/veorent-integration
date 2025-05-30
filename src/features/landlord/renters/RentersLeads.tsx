@@ -3,6 +3,7 @@ import { PageTitle } from "@/components/PageTitle";
 import { CreateButton } from "@/components/CreateButton";
 
 import { RenterItem } from "./RenterItem";
+import { AddLeadDialog } from "./components/AddLeadDialog";
 
 import { Link } from "react-router-dom";
 import RentersTablist from "./components/RentersTablist";
@@ -21,6 +22,8 @@ const leads = [
 
 export default function RentersLeads() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const handleAddLead = () => {};
 
   return (
     <div className="">
@@ -47,6 +50,12 @@ export default function RentersLeads() {
           </Link>
         ))}
       </div>
+
+      <AddLeadDialog
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        onSubmit={handleAddLead}
+      />
     </div>
   );
 }
