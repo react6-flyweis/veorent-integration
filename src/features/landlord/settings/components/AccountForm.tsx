@@ -74,10 +74,7 @@ export function AccountForm() {
     <div className="w-full">
       <h2 className="mb-4 text-xl font-bold sm:mb-6">My Information</h2>
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-4 sm:space-y-6"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           {/* Name Fields */}
           <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2">
             <FormField
@@ -155,12 +152,9 @@ export function AccountForm() {
             />
           </div>
 
-          {/* Address Section */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium">Address</h3>
-
+          <div className="flex gap-5">
             {/* Street Address and Unit */}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div className="grid flex-1 grid-cols-1 gap-2 gap-y-0 sm:grid-cols-3">
               <div className="sm:col-span-2">
                 <FormField
                   control={form.control}
@@ -193,10 +187,8 @@ export function AccountForm() {
                   )}
                 />
               </div>
-            </div>
 
-            {/* City, Region, Zip */}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {/* City, Region, Zip */}
               <FormField
                 control={form.control}
                 name="city"
@@ -237,44 +229,40 @@ export function AccountForm() {
                 )}
               />
             </div>
-          </div>
 
-          {/* Password and Logo Section */}
-          <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
-            {/* Password Section */}
-            <div className="flex flex-col space-y-4 lg:min-w-[200px]">
-              <div>
-                <h3 className="mb-2 text-lg font-medium">Password</h3>
-                <Button
-                  type="button"
-                  variant="outlinePrimary"
-                  className="w-full uppercase sm:w-auto sm:min-w-[160px]"
-                  onClick={() => setShowPasswordDialog(true)}
-                >
-                  Change Password
+            {/* Password and Logo Section */}
+            <div className="flex flex-1 flex-col gap-6 lg:flex-row lg:gap-8">
+              {/* Password Section */}
+              <div className="flex h-full flex-col justify-between space-y-4">
+                <div>
+                  <h3 className="mb-2 text-lg font-medium">Password</h3>
+                  <Button
+                    type="button"
+                    variant="outlinePrimary"
+                    className="w-full uppercase sm:w-auto sm:min-w-[160px]"
+                    onClick={() => setShowPasswordDialog(true)}
+                  >
+                    Change Password
+                  </Button>
+                </div>
+                <Button type="submit" className="w-full sm:w-auto">
+                  SAVE CHANGES
                 </Button>
               </div>
-            </div>
 
-            {/* Company Logo Section */}
-            <div className="flex-1">
-              <FormLabel className="mb-2 block text-lg font-medium">
-                Company Logo
-              </FormLabel>
-              <div className="flex h-32 flex-col items-center justify-center rounded-md border-2 border-dashed border-gray-300 p-4 sm:h-40 sm:p-6">
-                <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full border border-gray-300">
-                  <PlusIcon className="h-5 w-5 text-gray-500" />
+              {/* Company Logo Section */}
+              <div className="flex-1">
+                <FormLabel className="mb-2 block text-lg font-medium">
+                  Company Logo
+                </FormLabel>
+                <div className="flex h-32 flex-col items-center justify-center rounded-md border-2 border-dashed border-gray-300 p-4 sm:p-6">
+                  <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full border border-gray-300">
+                    <PlusIcon className="h-5 w-5 text-gray-500" />
+                  </div>
+                  <span className="text-sm text-gray-500">ADD LOGO</span>
                 </div>
-                <span className="text-sm text-gray-500">ADD LOGO</span>
               </div>
             </div>
-          </div>
-
-          {/* Submit Button */}
-          <div className="flex justify-end pt-4">
-            <Button type="submit" className="w-full sm:w-auto">
-              SAVE CHANGES
-            </Button>
           </div>
         </form>
       </Form>
