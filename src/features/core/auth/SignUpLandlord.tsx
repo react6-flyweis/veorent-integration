@@ -11,12 +11,9 @@ import {
   MultiStepperStep,
   MultiStepperButton,
 } from "@/components/MultiStepper";
+import { useNavigate } from "react-router";
 
 const formSchema = z.object({
-  fName: z.string().min(2, "First name is required."),
-  lName: z.string().optional(),
-  email: z.string().email("Enter a valid email"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
   startupOption: z.string().min(1, "Please select where you'd like to start"),
   propertyType: z.string().min(1, "Please select a property type"),
   rentalProcess: z.string().min(1, "Please select your rental process stage"),
@@ -25,13 +22,10 @@ const formSchema = z.object({
 type SignUpFormValues = z.infer<typeof formSchema>;
 
 export default function SignUpLandlord() {
+  const Navigate = useNavigate();
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fName: "",
-      lName: "",
-      email: "",
-      password: "",
       startupOption: "",
       propertyType: "",
       rentalProcess: "",
@@ -41,6 +35,7 @@ export default function SignUpLandlord() {
   const onSubmit = (values: SignUpFormValues) => {
     console.log("Form submitted:", values);
     // Handle form submission
+    Navigate("/landlord");
   };
 
   return (
