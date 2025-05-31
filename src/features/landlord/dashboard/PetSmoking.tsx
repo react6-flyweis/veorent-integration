@@ -10,7 +10,10 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 
 import parkingIcon from "./assets/parking.png";
 import pawsIcon from "./assets/paw.png";
@@ -21,8 +24,22 @@ import { useNavigate } from "react-router";
 // Define Zod validation schema
 const formSchema = z.object({
   hasPets: z.boolean(),
+  petType: z.string().optional(),
+  petBreed: z.string().optional(),
+  petWeight: z.string().optional(),
+  petAge: z.string().optional(),
   allowsSmoking: z.enum(["yes", "no", "outside"]),
   includesParkingRules: z.boolean(),
+  parkingOptions: z
+    .object({
+      garage: z.boolean(),
+      driveway: z.boolean(),
+      street: z.boolean(),
+      carport: z.boolean(),
+      designatedSpace: z.boolean(),
+      other: z.boolean(),
+    })
+    .optional(),
   requiresRentersInsurance: z.boolean(),
 });
 
@@ -34,13 +51,29 @@ export default function PetSmoking() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       hasPets: false,
+      petType: "",
+      petBreed: "",
+      petWeight: "",
+      petAge: "",
       allowsSmoking: "no",
       includesParkingRules: false,
+      parkingOptions: {
+        garage: false,
+        driveway: false,
+        street: false,
+        carport: false,
+        designatedSpace: false,
+        other: false,
+      },
       requiresRentersInsurance: false,
     },
   });
 
-  const { formState: { isSubmitting } } = form;
+  const {
+    formState: { isSubmitting },
+  } = form;
+  const hasPets = form.watch("hasPets");
+  const includesParkingRules = form.watch("includesParkingRules");
 
   const onSubmit = async (data: FormValues) => {
     try {
@@ -82,17 +115,82 @@ export default function PetSmoking() {
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem id="pets-yes" value="yes" />
-                        <FormLabel htmlFor="pets-yes" className="text-base">Yes</FormLabel>
+                        <FormLabel htmlFor="pets-yes" className="text-base">
+                          Yes
+                        </FormLabel>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem id="pets-no" value="no" />
-                        <FormLabel htmlFor="pets-no" className="text-base">No</FormLabel>
+                        <FormLabel htmlFor="pets-no" className="text-base">
+                          No
+                        </FormLabel>
                       </div>
                     </RadioGroup>
                   </FormControl>
                 </FormItem>
               )}
             />
+
+            {/* Pet Details Section - Only show when hasPets is true */}
+            {hasPets && (
+              <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="petType"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Type (Dog,Cat,ETC.)</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="petBreed"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Breed</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="petWeight"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Weight (LBS)</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="text" inputMode="numeric" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="petAge"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Age</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
           </div>
 
           {/* Smoking Section */}
@@ -115,15 +213,24 @@ export default function PetSmoking() {
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem id="smoking-yes" value="yes" />
-                        <FormLabel htmlFor="smoking-yes" className="text-base">Yes</FormLabel>
+                        <FormLabel htmlFor="smoking-yes" className="text-base">
+                          Yes
+                        </FormLabel>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem id="smoking-no" value="no" />
-                        <FormLabel htmlFor="smoking-no" className="text-base">No</FormLabel>
+                        <FormLabel htmlFor="smoking-no" className="text-base">
+                          No
+                        </FormLabel>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem id="smoking-outside" value="outside" />
-                        <FormLabel htmlFor="smoking-outside" className="text-base">Outside Only</FormLabel>
+                        <FormLabel
+                          htmlFor="smoking-outside"
+                          className="text-base"
+                        >
+                          Outside Only
+                        </FormLabel>
                       </div>
                     </RadioGroup>
                   </FormControl>
@@ -152,17 +259,119 @@ export default function PetSmoking() {
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem id="parking-yes" value="yes" />
-                        <FormLabel htmlFor="parking-yes" className="text-base">Yes</FormLabel>
+                        <FormLabel htmlFor="parking-yes" className="text-base">
+                          Yes
+                        </FormLabel>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem id="parking-no" value="no" />
-                        <FormLabel htmlFor="parking-no" className="text-base">No</FormLabel>
+                        <FormLabel htmlFor="parking-no" className="text-base">
+                          No
+                        </FormLabel>
                       </div>
                     </RadioGroup>
                   </FormControl>
                 </FormItem>
               )}
             />
+
+            {/* Parking Options - Only displayed if includesParkingRules is true */}
+            {includesParkingRules && (
+              <div className="mt-4 grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="parkingOptions.garage"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormLabel className="font-normal">Garage</FormLabel>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="parkingOptions.driveway"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormLabel className="font-normal">Driveway</FormLabel>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="parkingOptions.street"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormLabel className="font-normal">Street</FormLabel>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="parkingOptions.carport"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormLabel className="font-normal">Carport</FormLabel>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="parkingOptions.designatedSpace"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormLabel className="font-normal">
+                        Designated Space
+                      </FormLabel>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="parkingOptions.other"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormLabel className="font-normal">Other</FormLabel>
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
           </div>
 
           {/* Renters Insurance Section */}
@@ -185,11 +394,18 @@ export default function PetSmoking() {
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem id="insurance-yes" value="yes" />
-                        <FormLabel htmlFor="insurance-yes" className="text-base">Yes</FormLabel>
+                        <FormLabel
+                          htmlFor="insurance-yes"
+                          className="text-base"
+                        >
+                          Yes
+                        </FormLabel>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem id="insurance-no" value="no" />
-                        <FormLabel htmlFor="insurance-no" className="text-base">No</FormLabel>
+                        <FormLabel htmlFor="insurance-no" className="text-base">
+                          No
+                        </FormLabel>
                       </div>
                     </RadioGroup>
                   </FormControl>
