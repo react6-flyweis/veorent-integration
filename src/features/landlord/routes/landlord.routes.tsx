@@ -61,6 +61,11 @@ import PropertyUnits from "../properties/PropertyUnits";
 import Applicants from "../renters/Applicants";
 import Tenants from "../renters/Tenants";
 import RentersLeads from "../renters/RentersLeads";
+import EditPropertyBasics from "../properties/EditPropertyBasics";
+import EditPropertyPermissions from "../properties/EditPropertyPermissions";
+import EditPropertyDescription from "../properties/EditPropertyDescription";
+import EditPropertyUtilities from "../properties/EditPropertyUtilities";
+import EditPropertyAmenities from "../properties/EditPropertyAmenities";
 
 export const landlordRoutes: RouteObject[] = [
   {
@@ -162,6 +167,26 @@ export const landlordRoutes: RouteObject[] = [
   {
     path: "/properties/:id/edit-address",
     element: <EditPropertyAddress />,
+  },
+  {
+    path: "/properties/:id/edit-basics",
+    element: <EditPropertyBasics />,
+  },
+  {
+    path: "/properties/:id/edit-permissions",
+    element: <EditPropertyPermissions />,
+  },
+  {
+    path: "/properties/:id/edit-description",
+    element: <EditPropertyDescription />,
+  },
+  {
+    path: "/properties/:id/edit-utilities",
+    element: <EditPropertyUtilities />,
+  },
+  {
+    path: "/properties/:id/edit-amenities",
+    element: <EditPropertyAmenities />,
   },
   {
     path: "/properties/marketing-extended",
