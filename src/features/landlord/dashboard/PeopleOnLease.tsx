@@ -43,7 +43,11 @@ const formSchema = z
     landlordRegion: z.string().optional(),
     landlordZipCode: z.string().optional(),
     hasDifferentAddress: z.boolean(),
-    hasAdditionalAspects: z.boolean(),
+    hasAdditionalSigners: z.boolean(),
+    // Add fields for additional signers
+    additionalSignerFirstName: z.string().optional(),
+    additionalSignerLastName: z.string().optional(),
+    additionalSignerEmail: z.string().email("Invalid email").optional(),
   })
   .refine(
     (data) => {
@@ -75,7 +79,7 @@ export default function PeopleOnLease() {
       hasAdditionalOccupants: false,
       occupantType: "individual",
       hasDifferentAddress: false,
-      hasAdditionalAspects: false,
+      hasAdditionalSigners: false, // Changed from hasAdditionalAspects
       addAnotherLandlord: false,
       landlordStreetAddress: "",
       landlordUnit: "",
@@ -83,6 +87,9 @@ export default function PeopleOnLease() {
       landlordRegion: "",
       landlordZipCode: "",
       companyName: "",
+      additionalSignerFirstName: "",
+      additionalSignerLastName: "",
+      additionalSignerEmail: "",
     },
   });
 
@@ -538,13 +545,94 @@ export default function PeopleOnLease() {
               )}
             />
 
+            {form.watch("hasDifferentAddress") && (
+              <div className="mt-3">
+                <FormField
+                  control={form.control}
+                  name="landlordStreetAddress"
+                  render={({ field }) => (
+                    <FormItem className="mb-4">
+                      <FormLabel className="text-sm font-medium">
+                        Street Address
+                      </FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <div className="mb-4 grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="landlordUnit"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium">
+                          Unit
+                        </FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="landlordCity"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium">
+                          City
+                        </FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="landlordRegion"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium">
+                          Region
+                        </FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="landlordZipCode"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium">
+                          Zip Code
+                        </FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+            )}
+
             <FormField
               control={form.control}
-              name="hasAdditionalAspects"
+              name="hasAdditionalSigners"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="mb-2 block">
-                    Are there any additional aspects?
+                    Are there any additional signers?
                   </FormLabel>
                   <FormControl>
                     <RadioGroup
@@ -554,20 +642,73 @@ export default function PeopleOnLease() {
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
-                          id="additional-aspects-yes"
+                          id="additional-signers-yes"
                           value="yes"
                         />
-                        <label htmlFor="additional-aspects-yes">Yes</label>
+                        <label htmlFor="additional-signers-yes">Yes</label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem id="additional-aspects-no" value="no" />
-                        <label htmlFor="additional-aspects-no">No</label>
+                        <RadioGroupItem id="additional-signers-no" value="no" />
+                        <label htmlFor="additional-signers-no">No</label>
                       </div>
                     </RadioGroup>
                   </FormControl>
                 </FormItem>
               )}
             />
+
+            {form.watch("hasAdditionalSigners") && (
+              <div className="mt-3">
+                <div className="mb-4 grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="additionalSignerFirstName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium">
+                          Legal First Name
+                        </FormLabel>
+                        <FormControl>
+                          <Input className="mt-1" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="additionalSignerLastName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium">
+                          Last Name
+                        </FormLabel>
+                        <FormControl>
+                          <Input className="mt-1" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <FormField
+                  control={form.control}
+                  name="additionalSignerEmail"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium">
+                        Email
+                      </FormLabel>
+                      <FormControl>
+                        <Input className="mt-1" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
           </div>
 
           <div className="flex justify-center">
