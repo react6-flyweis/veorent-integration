@@ -28,10 +28,10 @@ const formSchema = z
     hasAdditionalOccupants: z.boolean(),
     occupantType: z.enum(["individual", "company"]),
     // Individual fields
-    landlordFirstName: z.string().min(1, "First name is required").optional(),
-    landlordLastName: z.string().min(1, "Last name is required").optional(),
+    landlordFirstName: z.string().optional(),
+    landlordLastName: z.string().optional(),
     // Company fields
-    companyName: z.string().min(1, "Company name is required").optional(),
+    companyName: z.string().optional(),
     // Common fields
     landlordEmail: z.string().email("Invalid email address"),
     landlordPhone: z.string().min(1, "Phone number is required"),
@@ -47,7 +47,11 @@ const formSchema = z
     // Add fields for additional signers
     additionalSignerFirstName: z.string().optional(),
     additionalSignerLastName: z.string().optional(),
-    additionalSignerEmail: z.string().email("Invalid email").optional(),
+    additionalSignerEmail: z
+      .string()
+      .email("Invalid email")
+      .optional()
+      .or(z.literal("")),
     // Additional occupant fields
     occupantFullName: z.string().optional(),
     occupantRelationship: z.string().optional(),
@@ -57,11 +61,12 @@ const formSchema = z
     (data) => {
       // If type is individual, require first and last name
       if (data.occupantType === "individual") {
-        return !!data.landlordFirstName && !!data.landlordLastName;
+        return data.landlordFirstName && data.landlordFirstName.trim().length > 0 && 
+               data.landlordLastName && data.landlordLastName.trim().length > 0;
       }
       // If type is company, require company name
       if (data.occupantType === "company") {
-        return !!data.companyName;
+        return data.companyName && data.companyName.trim().length > 0;
       }
       return true;
     },
@@ -164,6 +169,7 @@ export default function PeopleOnLease() {
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -185,6 +191,7 @@ export default function PeopleOnLease() {
                   >
                     I'll add my tenants later
                   </FormLabel>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -232,6 +239,7 @@ export default function PeopleOnLease() {
                         </div>
                       </RadioGroup>
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -320,6 +328,7 @@ export default function PeopleOnLease() {
                         </div>
                       </RadioGroup>
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -470,6 +479,7 @@ export default function PeopleOnLease() {
                     >
                       Add another landlord
                     </FormLabel>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -491,6 +501,7 @@ export default function PeopleOnLease() {
                         <FormControl>
                           <Input {...field} />
                         </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -600,6 +611,7 @@ export default function PeopleOnLease() {
                       </div>
                     </RadioGroup>
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -617,6 +629,7 @@ export default function PeopleOnLease() {
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -712,6 +725,7 @@ export default function PeopleOnLease() {
                       </div>
                     </RadioGroup>
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
