@@ -4,7 +4,7 @@ export function AuthLayout() {
   return (
     <div className="flex h-screen w-full">
       {/* Left Form Panel */}
-      <div className="@container flex flex-1 items-center justify-center p-2">
+      <div className="@container relative flex flex-1 items-center justify-center p-5">
         <Outlet />
       </div>
 
