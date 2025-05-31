@@ -48,6 +48,10 @@ const formSchema = z
     additionalSignerFirstName: z.string().optional(),
     additionalSignerLastName: z.string().optional(),
     additionalSignerEmail: z.string().email("Invalid email").optional(),
+    // Additional occupant fields
+    occupantFullName: z.string().optional(),
+    occupantRelationship: z.string().optional(),
+    occupantAge: z.string().optional(),
   })
   .refine(
     (data) => {
@@ -90,6 +94,9 @@ export default function PeopleOnLease() {
       additionalSignerFirstName: "",
       additionalSignerLastName: "",
       additionalSignerEmail: "",
+      occupantFullName: "",
+      occupantRelationship: "",
+      occupantAge: "",
     },
   });
 
@@ -229,6 +236,58 @@ export default function PeopleOnLease() {
                 )}
               />
             </div>
+
+            {/* Display additional occupant fields when hasAdditionalOccupants is true */}
+            {form.watch("hasAdditionalOccupants") && (
+              <div className="mt-3">
+                <div className="space-y-4">
+                  <div className="grid grid-cols-3 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="occupantFullName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-sm font-medium">
+                            Full Name
+                          </FormLabel>
+                          <FormControl>
+                            <Input className="mt-1" {...field} />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="occupantRelationship"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-sm font-medium">
+                            Relationship
+                          </FormLabel>
+                          <FormControl>
+                            <Input className="mt-1" {...field} />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="occupantAge"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-sm font-medium">
+                            Age
+                          </FormLabel>
+                          <FormControl>
+                            <Input className="mt-1" type="number" {...field} />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Landlord Section */}
             <div className="space-y-4 pt-4">
