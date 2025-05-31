@@ -59,36 +59,6 @@ const propertyData = {
 export default function EditProperty() {
   const navigate = useNavigate();
 
-  const handleEditLeasing = () => {
-    // Implement edit leasing logic
-    console.log("Edit leasing");
-  };
-
-  const handleEditPropertyDetails = () => {
-    // Implement edit property details logic
-    console.log("Edit property details");
-  };
-
-  const handleEditRequirements = () => {
-    // Implement edit requirements logic
-    console.log("Edit requirements");
-  };
-
-  const handleEditTitleDescription = () => {
-    // Implement edit title and description logic
-    console.log("Edit title and description");
-  };
-
-  const handleEditUtilities = () => {
-    // Implement edit utilities logic
-    console.log("Edit utilities");
-  };
-
-  const handleEditAmenities = () => {
-    // Implement edit amenities logic
-    console.log("Edit amenities");
-  };
-
   return (
     <div>
       <div className="bg-primary relative flex h-64 flex-col items-center justify-center gap-5">
@@ -116,7 +86,10 @@ export default function EditProperty() {
           </div>
         </PropertySection>
 
-        <PropertySection title="Leasing Details" onEdit={handleEditLeasing}>
+        <PropertySection
+          title="Leasing Details"
+          onEdit={() => navigate("/landlord/properties/1/edit-basics")}
+        >
           <div className="flex items-center gap-2">
             <BriefcaseIcon size={18} className="text-gray-500" />
             <p>Click Edit to add leasing information</p>
@@ -125,7 +98,7 @@ export default function EditProperty() {
 
         <PropertySection
           title="Property Details"
-          onEdit={handleEditPropertyDetails}
+          onEdit={() => navigate("/landlord/properties/1/edit-size")}
         >
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
@@ -143,7 +116,10 @@ export default function EditProperty() {
           </div>
         </PropertySection>
 
-        <PropertySection title="Requirements" onEdit={handleEditRequirements}>
+        <PropertySection
+          title="Requirements"
+          onEdit={() => navigate("/landlord/properties/1/edit-permissions")}
+        >
           <div className="flex items-center gap-2">
             <CigaretteIcon size={18} className="text-gray-500" />
             <span>No Smoking</span>
@@ -152,7 +128,7 @@ export default function EditProperty() {
 
         <PropertySection
           title="Title & Description"
-          onEdit={handleEditTitleDescription}
+          onEdit={() => navigate("/landlord/properties/1/edit-description")}
         >
           <div className="space-y-2">
             <p className="text-gray-500">N/A</p>
@@ -162,7 +138,7 @@ export default function EditProperty() {
 
         <PropertySection
           title="Included Utilities"
-          onEdit={handleEditUtilities}
+          onEdit={() => navigate("/landlord/properties/1/edit-utilities")}
         >
           <div className="flex items-center gap-2">
             <InfoIcon size={18} className="text-gray-500" />
@@ -170,7 +146,10 @@ export default function EditProperty() {
           </div>
         </PropertySection>
 
-        <PropertySection title="Amenities" onEdit={handleEditAmenities}>
+        <PropertySection
+          title="Amenities"
+          onEdit={() => navigate("/landlord/properties/1/edit-amenities")}
+        >
           <div className="flex items-center gap-2">
             <InfoIcon size={18} className="text-gray-500" />
             <p>Click Edit to add amenities information</p>
