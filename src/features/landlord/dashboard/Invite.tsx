@@ -1,4 +1,3 @@
-import { useState } from "react";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,13 +12,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 import dealIcon from "./assets/deal.png";
 import penApplicationIcon from "./assets/pen-application.png";
@@ -27,6 +19,12 @@ import rentHouseIcon from "./assets/rent-house.png";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { ApplicationTypeCard } from "./components/ApplicationTypeCard";
 import { useGoBack } from "@/hooks/useGoBack";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import { useInviteRenterMutation } from "./api/mutation";
+import { CurrencyInput } from "@/components/CurrencyInput";
+import { useToast } from "@/hooks/useAlertToast";
+import { useNavigate } from "react-router";
+import { PropertiesSelector } from "./components/PropertiesSelector";
 
 const inviteFormSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -47,16 +45,11 @@ const inviteFormSchema = z.object({
 
 type InviteFormValues = z.infer<typeof inviteFormSchema>;
 
-// Mock properties data - replace with actual data source
-const properties = [
-  { id: "prop1", name: "123 Main St" },
-  { id: "prop2", name: "456 Oak Ave" },
-  { id: "prop3", name: "789 Pine Blvd" },
-];
-
 export default function Invite() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { mutateAsync } = useInviteRenterMutation();
   const goBack = useGoBack();
+  const { showToast } = useToast();
+  const navigate = useNavigate();
 
   const form = useForm<InviteFormValues>({
     resolver: zodResolver(inviteFormSchema),
@@ -73,29 +66,45 @@ export default function Invite() {
   });
 
   const onSubmit = async (values: InviteFormValues) => {
-    setIsSubmitting(true);
+    const valueToSend = {
+      renterInfo: {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        sendBy:
+          values.inviteMethod.charAt(0).toUpperCase() +
+          values.inviteMethod.slice(1),
+        email: values.email,
+      },
+      rentalProperty: {
+        propertyId: values.propertyId,
+        rentAmount: values.rentAmount,
+        securityDeposit: values.securityDeposit,
+        applicationType:
+          values.applicationType.charAt(0).toUpperCase() +
+          values.applicationType.slice(1),
+      },
+    };
     try {
-      console.log(values);
-      // TODO: Implement API call to send invite
-      alert("Invite sent successfully");
-      form.reset();
+      await mutateAsync(valueToSend);
+      showToast("Tenant screening request sent successfully!", "success");
+      navigate("/landlord");
     } catch (error) {
-      console.error("Error sending invite:", error);
-    } finally {
-      setIsSubmitting(false);
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
     }
   };
 
   return (
     <div className="space-y-5">
-      <h2 className="font-semibold text-3xl">
+      <h2 className="text-3xl font-semibold">
         <span>Invite Renter to Apply</span>
       </h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {/* Renter Info Section */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2 font-medium text-lg">
+            <div className="flex items-center gap-2 text-lg font-medium">
               <img src={dealIcon} className="size-10" />
               <span>Renter Info</span>
             </div>
@@ -133,7 +142,7 @@ export default function Invite() {
                 control={form.control}
                 name="inviteMethod"
                 render={({ field }) => (
-                  <FormItem className="space-y-2 col-span-2">
+                  <FormItem className="col-span-2 space-y-2">
                     <FormLabel>Send Invite By</FormLabel>
                     <FormControl>
                       <RadioGroup
@@ -186,7 +195,7 @@ export default function Invite() {
 
           {/* Rental Property Section */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2 font-medium text-lg">
+            <div className="flex items-center gap-2 text-lg font-medium">
               <img src={rentHouseIcon} className="size-10" />
               <span>Rental Property</span>
             </div>
@@ -197,23 +206,9 @@ export default function Invite() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Property Applying To</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Applying to" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {properties.map((property) => (
-                        <SelectItem key={property.id} value={property.id}>
-                          {property.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <FormControl>
+                    <PropertiesSelector placeholder="Applying to" {...field} />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -227,7 +222,7 @@ export default function Invite() {
                   <FormItem>
                     <FormLabel>Rent Amount</FormLabel>
                     <FormControl>
-                      <Input type="text" {...field} />
+                      <CurrencyInput {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -241,7 +236,7 @@ export default function Invite() {
                   <FormItem>
                     <FormLabel>Security Deposit</FormLabel>
                     <FormControl>
-                      <Input type="text" {...field} />
+                      <CurrencyInput type="text" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -252,7 +247,7 @@ export default function Invite() {
 
           {/* Application Type Section */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2 font-medium text-lg">
+            <div className="flex items-center gap-2 text-lg font-medium">
               <img src={penApplicationIcon} className="size-10" />
               <span>Application Type</span>
             </div>
@@ -293,6 +288,14 @@ export default function Invite() {
             />
           </div>
 
+          {form.formState.errors.root && (
+            <div className="flex gap-2 rounded border border-red-500 p-2">
+              <p className="text-sm text-red-500">
+                {form.formState.errors.root.message}
+              </p>
+            </div>
+          )}
+
           <div className="flex justify-between">
             <Button
               variant="outlinePrimary"
@@ -304,12 +307,12 @@ export default function Invite() {
               Cancel
             </Button>
             <LoadingButton
-              isLoading={isSubmitting}
+              isLoading={form.formState.isSubmitting}
               size="lg"
               className="w-52 rounded-lg"
               type="submit"
             >
-              {isSubmitting ? "Sending..." : "Invite"}
+              Send Invite
             </LoadingButton>
           </div>
         </form>
