@@ -1,4 +1,3 @@
-import { useState } from "react";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -30,6 +29,10 @@ import dealIcon from "./assets/deal.png";
 import penApplicationIcon from "./assets/pen-application.png";
 import rentHouseIcon from "./assets/rent-house.png";
 import screenFeeIcon from "./assets/screen-fee.png";
+import { useInviteTenantMutation } from "./api/mutation";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import { useToast } from "@/hooks/useAlertToast";
+import { useNavigate } from "react-router";
 
 const screeningFormSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -50,7 +53,7 @@ const screeningFormSchema = z.object({
   screeningReportType: z.enum(["premium", "standard"], {
     required_error: "Please select a screening report type",
   }),
-  paymentMethod: z.enum(["renter", "landlord"], {
+  paymentMethod: z.enum(["renter", "me"], {
     required_error: "Please select who will pay for the screening report",
   }),
 });
@@ -65,7 +68,9 @@ const properties = [
 ];
 
 export default function Screen() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { mutateAsync } = useInviteTenantMutation();
+  const { showToast } = useToast();
+  const navigate = useNavigate();
   const goBack = useGoBack();
 
   const form = useForm<ScreeningFormValues>({
@@ -88,29 +93,53 @@ export default function Screen() {
   });
 
   const onSubmit = async (values: ScreeningFormValues) => {
-    setIsSubmitting(true);
+    const valuesToSend = {
+      renterInfo: {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        sendBy:
+          values.inviteMethod.charAt(0).toUpperCase() +
+          values.inviteMethod.slice(1),
+        email: values.email,
+      },
+      mailingDetails: {
+        streetAddress: values.streetAddress,
+        unitNumber: values.unit || "",
+        city: values.city,
+        region: values.region,
+        zipCode: values.zipCode,
+      },
+      rentalProperty: {
+        propertyId: values.propertyId,
+        applicationType:
+          values.screeningReportType.charAt(0).toUpperCase() +
+          values.screeningReportType.slice(1),
+      },
+      whoWillPay:
+        values.paymentMethod.charAt(0).toUpperCase() +
+        values.paymentMethod.slice(1),
+    };
     try {
-      console.log(values);
-      // TODO: Implement API call to request screening report
-      alert("Screening request submitted successfully");
-      form.reset();
+      await mutateAsync(valuesToSend);
+      showToast("Tenant screening request sent successfully!", "success");
+      navigate("/landlord");
     } catch (error) {
-      console.error("Error requesting screening report:", error);
-    } finally {
-      setIsSubmitting(false);
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
     }
   };
 
   return (
     <div className="space-y-5">
-      <h2 className="font-semibold text-3xl">
+      <h2 className="text-3xl font-semibold">
         <span>Request Tenant Screening</span>
       </h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {/* Renter Info Section */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2 font-medium text-lg">
+            <div className="flex items-center gap-2 text-lg font-medium">
               <img src={dealIcon} className="size-10" />
               <span>Renter Info</span>
             </div>
@@ -148,7 +177,7 @@ export default function Screen() {
                 control={form.control}
                 name="inviteMethod"
                 render={({ field }) => (
-                  <FormItem className="space-y-2 col-span-2">
+                  <FormItem className="col-span-2 space-y-2">
                     <FormLabel>Send Invite By</FormLabel>
                     <FormControl>
                       <RadioGroup
@@ -201,7 +230,7 @@ export default function Screen() {
 
           {/* Rental Property Section */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2 font-medium text-lg">
+            <div className="flex items-center gap-2 text-lg font-medium">
               <img src={rentHouseIcon} className="size-10" />
               <span>Rental Property</span>
             </div>
@@ -237,7 +266,7 @@ export default function Screen() {
 
           {/* Mailing Address Section */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2 font-medium text-lg">
+            <div className="flex items-center gap-2 text-lg font-medium">
               <img src={dealIcon} className="size-10" />
               <span>Your Mailing Address</span>
             </div>
@@ -331,7 +360,7 @@ export default function Screen() {
 
           {/* Screening Report Type Section */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2 font-medium text-lg">
+            <div className="flex items-center gap-2 text-lg font-medium">
               <img src={penApplicationIcon} className="size-10" />
               <span>Screening Report Type</span>
             </div>
@@ -374,7 +403,7 @@ export default function Screen() {
 
           {/* Payment Method Section */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2 font-medium text-lg">
+            <div className="flex items-center gap-2 text-lg font-medium">
               <img src={screenFeeIcon} className="size-10" />
               <span>Who will pay for the screening report?</span>
             </div>
@@ -400,7 +429,7 @@ export default function Screen() {
                       </FormItem>
                       <FormItem className="flex items-center space-x-3">
                         <FormControl>
-                          <RadioGroupItem value="landlord" />
+                          <RadioGroupItem value="me" />
                         </FormControl>
                         <FormLabel className="font-normal">
                           I will pay the fee
@@ -413,6 +442,14 @@ export default function Screen() {
             />
           </div>
 
+          {form.formState.errors.root && (
+            <div className="flex gap-2 rounded border border-red-500 p-2">
+              <span className="text-red-500">
+                {form.formState.errors.root.message}
+              </span>
+            </div>
+          )}
+
           <div className="flex justify-between">
             <Button
               variant="outlinePrimary"
@@ -424,12 +461,12 @@ export default function Screen() {
               Cancel
             </Button>
             <LoadingButton
-              isLoading={isSubmitting}
+              isLoading={form.formState.isSubmitting}
               size="lg"
               className="w-52 rounded-lg"
               type="submit"
             >
-              {isSubmitting ? "Submitting..." : "Request Report"}
+              Request Report
             </LoadingButton>
           </div>
         </form>
