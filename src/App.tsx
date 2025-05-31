@@ -20,7 +20,7 @@ function App() {
       <Route path="tenant">
         <Route
           element={
-            <AuthWrapper allowedUserType="tenant">
+            <AuthWrapper>
               <DashboardLayout />
             </AuthWrapper>
           }
@@ -35,7 +35,7 @@ function App() {
         </Route>
         <Route
           element={
-            <AuthWrapper allowedUserType="tenant">
+            <AuthWrapper>
               <FullLayout />
             </AuthWrapper>
           }
@@ -52,7 +52,7 @@ function App() {
       <Route path="landlord">
         <Route
           element={
-            <AuthWrapper allowedUserType="landlord">
+            <AuthWrapper>
               <DashboardLayout />
             </AuthWrapper>
           }
