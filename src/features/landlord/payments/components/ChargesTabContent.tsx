@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 type ChargeStatus = "paid" | "unpaid";
 type ChargeType = "Late Fee" | "Security Deposit" | "Rent" | "Utility Charge";
@@ -91,11 +92,10 @@ export function ChargesTabContent() {
   ];
 
   // Choose which data to display based on the active tab
-  const displayedCharges =
-    activeTab === "sent" ? sentCharges : upcomingCharges;
+  const displayedCharges = activeTab === "sent" ? sentCharges : upcomingCharges;
   const totalAmount = displayedCharges.reduce(
     (sum, charge) => sum + charge.amount,
-    0
+    0,
   );
 
   return (
@@ -160,13 +160,19 @@ export function ChargesTabContent() {
                       Deposit Est. {charge.estimatedDate}
                     </div>
                   )}
-                  <div className="font-semibold">${charge.amount.toFixed(2)}</div>
+                  <div className="font-semibold">
+                    ${charge.amount.toFixed(2)}
+                  </div>
                   {activeTab === "sent" && (
-                    charge.status === "paid" ? (
-                      <Badge className="bg-green-500">Paid</Badge>
-                    ) : (
-                      <div className="text-sm text-blue-600">Unpaid</div>
-                    )
+                    <Badge
+                      className={cn(
+                        charge.status === "paid"
+                          ? "bg-green-500"
+                          : "bg-blue-400",
+                      )}
+                    >
+                      {charge.status === "paid" ? "Paid" : "Unpaid"}
+                    </Badge>
                   )}
                 </div>
               </div>
