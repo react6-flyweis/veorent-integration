@@ -12,8 +12,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { LoadingButton } from "@/components/ui/loading-button";
-import { Link, useNavigate } from "react-router";
-import { useUserPreferenceStore } from "@/store/useUserPreferenceStore";
+import { Link } from "react-router";
+import { useLoginMutation } from "../api/mutation";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import { InfoIcon } from "lucide-react";
 
 const loginSchema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -23,8 +25,7 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
-  const { userType } = useUserPreferenceStore();
-  const navigate = useNavigate();
+  const { mutateAsync, data } = useLoginMutation();
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -33,14 +34,20 @@ export function LoginForm() {
     },
   });
 
-  const onSubmit = (data: LoginFormValues) => {
-    console.log("Login Data:", data);
-    navigate(`/${userType}`);
+  const onSubmit = async (values: LoginFormValues) => {
+    try {
+      await mutateAsync(values);
+      console.log("Login Data:", data);
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
           name="email"
@@ -69,6 +76,15 @@ export function LoginForm() {
           )}
         />
 
+        {form.formState.errors.root && (
+          <div className="flex gap-2 rounded border border-red-500 p-2">
+            <InfoIcon className="size-4 text-red-500" />
+            <p className="text-sm text-red-500">
+              {form.formState.errors.root.message}
+            </p>
+          </div>
+        )}
+
         <div className="text-right text-sm">
           <Link
             to="/forgot-password"
@@ -78,7 +94,12 @@ export function LoginForm() {
           </Link>
         </div>
 
-        <LoadingButton type="submit" size="lg" className="w-full">
+        <LoadingButton
+          type="submit"
+          size="lg"
+          className="w-full"
+          isLoading={form.formState.isSubmitting}
+        >
           Log In
         </LoadingButton>
       </form>
