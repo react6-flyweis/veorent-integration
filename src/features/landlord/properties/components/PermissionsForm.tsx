@@ -86,7 +86,7 @@ export const PermissionsForm = ({
                     <RadioGroup
                       onValueChange={field.onChange}
                       defaultValue={field.value}
-                      className="mt-2 flex flex-col space-y-2"
+                      className="mt-2 flex flex-col"
                     >
                       <FormItem className="flex items-center space-y-0 space-x-3">
                         <FormControl>
@@ -139,7 +139,7 @@ export const PermissionsForm = ({
                     <RadioGroup
                       onValueChange={field.onChange}
                       defaultValue={field.value}
-                      className="mt-2 flex flex-col space-y-2"
+                      className="mt-2 flex flex-col"
                     >
                       <FormItem className="flex items-center space-y-0 space-x-3">
                         <FormControl>
@@ -184,7 +184,7 @@ export const PermissionsForm = ({
                     <RadioGroup
                       onValueChange={field.onChange}
                       defaultValue={field.value}
-                      className="mt-2 flex flex-col space-y-2"
+                      className="mt-2 flex flex-col"
                     >
                       <FormItem className="flex items-center space-y-0 space-x-3">
                         <FormControl>

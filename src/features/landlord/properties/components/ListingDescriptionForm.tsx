@@ -14,6 +14,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { LoadingButton } from "@/components/ui/loading-button";
+import { IconRound } from "@/components/IconRound";
+
+import listingDescriptionIcon from "../assets/listing-description.png";
+import listingTitleIcon from "../assets/listing-title.png";
+import propertyDescriptionIcon from "../assets/property-description.png";
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "Property title is required" }).max(100),
@@ -50,7 +55,10 @@ export function ListingDescriptionForm({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-semibold">Listing Description</h2>
+        <div className="flex items-center gap-2">
+          <IconRound icon={listingDescriptionIcon} size="sm" />
+          <h2 className="text-2xl font-semibold">Listing Description</h2>
+        </div>
         <p className="text-muted-foreground">
           Provide details about your property
         </p>
@@ -63,7 +71,10 @@ export function ListingDescriptionForm({
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Property Title</FormLabel>
+                <div className="flex items-center gap-2">
+                  <IconRound icon={listingTitleIcon} size="sm" />
+                  <FormLabel>Property Title</FormLabel>
+                </div>
                 <FormControl>
                   <Input
                     placeholder="e.g. Cozy Downtown Apartment"
@@ -81,7 +92,10 @@ export function ListingDescriptionForm({
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Property Description</FormLabel>
+                <div className="flex items-center gap-2">
+                  <IconRound icon={propertyDescriptionIcon} size="sm" />
+                  <FormLabel>Property Description</FormLabel>
+                </div>
                 <FormControl>
                   <Textarea
                     placeholder="Describe your property in detail..."
