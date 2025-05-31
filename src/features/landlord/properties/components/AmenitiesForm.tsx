@@ -12,49 +12,34 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import utilitiesIcon from "../assets/utilities.png";
-import utilitiesCoveredIcon from "../assets/utilities-covered.png";
 import amenititesIcon from "../assets/amenitites.png";
 import appliancesIcon from "../assets/appliances.png";
 import floorCoveringIcon from "../assets/floor-covering.png";
+import acIcon from "../assets/ac.png";
 import { LoadingButton } from "@/components/ui/loading-button";
 
-const utilitiesAmenitiesSchema = z.object({
-  // Utilities fields
-  utilitiesPaid: z.object({
-    cable: z.boolean(),
-    internet: z.boolean(),
-    electricity: z.boolean(),
-    satelliteTV: z.boolean(),
-    garbage: z.boolean(),
-    sewage: z.boolean(),
-    gas: z.boolean(),
-    water: z.boolean(),
-  }),
-
-  // Amenities fields
-  amenities: z.object({
-    accessibility: z.boolean(),
-    alarmSystem: z.boolean(),
-    bicycleParking: z.boolean(),
-    cableReady: z.boolean(),
-    lawn: z.boolean(),
-    onSiteLaundry: z.boolean(),
-    swimmingPool: z.boolean(),
-    fencedYard: z.boolean(),
-    fireplace: z.boolean(),
-    fitnessCenter: z.boolean(),
-    furnished: z.boolean(),
-    nearPark: z.boolean(),
-    secureBuilding: z.boolean(),
-    vaultedCeiling: z.boolean(),
-    garage: z.boolean(),
-    hotTubSpa: z.boolean(),
-    intercom: z.boolean(),
-    laundryHookups: z.boolean(),
-    offStreetParking: z.boolean(),
-    securityCameras: z.boolean(),
-    wiredForInternet: z.boolean(),
-  }),
+const amenitiesSchema = z.object({
+  accessibility: z.boolean(),
+  alarmSystem: z.boolean(),
+  bicycleParking: z.boolean(),
+  cableReady: z.boolean(),
+  lawn: z.boolean(),
+  onSiteLaundry: z.boolean(),
+  swimmingPool: z.boolean(),
+  fencedYard: z.boolean(),
+  fireplace: z.boolean(),
+  fitnessCenter: z.boolean(),
+  furnished: z.boolean(),
+  nearPark: z.boolean(),
+  secureBuilding: z.boolean(),
+  vaultedCeiling: z.boolean(),
+  garage: z.boolean(),
+  hotTubSpa: z.boolean(),
+  intercom: z.boolean(),
+  laundryHookups: z.boolean(),
+  offStreetParking: z.boolean(),
+  securityCameras: z.boolean(),
+  wiredForInternet: z.boolean(),
 
   // Appliances fields
   appliances: z.object({
@@ -88,60 +73,44 @@ const utilitiesAmenitiesSchema = z.object({
   }),
 });
 
-export type UtilitiesAmenitiesFormValues = z.infer<
-  typeof utilitiesAmenitiesSchema
->;
+export type AmenitiesFormValues = z.infer<typeof amenitiesSchema>;
 
-interface UtilitiesAmenitiesFormProps {
-  defaultValues?: Partial<UtilitiesAmenitiesFormValues>;
-  onSuccess?: (data: UtilitiesAmenitiesFormValues) => void;
+interface AmenitiesFormProps {
+  defaultValues?: Partial<AmenitiesFormValues>;
+  onSuccess?: (data: AmenitiesFormValues) => void;
   address?: string;
 }
 
-export const UtilitiesAmenitiesForm = ({
+export const AmenitiesForm = ({
   defaultValues,
   onSuccess,
   address,
-}: UtilitiesAmenitiesFormProps) => {
-  const form = useForm<UtilitiesAmenitiesFormValues>({
-    resolver: zodResolver(utilitiesAmenitiesSchema),
+}: AmenitiesFormProps) => {
+  const form = useForm<AmenitiesFormValues>({
+    resolver: zodResolver(amenitiesSchema),
     defaultValues: {
       // Utilities defaults
-      utilitiesPaid: {
-        cable: false,
-        internet: false,
-        electricity: false,
-        satelliteTV: false,
-        garbage: false,
-        sewage: false,
-        gas: false,
-        water: false,
-      },
-
-      // Amenities defaults
-      amenities: {
-        accessibility: false,
-        alarmSystem: false,
-        bicycleParking: false,
-        cableReady: false,
-        lawn: false,
-        onSiteLaundry: false,
-        swimmingPool: false,
-        fencedYard: false,
-        fireplace: false,
-        fitnessCenter: false,
-        furnished: false,
-        nearPark: false,
-        secureBuilding: false,
-        vaultedCeiling: false,
-        garage: false,
-        hotTubSpa: false,
-        intercom: false,
-        laundryHookups: false,
-        offStreetParking: false,
-        securityCameras: false,
-        wiredForInternet: false,
-      },
+      accessibility: false,
+      alarmSystem: false,
+      bicycleParking: false,
+      cableReady: false,
+      lawn: false,
+      onSiteLaundry: false,
+      swimmingPool: false,
+      fencedYard: false,
+      fireplace: false,
+      fitnessCenter: false,
+      furnished: false,
+      nearPark: false,
+      secureBuilding: false,
+      vaultedCeiling: false,
+      garage: false,
+      hotTubSpa: false,
+      intercom: false,
+      laundryHookups: false,
+      offStreetParking: false,
+      securityCameras: false,
+      wiredForInternet: false,
 
       // Appliances defaults
       appliances: {
@@ -177,7 +146,7 @@ export const UtilitiesAmenitiesForm = ({
     },
   });
 
-  const handleSubmit = (data: UtilitiesAmenitiesFormValues) => {
+  const handleSubmit = (data: AmenitiesFormValues) => {
     onSuccess?.(data);
   };
 
@@ -197,167 +166,6 @@ export const UtilitiesAmenitiesForm = ({
           )}
 
           <div className="space-y-6">
-            <div>
-              <h3 className="mb-4 flex items-center gap-2 text-base font-medium">
-                <IconRound icon={utilitiesCoveredIcon} size="xs" />
-                Utilities Paid by Landlord
-              </h3>
-
-              <div className="grid grid-cols-2 gap-x-6 gap-y-3">
-                <FormField
-                  control={form.control}
-                  name="utilitiesPaid.cable"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center space-y-0 space-x-2">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormLabel className="text-base font-normal">
-                        Cable
-                      </FormLabel>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="utilitiesPaid.internet"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center space-y-0 space-x-2">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormLabel className="text-base font-normal">
-                        Internet
-                      </FormLabel>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="utilitiesPaid.electricity"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center space-y-0 space-x-2">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormLabel className="text-base font-normal">
-                        Electricity
-                      </FormLabel>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="utilitiesPaid.satelliteTV"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center space-y-0 space-x-2">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormLabel className="text-base font-normal">
-                        Satellite TV
-                      </FormLabel>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="utilitiesPaid.garbage"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center space-y-0 space-x-2">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormLabel className="text-base font-normal">
-                        Garbage
-                      </FormLabel>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="utilitiesPaid.sewage"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center space-y-0 space-x-2">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormLabel className="text-base font-normal">
-                        Sewage
-                      </FormLabel>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="utilitiesPaid.gas"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center space-y-0 space-x-2">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormLabel className="text-base font-normal">
-                        Gas
-                      </FormLabel>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="utilitiesPaid.water"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center space-y-0 space-x-2">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormLabel className="text-base font-normal">
-                        Water
-                      </FormLabel>
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-
-            <div className="mb-6 rounded-md bg-blue-50 p-4">
-              <p className="text-sm text-gray-700">
-                Select which utilities are included in the rent and will be paid
-                by you as the landlord. Tenants will be responsible for any
-                utilities not selected.
-              </p>
-            </div>
-
             {/* Amenities Section */}
             <div>
               <div className="mb-4 flex items-center gap-2">
@@ -369,7 +177,7 @@ export const UtilitiesAmenitiesForm = ({
                 {/* ...existing amenities code... */}
                 <FormField
                   control={form.control}
-                  name="amenities.accessibility"
+                  name="accessibility"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-y-0 space-x-2">
                       <FormControl>
@@ -387,7 +195,7 @@ export const UtilitiesAmenitiesForm = ({
 
                 <FormField
                   control={form.control}
-                  name="amenities.alarmSystem"
+                  name="alarmSystem"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-y-0 space-x-2">
                       <FormControl>
@@ -405,7 +213,7 @@ export const UtilitiesAmenitiesForm = ({
 
                 <FormField
                   control={form.control}
-                  name="amenities.bicycleParking"
+                  name="bicycleParking"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-y-0 space-x-2">
                       <FormControl>
@@ -421,10 +229,10 @@ export const UtilitiesAmenitiesForm = ({
                   )}
                 />
 
-                {/* Continue with rest of amenities... */}
+                {/* Continue with rest of .. */}
                 <FormField
                   control={form.control}
-                  name="amenities.cableReady"
+                  name="cableReady"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-y-0 space-x-2">
                       <FormControl>
@@ -442,7 +250,7 @@ export const UtilitiesAmenitiesForm = ({
 
                 <FormField
                   control={form.control}
-                  name="amenities.lawn"
+                  name="lawn"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-y-0 space-x-2">
                       <FormControl>
@@ -460,7 +268,7 @@ export const UtilitiesAmenitiesForm = ({
 
                 <FormField
                   control={form.control}
-                  name="amenities.onSiteLaundry"
+                  name="onSiteLaundry"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-y-0 space-x-2">
                       <FormControl>
@@ -478,7 +286,7 @@ export const UtilitiesAmenitiesForm = ({
 
                 <FormField
                   control={form.control}
-                  name="amenities.swimmingPool"
+                  name="swimmingPool"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-y-0 space-x-2">
                       <FormControl>
@@ -496,7 +304,7 @@ export const UtilitiesAmenitiesForm = ({
 
                 <FormField
                   control={form.control}
-                  name="amenities.fencedYard"
+                  name="fencedYard"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-y-0 space-x-2">
                       <FormControl>
@@ -514,7 +322,7 @@ export const UtilitiesAmenitiesForm = ({
 
                 <FormField
                   control={form.control}
-                  name="amenities.fireplace"
+                  name="fireplace"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-y-0 space-x-2">
                       <FormControl>
@@ -532,7 +340,7 @@ export const UtilitiesAmenitiesForm = ({
 
                 <FormField
                   control={form.control}
-                  name="amenities.fitnessCenter"
+                  name="fitnessCenter"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-y-0 space-x-2">
                       <FormControl>
@@ -550,7 +358,7 @@ export const UtilitiesAmenitiesForm = ({
 
                 <FormField
                   control={form.control}
-                  name="amenities.furnished"
+                  name="furnished"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-y-0 space-x-2">
                       <FormControl>
@@ -568,7 +376,7 @@ export const UtilitiesAmenitiesForm = ({
 
                 <FormField
                   control={form.control}
-                  name="amenities.nearPark"
+                  name="nearPark"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-y-0 space-x-2">
                       <FormControl>
@@ -586,7 +394,7 @@ export const UtilitiesAmenitiesForm = ({
 
                 <FormField
                   control={form.control}
-                  name="amenities.secureBuilding"
+                  name="secureBuilding"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-y-0 space-x-2">
                       <FormControl>
@@ -604,7 +412,7 @@ export const UtilitiesAmenitiesForm = ({
 
                 <FormField
                   control={form.control}
-                  name="amenities.vaultedCeiling"
+                  name="vaultedCeiling"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-y-0 space-x-2">
                       <FormControl>
@@ -622,7 +430,7 @@ export const UtilitiesAmenitiesForm = ({
 
                 <FormField
                   control={form.control}
-                  name="amenities.garage"
+                  name="garage"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-y-0 space-x-2">
                       <FormControl>
@@ -640,7 +448,7 @@ export const UtilitiesAmenitiesForm = ({
 
                 <FormField
                   control={form.control}
-                  name="amenities.hotTubSpa"
+                  name="hotTubSpa"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-y-0 space-x-2">
                       <FormControl>
@@ -658,7 +466,7 @@ export const UtilitiesAmenitiesForm = ({
 
                 <FormField
                   control={form.control}
-                  name="amenities.intercom"
+                  name="intercom"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-y-0 space-x-2">
                       <FormControl>
@@ -676,7 +484,7 @@ export const UtilitiesAmenitiesForm = ({
 
                 <FormField
                   control={form.control}
-                  name="amenities.laundryHookups"
+                  name="laundryHookups"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-y-0 space-x-2">
                       <FormControl>
@@ -694,7 +502,7 @@ export const UtilitiesAmenitiesForm = ({
 
                 <FormField
                   control={form.control}
-                  name="amenities.offStreetParking"
+                  name="offStreetParking"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-y-0 space-x-2">
                       <FormControl>
@@ -712,7 +520,7 @@ export const UtilitiesAmenitiesForm = ({
 
                 <FormField
                   control={form.control}
-                  name="amenities.securityCameras"
+                  name="securityCameras"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-y-0 space-x-2">
                       <FormControl>
@@ -730,7 +538,7 @@ export const UtilitiesAmenitiesForm = ({
 
                 <FormField
                   control={form.control}
-                  name="amenities.wiredForInternet"
+                  name="wiredForInternet"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-y-0 space-x-2">
                       <FormControl>
@@ -1077,7 +885,7 @@ export const UtilitiesAmenitiesForm = ({
             {/* HVAC Section */}
             <div>
               <div className="mb-4 flex items-center gap-2">
-                <IconRound icon="" size="xs" />
+                <IconRound icon={acIcon} size="xs" />
                 <h3 className="text-base font-medium">
                   Air Conditioning & Heating
                 </h3>

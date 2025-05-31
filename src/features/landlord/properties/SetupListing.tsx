@@ -9,12 +9,13 @@ import { useGoBack } from "@/hooks/useGoBack";
 import { PropertySizeForm } from "./components/PropertySizeForm";
 import { LeasingBasicsForm } from "./components/LeasingBasicsForm";
 import { PermissionsForm } from "./components/PermissionsForm";
-import { UtilitiesAmenitiesForm } from "./components/UtilitiesAmenitiesForm";
 import { ListingDescriptionForm } from "./components/ListingDescriptionForm";
 import { PhotosVideosForm } from "./components/PhotosVideosForm";
 import { PhoneVerificationForm } from "./components/PhoneVerificationForm";
 import { PublishListingForm } from "./components/PublishListingForm";
 import { ListingSuccessScreen } from "./components/ListingSuccessScreen";
+import { UtilitiesForm } from "./components/UtilitiesForm";
+import { AmenitiesForm } from "./components/AmenitiesForm";
 
 export default function SetupListing() {
   const goBack = useGoBack();
@@ -44,7 +45,11 @@ export default function SetupListing() {
       </MultiStepperStep>
 
       <MultiStepperStep>
-        <UtilitiesAmenitiesForm onSuccess={handleSuccess} />
+        <UtilitiesForm onSuccess={handleSuccess} />
+      </MultiStepperStep>
+
+      <MultiStepperStep>
+        <AmenitiesForm onSuccess={handleSuccess} />
       </MultiStepperStep>
 
       <MultiStepperStep>
