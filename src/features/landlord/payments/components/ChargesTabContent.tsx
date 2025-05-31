@@ -25,7 +25,7 @@ export function ChargesTabContent() {
   const sentCharges: Charge[] = [
     {
       id: "1",
-      date: "08/19/2024",
+      date: "05/19/2025",
       type: "Late Fee",
       property: "123 Main St.",
       amount: 50.0,
@@ -34,7 +34,7 @@ export function ChargesTabContent() {
     },
     {
       id: "2",
-      date: "08/19/2024",
+      date: "05/19/2025",
       type: "Security Deposit",
       property: "Ft. Collins Lease",
       amount: 1200.0,
@@ -42,7 +42,7 @@ export function ChargesTabContent() {
     },
     {
       id: "3",
-      date: "08/19/2024",
+      date: "05/19/2025",
       type: "Security Deposit",
       property: "123 Main St.",
       amount: 1200.0,
@@ -98,6 +98,25 @@ export function ChargesTabContent() {
     0,
   );
 
+  // Get the latest date from the charges
+  const getLatestDate = () => {
+    if (activeTab === "upcoming") return "Upcoming Charges";
+    
+    const validDates = displayedCharges
+      .map(charge => charge.date)
+      .filter(date => date !== "N/A")
+      .map(date => new Date(date))
+      .filter(date => !isNaN(date.getTime()));
+    
+    if (validDates.length === 0) {
+      const now = new Date();
+      return now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    }
+    
+    const latestDate = new Date(Math.max(...validDates.map(date => date.getTime())));
+    return latestDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -122,7 +141,7 @@ export function ChargesTabContent() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold">
-            {activeTab === "sent" ? "September 2023" : "Upcoming Charges"}
+            {getLatestDate()}
           </h2>
           <div className="flex items-center gap-1">
             <span className="text-muted-foreground text-sm">TOTAL</span>
