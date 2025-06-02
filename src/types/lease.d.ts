@@ -1,6 +1,6 @@
 interface IPropertyAddress {
   streetAddress: string;
-  unit: string;
+  unit?: string;
   city: string;
   region: string;
   zipCode: string;
@@ -13,12 +13,12 @@ interface ILeaseTerm {
 
 interface IRentDepositAndFee {
   monthlyRent: number;
-  petRent: boolean;
-  proratedRent: boolean;
+  petRent?: boolean;
+  proratedRent?: boolean;
   securityDeposit: number;
-  otherDeposit: number;
-  petDeposite: boolean;
-  oneTimeFees: boolean;
+  otherDeposit?: number;
+  petDeposite?: boolean;
+  oneTimeFees?: boolean;
   banckAccount: string;
   paymentMethod: string;
 }
