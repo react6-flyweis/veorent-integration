@@ -17,33 +17,57 @@ interface IRentDepositAndFee {
   proratedRent?: boolean;
   securityDeposit: number;
   otherDeposit?: number;
-  petDeposite?: boolean;
+  petDeposit?: boolean;
   oneTimeFees?: boolean;
-  banckAccount: string;
+  bankAccount: string;
   paymentMethod: string;
 }
 
 interface IPeopleOnTheLease {
-  renters: string;
-  additionalOccupants: boolean;
-  EntitityType: string;
+  renters: string; // Name of the primary renter(s)
+  additionalOccupants: boolean; // Indicates if there are additional occupants
+  fullName?: string;
+  relationship?: string;
+  age?: string;
+  EntityType: "Individual" | "Company";
   firstName: string;
   lastName: string;
-  email: string;
-  phone: string;
-  streetAddress: string;
-  unit: string;
-  city: string;
-  region: string;
-  zipCode: string;
+  email?: string;
+  phone?: string;
+  companyName?: string;
+  companyEmail?: string;
+  companyPhone?: string;
+  streetAddress?: string;
+  unit?: string;
+  city?: string;
+  region?: string;
+  zipCode?: string;
   poBox: boolean;
+  poBoxstreetAddress?: string;
+  poBoxunit?: string;
+  poBoxcity?: string;
+  poBoxregion?: string;
+  poBoxzipCode?: string;
   signers: boolean;
+  legalFirstName: string;
+  legalLastName: string;
+  legalEmail: string;
 }
 
 interface IPetsSmokingAndOther {
-  ptes: boolean;
+  pets: boolean;
+  typeOfPet?: string;
+  petBreed?: string;
+  petWeight?: string;
+  petAge?: string;
   smoking: boolean;
   parking: boolean;
+  isGarage?: boolean;
+  isDriveway?: boolean;
+  isStreet?: boolean;
+  isCarport?: boolean;
+  isDesignatedSpace?: boolean;
+  isOther?: boolean;
   renterInsurance: boolean;
 }
 
@@ -65,7 +89,7 @@ interface IUtilitiesServiceAndKeys {
 
 interface IProvisionsAndAttachments {
   additionalTerm: string;
-  attachement: string;
+  attachment: string;
 }
 
 interface ILeaseDetail {
