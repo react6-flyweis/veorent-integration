@@ -14,3 +14,10 @@ export const useInviteRenterMutation = () => {
       axiosLandlord.post<IResponse<unknown>>("/referralRentals", data),
   });
 };
+
+export const useCreateOrUpdateLeaseAgreementMutation = () => {
+  return useMutation({
+    mutationFn: (data: unknown) =>
+      axiosLandlord.post<IResponse<ILeaseDetail>>("/LeaseCompleteData", data),
+  });
+};
