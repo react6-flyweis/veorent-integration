@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { useForm } from "react-hook-form";
+import { useForm, type ControllerRenderProps } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -12,7 +12,6 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { BuilderLayout } from "./components/BuilderLayout";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -38,7 +37,10 @@ import sewerIcon from "./assets/icons/seawage.png";
 import lawnCareIcon from "./assets/icons/lawn.png";
 import snowRemovalIcon from "./assets/icons/snow-removal.png";
 import condoIcon from "./assets/icons/condo-ee.png";
-import { useNavigate } from "react-router";
+import { Navigate, useLocation, useNavigate } from "react-router";
+import { useCreateOrUpdateLeaseAgreementMutation } from "./api/mutation";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import FormErrors from "@/components/FormErrors";
 
 // Define schema for the form
 const utilitiesServicesSchema = z.object({
@@ -61,13 +63,16 @@ const utilitiesServicesSchema = z.object({
   keyCopies: z.string().min(1, "Number of copies is required"),
 
   // Maintenance section
-  maintenanceOptions: z.array(z.string()),
+  maintenanceOptions: z.enum(["mail", "email", "textmail", "other"]),
 });
 
 type UtilitiesServicesValues = z.infer<typeof utilitiesServicesSchema>;
 
 export default function UtilitiesServices() {
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const { mutateAsync, isSuccess } = useCreateOrUpdateLeaseAgreementMutation();
+
   const form = useForm<UtilitiesServicesValues>({
     resolver: zodResolver(utilitiesServicesSchema),
     defaultValues: {
@@ -83,7 +88,7 @@ export default function UtilitiesServices() {
       hoaCondoFee: "n/a",
       keyType: "",
       keyCopies: "",
-      maintenanceOptions: [],
+      maintenanceOptions: "mail",
     },
   });
 
@@ -93,71 +98,35 @@ export default function UtilitiesServices() {
 
   const onSubmit = async (values: UtilitiesServicesValues) => {
     try {
-      console.log(values);
-      // TODO: Save utilities and services information and move to next step
-      navigate("/landlord/lease-agreement/provisions-attachments");
+      const valuesToSave: {
+        rentalProperty: string;
+        utilitiesServices: IUtilitiesServiceAndKeys;
+      } = {
+        rentalProperty: state.property,
+        utilitiesServices: {
+          ...values,
+          sewer: values.sewerSeptic,
+          hoa: values.hoaCondoFee,
+          keys: values.keyType,
+          copies: values.keyCopies,
+          maintenance: values.maintenanceOptions,
+        },
+      };
+      await mutateAsync(valuesToSave);
+      setTimeout(() => {
+        navigate("/landlord/lease-agreement/provisions-attachments", { state });
+      }, 300);
     } catch (error) {
-      console.error("Error saving information:", error);
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
     }
   };
 
-  // Helper component for responsibility radio options
-  const ResponsibilityRadios = ({
-    name,
-    label,
-    icon,
-  }: {
-    name: Exclude<keyof UtilitiesServicesValues, "maintenanceOptions">;
-    label: string;
-    icon: string;
-  }) => (
-    <FormField
-      control={form.control}
-      name={name}
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>
-            <img src={icon} alt={label} className="max-h-7 max-w-7" />
-            <span className="text-sm font-medium sm:text-base sm:font-normal">
-              {label}
-            </span>
-          </FormLabel>
-          <FormControl>
-            <RadioGroup
-              onValueChange={field.onChange}
-              defaultValue={field.value}
-              className="flex flex-col gap-3 pl-5 sm:flex-row sm:gap-4"
-            >
-              <FormItem className="flex items-center space-x-2">
-                <FormControl>
-                  <RadioGroupItem value="tenant" />
-                </FormControl>
-                <FormLabel className="text-sm font-normal sm:text-base">
-                  Tenant
-                </FormLabel>
-              </FormItem>
-              <FormItem className="flex items-center space-x-2">
-                <FormControl>
-                  <RadioGroupItem value="landlord" />
-                </FormControl>
-                <FormLabel className="text-sm font-normal sm:text-base">
-                  Landlord
-                </FormLabel>
-              </FormItem>
-              <FormItem className="flex items-center space-x-2">
-                <FormControl>
-                  <RadioGroupItem value="n/a" />
-                </FormControl>
-                <FormLabel className="text-sm font-normal sm:text-base">
-                  N/A
-                </FormLabel>
-              </FormItem>
-            </RadioGroup>
-          </FormControl>
-        </FormItem>
-      )}
-    />
-  );
+  if (!state || !state.property) {
+    // if no property is selected then redirect to select lease
+    return <Navigate to="/landlord/lease-agreement" />;
+  }
 
   return (
     <BuilderLayout
@@ -236,16 +205,17 @@ export default function UtilitiesServices() {
                     name: "hoaCondoFee",
                   },
                 ].map((item) => (
-                  <ResponsibilityRadios
+                  <FormField
+                    control={form.control}
+                    name={item.name as keyof UtilitiesServicesValues}
                     key={item.name}
-                    name={
-                      item.name as Exclude<
-                        keyof UtilitiesServicesValues,
-                        "maintenanceOptions"
-                      >
-                    }
-                    label={item.label}
-                    icon={item.icon}
+                    render={({ field }) => (
+                      <ResponsibilityRadios
+                        label={item.label}
+                        icon={item.icon}
+                        field={field}
+                      />
+                    )}
                   />
                 ))}
               </div>
@@ -305,7 +275,7 @@ export default function UtilitiesServices() {
                         Copies
                       </FormLabel>
                       <FormControl>
-                        <Input {...field} className="w-full" />
+                        <Input type="number" {...field} className="w-full" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -336,38 +306,46 @@ export default function UtilitiesServices() {
             <FormField
               control={form.control}
               name="maintenanceOptions"
-              render={() => (
+              render={({ field }) => (
                 <FormItem>
-                  <div className="grid grid-cols-1 gap-3">
-                    <div className="flex items-center space-x-2 p-2 sm:p-0">
-                      <Checkbox id="mail" value="mail" />
-                      <label htmlFor="mail" className="font-medium">
-                        Mail
-                      </label>
-                    </div>
-                    <div className="flex items-center space-x-2 p-2 sm:p-0">
-                      <Checkbox id="email" value="email" />
-                      <label htmlFor="email" className="font-medium">
-                        E-Mail
-                      </label>
-                    </div>
-                    <div className="flex items-center space-x-2 p-2 sm:p-0">
-                      <Checkbox id="textmail" value="textmail" />
-                      <label htmlFor="textmail" className="font-medium">
-                        Text Mail
-                      </label>
-                    </div>
-                    <div className="flex items-center space-x-2 p-2 sm:p-0">
-                      <Checkbox id="other" value="other" />
-                      <label htmlFor="other" className="font-medium">
-                        Other
-                      </label>
-                    </div>
-                  </div>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="grid grid-cols-1 gap-1"
+                    >
+                      <FormItem className="flex items-center space-x-2">
+                        <FormControl>
+                          <RadioGroupItem value="mail" />
+                        </FormControl>
+                        <FormLabel className="text-base">Mail</FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-2">
+                        <FormControl>
+                          <RadioGroupItem value="email" />
+                        </FormControl>
+                        <FormLabel className="text-base">E-Mail</FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-2">
+                        <FormControl>
+                          <RadioGroupItem value="textmail" />
+                        </FormControl>
+                        <FormLabel className="text-base">Text Mail</FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-2">
+                        <FormControl>
+                          <RadioGroupItem value="other" />
+                        </FormControl>
+                        <FormLabel className="text-base">Other</FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
                 </FormItem>
               )}
             />
           </div>
+
+          <FormErrors errors={form.formState.errors} />
 
           <div className="flex justify-center pt-6 sm:pt-4">
             <LoadingButton
@@ -376,7 +354,7 @@ export default function UtilitiesServices() {
               className="w-full max-w-md rounded-lg sm:w-3/5"
               type="submit"
             >
-              {isSubmitting ? "Saving..." : "Save & Next"}
+              {isSuccess ? "Saved!" : "Save & Next"}
             </LoadingButton>
           </div>
         </form>
@@ -384,3 +362,67 @@ export default function UtilitiesServices() {
     </BuilderLayout>
   );
 }
+
+// Helper component for responsibility radio options
+const ResponsibilityRadios = ({
+  label,
+  icon,
+  field,
+}: {
+  label: string;
+  icon: string;
+  field: ControllerRenderProps<
+    UtilitiesServicesValues,
+    keyof UtilitiesServicesValues
+  >;
+}) => (
+  <FormItem>
+    <FormLabel>
+      <img src={icon} alt={label} className="max-h-7 max-w-7" />
+      <span className="text-sm font-medium sm:text-base sm:font-normal">
+        {label}
+      </span>
+    </FormLabel>
+    <FormControl>
+      <RadioGroup
+        onValueChange={field.onChange}
+        value={field.value as string}
+        className="flex flex-col gap-3 pl-5 sm:flex-row sm:gap-4"
+      >
+        <FormItem className="flex items-center space-x-2">
+          <FormControl>
+            <RadioGroupItem value="tenant" id={`${field.name}-tenant`} />
+          </FormControl>
+          <FormLabel
+            htmlFor={`${field.name}-tenant`}
+            className="cursor-pointer text-sm font-normal sm:text-base"
+          >
+            Tenant
+          </FormLabel>
+        </FormItem>
+        <FormItem className="flex items-center space-x-2">
+          <FormControl>
+            <RadioGroupItem value="landlord" id={`${field.name}-landlord`} />
+          </FormControl>
+          <FormLabel
+            htmlFor={`${field.name}-landlord`}
+            className="cursor-pointer text-sm font-normal sm:text-base"
+          >
+            Landlord
+          </FormLabel>
+        </FormItem>
+        <FormItem className="flex items-center space-x-2">
+          <FormControl>
+            <RadioGroupItem value="n/a" id={`${field.name}-na`} />
+          </FormControl>
+          <FormLabel
+            htmlFor={`${field.name}-na`}
+            className="cursor-pointer text-sm font-normal sm:text-base"
+          >
+            N/A
+          </FormLabel>
+        </FormItem>
+      </RadioGroup>
+    </FormControl>
+  </FormItem>
+);
