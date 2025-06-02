@@ -57,7 +57,11 @@ export default function LeaseSpecific() {
 
   const onSubmit = async (values: LeaseSpecificFormValues) => {
     try {
-      const valuesToSave = {
+      const valuesToSave: {
+        lease: string;
+        propertyAddress: IPropertyAddress;
+        leaseTerm: ILeaseTerm;
+      } = {
         lease: state.property,
         propertyAddress: {
           streetAddress: values.streetAddress,
