@@ -51,7 +51,6 @@ export type SidebarItem = SidebarItemWithSubItems | SidebarItemWithoutSubItems;
 
 export interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   navigationItems: SidebarItem[];
-  onLogout?: () => void;
 }
 
 export function AppSidebar({ navigationItems, ...props }: AppSidebarProps) {

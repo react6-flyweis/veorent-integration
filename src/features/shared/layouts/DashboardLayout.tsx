@@ -45,18 +45,12 @@ export function DashboardLayout() {
 
   const sidebarProps = getSidebarProps();
 
-  const handleLogout = () => {
-    // Add logout logic here
-    console.log("Logging out...");
-  };
-
   return (
     <SidebarProvider defaultOpen={sidebarProps.defaultOpen}>
       <ToastProvider>
         <AppSidebar
           collapsible={sidebarProps.collapsible}
           navigationItems={navigationItems}
-          onLogout={handleLogout}
         />
         <SidebarInset className="@container relative flex flex-1 flex-col p-5 md:p-10">
           {
