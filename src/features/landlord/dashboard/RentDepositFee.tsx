@@ -14,13 +14,6 @@ import { LoadingButton } from "@/components/ui/loading-button";
 import { BuilderLayout } from "./components/BuilderLayout";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 import houseIcon from "./assets/house.png";
 import coinBagIcon from "./assets/coin-bag.png";
@@ -31,6 +24,7 @@ import exchangeIcon from "./assets/exchange.png";
 import { CurrencyInput } from "@/components/CurrencyInput";
 import { Navigate, useLocation, useNavigate } from "react-router";
 import { useCreateOrUpdateLeaseAgreementMutation } from "./api/mutation";
+import { availableBanks, BankSelector } from "./components/BankSelector";
 
 const rentDepositFeeSchema = z.object({
   monthlyRent: z.coerce.number().min(1, "Monthly rent is required"),
@@ -48,7 +42,9 @@ const rentDepositFeeSchema = z.object({
   paymentMethods: z
     .array(z.string())
     .min(1, "At least one payment method is required"),
-  bankAccount: z.string().optional(),
+  bankAccount: z.enum(
+    availableBanks.map((bank) => bank._id) as [string, ...string[]],
+  ),
 });
 
 type RentDepositFeeValues = z.infer<typeof rentDepositFeeSchema>;
@@ -455,23 +451,9 @@ export default function RentDepositFee() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Bank Account</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Choose your bank account..." />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="standard">
-                        Standard Bank Group
-                      </SelectItem>
-                      <SelectItem value="firstrand">FirstRand</SelectItem>
-                      <SelectItem value="absa">Absa Group</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <FormControl>
+                    <BankSelector {...field} />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
