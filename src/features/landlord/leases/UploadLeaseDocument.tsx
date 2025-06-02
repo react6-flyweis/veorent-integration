@@ -11,8 +11,8 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { ImageUpload } from "@/components/ui/image-upload";
 import { useNavigate } from "react-router";
+import { ImageInput } from "@/components/ui/image-input";
 
 const formSchema = z.object({
   document: z.array(
@@ -52,7 +52,7 @@ export default function UploadLeaseDocument() {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <ImageUpload {...field} />
+                  <ImageInput {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

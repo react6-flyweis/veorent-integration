@@ -21,11 +21,11 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
 import { DateInput } from "@/components/ui/date-input";
-import { ImageUpload } from "@/components/ui/image-upload";
 import { DialogClose } from "@/components/ui/dialog";
 import { CurrencyInput } from "@/components/CurrencyInput";
 import { useToast } from "@/hooks/useAlertToast";
 import { LoadingButton } from "@/components/ui/loading-button";
+import { ImageInput } from "@/components/ui/image-input";
 
 const formSchema = z.object({
   date: z.date(),
@@ -162,7 +162,7 @@ const CreateExpense = () => {
             render={({ field }) => (
               <FormItem className="gap-1">
                 <FormControl>
-                  <ImageUpload variant="small" {...field} />
+                  <ImageInput variant="small" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -4,7 +4,6 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { IconRound } from "@/components/IconRound";
-import { ImageUpload } from "@/components/ui/image-upload";
 import {
   Form,
   FormControl,
@@ -13,6 +12,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { ImageInput } from "@/components/ui/image-input";
 
 // Define our form schema with Zod
 const formSchema = z.object({
@@ -78,14 +78,7 @@ export function PhotosVideosForm({ onSuccess }: PhotosVideosFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <ImageUpload
-                      value={field.value}
-                      onChange={field.onChange}
-                      maxFiles={5}
-                      maxSize={10}
-                      dragPrompt="CLICK OR DRAG TO UPLOAD"
-                      accept={["image/jpeg", "image/png", "image/webp"]}
-                    />
+                    <ImageInput {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

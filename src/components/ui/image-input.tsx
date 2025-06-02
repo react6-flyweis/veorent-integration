@@ -2,33 +2,57 @@ import React, { useRef, useState } from "react";
 import picturesIcon from "@/assets/icons/pictures.png";
 import { X } from "lucide-react";
 
-type ImageUploadProps = {
-  value?: (File | string)[];
-  onChange: (files: (File | string)[]) => void;
+type ImageInputProps = {
+  value?: (File | string)[] | (File | string);
+  onChange: (files: (File | string)[] | (File | string)) => void;
   accept?: string[];
   maxSize?: number; // in MB
   maxFiles?: number;
   className?: string;
   dragPrompt?: string;
   variant?: "default" | "small";
+  multiple?: boolean;
 };
 
-export const ImageUpload = ({
-  value = [],
+export const ImageInput = ({
+  value,
   onChange,
   accept = ["image/jpeg", "image/png", "image/gif", "image/webp"],
   maxSize = 5, // Default 5MB
   maxFiles = 1,
   className = "",
-  dragPrompt = "CLICK OR DRAG TO UPLOAD IMAGES",
+  dragPrompt,
   variant = "default",
-}: ImageUploadProps) => {
+  multiple = true,
+}: ImageInputProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [dragActive, setDragActive] = useState(false);
   const [previewUrls, setPreviewUrls] = useState<Record<number, string>>({});
 
+  // Normalize value to always work with arrays internally
+  const normalizedValue = multiple
+    ? Array.isArray(value)
+      ? value
+      : value
+        ? [value]
+        : []
+    : value
+      ? Array.isArray(value)
+        ? value
+        : [value]
+      : [];
+
+  // Generate default drag prompt based on multiple prop
+  const defaultDragPrompt = multiple
+    ? "CLICK OR DRAG TO UPLOAD IMAGES"
+    : "CLICK OR DRAG TO UPLOAD IMAGE";
+  const finalDragPrompt = dragPrompt ?? defaultDragPrompt;
+
   // Check if max files limit is reached
-  const isMaxFilesReached = value.length >= maxFiles;
+  const isMaxFilesReached = normalizedValue.length >= maxFiles;
+
+  // Check if uploader should be hidden (when multiple is false and image is uploaded)
+  const shouldHideUploader = !multiple && normalizedValue.length > 0;
 
   // Helper to check if an item is a File or string URL
   const isFile = (item: File | string): item is File => {
@@ -83,8 +107,17 @@ export const ImageUpload = ({
     });
 
     // Limit number of files, preserving string URLs
-    const combinedFiles = [...value, ...validFiles].slice(0, maxFiles);
-    onChange(combinedFiles);
+    const combinedFiles = [...normalizedValue, ...validFiles].slice(
+      0,
+      maxFiles,
+    );
+
+    // Return single value or array based on multiple prop
+    if (multiple) {
+      onChange(combinedFiles);
+    } else {
+      onChange(combinedFiles[0] || []);
+    }
   };
 
   const handleDrag = (e: React.DragEvent) => {
@@ -116,73 +149,84 @@ export const ImageUpload = ({
     setPreviewUrls(newPreviewUrls);
 
     // Remove from value
-    onChange(value.filter((_, index) => index !== indexToRemove));
+    const newFiles = normalizedValue.filter(
+      (_, index) => index !== indexToRemove,
+    );
+
+    if (multiple) {
+      onChange(newFiles);
+    } else {
+      onChange(newFiles[0] || []);
+    }
   };
 
   return (
     <div className="space-y-2">
-      <div
-        className={`relative ${className} ${
-          isMaxFilesReached ? "pointer-events-none opacity-50" : ""
-        }`}
-        onDragEnter={handleDrag}
-        onDragLeave={handleDrag}
-        onDragOver={handleDrag}
-        onDrop={handleDrop}
-      >
-        <label
-          htmlFor="image-upload"
-          className={`block w-full ${
-            isMaxFilesReached ? "cursor-not-allowed" : "cursor-pointer"
+      {!shouldHideUploader && (
+        <div
+          className={`relative ${className} ${
+            isMaxFilesReached ? "pointer-events-none opacity-50" : ""
           }`}
-          onClick={(e) => {
-            if (isMaxFilesReached) {
-              e.preventDefault();
-              return;
-            }
-            // Do NOT call fileInputRef.current?.click() here, as the htmlFor will handle it
-          }}
+          onDragEnter={handleDrag}
+          onDragLeave={handleDrag}
+          onDragOver={handleDrag}
+          onDrop={handleDrop}
         >
-          <input
-            ref={fileInputRef}
-            id="image-upload"
-            type="file"
-            accept={accept.join(",")}
-            className="hidden"
-            multiple={maxFiles > 1}
-            onChange={(e) => handleFiles(e.target.files)}
-            disabled={isMaxFilesReached}
-          />
-          <div
-            className={`flex flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed p-6 transition-colors ${
-              dragActive ? "border-primary bg-primary/5" : ""
-            } ${variant === "small" ? "h-24" : "h-40"}`}
+          <label
+            htmlFor="image-upload"
+            className={`block w-full ${
+              isMaxFilesReached ? "cursor-not-allowed" : "cursor-pointer"
+            }`}
+            onClick={(e) => {
+              if (isMaxFilesReached) {
+                e.preventDefault();
+                return;
+              }
+              // Do NOT call fileInputRef.current?.click() here, as the htmlFor will handle it
+            }}
           >
-            <img
-              src={picturesIcon}
-              className={`${variant === "small" ? "size-6" : "size-10"}`}
-              alt="Upload Images"
+            <input
+              ref={fileInputRef}
+              id="image-upload"
+              type="file"
+              accept={accept.join(",")}
+              className="hidden"
+              multiple={multiple && maxFiles > 1}
+              onChange={(e) => handleFiles(e.target.files)}
+              disabled={isMaxFilesReached}
             />
-            <span
-              className={`text-muted-foreground text-center ${
-                variant === "small" ? "text-sm" : "text-lg"
-              }`}
+            <div
+              className={`flex flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed p-6 transition-colors ${
+                dragActive ? "border-primary bg-primary/5" : ""
+              } ${variant === "small" ? "h-24" : "h-40"}`}
             >
-              {isMaxFilesReached
-                ? `Maximum ${maxFiles} image${maxFiles > 1 ? "s" : ""} reached`
-                : dragPrompt}
-            </span>
-          </div>
-        </label>
-      </div>
+              <img
+                src={picturesIcon}
+                className={`${variant === "small" ? "size-6" : "size-10"}`}
+                alt="Upload Images"
+              />
+              <span
+                className={`text-muted-foreground text-center ${
+                  variant === "small" ? "text-sm" : "text-lg"
+                }`}
+              >
+                {isMaxFilesReached
+                  ? `Maximum ${maxFiles} image${maxFiles > 1 ? "s" : ""} reached`
+                  : finalDragPrompt}
+              </span>
+            </div>
+          </label>
+        </div>
+      )}
 
-      {value.length > 0 && (
+      {normalizedValue.length > 0 && (
         <div className="mt-2 space-y-2">
           <p className="text-muted-foreground text-sm">
-            Uploaded images ({value.length}/{maxFiles}):
+            Uploaded {multiple ? "images" : "image"} ({normalizedValue.length}/
+            {maxFiles}):
           </p>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
-            {value.map((item, index) => {
+            {normalizedValue.map((item, index) => {
               const isFileItem = isFile(item);
               const fileName = isFileItem
                 ? item.name

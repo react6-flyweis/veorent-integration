@@ -20,11 +20,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ImageUpload } from "@/components/ui/image-upload";
 import { useNavigate } from "react-router";
 import { PageTitle } from "@/components/PageTitle";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { useToast } from "@/hooks/useAlertToast";
+import { ImageInput } from "@/components/ui/image-input";
 
 // Define the form schema with Zod
 const formSchema = z.object({
@@ -242,11 +242,7 @@ export function CreateMaintenance() {
                   <FormItem>
                     <FormLabel>Photos (Optional)</FormLabel>
                     <FormControl>
-                      <ImageUpload
-                        value={field.value}
-                        onChange={(urls) => field.onChange(urls)}
-                        maxFiles={3}
-                      />
+                      <ImageInput maxFiles={3} {...field} />
                     </FormControl>
                     <FormDescription>
                       Upload up to 3 photos of the issue
