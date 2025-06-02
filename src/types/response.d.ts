@@ -10,3 +10,8 @@ interface ILoginResponse {
   otp: string;
   mobileNumber: string;
 }
+
+interface IImageUploadResponse {
+  img: string;
+  _id: string;
+}
