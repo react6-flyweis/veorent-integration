@@ -9,10 +9,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { BuilderLayout } from "./components/BuilderLayout";
-import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Card } from "@/components/ui/card";
 
 import houseIcon from "./assets/house.png";
@@ -25,6 +24,8 @@ import { CurrencyInput } from "@/components/CurrencyInput";
 import { Navigate, useLocation, useNavigate } from "react-router";
 import { useCreateOrUpdateLeaseAgreementMutation } from "./api/mutation";
 import { availableBanks, BankSelector } from "./components/BankSelector";
+import FormErrors from "@/components/FormErrors";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 const rentDepositFeeSchema = z.object({
   monthlyRent: z.coerce.number().min(1, "Monthly rent is required"),
@@ -79,13 +80,12 @@ export default function RentDepositFee() {
   const onSubmit = async (values: RentDepositFeeValues) => {
     try {
       const valuesToSave: {
-        lease: string;
+        rentalProperty: string;
         rentDepositAndFee: IRentDepositAndFee;
       } = {
-        lease: state.property,
+        rentalProperty: state.property,
         rentDepositAndFee: {
           ...values,
-          banckAccount: values.bankAccount || "",
           paymentMethod: values.paymentMethods.join(", "),
         },
       };
@@ -94,7 +94,9 @@ export default function RentDepositFee() {
         navigate("/landlord/lease-agreement/people-on-lease");
       }, 300);
     } catch (error) {
-      console.error("Error saving information:", error);
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
     }
   };
 
@@ -469,31 +471,56 @@ export default function RentDepositFee() {
                 name="paymentMethods"
                 render={() => (
                   <FormItem>
-                    <div className="space-y-2">
-                      <div className="flex items-center space-x-4">
-                        <Checkbox id="card" value="card" />
-                        <label htmlFor="card" className="font-medium">
-                          Card
-                        </label>
-                      </div>
-                      <div className="flex items-center space-x-4">
-                        <Checkbox id="mtn" value="mtn" />
-                        <label htmlFor="mtn" className="font-medium">
-                          MTN money Pay
-                        </label>
-                      </div>
-                      <div className="flex items-center space-x-4">
-                        <Checkbox id="orange" value="orange" />
-                        <label htmlFor="orange" className="font-medium">
-                          Orange money pay
-                        </label>
-                      </div>
-                    </div>
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={(value) =>
+                          form.setValue("paymentMethods", [value])
+                        }
+                        defaultValue="bank"
+                      >
+                        <FormItem className="flex items-center space-x-2">
+                          <FormControl>
+                            <RadioGroupItem value="card" id="card" />
+                          </FormControl>
+                          <FormLabel
+                            htmlFor="card"
+                            className="text-base font-normal"
+                          >
+                            Card
+                          </FormLabel>
+                        </FormItem>
+
+                        <FormItem className="flex items-center space-x-2">
+                          <FormControl>
+                            <RadioGroupItem value="mtn" id="mtn" />
+                          </FormControl>
+                          <FormLabel
+                            htmlFor="mtn"
+                            className="text-base font-normal"
+                          >
+                            MTN momo Pay
+                          </FormLabel>
+                        </FormItem>
+                        <FormItem className="flex items-center space-x-2">
+                          <FormControl>
+                            <RadioGroupItem value="orange" id="orange" />
+                          </FormControl>
+                          <FormLabel
+                            htmlFor="orange"
+                            className="text-base font-normal"
+                          >
+                            Orange money pay
+                          </FormLabel>
+                        </FormItem>
+                      </RadioGroup>
+                    </FormControl>
                   </FormItem>
                 )}
               />
             </div>
           </div>
+
+          <FormErrors errors={form.formState.errors} />
 
           <div className="flex justify-center pt-4">
             <LoadingButton
