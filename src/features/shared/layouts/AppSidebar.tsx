@@ -28,6 +28,7 @@ import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 import { useRef, useEffect, useState } from "react";
 import { LogoutConfirmDialog } from "@/components/LogoutConfirmDialog";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export type SidebarSubItem = {
   title: string;
@@ -57,10 +58,12 @@ export function AppSidebar({ navigationItems, ...props }: AppSidebarProps) {
   const navigate = useNavigate();
   const { state } = useSidebar();
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const logout = useAuthStore((store) => store.logout);
 
   const logoutHandler = () => {
     setShowLogoutDialog(false);
-    navigate("/");
+    logout();
+    navigate("/login", { replace: true });
   };
 
   // Component to handle individual text animations
