@@ -15,25 +15,31 @@ import { Textarea } from "@/components/ui/textarea";
 
 import additionalTermsIcon from "./assets/additional.png";
 import attachmentIcon from "./assets/attachment.png";
-import { ImageUpload } from "@/components/ui/image-upload";
-import { useNavigate } from "react-router";
+import { Navigate, useLocation, useNavigate } from "react-router";
+import { useCreateOrUpdateLeaseAgreementMutation } from "./api/mutation";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import FormErrors from "@/components/FormErrors";
+import { ImageInput } from "@/components/ui/image-input";
+import { useUploadImageMutation } from "../api/mutations";
 
 // Define schema for the form
 const provisionAttachmentSchema = z.object({
   additionalTerms: z.string(),
-  attachments: z.array(z.instanceof(File)).optional(),
+  attachment: z.instanceof(File),
 });
 
 type ProvisionAttachmentValues = z.infer<typeof provisionAttachmentSchema>;
 
 export default function ProvisionAttachment() {
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const { mutateAsync, isSuccess } = useCreateOrUpdateLeaseAgreementMutation();
+  const { mutateAsync: uploadAttachment } = useUploadImageMutation();
 
   const form = useForm<ProvisionAttachmentValues>({
     resolver: zodResolver(provisionAttachmentSchema),
     defaultValues: {
       additionalTerms: "",
-      attachments: [],
     },
   });
 
@@ -43,13 +49,43 @@ export default function ProvisionAttachment() {
 
   const onSubmit = async (values: ProvisionAttachmentValues) => {
     try {
-      console.log(values);
-      // TODO: Save provisions and attachments and move to next step
-      navigate("/landlord/lease-agreement/create");
+      const valuesToSave: {
+        rentalProperty: string;
+        ProvisionsAndAttachments: {
+          additionalTerm: string;
+          attachment?: string;
+        };
+      } = {
+        rentalProperty: state.property,
+        ProvisionsAndAttachments: {
+          additionalTerm: values.additionalTerms,
+        },
+      };
+      if (values.attachment) {
+        // upload the attachment
+        const formData = new FormData();
+        formData.append("file", values.attachment);
+        // response as url
+        const response = await uploadAttachment(formData);
+        // pass url to valuesToSave
+        valuesToSave.ProvisionsAndAttachments.attachment =
+          response.data.data[0].img;
+      }
+      await mutateAsync(valuesToSave);
+      setTimeout(() => {
+        navigate("/landlord/lease-agreement/create", { state });
+      }, 300);
     } catch (error) {
-      console.error("Error saving information:", error);
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
     }
   };
+
+  if (!state || !state.property) {
+    // if no property is selected then redirect to select lease
+    return <Navigate to="/landlord/lease-agreement" />;
+  }
 
   return (
     <BuilderLayout
@@ -144,11 +180,11 @@ export default function ProvisionAttachment() {
 
               <FormField
                 control={form.control}
-                name="attachments"
-                render={({ field: { value, onChange } }) => (
+                name="attachment"
+                render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <ImageUpload value={value || []} onChange={onChange} />
+                      <ImageInput multiple={false} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -157,6 +193,8 @@ export default function ProvisionAttachment() {
             </div>
           </div>
 
+          <FormErrors errors={form.formState.errors} />
+
           <div className="flex justify-center pt-4">
             <LoadingButton
               isLoading={isSubmitting}
@@ -164,7 +202,7 @@ export default function ProvisionAttachment() {
               className="w-3/5 rounded-lg"
               type="submit"
             >
-              {isSubmitting ? "Saving..." : "Save"}
+              {isSuccess ? "Saved!" : "Save & Next"}
             </LoadingButton>
           </div>
         </form>
