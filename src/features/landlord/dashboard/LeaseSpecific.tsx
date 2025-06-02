@@ -17,7 +17,8 @@ import houseIcon from "./assets/house.png";
 import leaseIcon from "./assets/deal.png";
 import { BuilderLayout } from "./components/BuilderLayout";
 import { DateInput } from "@/components/ui/date-input";
-import { useNavigate } from "react-router";
+import { Navigate, useLocation, useNavigate } from "react-router";
+import { useCreateOrUpdateLeaseAgreementMutation } from "./api/mutation";
 
 const leaseSpecificSchema = z.object({
   streetAddress: z.string().min(1, "Street address is required"),
@@ -37,6 +38,9 @@ type LeaseSpecificFormValues = z.infer<typeof leaseSpecificSchema>;
 
 export default function LeaseSpecific() {
   const navigate = useNavigate();
+  const { state } = useLocation();
+
+  const { mutateAsync, isSuccess } = useCreateOrUpdateLeaseAgreementMutation();
 
   const form = useForm<LeaseSpecificFormValues>({
     resolver: zodResolver(leaseSpecificSchema),
@@ -53,13 +57,35 @@ export default function LeaseSpecific() {
 
   const onSubmit = async (values: LeaseSpecificFormValues) => {
     try {
-      console.log(values);
-      // TODO: Save lease information and move to next step
-      navigate("/landlord/lease-agreement/rent-deposit-fee");
+      const valuesToSave = {
+        lease: state.property,
+        propertyAddress: {
+          streetAddress: values.streetAddress,
+          unit: values.unit,
+          city: values.city,
+          region: values.region,
+          zipCode: values.zipCode,
+        },
+        leaseTerm: {
+          termType:
+            values.leaseTerm === "fixed" ? "Fixed Term" : "Month-to-Month",
+          startDate: values.startDate.toISOString(),
+        },
+      };
+
+      await mutateAsync(valuesToSave);
+      setTimeout(() => {
+        navigate("/landlord/lease-agreement/rent-deposit-fee");
+      }, 300);
     } catch (error) {
       console.error("Error saving lease information:", error);
     }
   };
+
+  if (!state || !state.property) {
+    // if no property is selected then redirect to select lease
+    return <Navigate to="/landlord/lease-agreement" />;
+  }
 
   return (
     <BuilderLayout
@@ -212,7 +238,7 @@ export default function LeaseSpecific() {
               className="w-4/5 rounded-lg @lg:w-3/5"
               type="submit"
             >
-              {form.formState.isSubmitting ? "Saving..." : "Save & Next"}
+              {isSuccess ? "Saved Successfully" : "Save & Next"}
             </LoadingButton>
           </div>
         </form>
