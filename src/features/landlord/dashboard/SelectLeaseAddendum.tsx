@@ -5,13 +5,7 @@ import {
   type MultiStepperRef,
 } from "@/components/MultiStepper";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { useRef, useState } from "react";
 
 import fingerSnapIcon from "./assets/finger-snap.png";
@@ -20,22 +14,16 @@ import smoothPenIcon from "./assets/smooth-pen.png";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageTitle } from "@/components/PageTitle";
 import { Link } from "react-router";
+import { PropertiesSelector } from "./components/PropertiesSelector";
 
 export default function SelectLeaseAddendum() {
-  const [selectedAddress, setSelectedAddress] = useState<string | undefined>();
+  const [selectedAddress, setSelectedAddress] = useState<string>("");
   const stepperRef = useRef<MultiStepperRef>(null);
   const handleContinue = () => {
     if (stepperRef.current) {
       stepperRef.current.goNext();
     }
   };
-
-  // Mock addresses - replace with actual data in production
-  const addresses = [
-    "123 Main St, Apt 4, City, State 12345",
-    "456 Elm St, City, State 12345",
-    "789 Oak Ave, City, State 12345",
-  ];
 
   return (
     <MultiStepper ref={stepperRef}>
@@ -46,21 +34,11 @@ export default function SelectLeaseAddendum() {
           <div>
             <div className="mb-4">
               <label className="mb-1 block text-sm font-medium">Lease</label>
-              <Select
+              <PropertiesSelector
                 value={selectedAddress}
-                onValueChange={setSelectedAddress}
-              >
-                <SelectTrigger className="w-full rounded-md border p-3">
-                  <SelectValue placeholder="Choose an address" />
-                </SelectTrigger>
-                <SelectContent>
-                  {addresses.map((address, index) => (
-                    <SelectItem key={index} value={address}>
-                      {address}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                onChange={setSelectedAddress}
+                placeholder="Select a lease"
+              />
             </div>
             <div className="flex justify-center">
               <Button
@@ -150,7 +128,12 @@ export default function SelectLeaseAddendum() {
 
             <div className="mt-6 flex justify-center">
               <Button className="w-3/5" size="lg" asChild>
-                <Link to="/landlord/lease-addendum/create">Sounds Good</Link>
+                <Link
+                  state={{ propertyId: selectedAddress }}
+                  to="/landlord/lease-addendum/create"
+                >
+                  Sounds Good
+                </Link>
               </Button>
             </div>
           </div>
