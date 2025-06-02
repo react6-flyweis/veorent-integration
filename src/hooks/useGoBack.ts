@@ -1,7 +1,7 @@
 import { useCallback } from "react";
+import type { MouseEvent } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useUserPreferenceStore } from "@/store/useUserPreferenceStore";
-import type { MouseEvent } from "react";
 
 /**
  * A hook that provides a function to navigate back to the previous page.
@@ -42,15 +42,8 @@ export function useGoBack(customFallbackPath?: string) {
         try {
           // For multiple steps back, use browser's history API
           if (Math.abs(stepsToGoBack) > 1) {
-            console.log(
-              "Going back",
-              stepsToGoBack,
-              "steps using browser history",
-            );
-
             // Set up a fallback timer in case history navigation fails
             const fallbackTimer = setTimeout(() => {
-              console.log("History navigation timeout, using fallback");
               navigate(fallbackPath);
             }, 100);
 
@@ -64,7 +57,6 @@ export function useGoBack(customFallbackPath?: string) {
             window.history.go(stepsToGoBack);
           } else {
             // For single step, use React Router
-            console.log("Going back", stepsToGoBack, "step");
             navigate(-stepsToGoBack);
           }
         } catch (error) {
