@@ -1,8 +1,9 @@
 export interface IUser {
   _id: string;
   userId: string;
+  businessId?: string;
   goals: unknown[];
-  image: string;
+  // image: string | null;
   email: string;
   password: string;
   otp: string;
@@ -24,6 +25,9 @@ export interface IUser {
   createdAt: string;
   updatedAt: string;
   __v: number;
-  mobileNumber: string;
-  fullName: string;
+  // mobileNumber: string;
+  // fullName: string;
+  firstname: string;
+  lastname: string;
+  propertyCount: string;
 }

@@ -5,6 +5,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 
 export function useLoginMutation() {
   const navigate = useNavigate();
+  const setToken = useAuthStore((store) => store.setToken);
   const queryClient = useQueryClient();
   const { login: loginToStore } = useAuthStore();
 
@@ -13,7 +14,7 @@ export function useLoginMutation() {
     onSuccess: async (token) => {
       try {
         // 1. Store token immediately
-        useAuthStore.getState().setToken(token);
+        setToken(token);
 
         // 2. Fetch user profile data using the token
         const userProfile = await getProfile();
