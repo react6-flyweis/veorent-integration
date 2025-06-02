@@ -18,7 +18,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
+import { useCreateOrUpdateLeaseAgreementMutation } from "./api/mutation";
 
 // Define Zod validation schema
 const formSchema = z
@@ -27,12 +28,11 @@ const formSchema = z
     tenantSearch: z.string().optional(),
     hasAdditionalOccupants: z.boolean(),
     occupantType: z.enum(["individual", "company"]),
-    // Individual fields
-    landlordFirstName: z.string().optional(),
-    landlordLastName: z.string().optional(),
     // Company fields
     companyName: z.string().optional(),
     // Common fields
+    landlordFirstName: z.string(),
+    landlordLastName: z.string(),
     landlordEmail: z.string().email("Invalid email address"),
     landlordPhone: z.string().min(1, "Phone number is required"),
     addAnotherLandlord: z.boolean(),
@@ -61,8 +61,12 @@ const formSchema = z
     (data) => {
       // If type is individual, require first and last name
       if (data.occupantType === "individual") {
-        return data.landlordFirstName && data.landlordFirstName.trim().length > 0 && 
-               data.landlordLastName && data.landlordLastName.trim().length > 0;
+        return (
+          data.landlordFirstName &&
+          data.landlordFirstName.trim().length > 0 &&
+          data.landlordLastName &&
+          data.landlordLastName.trim().length > 0
+        );
       }
       // If type is company, require company name
       if (data.occupantType === "company") {
@@ -80,6 +84,8 @@ type FormValues = z.infer<typeof formSchema>;
 
 export default function PeopleOnLease() {
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const { mutateAsync, isSuccess } = useCreateOrUpdateLeaseAgreementMutation();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -88,33 +94,48 @@ export default function PeopleOnLease() {
       hasAdditionalOccupants: false,
       occupantType: "individual",
       hasDifferentAddress: false,
-      hasAdditionalSigners: false, // Changed from hasAdditionalAspects
+      hasAdditionalSigners: false,
       addAnotherLandlord: false,
-      landlordStreetAddress: "",
-      landlordUnit: "",
-      landlordCity: "",
-      landlordRegion: "",
-      landlordZipCode: "",
-      companyName: "",
-      additionalSignerFirstName: "",
-      additionalSignerLastName: "",
-      additionalSignerEmail: "",
-      occupantFullName: "",
-      occupantRelationship: "",
-      occupantAge: "",
     },
   });
 
   const { handleSubmit } = form;
   const occupantType = form.watch("occupantType");
 
-  const onSubmit = async (data: FormValues) => {
+  const onSubmit = async (values: FormValues) => {
     // Simulate submission
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("Form data:", data);
-      // Handle navigation to next page
-      navigate("/landlord/lease-agreement/pet-smoking");
+      const valuesToSave: {
+        lease: string;
+        peopleOnTheLease: IPeopleOnTheLease;
+      } = {
+        lease: state.property,
+        peopleOnTheLease: {
+          ...values,
+          renters: "",
+          additionalOccupants: false,
+          EntitityType: occupantType,
+          // companyName: occupantType === "company" ? values.companyName : "",
+          firstName: values.landlordFirstName,
+          lastName: values.landlordLastName,
+          email: values.landlordEmail,
+          phone: values.landlordPhone,
+          poBox: values.hasDifferentAddress,
+          streetAddress: values.landlordStreetAddress || "",
+          unit: values.landlordUnit || "",
+          city: values.landlordCity || "",
+          region: values.landlordRegion || "",
+          zipCode: values.landlordZipCode || "",
+          signers: values.hasAdditionalSigners,
+          // additionalSignerFirstName: values.additionalSignerFirstName || "",
+          // additionalSignerLastName: values.additionalSignerLastName || "",
+          // additionalSignerEmail: values.additionalSignerEmail || "",
+        },
+      };
+      await mutateAsync(valuesToSave);
+      setTimeout(() => {
+        navigate("/landlord/lease-agreement/pet-smoking");
+      }, 300);
     } catch (error) {
       console.error("Submission error:", error);
     }
@@ -791,7 +812,7 @@ export default function PeopleOnLease() {
               className="w-3/5 rounded-lg"
               type="submit"
             >
-              {form.formState.isSubmitting ? "Saving..." : "Save & Next"}
+              {isSuccess ? "Saved Successfully" : "Save & Next"}
             </LoadingButton>
           </div>
         </form>
