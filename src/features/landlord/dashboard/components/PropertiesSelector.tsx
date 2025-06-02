@@ -24,11 +24,17 @@ export function PropertiesSelector({
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
-        {data?.data?.map((property) => (
-          <SelectItem key={property._id} value={property._id}>
-            {property.name}
+        {data?.data?.length ? (
+          data.data.map((property) => (
+            <SelectItem key={property._id} value={property._id}>
+              {property.name}
+            </SelectItem>
+          ))
+        ) : (
+          <SelectItem value="no-properties" disabled>
+            No properties found
           </SelectItem>
-        ))}
+        )}
       </SelectContent>
     </Select>
   );
