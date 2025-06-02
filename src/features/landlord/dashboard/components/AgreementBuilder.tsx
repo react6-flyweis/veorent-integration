@@ -8,14 +8,14 @@ import utilitiesIcon from "../assets/utilities.png";
 import provisionsIcon from "../assets/provisions.png";
 import depositIcon from "../assets/deposit.png";
 import groupIcon from "../assets/group.png";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 interface Section {
   id: string;
   title: string;
   description: string;
   icon: string;
-  path?: string;
+  path: string;
 }
 
 const sections: Section[] = [
@@ -66,6 +66,7 @@ const sections: Section[] = [
 ];
 
 export function AgreementBuilder() {
+  const { state } = useLocation();
   return (
     <div className="space-y-6">
       <Card className="gap-2 border-0 bg-blue-200 p-4">
@@ -108,7 +109,9 @@ export function AgreementBuilder() {
               asChild
               disabled={!section.path}
             >
-              <Link to={section.path ?? "#"}>START</Link>
+              <Link state={state} to={section.path}>
+                START
+              </Link>
             </Button>
           </div>
         ))}
