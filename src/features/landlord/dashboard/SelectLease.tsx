@@ -19,7 +19,7 @@ export default function SelectLease() {
 
   return (
     <div className="flex flex-col">
-      <div className="mb-6">
+      <div className="mb-6 flex items-center gap-5">
         <BackButton />
         <h2 className="text-2xl font-semibold">
           Select Which Lease Needs an Agreement
