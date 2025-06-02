@@ -19,7 +19,10 @@ import parkingIcon from "./assets/parking.png";
 import pawsIcon from "./assets/paw.png";
 import smokingIcon from "./assets/smoking.png";
 import insuranceIcon from "./assets/renter-insurance.png";
-import { useNavigate } from "react-router";
+import { Navigate, useLocation, useNavigate } from "react-router";
+import { useCreateOrUpdateLeaseAgreementMutation } from "./api/mutation";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import FormErrors from "@/components/FormErrors";
 
 // Define Zod validation schema
 const formSchema = z.object({
@@ -28,7 +31,7 @@ const formSchema = z.object({
   petBreed: z.string().optional(),
   petWeight: z.string().optional(),
   petAge: z.string().optional(),
-  allowsSmoking: z.enum(["yes", "no", "outside"]),
+  allowsSmoking: z.boolean(),
   includesParkingRules: z.boolean(),
   parkingOptions: z
     .object({
@@ -47,15 +50,14 @@ type FormValues = z.infer<typeof formSchema>;
 
 export default function PetSmoking() {
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const { mutateAsync, isSuccess } = useCreateOrUpdateLeaseAgreementMutation();
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       hasPets: false,
-      petType: "",
-      petBreed: "",
-      petWeight: "",
-      petAge: "",
-      allowsSmoking: "no",
+      allowsSmoking: false,
       includesParkingRules: false,
       parkingOptions: {
         garage: false,
@@ -75,18 +77,45 @@ export default function PetSmoking() {
   const hasPets = form.watch("hasPets");
   const includesParkingRules = form.watch("includesParkingRules");
 
-  const onSubmit = async (data: FormValues) => {
+  const onSubmit = async (values: FormValues) => {
     try {
-      // Simulate API request
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("Form data:", data);
-      // Handle navigation to next page
-      navigate("/landlord/lease-agreement/utilities-services");
+      const valuesToSave: {
+        rentalProperty: string;
+        petsSmokingAndOther: IPetsSmokingAndOther;
+      } = {
+        rentalProperty: state.property,
+        petsSmokingAndOther: {
+          pets: values.hasPets,
+          typeOfPet: values.petType,
+
+          smoking: values.allowsSmoking,
+          parking: values.includesParkingRules,
+          isGarage: values.parkingOptions?.garage,
+          isDriveway: values.parkingOptions?.driveway,
+          isStreet: values.parkingOptions?.street,
+          isCarport: values.parkingOptions?.carport,
+          isDesignatedSpace: values.parkingOptions?.designatedSpace,
+          isOther: values.parkingOptions?.other,
+
+          renterInsurance: values.requiresRentersInsurance,
+          ...values,
+        },
+      };
+      await mutateAsync(valuesToSave);
+      setTimeout(() => {
+        navigate("/landlord/lease-agreement/utilities-services", { state });
+      }, 300);
     } catch (error) {
-      console.error("Error submitting form:", error);
-      // Handle error (e.g., show a toast notification)
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
     }
   };
+
+  if (!state || !state.property) {
+    // if no property is selected then redirect to select lease
+    return <Navigate to="/landlord/lease-agreement" />;
+  }
 
   return (
     <BuilderLayout
@@ -139,7 +168,9 @@ export default function PetSmoking() {
                   name="petType"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Type (Dog,Cat,ETC.)</FormLabel>
+                      <FormLabel className="text-base">
+                        Type (Dog,Cat,ETC.)
+                      </FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -153,7 +184,7 @@ export default function PetSmoking() {
                   name="petBreed"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Breed</FormLabel>
+                      <FormLabel className="text-base">Breed</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -167,7 +198,7 @@ export default function PetSmoking() {
                   name="petWeight"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Weight (LBS)</FormLabel>
+                      <FormLabel className="text-base">Weight (LBS)</FormLabel>
                       <FormControl>
                         <Input {...field} type="text" inputMode="numeric" />
                       </FormControl>
@@ -181,7 +212,7 @@ export default function PetSmoking() {
                   name="petAge"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Age</FormLabel>
+                      <FormLabel className="text-base">Age</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -208,8 +239,8 @@ export default function PetSmoking() {
                   <FormControl>
                     <RadioGroup
                       className="flex space-x-4"
-                      value={field.value}
-                      onValueChange={field.onChange}
+                      value={field.value ? "yes" : "no"}
+                      onValueChange={(value) => field.onChange(value === "yes")}
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem id="smoking-yes" value="yes" />
@@ -414,6 +445,8 @@ export default function PetSmoking() {
             />
           </div>
 
+          <FormErrors errors={form.formState.errors} />
+
           {/* Submit Button */}
           <div className="mt-8 flex justify-center">
             <LoadingButton
@@ -422,7 +455,7 @@ export default function PetSmoking() {
               size="lg"
               className="w-4/5 @lg:w-3/5"
             >
-              Save & Next
+              {isSuccess ? "Saved Successfully" : "Save & Next"}
             </LoadingButton>
           </div>
         </form>
