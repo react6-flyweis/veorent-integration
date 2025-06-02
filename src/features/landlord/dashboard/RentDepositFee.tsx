@@ -29,21 +29,22 @@ import moneyLeaseIcon from "./assets/money-lease.png";
 import moneyDepositIcon from "./assets/money-deposit.png";
 import exchangeIcon from "./assets/exchange.png";
 import { CurrencyInput } from "@/components/CurrencyInput";
-import { useNavigate } from "react-router";
+import { Navigate, useLocation, useNavigate } from "react-router";
+import { useCreateOrUpdateLeaseAgreementMutation } from "./api/mutation";
 
 const rentDepositFeeSchema = z.object({
-  monthlyRent: z.string().min(1, "Monthly rent is required"),
+  monthlyRent: z.coerce.number().min(1, "Monthly rent is required"),
   chargePetRent: z.boolean(),
-  petRentAmount: z.string().optional(),
+  petRentAmount: z.coerce.number().optional(),
   proratedRent: z.boolean(),
-  proratedRentAmount: z.string().optional(),
-  securityDeposit: z.string().min(1, "Security deposit is required"),
+  proratedRentAmount: z.coerce.number().optional(),
+  securityDeposit: z.coerce.number().min(1, "Security deposit is required"),
   requirePetDeposit: z.boolean(),
-  petDepositAmount: z.string().optional(),
-  otherDeposit: z.string().optional(),
+  petDepositAmount: z.coerce.number().optional(),
+  otherDeposit: z.coerce.number().optional(),
   oneTimeFees: z.boolean(),
   feeName: z.string().optional(),
-  feeAmount: z.string().optional(),
+  feeAmount: z.coerce.number().optional(),
   paymentMethods: z
     .array(z.string())
     .min(1, "At least one payment method is required"),
@@ -54,24 +55,17 @@ type RentDepositFeeValues = z.infer<typeof rentDepositFeeSchema>;
 
 export default function RentDepositFee() {
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const { mutateAsync, isSuccess } = useCreateOrUpdateLeaseAgreementMutation();
 
   const form = useForm<RentDepositFeeValues>({
     resolver: zodResolver(rentDepositFeeSchema),
     defaultValues: {
-      monthlyRent: "",
       chargePetRent: false,
-      petRentAmount: "",
       proratedRent: false,
-      proratedRentAmount: "",
-      securityDeposit: "",
       requirePetDeposit: false,
-      petDepositAmount: "",
-      otherDeposit: "",
       oneTimeFees: false,
-      feeName: "",
-      feeAmount: "",
       paymentMethods: ["bank"],
-      bankAccount: "",
     },
   });
 
@@ -88,13 +82,30 @@ export default function RentDepositFee() {
 
   const onSubmit = async (values: RentDepositFeeValues) => {
     try {
-      console.log(values);
-      // TODO: Save rent, deposit, and fee information and move to next step
-      navigate("/landlord/lease-agreement/people-on-lease");
+      const valuesToSave: {
+        lease: string;
+        rentDepositAndFee: IRentDepositAndFee;
+      } = {
+        lease: state.property,
+        rentDepositAndFee: {
+          ...values,
+          banckAccount: values.bankAccount || "",
+          paymentMethod: values.paymentMethods.join(", "),
+        },
+      };
+      await mutateAsync(valuesToSave);
+      setTimeout(() => {
+        navigate("/landlord/lease-agreement/people-on-lease");
+      }, 300);
     } catch (error) {
       console.error("Error saving information:", error);
     }
   };
+
+  if (!state || !state.property) {
+    // if no property is selected then redirect to select lease
+    return <Navigate to="/landlord/lease-agreement" />;
+  }
 
   return (
     <BuilderLayout
@@ -509,7 +520,7 @@ export default function RentDepositFee() {
               className="w-3/5 rounded-lg"
               type="submit"
             >
-              {isSubmitting ? "Saving..." : "Save & Next"}
+              {isSuccess ? "Saved Successfully" : "Save & Next"}
             </LoadingButton>
           </div>
         </form>
