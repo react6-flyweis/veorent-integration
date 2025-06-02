@@ -19,6 +19,8 @@ import { BuilderLayout } from "./components/BuilderLayout";
 import { DateInput } from "@/components/ui/date-input";
 import { Navigate, useLocation, useNavigate } from "react-router";
 import { useCreateOrUpdateLeaseAgreementMutation } from "./api/mutation";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import FormErrors from "@/components/FormErrors";
 
 const leaseSpecificSchema = z.object({
   streetAddress: z.string().min(1, "Street address is required"),
@@ -58,11 +60,11 @@ export default function LeaseSpecific() {
   const onSubmit = async (values: LeaseSpecificFormValues) => {
     try {
       const valuesToSave: {
-        lease: string;
+        rentalProperty: string;
         propertyAddress: IPropertyAddress;
         leaseTerm: ILeaseTerm;
       } = {
-        lease: state.property,
+        rentalProperty: state.property,
         propertyAddress: {
           streetAddress: values.streetAddress,
           unit: values.unit,
@@ -82,7 +84,9 @@ export default function LeaseSpecific() {
         navigate("/landlord/lease-agreement/rent-deposit-fee");
       }, 300);
     } catch (error) {
-      console.error("Error saving lease information:", error);
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
     }
   };
 
@@ -234,6 +238,8 @@ export default function LeaseSpecific() {
               )}
             />
           </div>
+
+          <FormErrors errors={form.formState.errors} />
 
           <div className="flex justify-center">
             <LoadingButton
