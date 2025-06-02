@@ -20,6 +20,8 @@ import {
 } from "@/components/ui/form";
 import { useLocation, useNavigate } from "react-router";
 import { useCreateOrUpdateLeaseAgreementMutation } from "./api/mutation";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import FormErrors from "@/components/FormErrors";
 
 // Define Zod validation schema
 const formSchema = z
@@ -106,38 +108,59 @@ export default function PeopleOnLease() {
     // Simulate submission
     try {
       const valuesToSave: {
-        lease: string;
+        rentalProperty: string;
         peopleOnTheLease: IPeopleOnTheLease;
       } = {
-        lease: state.property,
+        rentalProperty: state.property,
         peopleOnTheLease: {
           ...values,
           renters: "",
+
           additionalOccupants: false,
-          EntitityType: occupantType,
-          // companyName: occupantType === "company" ? values.companyName : "",
+          fullName: values.occupantFullName || "",
+          relationship: values.occupantRelationship || "",
+          age: values.occupantAge || "",
+
+          EntityType: (occupantType.charAt(0).toUpperCase() +
+            occupantType.slice(1)) as "Individual" | "Company",
+          companyName: occupantType === "company" ? values.companyName : "",
+
           firstName: values.landlordFirstName,
           lastName: values.landlordLastName,
+
           email: values.landlordEmail,
           phone: values.landlordPhone,
-          poBox: values.hasDifferentAddress,
+
+          companyEmail: occupantType === "company" ? values.landlordEmail : "",
+          companyPhone: occupantType === "company" ? values.landlordPhone : "",
+
           streetAddress: values.landlordStreetAddress || "",
           unit: values.landlordUnit || "",
           city: values.landlordCity || "",
           region: values.landlordRegion || "",
           zipCode: values.landlordZipCode || "",
+
+          poBox: values.hasDifferentAddress,
+          poBoxstreetAddress: values.landlordStreetAddress || "",
+          poBoxunit: values.landlordUnit || "",
+          poBoxcity: values.landlordCity || "",
+          poBoxregion: values.landlordRegion || "",
+          poBoxzipCode: values.landlordZipCode || "",
+
           signers: values.hasAdditionalSigners,
-          // additionalSignerFirstName: values.additionalSignerFirstName || "",
-          // additionalSignerLastName: values.additionalSignerLastName || "",
-          // additionalSignerEmail: values.additionalSignerEmail || "",
+          legalFirstName: values.additionalSignerFirstName || "",
+          legalLastName: values.additionalSignerLastName || "",
+          legalEmail: values.additionalSignerEmail || "",
         },
       };
       await mutateAsync(valuesToSave);
       setTimeout(() => {
-        navigate("/landlord/lease-agreement/pet-smoking");
+        navigate("/landlord/lease-agreement/pet-smoking", { state });
       }, 300);
     } catch (error) {
-      console.error("Submission error:", error);
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
     }
   };
 
@@ -804,6 +827,8 @@ export default function PeopleOnLease() {
               </div>
             )}
           </div>
+
+          <FormErrors errors={form.formState.errors} />
 
           <div className="flex justify-center">
             <LoadingButton
