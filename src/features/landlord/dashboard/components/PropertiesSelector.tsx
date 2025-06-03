@@ -14,7 +14,7 @@ export function PropertiesSelector({
 }: {
   value: string;
   onChange: (value: string) => void;
-  placeholder: string;
+  placeholder?: string;
 }) {
   const { data } = useGetProperties();
 
