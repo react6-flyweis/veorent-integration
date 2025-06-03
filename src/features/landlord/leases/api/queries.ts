@@ -4,7 +4,7 @@ import { axiosLandlord } from "../../api/axios";
 export const useGetLeases = () => {
   return useQuery({
     queryFn: () => axiosLandlord.get<IResponse<ILease[]>>("/leases"),
-    queryKey: ["expenses"],
+    queryKey: ["leases"],
     select: (data) => data.data.data,
   });
 };
