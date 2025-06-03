@@ -5,7 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useGetProperties } from "../api/queries";
+import { useGetProperties } from "@/features/landlord/api/queries";
 
 export function PropertiesSelector({
   value,
@@ -24,8 +24,8 @@ export function PropertiesSelector({
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
-        {data?.data?.length ? (
-          data.data.map((property) => (
+        {data?.length ? (
+          data.map((property) => (
             <SelectItem key={property._id} value={property._id}>
               {property.name}
             </SelectItem>
