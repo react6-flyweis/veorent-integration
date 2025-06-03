@@ -21,3 +21,10 @@ export const useCreateOrUpdateLeaseAgreementMutation = () => {
       axiosLandlord.post<IResponse<ILeaseDetail>>("/LeaseCompleteData", data),
   });
 };
+
+export const useCreateLeaseAddendumMutation = () => {
+  return useMutation({
+    mutationFn: (data: unknown) =>
+      axiosLandlord.post<IResponse<ILeaseDetail>>("/lease-addendum", data),
+  });
+};
