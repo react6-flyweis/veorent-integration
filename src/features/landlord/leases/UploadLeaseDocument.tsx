@@ -11,7 +11,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { useNavigate } from "react-router";
+import { Navigate, useLocation, useNavigate } from "react-router";
 import { ImageInput } from "@/components/ui/image-input";
 
 const formSchema = z.object({
@@ -26,6 +26,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 export default function UploadLeaseDocument() {
   const navigate = useNavigate();
+  const { state } = useLocation();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,6 +40,11 @@ export default function UploadLeaseDocument() {
     // Here you would typically upload the file to a server
     navigate("/landlord/leases/whats-next");
   };
+
+  if (!state || !state.property) {
+    // if no property is selected then redirect to select lease
+    return <Navigate to="/landlord/lease-agreement" />;
+  }
 
   return (
     <div className="space-y-5">
