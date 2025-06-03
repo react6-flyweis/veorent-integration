@@ -5,33 +5,37 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Link } from "react-router";
 import { TabsContent } from "@/components/ui/ghost-tabs";
 import { useState } from "react";
+import { useGetLeases } from "./api/queries";
+import { CurrencyIcon } from "@/components/CurrencyIcon";
 
-const upcomingLeases = [
-  {
-    id: "1",
-    propertyName: "123 Main St.",
-    address: "123 Main St.",
-    rent: 1200,
-    unpaidCharges: 100,
-    term: {
-      start: "08/19/2024",
-      end: "08/19/2025",
-    },
-  },
-  {
-    id: "2",
-    propertyName: "Ft. Collins Lease",
-    address: "700 H St.",
-    rent: 900,
-    unpaidCharges: 600,
-    term: {
-      start: "08/19/2024",
-      end: "08/19/2025",
-    },
-  },
-];
+// const upcomingLeases = [
+//   {
+//     id: "1",
+//     propertyName: "123 Main St.",
+//     address: "123 Main St.",
+//     rent: 1200,
+//     unpaidCharges: 100,
+//     term: {
+//       start: "08/19/2024",
+//       end: "08/19/2025",
+//     },
+//   },
+//   {
+//     id: "2",
+//     propertyName: "Ft. Collins Lease",
+//     address: "700 H St.",
+//     rent: 900,
+//     unpaidCharges: 600,
+//     term: {
+//       start: "08/19/2024",
+//       end: "08/19/2025",
+//     },
+//   },
+// ];
 
 export default function Leases() {
+  const { data: leases } = useGetLeases();
+  console.log(leases);
   const [activeTab, setActiveTab] = useState("active");
   const handleTabChange = (value: string) => {
     setActiveTab(value);
@@ -57,23 +61,39 @@ export default function Leases() {
 
         <TabsContent value={activeTab}>
           <div className="space-y-4">
-            {upcomingLeases.map((lease) => (
-              <Card key={lease.id} className="gap-0 py-3">
-                <CardHeader className="px-3">
-                  <p className="text-sm text-gray-500 uppercase">
-                    UPCOMING LEASE
-                  </p>
-                  <h2 className="text-lg font-bold">{lease.propertyName}</h2>
-                  <p className="text-gray-600">{lease.address}</p>
-                </CardHeader>
-                <CardContent className="px-3">
-                  <div className="flex justify-between">
-                    <span className="text-gray-500 uppercase">RENT</span>
-                    <span className="font-semibold">
-                      ${lease.rent.toLocaleString()}
-                    </span>
-                  </div>
-
+            {leases?.length ? (
+              leases.map((lease) => (
+                <Card key={lease._id} className="gap-0 py-3">
+                  <CardHeader className="px-3">
+                    <p className="text-sm text-gray-500">
+                      <span>
+                        {" "}
+                        {new Date(lease.startDate) > new Date()
+                          ? "Upcoming Lease"
+                          : "Active Lease"}
+                      </span>
+                      {/* <span className="text-gray-400">
+                        {" - since " +
+                          new Date(lease.createdAt).toLocaleDateString()}
+                      </span> */}
+                    </p>
+                    <h2 className="text-lg font-bold">{lease.leaseNickname}</h2>
+                    {lease.rentalProperty && (
+                      <p className="text-gray-600">
+                        {lease.rentalProperty?.name},
+                        {lease.rentalProperty?.addressDetails.streetAddress}
+                      </p>
+                    )}
+                  </CardHeader>
+                  <CardContent className="px-3">
+                    <div className="flex justify-between">
+                      <span className="text-gray-500 uppercase">RENT</span>
+                      <span className="flex items-center gap-1 font-semibold">
+                        <CurrencyIcon size="sm" />
+                        {lease.rentalProperty?.rentalDetails.targetRent.toLocaleString()}
+                      </span>
+                    </div>
+                    {/* 
                   <div className="flex justify-between">
                     <span className="text-gray-500 uppercase">
                       UNPAID CHARGES
@@ -81,17 +101,23 @@ export default function Leases() {
                     <span className="font-semibold">
                       ${lease.unpaidCharges.toLocaleString()}
                     </span>
-                  </div>
+                  </div> */}
 
-                  <div className="flex justify-between">
-                    <span className="text-gray-500 uppercase">LEASE TERM</span>
-                    <span className="font-semibold">
-                      {lease.term.start} - {lease.term.end}
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                    <div className="flex justify-between">
+                      <span className="text-gray-500 uppercase">
+                        LEASE TERM
+                      </span>
+                      <span className="font-semibold">
+                        {new Date(lease.startDate).toLocaleDateString()} -{" "}
+                        {new Date(lease.endDate).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <div className="text-center text-gray-500">No leases found.</div>
+            )}
           </div>
         </TabsContent>
       </Tabs>
