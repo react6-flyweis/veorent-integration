@@ -14,6 +14,9 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DateInput } from "@/components/ui/date-input";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
 import { PageTitle } from "@/components/PageTitle";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -24,7 +27,11 @@ import amendmentIcon from "./assets/amendment.png";
 import calendarIcon from "./assets/calendar.png";
 import monthIcon from "./assets/month.png";
 import dateIcon from "./assets/date.png";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
+import { useCreateLeaseAddendumMutation } from "./api/mutation";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import { useToast } from "@/hooks/useAlertToast";
+import { CurrencyInput } from "@/components/CurrencyInput";
 
 // Define Zod validation schema
 const formSchema = z.object({
@@ -34,10 +41,23 @@ const formSchema = z.object({
   otherAmendments: z.string(),
   originalLeaseDate: z.date(),
   endDateChange: z.string(),
+  newEndDate: z.date().optional(),
+  newMonthlyRent: z.string().optional(),
+  securityDeposit: z.boolean().optional(),
+  securityDepositAmount: z.string().optional(),
+  petDeposit: z.boolean().optional(),
+  petDepositAmount: z.string().optional(),
+  otherDeposit: z.boolean().optional(),
+  otherDepositAmount: z.string().optional(),
+  otherAmendmentsText: z.string().optional(),
 });
 
 export default function CreateLeaseAddendum() {
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const { mutateAsync } = useCreateLeaseAddendumMutation();
+  const { showToast } = useToast();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -47,18 +67,43 @@ export default function CreateLeaseAddendum() {
       endDateChange: "no",
       effectiveDate: new Date(),
       originalLeaseDate: new Date(),
+      newEndDate: undefined,
+      newMonthlyRent: "",
+      securityDeposit: false,
+      securityDepositAmount: "",
+      petDeposit: false,
+      petDepositAmount: "",
+      otherDeposit: false,
+      otherDepositAmount: "",
+      otherAmendmentsText: "",
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      // Simulate API request
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("Lease Addendum data:", data);
-      // Handle navigation or success
-      navigate("/landlord");
+      const valuesToSubmit: ILeaseAddendumCreateData = {
+        property: state.property,
+        startDate: values.newEndDate ? values.newEndDate.toISOString() : "",
+        endDate: values.newEndDate ? values.newEndDate.toISOString() : "",
+        monthlyRent: values.monthlyRentChange === "yes",
+        monthlyRentPrice: values.newMonthlyRent || "",
+        deposits: values.depositChange === "yes",
+        securityDeposite: values.securityDepositAmount || "",
+        petDeposit: values.petDepositAmount || "",
+        otherDeposit: values.otherDepositAmount || "",
+        otherAmendments: values.otherAmendments === "yes",
+        otherAmendmentsText: values.otherAmendmentsText || "",
+        effectiveDate: values.effectiveDate.toISOString(),
+      };
+      await mutateAsync(valuesToSubmit);
+      showToast("Lease addendum created successfully!", "success");
+      setTimeout(() => {
+        navigate("/landlord");
+      }, 500);
     } catch (error) {
-      console.error("Error submitting form:", error);
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
     }
   };
 
@@ -190,17 +235,35 @@ export default function CreateLeaseAddendum() {
                       </RadioGroup>
                     </FormControl>
                     <FormMessage />
-                    <div className="text-primary mt-2 rounded-md bg-blue-100 p-3 text-sm">
-                      <p>
-                        Lorem Ipsum is simply dummy text of the printing and
-                        typesetting industry. Lorem Ipsum has been the
-                        industry's standard dummy text ever since the 1500s,
-                        when an unknown printer took a galley of type and
-                      </p>
-                    </div>
                   </FormItem>
                 )}
               />
+
+              {/* Conditional New End Date Field */}
+              {form.watch("endDateChange") === "yes" && (
+                <FormField
+                  control={form.control}
+                  name="newEndDate"
+                  render={({ field }) => (
+                    <FormItem className="mt-4">
+                      <FormLabel>New End Date</FormLabel>
+                      <FormControl>
+                        <DateInput className="@md:w-1/2" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+
+              <div className="text-primary mt-2 rounded-md bg-blue-100 p-3 text-sm">
+                <p>
+                  Lorem Ipsum is simply dummy text of the printing and
+                  typesetting industry. Lorem Ipsum has been the industry's
+                  standard dummy text ever since the 1500s, when an unknown
+                  printer took a galley of type and
+                </p>
+              </div>
             </div>
           </div>
 
@@ -235,17 +298,41 @@ export default function CreateLeaseAddendum() {
                     </RadioGroup>
                   </FormControl>
                   <FormMessage />
-                  <div className="text-primary mt-2 rounded-md bg-blue-100 p-3 text-sm">
-                    <p>
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry. Lorem Ipsum has been the industry's
-                      standard dummy text ever since the 1500s, when an unknown
-                      printer took a galley of type and
-                    </p>
-                  </div>
                 </FormItem>
               )}
             />
+
+            {/* Conditional New Monthly Rent Field */}
+            {form.watch("monthlyRentChange") === "yes" && (
+              <FormField
+                control={form.control}
+                name="newMonthlyRent"
+                render={({ field }) => (
+                  <FormItem className="mt-4">
+                    <FormLabel>New Monthly Rent</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        step="0.01"
+                        placeholder="0.00"
+                        className="@md:w-1/2"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            <div className="text-primary mt-2 rounded-md bg-blue-100 p-3 text-sm">
+              <p>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and
+              </p>
+            </div>
           </div>
 
           {/* Deposits Section */}
@@ -279,17 +366,128 @@ export default function CreateLeaseAddendum() {
                     </RadioGroup>
                   </FormControl>
                   <FormMessage />
-                  <div className="text-primary mt-2 rounded-md bg-blue-100 p-3 text-sm">
-                    <p>
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry. Lorem Ipsum has been the industry's
-                      standard dummy text ever since the 1500s, when an unknown
-                      printer took a galley of type and
-                    </p>
-                  </div>
                 </FormItem>
               )}
             />
+
+            {/* Conditional Deposit Fields */}
+            {form.watch("depositChange") === "yes" && (
+              <div className="mt-4 max-w-2xl space-y-4">
+                {/* Security Deposit */}
+                <div className="flex w-full items-center justify-between space-x-4">
+                  <FormField
+                    control={form.control}
+                    name="securityDeposit"
+                    render={({ field }) => (
+                      <FormItem className="flex items-center space-x-2">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormLabel className="text-sm font-normal">
+                          Security Deposit
+                        </FormLabel>
+                      </FormItem>
+                    )}
+                  />
+                  {form.watch("securityDeposit") && (
+                    <FormField
+                      control={form.control}
+                      name="securityDepositAmount"
+                      render={({ field }) => (
+                        <FormItem className="@md:w-1/2">
+                          <FormControl>
+                            <CurrencyInput {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
+                </div>
+
+                {/* Pet Deposit */}
+                <div className="flex w-full items-center justify-between space-x-4">
+                  <FormField
+                    control={form.control}
+                    name="petDeposit"
+                    render={({ field }) => (
+                      <FormItem className="flex items-center space-x-2">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormLabel className="text-sm font-normal">
+                          Pet Deposit
+                        </FormLabel>
+                      </FormItem>
+                    )}
+                  />
+                  {form.watch("petDeposit") && (
+                    <FormField
+                      control={form.control}
+                      name="petDepositAmount"
+                      render={({ field }) => (
+                        <FormItem className="@md:w-1/2">
+                          <FormControl>
+                            <CurrencyInput {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
+                </div>
+
+                {/* Other Deposit */}
+                <div className="flex w-full items-center justify-between space-x-4">
+                  <FormField
+                    control={form.control}
+                    name="otherDeposit"
+                    render={({ field }) => (
+                      <FormItem className="flex items-center space-x-2">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormLabel className="text-sm font-normal">
+                          Other Deposit
+                        </FormLabel>
+                      </FormItem>
+                    )}
+                  />
+                  {form.watch("otherDeposit") && (
+                    <FormField
+                      control={form.control}
+                      name="otherDepositAmount"
+                      render={({ field }) => (
+                        <FormItem className="@md:w-1/2">
+                          <FormControl>
+                            <CurrencyInput {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
+                </div>
+              </div>
+            )}
+
+            <div className="text-primary mt-2 rounded-md bg-blue-100 p-3 text-sm">
+              <p>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and
+              </p>
+            </div>
           </div>
 
           {/* Other Amendments Section */}
@@ -328,17 +526,40 @@ export default function CreateLeaseAddendum() {
                     </RadioGroup>
                   </FormControl>
                   <FormMessage />
-                  <div className="text-primary mt-2 rounded-md bg-blue-100 p-3 text-sm">
-                    <p>
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry. Lorem Ipsum has been the industry's
-                      standard dummy text ever since the 1500s, when an unknown
-                      printer took a galley of type and
-                    </p>
-                  </div>
                 </FormItem>
               )}
             />
+
+            {/* Conditional Other Amendments Text Field */}
+            {form.watch("otherAmendments") === "yes" && (
+              <FormField
+                control={form.control}
+                name="otherAmendmentsText"
+                render={({ field }) => (
+                  <FormItem className="mt-4">
+                    <FormControl>
+                      <Textarea
+                        placeholder="Describe the other amendments..."
+                        className="min-h-[120px]"
+                        {...field}
+                      />
+                    </FormControl>
+                    <div className="text-sm text-gray-500">
+                      {field.value?.length || 0}/10000 characters used
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+            <div className="text-primary mt-2 rounded-md bg-blue-100 p-3 text-sm">
+              <p>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and
+              </p>
+            </div>
           </div>
 
           {/* Effective Date Section */}
