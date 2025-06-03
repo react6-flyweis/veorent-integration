@@ -66,7 +66,7 @@ export function PropertyCard({ property }: { property: IProperty }) {
               )} */}
             </div>
             <div className="flex flex-1 justify-start">
-              {property.propertyTypeId.name === "Single Family" && (
+              {property.propertyTypeId?.name === "Single Family" && (
                 <div className="">
                   <div>
                     <span>Baths/Beds: </span>
@@ -88,7 +88,7 @@ export function PropertyCard({ property }: { property: IProperty }) {
         </div>
       </CardContent>
       <CardFooter className="p-0">
-        {property.propertyTypeId.name === "Single Family" ? (
+        {property.propertyTypeId?.name === "Single Family" ? (
           <div className="grid w-full grid-cols-2 gap-1">
             <Button variant="outline">Share Listing</Button>
 
