@@ -9,3 +9,11 @@ interface ILease {
   updatedAt: string;
   __v: number;
 }
+
+interface ILeaseCreateData {
+  rentalProperty: string; // ID of the rental property
+  leaseNickname: string;
+  startDate: string; // ISO date string
+  endDate: string; // ISO date string
+  monthToMonth: boolean;
+}
