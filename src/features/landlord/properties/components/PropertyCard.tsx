@@ -5,16 +5,15 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { Star } from "lucide-react";
+// import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CurrencyIcon } from "@/components/CurrencyIcon";
 import { Dialog } from "@/components/ui/dialog";
 import { ScreenMethodDialog } from "../../dashboard/components/ScreenMethodDialog";
-import type { PropertyType } from "../Properties";
 import { useState } from "react";
 import { Link } from "react-router";
 
-export function PropertyCard({ property }: { property: PropertyType }) {
+export function PropertyCard({ property }: { property: IProperty }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <Card className="relative gap-0 overflow-hidden p-0">
@@ -40,7 +39,7 @@ export function PropertyCard({ property }: { property: PropertyType }) {
         <div className="flex flex-col gap-4 sm:flex-row">
           <div className="">
             <img
-              src={property.image}
+              src={property.image[0]?.img}
               alt={property.name}
               className="size-24 rounded object-cover"
             />
@@ -49,12 +48,13 @@ export function PropertyCard({ property }: { property: PropertyType }) {
             <div className="flex-1">
               <h3 className="text-lg font-semibold">{property.name}</h3>
               <p className="text-muted-foreground text-sm">
-                {property.address}
+                {property.addressDetails.streetAddress}
               </p>
               <p>
-                {property.city}, {property.state} {property.zipCode}
+                {property.addressDetails.city}, {property.addressDetails.region}{" "}
+                {property.addressDetails.zipCode}
               </p>
-              {property.rating && (
+              {/* {property.rating && (
                 <div className="mt-1 flex">
                   {Array.from({ length: property.rating }).map((_, i) => (
                     <Star
@@ -63,22 +63,22 @@ export function PropertyCard({ property }: { property: PropertyType }) {
                     />
                   ))}
                 </div>
-              )}
+              )} */}
             </div>
             <div className="flex flex-1 justify-start">
-              {property.type === "single" && (
+              {property.propertyTypeId.name === "Single Family" && (
                 <div className="">
                   <div>
                     <span>Baths/Beds: </span>
                     <span className="text-sm font-medium text-gray-700">
-                      {property.baths}/{property.beds}
+                      {property.propertySize.baths}/{property.propertySize.beds}
                     </span>
                   </div>
                   <div className="flex items-center gap-1">
                     <span>Rent: </span>
                     <CurrencyIcon size="sm" />
                     <span className="text-sm font-medium text-gray-700">
-                      {property.rent}/-
+                      {property.leasingBasics.targetRent}/-
                     </span>
                   </div>
                 </div>
@@ -88,7 +88,7 @@ export function PropertyCard({ property }: { property: PropertyType }) {
         </div>
       </CardContent>
       <CardFooter className="p-0">
-        {property.type === "single" ? (
+        {property.propertyTypeId.name === "Single Family" ? (
           <div className="grid w-full grid-cols-2 gap-1">
             <Button variant="outline">Share Listing</Button>
 
@@ -106,7 +106,7 @@ export function PropertyCard({ property }: { property: PropertyType }) {
         ) : (
           <Link
             className="w-full"
-            to={`/landlord/properties/${property.id}/units`}
+            to={`/landlord/properties/${property._id}/units`}
           >
             <Button className="w-full" variant="outline">
               Show Units & Rooms
