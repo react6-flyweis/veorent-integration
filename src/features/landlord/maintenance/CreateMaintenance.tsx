@@ -13,18 +13,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useNavigate } from "react-router";
 import { PageTitle } from "@/components/PageTitle";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { useToast } from "@/hooks/useAlertToast";
 import { ImageInput } from "@/components/ui/image-input";
+import { PropertiesSelector } from "../dashboard/components/PropertiesSelector";
+import { useCreateMaintenanceRequestMutation } from "./api/mutation";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 // Define the form schema with Zod
 const formSchema = z.object({
@@ -32,9 +28,11 @@ const formSchema = z.object({
     required_error: "Property is required",
   }),
   lease: z.string().optional(),
-  leaseCategory: z.string({
-    required_error: "Lease category is required",
-  }),
+  leaseCategory: z
+    .string({
+      // required_error: "Lease category is required",
+    })
+    .optional(),
   issueTitle: z
     .string({
       required_error: "Issue title is required",
@@ -69,6 +67,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 export function CreateMaintenance() {
   const navigate = useNavigate();
+  const { mutateAsync } = useCreateMaintenanceRequestMutation();
 
   const { showToast } = useToast();
   const form = useForm<FormValues>({
@@ -85,13 +84,36 @@ export function CreateMaintenance() {
   });
 
   // Handle form submission
-  const onSubmit = (data: FormValues) => {
-    console.log("Form submitted with data:", data);
-    // Add your API call here to submit the form data
-    showToast("Maintenance request created successfully!", "success");
-    setTimeout(() => {
-      navigate("/landlord/maintenance/_id_");
-    }, 1000); // Simulate API call delay
+  const onSubmit = async (values: FormValues) => {
+    try {
+      const images = values.photos?.map((file) => {
+        if (typeof file === "string") {
+          return file; // URL from server
+        } else if (file instanceof File) {
+          return URL.createObjectURL(file);
+        }
+        return "";
+      });
+      const valuesToSubmit: IMaintenanceRequestForm = {
+        ...values,
+        category: "Starred",
+        issueDescription: values.description,
+        timePeriod:
+          values.preferredTime === "anytime"
+            ? "Any-Time"
+            : "Coordinate-A-Time-First",
+        receipts: images ? images.filter((img) => img !== "") : [],
+      };
+      const result = await mutateAsync(valuesToSubmit);
+      showToast("Maintenance request created successfully!", "success");
+      setTimeout(() => {
+        navigate(`/landlord/maintenance/${result.data.data._id}`);
+      }, 200);
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   };
 
   return (
@@ -109,20 +131,10 @@ export function CreateMaintenance() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Property</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select property" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="123-st">CO. 123 St.</SelectItem>
-                    <SelectItem value="456-ave">CO. 456 Ave.</SelectItem>
-                  </SelectContent>
-                </Select>
+                <FormControl>
+                  <PropertiesSelector {...field} />
+                </FormControl>
+
                 <FormMessage />
               </FormItem>
             )}
