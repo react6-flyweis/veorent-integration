@@ -129,7 +129,7 @@ export default function SelectLeaseAddendum() {
             <div className="mt-6 flex justify-center">
               <Button className="w-3/5" size="lg" asChild>
                 <Link
-                  state={{ propertyId: selectedAddress }}
+                  state={{ property: selectedAddress }}
                   to="/landlord/lease-addendum/create"
                 >
                   Sounds Good
