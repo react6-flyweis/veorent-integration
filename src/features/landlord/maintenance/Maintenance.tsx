@@ -10,37 +10,47 @@ import {
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calendar1, Home, Search, Star, ClipboardList } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { CreateButton } from "@/components/CreateButton";
 import { PageTitle } from "@/components/PageTitle";
+import { useGetMaintenanceRequests } from "./api/queries";
+import { formatDate } from "@/utils/formatDate";
 
-interface MaintenanceIssue {
-  id: string;
-  date: string;
-  title: string;
-  rental: {
-    address: string;
-    link: string;
-  };
-  lastActivity: string;
-  status: "Open" | "In Progress" | "Completed";
-}
+// interface MaintenanceIssue {
+//   id: string;
+//   date: string;
+//   title: string;
+//   rental: {
+//     address: string;
+//     link: string;
+//   };
+//   lastActivity: string;
+//   status: "Open" | "In Progress" | "Completed";
+// }
 
-const demoData: MaintenanceIssue[] = [
-  {
-    id: "1",
-    date: "Jan 08, 2024",
-    title: "Plumbing",
-    rental: {
-      address: "123, Main St.",
-      link: "/rentals/123",
-    },
-    lastActivity: "Jan 08, 2024 3:04pm",
-    status: "Open",
-  },
-];
+// const demoData: MaintenanceIssue[] = [
+//   {
+//     id: "1",
+//     date: "Jan 08, 2024",
+//     title: "Plumbing",
+//     rental: {
+//       address: "123, Main St.",
+//       link: "/rentals/123",
+//     },
+//     lastActivity: "Jan 08, 2024 3:04pm",
+//     status: "Open",
+//   },
+// ];
 
 export default function Maintenance() {
+  const { data: maintenanceRequests,isLoading } = useGetMaintenanceRequests();
+
+  const navigate = useNavigate();
+
+  const handleClick = (issueId: string) => {
+    navigate(`/landlord/maintenance/${issueId}`);
+  };
+
   return (
     <div className="w-full space-y-8">
       <div className="flex items-center justify-between">
@@ -113,28 +123,52 @@ export default function Maintenance() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {demoData.map((issue) => (
-                <TableRow key={issue.id}>
-                  <TableCell className="font-semibold">{issue.date}</TableCell>
-                  <TableCell className="text-primary text-xl font-bold">
-                    {issue.title}
-                  </TableCell>
-                  <TableCell>
-                    <Link
-                      to={issue.rental.link}
-                      className="text-lg text-blue-500 underline"
-                    >
-                      {issue.rental.address}
-                    </Link>
-                  </TableCell>
-                  <TableCell className="text-base">
-                    {issue.lastActivity}
-                  </TableCell>
-                  <TableCell>
-                    <Badge>{issue.status}</Badge>
+              {isLoading ? (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center text-gray-500 py-8">
+                    <div className="flex items-center justify-center space-x-2">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+                      <span>Loading maintenance requests...</span>
+                    </div>
                   </TableCell>
                 </TableRow>
-              ))}
+              ) : maintenanceRequests?.length ? (
+                maintenanceRequests.map((issue) => (
+                  <TableRow
+                    key={issue._id}
+                    onClick={() => handleClick(issue._id)}
+                    className="cursor-pointer"
+                  >
+                    <TableCell className="font-semibold">
+                      {formatDate(issue.createdAt)}
+                    </TableCell>
+                    <TableCell className="text-primary text-xl font-bold">
+                      {issue.issueTitle}
+                    </TableCell>
+                    <TableCell>
+                      <Link
+                        to={issue.property}
+                        className="text-lg text-blue-500 underline"
+                      >
+                        {/* {issue.property.address} */}
+                        {/* Address */}
+                      </Link>
+                    </TableCell>
+                    <TableCell className="text-base">
+                      {formatDate(issue.updatedAt)}
+                    </TableCell>
+                    <TableCell>
+                      <Badge>{issue.status}</Badge>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center text-gray-500">
+                    No maintenance requests found.
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </div>
