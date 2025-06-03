@@ -8,13 +8,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -26,6 +19,9 @@ import { CurrencyInput } from "@/components/CurrencyInput";
 import { useToast } from "@/hooks/useAlertToast";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { ImageInput } from "@/components/ui/image-input";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import { useCreateExpenseMutation } from "./api/mutation";
+import { PropertiesSelector } from "../dashboard/components/PropertiesSelector";
 
 const formSchema = z.object({
   date: z.date(),
@@ -33,7 +29,7 @@ const formSchema = z.object({
     message: "Amount must be a valid number greater than 0",
   }),
   rental: z.string().min(1, "Rental property is required"),
-  description: z.string().optional(),
+  description: z.string(),
   notes: z.string().optional(),
   files: z.array(z.instanceof(File)).optional(),
 });
@@ -43,6 +39,7 @@ type ExpenseFormValues = z.infer<typeof formSchema>;
 const CreateExpense = () => {
   const navigate = useNavigate();
   const { showToast } = useToast();
+  const { mutateAsync } = useCreateExpenseMutation();
 
   const form = useForm<ExpenseFormValues>({
     resolver: zodResolver(formSchema),
@@ -55,13 +52,23 @@ const CreateExpense = () => {
   });
 
   const onSubmit = async (values: ExpenseFormValues) => {
-    console.log("Form values:", values);
-
-    // Here you would typically call an API to save the expense
-    showToast("Your new expense has been added successfully!", "success");
-    setTimeout(() => {
-      navigate("/landlord/expenses");
-    }, 1000);
+    try {
+      const valuesToSubmit: ICreateExpenseData = {
+        ...values,
+        datePaid: values.date.toISOString(),
+        amountPaid: Number(values.amount),
+        property: values.rental,
+      };
+      await mutateAsync(valuesToSubmit);
+      showToast("Your new expense has been added successfully!", "success");
+      setTimeout(() => {
+        navigate("/landlord/expenses");
+      }, 1000);
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   };
 
   return (
@@ -103,18 +110,10 @@ const CreateExpense = () => {
           render={({ field }) => (
             <FormItem className="gap-1">
               <FormLabel className="text-base">Property</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select property" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="shared">Shared across property</SelectItem>
-                  <SelectItem value="123-main">123, Main St</SelectItem>
-                  <SelectItem value="456-oak">456, Oak Ave</SelectItem>
-                </SelectContent>
-              </Select>
+              <FormControl>
+                <PropertiesSelector {...field} />
+              </FormControl>
+
               <FormMessage />
             </FormItem>
           )}
