@@ -6,9 +6,10 @@ import { IconRound } from "@/components/IconRound";
 
 import documentsIcon from "./assets/documents.png";
 import applicationIcon from "./assets/application.png";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 export default function WhatsNext() {
+  const { state } = useLocation();
   return (
     <div className="space-y-6">
       <PageTitle title="What's next for you?" withBack />
@@ -52,7 +53,9 @@ export default function WhatsNext() {
             </CardContent>
             <CardFooter className="flex justify-center">
               <Button size="lg" className="w-full" asChild>
-                <Link to={item.url}>{item.buttonText}</Link>
+                <Link state={state} to={item.url}>
+                  {item.buttonText}
+                </Link>
               </Button>
             </CardFooter>
           </Card>
