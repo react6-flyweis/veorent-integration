@@ -34,8 +34,7 @@ import { CurrencyIcon } from "@/components/CurrencyIcon";
 // ];
 
 export default function Leases() {
-  const { data: leases } = useGetLeases();
-  console.log(leases);
+  const { data: leases, isLoading } = useGetLeases();
   const [activeTab, setActiveTab] = useState("active");
   const handleTabChange = (value: string) => {
     setActiveTab(value);
@@ -61,7 +60,11 @@ export default function Leases() {
 
         <TabsContent value={activeTab}>
           <div className="space-y-4">
-            {leases?.length ? (
+            {isLoading ? (
+              <div className="flex items-center justify-center py-20">
+                <p className="text-gray-500">Loading...</p>
+              </div>
+            ) : leases?.length ? (
               leases.map((lease) => (
                 <Card key={lease._id} className="gap-0 py-3">
                   <CardHeader className="px-3">
