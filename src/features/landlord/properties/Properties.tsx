@@ -78,7 +78,7 @@ import { useGetProperties } from "../api/queries";
 // ];
 
 export default function Properties() {
-  const { data: properties } = useGetProperties();
+  const { data: properties, isLoading } = useGetProperties();
 
   return (
     <div>
@@ -89,9 +89,13 @@ export default function Properties() {
         </Link>
       </div>
       <div className="flex flex-col gap-4">
-        {properties?.length ? (
+        {isLoading ? (
+          <div className="flex w-full items-center justify-center">
+            <p className="text-lg text-gray-500">Loading properties...</p>
+          </div>
+        ) : properties?.length ? (
           properties?.map((property) =>
-            property.propertyTypeId.name !== "Single Family" ? (
+            property.propertyTypeId?.name !== "Single Family" ? (
               <PropertyCard property={property} />
             ) : (
               <Link
