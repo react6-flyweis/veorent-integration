@@ -30,35 +30,38 @@ import {
 import { useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import CreateExpense from "./CreateExpense";
+import { useGetExpenses } from "./api/queries";
 
-interface Expense {
-  id: string;
-  date: string;
-  category: string;
-  description: string;
-  rental: string;
-  amount: number;
-}
+// interface Expense {
+//   id: string;
+//   date: string;
+//   category: string;
+//   description: string;
+//   rental: string;
+//   amount: number;
+// }
 
 const Expenses = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [timeFilter, setTimeFilter] = useState<string | null>("All Time");
   const isMobile = useIsMobile();
 
-  const expenses: Expense[] = [
-    {
-      id: "1",
-      date: "Jan 08, 2024",
-      category: "Advertising",
-      description: "Advertising",
-      rental: "123, Main St",
-      amount: 100.0,
-    },
-    // Add more mock expenses here as needed
-  ];
+  // const expenses: Expense[] = [
+  //   {
+  //     id: "1",
+  //     date: "Jan 08, 2024",
+  //     category: "Advertising",
+  //     description: "Advertising",
+  //     rental: "123, Main St",
+  //     amount: 100.0,
+  //   },
+  //   // Add more mock expenses here as needed
+  // ];
+
+  const { data: expenses = [] } = useGetExpenses();
 
   const totalExpenses = expenses.reduce(
-    (total, expense) => total + expense.amount,
+    (total, expense) => total + (expense.amountPaid || 0),
     0,
   );
 
@@ -134,9 +137,11 @@ const Expenses = () => {
       <Card className="gap-0 overflow-hidden p-0">
         <Table>
           <TableHeader>
-            <TableRow className="shadow bg-background">
+            <TableRow className="bg-background shadow">
               <TableHead className="p-3 text-sm font-medium">DATE</TableHead>
-              <TableHead className="p-3 text-sm font-medium">CATEGORY & DESCRIPTION</TableHead>
+              <TableHead className="p-3 text-sm font-medium">
+                CATEGORY & DESCRIPTION
+              </TableHead>
               <TableHead className="p-3 text-sm font-medium">RENTAL</TableHead>
               <TableHead className="p-3 text-sm font-medium">
                 <div className="flex items-center gap-1">
@@ -146,19 +151,36 @@ const Expenses = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {expenses.map((expense) => (
-              <TableRow key={expense.id}>
-                <TableCell className="text-gray-600 p-4">{expense.date}</TableCell>
-                <TableCell className="text-lg font-medium p-4">{expense.description}</TableCell>
-                <TableCell className="text-blue-500 underline p-4">{expense.rental}</TableCell>
-                <TableCell className="p-4">
-                  <div className="flex items-center gap-1 text-lg font-medium">
-                    <CurrencyIcon />
-                    {expense.amount.toFixed(2)}
-                  </div>
+            {expenses?.length ? (
+              expenses.map((expense) => (
+                <TableRow key={expense._id}>
+                  <TableCell className="p-4 text-gray-600">
+                    {expense.datePaid || ""}
+                  </TableCell>
+                  <TableCell className="p-4 text-lg font-medium">
+                    {expense.description}
+                  </TableCell>
+                  <TableCell className="p-4 text-blue-500 underline">
+                    {expense.property || ""}
+                  </TableCell>
+                  <TableCell className="p-4">
+                    <div className="flex items-center gap-1 text-lg font-medium">
+                      <CurrencyIcon />
+                      {expense.amountPaid?.toFixed(2)}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={4}
+                  className="p-4 text-center text-gray-500"
+                >
+                  No expenses recorded.
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </Card>
