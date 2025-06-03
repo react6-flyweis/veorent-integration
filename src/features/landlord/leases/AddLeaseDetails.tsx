@@ -14,13 +14,17 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { MapPinIcon } from "lucide-react";
+// import { MapPinIcon } from "lucide-react";
 import { useNavigate } from "react-router";
+import { useCreateLeaseMutation } from "./api/mutation";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import FormErrors from "@/components/FormErrors";
+import { PropertiesSelector } from "../dashboard/components/PropertiesSelector";
 
 // Define Zod validation schema
 const formSchema = z.object({
-  rentalProperty: z.string(),
-  leaseNickname: z.string(),
+  rentalProperty: z.string().min(1, "Rental property is required"),
+  leaseNickname: z.string().min(1, "Lease nickname is required"),
   startDate: z.date().optional(),
   endDate: z.date().optional(),
   isMonthToMonth: z.boolean(),
@@ -28,6 +32,7 @@ const formSchema = z.object({
 
 export default function AddLeaseDetails() {
   const navigate = useNavigate();
+  const { mutateAsync } = useCreateLeaseMutation();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -40,14 +45,22 @@ export default function AddLeaseDetails() {
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      // Simulate API request
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("Lease details data:", data);
-      navigate("/landlord/leases/whats-next");
+      const valuesToSubmit: ILeaseCreateData = {
+        ...values,
+        startDate: values.startDate ? values.startDate.toISOString() : "",
+        endDate: values.endDate ? values.endDate.toISOString() : "",
+        monthToMonth: values.isMonthToMonth,
+      };
+      await mutateAsync(valuesToSubmit);
+      navigate("/landlord/leases/whats-next", {
+        state: { property: values.rentalProperty },
+      });
     } catch (error) {
-      console.error("Error submitting form:", error);
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
     }
   };
 
@@ -68,7 +81,7 @@ export default function AddLeaseDetails() {
               <FormItem>
                 <FormLabel>Rental Property</FormLabel>
                 <FormControl>
-                  <div className="relative">
+                  {/* <div className="relative">
                     <Input
                       {...field}
                       placeholder="Press to select a property"
@@ -80,7 +93,11 @@ export default function AddLeaseDetails() {
                         aria-hidden="true"
                       />
                     </div>
-                  </div>
+                  </div> */}
+                  <PropertiesSelector
+                    placeholder="Press to select a property"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -162,6 +179,8 @@ export default function AddLeaseDetails() {
               </FormItem>
             )}
           />
+
+          <FormErrors errors={form.formState.errors} />
 
           <div className="flex justify-center pt-2">
             <LoadingButton
