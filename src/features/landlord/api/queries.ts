@@ -8,3 +8,11 @@ export const useGetProperties = () => {
     select: (data) => data.data.data,
   });
 };
+
+export const useGetLeases = () => {
+  return useQuery({
+    queryFn: () => axiosLandlord.get<IResponse<ILease[]>>("/leases"),
+    queryKey: ["leases"],
+    select: (data) => data.data.data,
+  });
+};
