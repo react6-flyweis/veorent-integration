@@ -13,6 +13,23 @@ interface IResponseWithPagination<T> extends IResponse<T> {
   };
 }
 
+interface IPaginatedResponse<T> {
+  status: number;
+  message: string;
+  data: {
+    docs: T[];
+    totalDocs: number;
+    limit: number;
+    totalPages: number;
+    page: number;
+    pagingCounter: number;
+    hasPrevPage: boolean;
+    hasNextPage: boolean;
+    prevPage: number | null;
+    nextPage: number | null;
+  };
+}
+
 interface ILoginResponse {
   token: string;
   id: string;
