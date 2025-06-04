@@ -35,13 +35,16 @@ import {
 import { useGoBack } from "@/hooks/useGoBack";
 import { useToast } from "@/hooks/useAlertToast";
 import { useNavigate } from "react-router";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import { useCreateChargeMutation } from "./api/mutation";
+import FormErrors from "@/components/FormErrors";
 
 // Form schema
 const formSchema = z.object({
   category: z.string({
     required_error: "Please select a category",
   }),
-  description: z.string().max(50).optional(),
+  description: z.string().max(50),
   amount: z.coerce.number().min(0, "Amount must be a positive number"),
   startDate: z.date({
     required_error: "Start date is required",
@@ -57,6 +60,7 @@ const DailyCharge: React.FC = () => {
   const { showToast } = useToast();
   const goBack = useGoBack();
   const navigate = useNavigate();
+  const { mutateAsync } = useCreateChargeMutation();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -66,11 +70,25 @@ const DailyCharge: React.FC = () => {
     },
   });
 
-  const onSubmit = (data: FormValues) => {
-    console.log(data);
-    // Handle form submission
-    showToast("Your monthly charge is create successfully.", "success");
-    navigate("/landlord/payments/create-charge");
+  const onSubmit = async (values: FormValues) => {
+    try {
+      const valuesToSubmit: IDailyChargeCreate = {
+        ...values,
+        chargeType: "Daily",
+        bankAccount: "",
+        startDate: values.startDate.toISOString(),
+        endDate: values.endDate?.toISOString(),
+      };
+      await mutateAsync(valuesToSubmit);
+      showToast("Your daily charge is create successfully.", "success");
+      setTimeout(() => {
+        navigate("/landlord/payments/create-charge");
+      }, 1000);
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   };
 
   return (
@@ -316,6 +334,7 @@ const DailyCharge: React.FC = () => {
                     molestiae, esse ut eligendi.
                   </p>
                 </div>
+                <FormErrors errors={form.formState.errors} />
               </section>
             </MultiStepperStep>
 
