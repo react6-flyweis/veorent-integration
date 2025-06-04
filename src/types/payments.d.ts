@@ -20,3 +20,31 @@ interface ICharge {
   flatAmount?: number;
   applyLateFee?: string;
 }
+
+interface IOneTimeChargeCreate {
+  category: string; // enum: ['Rent', 'Utilities', 'Other']
+  description: string;
+  amount: number;
+  dueDate: string; // ISO date string
+  bankAccount: string; // Masked bank account number
+  chargeType: "One-Time"; // enum: ['Monthly', 'One-Time']
+  lease?: string;
+  property?: string;
+}
+
+interface IMonthlyChargeCreate {
+  category: string; // enum: ['Rent', 'Utilities', 'Other']
+  description: string;
+  amount: number;
+  dueDate: string; // ISO date string
+  month: string; // e.g., "October"
+  year: string; // e.g., "2024"
+  automaticLateFee?: boolean;
+  lateFeePay?: "Flat" | "Percentage"; // enum: ['Flat', 'Percentage']
+  flatAmount?: number; // Required if lateFeePay is "Flat"
+  applyLateFee?: string; // enum: ['Same-Day', '1 Day After Rent Is Due', '1 week After Rent Is Due']
+  bankAccount: string; // Masked bank account number
+  chargeType: "Monthly"; // enum: ['Monthly', 'One-Time']
+  lease?: string;
+  property?: string;
+}
