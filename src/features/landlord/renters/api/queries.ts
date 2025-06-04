@@ -16,3 +16,11 @@ export const useGetLeadDetailsQuery = (leadId: string) => {
     select: (data) => data.data.lead,
   });
 };
+
+export const useGetApplicantsQuery = () => {
+  return useQuery({
+    queryFn: () => axiosLandlord.get<IResponse<IApplicant[]>>("/move-requests"),
+    queryKey: ["applicants"],
+    select: (data) => data.data.data,
+  });
+};
