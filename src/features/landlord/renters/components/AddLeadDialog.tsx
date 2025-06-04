@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,7 +7,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -18,15 +16,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { PropertiesSelector } from "../../dashboard/components/PropertiesSelector";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import { useCreateLeadMutation } from "../api/mutations";
+import { useToast } from "@/hooks/useAlertToast";
+import { LoadingButton } from "@/components/ui/loading-button";
 
 const formSchema = z.object({
   property: z.string().min(1, { message: "Property is required" }),
@@ -38,19 +33,13 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 interface AddLeadDialogProps {
-  trigger?: React.ReactNode;
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
-  onSubmit?: (values: FormValues) => void;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
-export function AddLeadDialog({
-  trigger,
-  open,
-  onOpenChange,
-  onSubmit,
-}: AddLeadDialogProps) {
-  const [isOpen, setIsOpen] = useState(false);
+export function AddLeadDialog({ open, onOpenChange }: AddLeadDialogProps) {
+  const { mutateAsync } = useCreateLeadMutation();
+  const { showToast } = useToast();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -62,18 +51,42 @@ export function AddLeadDialog({
     },
   });
 
-  const handleSubmit = (values: FormValues) => {
-    onSubmit?.(values);
-    setIsOpen(false);
-    form.reset();
+  const handleSubmit = async (values: FormValues) => {
+    try {
+      const valuesToSubmit: ILeadCreateData = {
+        propertyInterested: values.property,
+        fullName: values.fullName,
+        renterEmail: values.email,
+        phoneNumber: values.phone,
+      };
+      await mutateAsync(valuesToSubmit);
+      showToast("Lead created successfully", "success");
+      setTimeout(() => {
+        form.reset();
+        onOpenChange(false);
+      }, 1000);
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   };
 
-  const controlledOpen = open !== undefined ? open : isOpen;
-  const handleOpenChange = onOpenChange || setIsOpen;
+  const handleOpenChange = (open: boolean) => {
+    if (form.formState.isDirty) {
+      const confirmClose = window.confirm(
+        "You have unsaved changes. Are you sure you want to close the create dialog?",
+      );
+      if (!confirmClose) {
+        return;
+      }
+    }
+    form.reset();
+    onOpenChange(open);
+  };
 
   return (
-    <Dialog open={controlledOpen} onOpenChange={handleOpenChange}>
-      {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">
@@ -94,23 +107,7 @@ export function AddLeadDialog({
                     Property Interested in
                   </FormLabel>
                   <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Property name" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="property1">
-                          123 Main Street
-                        </SelectItem>
-                        <SelectItem value="property2">
-                          456 Oak Avenue
-                        </SelectItem>
-                        <SelectItem value="property3">789 Pine Lane</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <PropertiesSelector {...field} />
                   </FormControl>
                   <FormMessage />
                   <p className="mt-1 text-sm text-blue-400">
@@ -128,7 +125,7 @@ export function AddLeadDialog({
                 <FormItem className="gap-0">
                   <FormLabel className="text-base">Full Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Lorem Ipsum" {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -142,7 +139,7 @@ export function AddLeadDialog({
                 <FormItem className="gap-0">
                   <FormLabel className="text-base">Renter's Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="Lorem Ipsum" {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -156,7 +153,7 @@ export function AddLeadDialog({
                 <FormItem className="gap-0">
                   <FormLabel className="text-base">Phone Number</FormLabel>
                   <FormControl>
-                    <Input placeholder="Lorem Ipsum" {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -164,9 +161,13 @@ export function AddLeadDialog({
             />
 
             <div className="flex justify-center">
-              <Button type="submit" className="w-4/5">
+              <LoadingButton
+                type="submit"
+                className="w-4/5"
+                isLoading={form.formState.isSubmitting}
+              >
                 Submit
-              </Button>
+              </LoadingButton>
             </div>
           </form>
         </Form>
