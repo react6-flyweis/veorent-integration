@@ -93,6 +93,7 @@ export default function Applicants() {
                   <Button className="mt-2 h-10 px-6">
                     <Link
                       to={`/landlord/renters/application/${applicant._id}/move-in`}
+                      state={{ applicant }}
                     >
                       Move in Renter
                     </Link>
