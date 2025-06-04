@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router";
+import { Navigate, useLocation, useNavigate } from "react-router";
 
 import { IconRound } from "@/components/IconRound";
 import {
@@ -31,7 +31,6 @@ import {
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -43,30 +42,31 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/useAlertToast";
+import { getFullName, getInitial } from "@/utils/name";
+import { formatDate } from "@/utils/formatDate";
 
-const units = [
-  {
-    id: 1,
-    propertyName: "Property Name",
-    address: "Address line 1 region",
-    unitName: "Unit Name",
-    type: "Type Of Unit",
-    totalUnits: 1,
-    availableUnits: 20,
-  },
-  {
-    id: 2,
-    propertyName: "Property Name",
-    address: "Address line 1 region",
-    unitName: "Unit Name",
-    type: "Type Of Unit",
-    totalUnits: 1,
-    availableUnits: 20,
-  },
-];
+// const units = [
+//   {
+//     id: 1,
+//     propertyName: "Property Name",
+//     address: "Address line 1 region",
+//     unitName: "Unit Name",
+//     type: "Type Of Unit",
+//     totalUnits: 1,
+//     availableUnits: 20,
+//   },
+//   {
+//     id: 2,
+//     propertyName: "Property Name",
+//     address: "Address line 1 region",
+//     unitName: "Unit Name",
+//     type: "Type Of Unit",
+//     totalUnits: 1,
+//     availableUnits: 20,
+//   },
+// ];
 
 const formSchema = z.object({
-  selectedUnitId: z.string({ required_error: "Please select a unit" }),
   action: z.enum(["deny", "active"], {
     required_error: "Please select an action",
   }),
@@ -77,13 +77,10 @@ type FormValues = z.infer<typeof formSchema>;
 export default function MoveInRenter() {
   const navigate = useNavigate();
   const { showToast } = useToast();
+  const { state } = useLocation();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      selectedUnitId: undefined,
-      action: undefined,
-    },
   });
 
   function onSubmit(values: FormValues) {
@@ -95,6 +92,12 @@ export default function MoveInRenter() {
       console.error("Error submitting form:", error);
     }
   }
+
+  if (!state || !state.applicant) {
+    return <Navigate to="/landlord/renters/applicants" replace />;
+  }
+
+  const applicant = state.applicant as IApplicant;
 
   return (
     <Form {...form}>
@@ -113,65 +116,45 @@ export default function MoveInRenter() {
             </div>
           </MultiStepperHeader>
 
-          <MultiStepperStep onValidate={() => form.trigger("selectedUnitId")}>
-            <FormField
-              control={form.control}
-              name="selectedUnitId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Select a Unit</FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      value={field.value}
-                      className="grid grid-cols-2 gap-5"
-                    >
-                      {units.map((unit) => (
-                        <Label key={unit.id} className="w-full cursor-pointer">
-                          <RadioGroupItem
-                            value={unit.id.toString()}
-                            className="sr-only"
-                          />
-                          <Card
-                            className={cn(
-                              "w-full p-2",
-                              field.value === unit.id.toString() &&
-                                "border-primary border-2",
-                            )}
-                          >
-                            <CardHeader className="px-2">
-                              <CardTitle className="text-lg">
-                                {unit.propertyName}
-                              </CardTitle>
-                              <CardDescription>{unit.address}</CardDescription>
-                            </CardHeader>
-                            <CardContent className="px-2">
-                              <div className="text-primary flex justify-between font-semibold">
-                                <span>{unit.unitName}</span>
-                                <span>No. of Units</span>
-                              </div>
-                              <div className="text-muted-foreground flex justify-between text-sm">
-                                <span>{unit.type}</span>
-                                <span>{unit.totalUnits}</span>
-                              </div>
-                            </CardContent>
-                            <CardFooter className="flex justify-between border-t px-2 pt-2">
-                              <p className="text-sm">
-                                <span>Available No. of Units: </span>
-                                <span className="font-bold">
-                                  {unit.availableUnits}
-                                </span>
-                              </p>
-                            </CardFooter>
-                          </Card>
-                        </Label>
-                      ))}
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <MultiStepperStep onValidate={() => true}>
+            <h3 className="text-primary text-2xl font-bold">Units</h3>
+            <div className="flex gap-5">
+              {[
+                {
+                  ...applicant.destinationProperty,
+                },
+              ].map((unit) => (
+                <Card className="w-full p-2">
+                  <CardHeader className="px-2">
+                    <CardTitle className="text-lg">
+                      {/* {unit.propertyName} */}
+                      {unit.streetAddress}
+                    </CardTitle>
+                    <CardDescription>{unit.streetAddress}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="px-2">
+                    <div className="text-primary flex justify-between font-semibold">
+                      <span>{unit.unitNumber}</span>
+                      <span>No. of Units</span>
+                    </div>
+                    <div className="text-muted-foreground flex justify-between text-sm">
+                      {/* <span>{unit.type}</span> */}
+                      <span>Type</span>
+                      {/* <span>{unit.totalUnits}</span> */}
+                      <span>{applicant.allocateUnit}</span>
+                    </div>
+                  </CardContent>
+                  <CardFooter className="flex justify-between border-t px-2 pt-2">
+                    <p className="text-sm">
+                      <span>Available No. of Units: </span>
+                      <span className="font-bold">
+                        {applicant.avalibleUnit || "N/A"}
+                      </span>
+                    </p>
+                  </CardFooter>
+                </Card>
+              ))}
+            </div>
           </MultiStepperStep>
 
           <MultiStepperStep onValidate={() => form.trigger("action")}>
@@ -217,13 +200,35 @@ export default function MoveInRenter() {
 
               <div className="flex items-center gap-3">
                 <Avatar className="size-14">
-                  <AvatarImage />
-                  <AvatarFallback>KD</AvatarFallback>
+                  <AvatarImage
+                    src={applicant.userId?.dummyImage[0].img}
+                    alt={getFullName(
+                      applicant.userId?.firstname,
+                      applicant.userId?.lastname,
+                    )}
+                  />
+                  <AvatarFallback>
+                    {getInitial(
+                      applicant.userId?.firstname +
+                        " " +
+                        applicant.userId.lastname,
+                    )}
+                  </AvatarFallback>
                 </Avatar>
                 <div>
-                  <p className="text-primary font-semibold">Kianna Dias</p>
-                  <p className="text-sm text-gray-500">Property Name</p>
-                  <p className="text-sm text-gray-500">Unit Name</p>
+                  <p className="text-primary font-semibold">
+                    {getFullName(
+                      applicant.userId?.firstname,
+                      applicant.userId?.lastname,
+                    )}
+                  </p>
+                  {/* <p className="text-sm text-gray-500">{applicant.currentProperty.name}</p> */}
+                  <p className="text-sm text-gray-500">
+                    {applicant.currentProperty.streetAddress}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    {applicant.currentProperty.streetAddress}
+                  </p>
                 </div>
               </div>
 
@@ -231,18 +236,29 @@ export default function MoveInRenter() {
                 {[
                   {
                     id: "draft",
-                    status: "Draft Lease",
-                    leaseName: "Lease Name",
+                    status: "Draft",
+                    leaseName: applicant.lease?.leaseNickname,
                     propertyName: "Property Name, Unit Name",
-                    term: "Start Date - End Date",
+                    term:
+                      formatDate(applicant.lease?.startDate) +
+                      " - " +
+                      formatDate(applicant.lease?.endDate || ""),
                     rent: "2000 F.CFA/Month",
                   },
                   {
                     id: "endingSoon",
                     status: "Ending Soon",
                     leaseName: "Lease Name",
-                    propertyName: "Property Name, Unit Name",
-                    term: "Start Date - End Date",
+                    propertyName:
+                      applicant.currentProperty.streetAddress +
+                      ", " +
+                      applicant.currentProperty.unitNumber,
+                    term:
+                      formatDate(applicant.currentPropertyLeaseTerm.startDate) +
+                      " - " +
+                      formatDate(
+                        applicant.currentPropertyLeaseTerm.endDate || "",
+                      ),
                     rent: "2000 F.CFA/Month",
                   },
                 ].map((lease) => (
@@ -288,18 +304,40 @@ export default function MoveInRenter() {
                   Next
                 </Button>
               </DialogTrigger>
-              <DialogContent className="">
+              <DialogContent className="max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle>Confirm Move In</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <Avatar className="size-10">
-                      <AvatarImage alt="Kianna Dias" />
-                      <AvatarFallback>KD</AvatarFallback>
+                  <div className="items-cnter flex gap-5">
+                    {/* Avatar */}
+                    <Avatar className="h-12 w-12">
+                      <AvatarImage
+                        src={applicant.userId?.dummyImage[0].img}
+                        alt="Kianna Dias"
+                      />
+                      <AvatarFallback>
+                        {getInitial(
+                          applicant.userId?.firstname +
+                            " " +
+                            applicant.userId.lastname,
+                        )}
+                      </AvatarFallback>
                     </Avatar>
-                    <div>
-                      <p className="text-primary font-semibold">Kianna Dias</p>
+                    <div className="">
+                      <div className="text-lg font-bold">
+                        {getFullName(
+                          applicant.userId?.firstname,
+                          applicant.userId?.lastname,
+                        )}
+                      </div>
+                      <div className="text-muted-foreground mb-1 text-xs">
+                        Date Submitted: {formatDate(applicant.createdAt, true)}
+                      </div>
+                      <div className="mb-2 text-sm font-semibold text-gray-700">
+                        {applicant.currentProperty.streetAddress},{" "}
+                        {applicant.currentProperty.unitNumber}
+                      </div>
                     </div>
                   </div>
 
@@ -309,16 +347,21 @@ export default function MoveInRenter() {
                       <CardContent className="space-y-2 p-0">
                         <div>
                           <p className="text-primary font-bold">
-                            Property Name
+                            Destination Property Name
                           </p>
                           <p className="text-sm text-gray-500">
-                            Address line 1 region
+                            {applicant.destinationProperty.streetAddress}
                           </p>
                         </div>
                         <div>
                           <p className="text-primary font-bold">Unit Name</p>
-                          <p className="text-sm text-gray-500">Type Of Unit</p>
+                          <p className="text-sm text-gray-500">
+                            {applicant.destinationProperty.unitNumber}
+                          </p>
                           <p className="text-sm text-gray-500">No.of.unit</p>
+                          <p className="text-sm text-gray-500">
+                            {applicant.destinationProperty.unitNumber}
+                          </p>
                         </div>
                       </CardContent>
                     </Card>
@@ -332,10 +375,12 @@ export default function MoveInRenter() {
                       <CardContent className="space-y-2 p-0">
                         <div>
                           <p className="text-primary font-bold">
-                            Peter Shop Jan
+                            {applicant.lease?.leaseNickname}
                           </p>
                           <p className="text-sm text-gray-500">
-                            Peter shop, Shop number 305
+                            {/* {applicant.destinationProperty.name}, */}
+                            Destination property,{" "}
+                            {applicant.destinationProperty.streetAddress}
                           </p>
                         </div>
                         <div>
@@ -344,7 +389,10 @@ export default function MoveInRenter() {
                         </div>
                         <div>
                           <p className="text-primary font-bold">Lease term</p>
-                          <p className="text-sm text-gray-500">Month - Month</p>
+                          <p className="text-sm text-gray-500">
+                            {formatDate(applicant.lease?.startDate)} -{" "}
+                            {formatDate(applicant.lease?.endDate || "")}
+                          </p>
                         </div>
                       </CardContent>
                     </Card>
