@@ -7,8 +7,12 @@ import verifiedIcon from "./assets/verified.png";
 import { Link } from "react-router";
 import { PageTitle } from "@/components/PageTitle";
 import RentersTablist from "./components/RentersTablist";
+import { useGetApplicantsQuery } from "./api/queries";
+import { getFullName, getInitial } from "@/utils/name";
+import { formatDate } from "@/utils/formatDate";
 
 export default function Applicants() {
+  const { data: applicants, isLoading } = useGetApplicantsQuery();
   return (
     <div className="">
       <div className="mb-5">
@@ -16,63 +20,92 @@ export default function Applicants() {
         <RentersTablist />
       </div>
       <div className="space-y-4">
-        {/* Applicant Card */}
-        <Card className="py-4">
-          <CardContent className="px-4">
-            <div className="flex gap-5">
-              {/* Avatar */}
-              <Avatar className="h-12 w-12">
-                <AvatarImage src="" alt="Kianna Dias" />
-                <AvatarFallback>KD</AvatarFallback>
-              </Avatar>
-              <div className="">
-                <div className="text-lg font-bold">Kianna Dias</div>
-                <div className="text-muted-foreground mb-1 text-xs">
-                  Date Submitted: 08/19/2024 &nbsp; 07:40 AM
-                </div>
-                <div className="mb-2 text-sm font-semibold text-gray-700">
-                  123 Main St., Unit 1, Room A
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col @md:flex-row @md:items-end">
-              <div className="flex flex-1 flex-col items-center gap-5 @md:flex-row">
-                <p className="text-muted-foreground text-lg">Applied to</p>
-                <div className="flex w-full flex-col gap-3 @lg:flex-row">
-                  {[
-                    {
-                      title: "Marvel Property",
-                      address: "House, House no 3",
-                      unit: "Number of Unit - 1",
-                    },
-                    {
-                      title: "Marvel Property",
-                      address: "House, House no 3",
-                      unit: "Number of Unit - 1",
-                    },
-                  ].map((property, index) => (
-                    <div
-                      key={index}
-                      className="rounded border px-3 py-2 text-sm"
-                    >
-                      <div className="text-primary text-base font-semibold">
-                        {property.title}
-                      </div>
-                      <div>{property.address}</div>
-                      <div>{property.unit}</div>
+        {isLoading ? (
+          <div className="flex items-center justify-center py-4">
+            <span>Loading...</span>
+          </div>
+        ) : applicants?.length ? (
+          applicants.slice(0, 3).map((applicant) => (
+            <Card className="py-4">
+              {/* Applicant Card */}
+              <CardContent className="px-4">
+                <div className="flex gap-5">
+                  {/* Avatar */}
+                  <Avatar className="h-12 w-12">
+                    <AvatarImage
+                      src={applicant.userId?.dummyImage[0].img}
+                      alt="Kianna Dias"
+                    />
+                    <AvatarFallback>
+                      {getInitial(
+                        applicant.userId?.firstname +
+                          " " +
+                          applicant.userId.lastname,
+                      )}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="">
+                    <div className="text-lg font-bold">
+                      {getFullName(
+                        applicant.userId?.firstname,
+                        applicant.userId?.lastname,
+                      )}
                     </div>
-                  ))}
+                    <div className="text-muted-foreground mb-1 text-xs">
+                      Date Submitted: {formatDate(applicant.createdAt, true)}
+                    </div>
+                    <div className="mb-2 text-sm font-semibold text-gray-700">
+                      {applicant.currentProperty.streetAddress},{" "}
+                      {applicant.currentProperty.unitNumber}
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <Button className="mt-2 h-10 px-6">
-                <Link to="/landlord/renters/application/_id_/move-in">
-                  Move in Renter
-                </Link>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+
+                <div className="flex flex-col @md:flex-row @md:items-end">
+                  <div className="flex flex-1 flex-col items-center gap-5 @md:flex-row">
+                    <p className="text-muted-foreground text-lg">Applied to</p>
+                    <div className="flex w-full flex-col gap-3 @lg:flex-row">
+                      {[
+                        {
+                          title: applicant.destinationProperty.streetAddress,
+                          address: applicant.destinationProperty.streetAddress,
+                          unit: `Unit - ${applicant.allocateUnit || "N/A"}`,
+                        },
+                        // {
+                        //   title: "Marvel Property",
+                        //   address: "House, House no 3",
+                        //   unit: "Number of Unit - 1",
+                        // },
+                      ].map((property, index) => (
+                        <div
+                          key={index}
+                          className="rounded border px-3 py-2 text-sm"
+                        >
+                          <div className="text-primary text-base font-semibold">
+                            {property.title}
+                          </div>
+                          <div>{property.address}</div>
+                          <div>{property.unit}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <Button className="mt-2 h-10 px-6">
+                    <Link
+                      to={`/landlord/renters/application/${applicant._id}/move-in`}
+                    >
+                      Move in Renter
+                    </Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        ) : (
+          <div className="flex items-center justify-center py-4">
+            <span>No applicants found.</span>
+          </div>
+        )}
 
         {/* Applicants List */}
         <div className="flex flex-col gap-4">
