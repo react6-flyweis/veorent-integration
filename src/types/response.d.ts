@@ -4,6 +4,15 @@ interface IResponse<T> {
   data: T;
 }
 
+interface IResponseWithPagination<T> extends IResponse<T> {
+  pagination: {
+    totalDocs: number;
+    totalPages: number;
+    currentPage: number;
+    limit: number;
+  };
+}
+
 interface ILoginResponse {
   token: string;
   id: string;
