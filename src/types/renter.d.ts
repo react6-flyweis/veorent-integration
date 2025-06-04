@@ -10,6 +10,13 @@ interface ILead {
   __v?: number; // Optional version key
 }
 
+interface ILeadCreateData {
+  propertyInterested: string; // Property ID
+  fullName: string;
+  renterEmail: string;
+  phoneNumber: string;
+}
+
 interface ILeadsResponse {
   status: boolean;
   message: string;
