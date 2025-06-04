@@ -3,7 +3,8 @@ import { axiosLandlord } from "../../api/axios";
 
 export const useCreateChargeMutation = () => {
   return useMutation({
-    mutationFn: (data: IMonthlyChargeCreate | IOneTimeChargeCreate) =>
-      axiosLandlord.post<IResponse<ICharge>>("/charge", data),
+    mutationFn: (
+      data: IMonthlyChargeCreate | IOneTimeChargeCreate | IDailyChargeCreate,
+    ) => axiosLandlord.post<IResponse<ICharge>>("/charge", data),
   });
 };

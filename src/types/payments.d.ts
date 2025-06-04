@@ -48,3 +48,15 @@ interface IMonthlyChargeCreate {
   lease?: string;
   property?: string;
 }
+
+interface IDailyChargeCreate {
+  category: string; // enum: ['Rent', 'Utilities', 'Other']
+  description: string;
+  amount: number;
+  startDate: string; // ISO date string - when daily charges begin
+  endDate?: string; // ISO date string - optional, when daily charges stop
+  bankAccount: string; // Masked bank account number
+  chargeType: "Daily"; // enum: ['Monthly', 'One-Time', 'Daily']
+  lease?: string;
+  property?: string;
+}
