@@ -34,13 +34,16 @@ import {
 import { useGoBack } from "@/hooks/useGoBack";
 import { useToast } from "@/hooks/useAlertToast";
 import { useNavigate } from "react-router";
+import { useCreateChargeMutation } from "./api/mutation";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import FormErrors from "@/components/FormErrors";
 
 // Form schema
 const formSchema = z.object({
   category: z.string({
     required_error: "Please select a category",
   }),
-  description: z.string().max(50).optional(),
+  description: z.string().max(50),
   amount: z.coerce.number().min(0, "Amount must be a positive number"),
   dueDate: z.date({
     required_error: "Due date is required",
@@ -56,6 +59,8 @@ export default function OneTimeCharge() {
   const navigate = useNavigate();
   const { showToast } = useToast();
   const goBack = useGoBack();
+  const { mutateAsync } = useCreateChargeMutation();
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -63,11 +68,23 @@ export default function OneTimeCharge() {
     },
   });
 
-  const onSubmit = (data: FormValues) => {
-    console.log(data);
-    // Handle form submission
-    showToast("One-time charge created successfully!", "success");
-    navigate("/landlord/payments/create-charge");
+  const onSubmit = async (values: FormValues) => {
+    try {
+      const valuesToSubmit: IOneTimeChargeCreate = {
+        ...values,
+        dueDate: values.dueDate.toISOString(),
+        chargeType: "One-Time",
+      };
+      await mutateAsync(valuesToSubmit);
+      showToast("One-time charge created successfully!", "success");
+      setTimeout(() => {
+        navigate("/landlord/payments/create-charge");
+      }, 1000);
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   };
 
   return (
@@ -273,6 +290,7 @@ export default function OneTimeCharge() {
                     molestiae, esse ut eligendi.
                   </p>
                 </div>
+                <FormErrors errors={form.formState.errors} />
               </section>
             </MultiStepperStep>
 
