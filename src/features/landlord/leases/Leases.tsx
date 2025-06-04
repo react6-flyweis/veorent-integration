@@ -5,8 +5,8 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Link } from "react-router";
 import { TabsContent } from "@/components/ui/ghost-tabs";
 import { useState } from "react";
-import { useGetLeases } from "./api/queries";
 import { CurrencyIcon } from "@/components/CurrencyIcon";
+import { useGetLeases } from "../api/queries";
 
 // const upcomingLeases = [
 //   {
