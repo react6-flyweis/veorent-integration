@@ -1,11 +1,3 @@
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { Card, CardContent, CardDescription } from "@/components/ui/card";
@@ -15,9 +7,14 @@ import monthlyChargeIcon from "./assets/monthly-charge.png";
 import paydayIcon from "./assets/payday.png";
 import dailyChargeIcon from "./assets/daily-charge.png";
 import { Link } from "react-router";
+import { useState } from "react";
+import { LeaseSelector } from "./components/LeaseSelector";
+import { cn } from "@/lib/utils";
 
 const CreateCharge: React.FC = () => {
   const goBack = useGoBack();
+
+  const [lease, setLease] = useState<string | null>(null);
 
   return (
     <div className="">
@@ -35,18 +32,7 @@ const CreateCharge: React.FC = () => {
 
       <div className="space-y-6">
         <div>
-          <Select>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select Lease to Charge" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="lease1">Lease 1</SelectItem>
-                <SelectItem value="lease2">Lease 2</SelectItem>
-                {/* Additional leases would be populated dynamically */}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <LeaseSelector value={lease || ""} onChange={setLease} />
           <p className="mt-2 underline">Haven't created the lease yet?</p>
         </div>
 
@@ -79,8 +65,19 @@ const CreateCharge: React.FC = () => {
                 path: "/landlord/payments/one-time-charge",
               },
             ].map((charge) => (
-              <Link key={charge.type} to={charge.path}>
-                <Card>
+              <Link
+                key={charge.type}
+                to={charge.path}
+                onClick={(e) => (lease ? undefined : e.preventDefault())}
+                className={cn(lease ? "cursor-pointer" : "cursor-not-allowed")}
+                state={{ lease }}
+              >
+                <Card
+                  className={cn(
+                    "transition-shadow duration-200",
+                    lease && "hover:shadow-lg",
+                  )}
+                >
                   <CardContent className="flex items-center gap-3 p-4">
                     <img
                       src={charge.icon}
