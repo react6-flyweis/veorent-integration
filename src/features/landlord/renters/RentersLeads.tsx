@@ -26,8 +26,6 @@ export default function RentersLeads() {
 
   const { data: leads, isLoading } = useGetLeadsQuery();
 
-  const handleAddLead = () => {};
-
   return (
     <div className="">
       <div className="mb-2 flex items-center justify-between">
@@ -66,11 +64,7 @@ export default function RentersLeads() {
         )}
       </div>
 
-      <AddLeadDialog
-        open={isDialogOpen}
-        onOpenChange={setIsDialogOpen}
-        onSubmit={handleAddLead}
-      />
+      <AddLeadDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
     </div>
   );
 }
