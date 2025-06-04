@@ -39,6 +39,7 @@ interface IApplicant {
   currentPropertyLeaseTerm: ILeaseTerm;
   destinationProperty: IPropertyShortDetail;
   destinationPropertyLeaseTerm: ILeaseTerm;
+  lease: Omit<ILease, "rentalProperty">; // Omit rentalProperty
   userId: IUser;
   moveDate: string; // ISO date string
   moveTime: string; // e.g., "10:00 AM"
