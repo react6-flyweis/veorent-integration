@@ -38,13 +38,16 @@ import { useGoBack } from "@/hooks/useGoBack";
 import { CurrencyInput } from "@/components/CurrencyInput";
 import { useToast } from "@/hooks/useAlertToast";
 import { useNavigate } from "react-router";
+import { useCreateChargeMutation } from "./api/mutation";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import FormErrors from "@/components/FormErrors";
 
 // Form schema
 const formSchema = z.object({
   category: z.string({
     required_error: "Please select a category",
   }),
-  description: z.string().max(50).optional(),
+  description: z.string().max(50),
   amount: z.coerce.number().min(0, "Amount must be a positive number"),
   dueDate: z.date({
     required_error: "Due date is required",
@@ -60,7 +63,7 @@ const formSchema = z.object({
   lateFeeType: z.enum(["flat", "percentage"]).optional(),
   lateFeeAmount: z.coerce.number().optional(),
   lateFeeFor: z.enum(["sameDay", "oneDay", "oneWeek"]).optional(),
-  bankAccount: z.string().optional(),
+  bankAccount: z.string(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -69,6 +72,7 @@ const MonthlyCharge: React.FC = () => {
   const { showToast } = useToast();
   const goBack = useGoBack();
   const navigate = useNavigate();
+  const { mutateAsync } = useCreateChargeMutation();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -84,11 +88,23 @@ const MonthlyCharge: React.FC = () => {
   const lateFeeType = form.watch("lateFeeType");
   const doesRepeat = form.watch("doesRepeat");
 
-  const onSubmit = (data: FormValues) => {
-    console.log(data);
-    // Handle form submission
-    showToast("Your monthly charge is create successfully.", "success");
-    navigate("/landlord/payments/create-charge");
+  const onSubmit = async (values: FormValues) => {
+    try {
+      const valuesToSubmit: IMonthlyChargeCreate = {
+        ...values,
+        dueDate: values.dueDate.toISOString(),
+        chargeType: "Monthly",
+      };
+      await mutateAsync(valuesToSubmit);
+      showToast("Your monthly charge is create successfully.", "success");
+      setTimeout(() => {
+        navigate("/landlord/payments/create-charge");
+      }, 1000);
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   };
 
   return (
@@ -521,6 +537,7 @@ const MonthlyCharge: React.FC = () => {
                     molestiae, esse ut eligendi.
                   </p>
                 </div>
+                <FormErrors errors={form.formState.errors} />
               </section>
             </MultiStepperStep>
 
