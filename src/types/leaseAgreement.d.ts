@@ -9,6 +9,7 @@ interface IPropertyAddress {
 interface ILeaseTerm {
   termType: string;
   startDate: string;
+  endDate?: string;
 }
 
 interface IRentDepositAndFee {
