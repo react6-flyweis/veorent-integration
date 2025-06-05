@@ -32,6 +32,14 @@ import { DateInput } from "@/components/ui/date-input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { PlusCircleIcon } from "lucide-react";
+import { CurrencyInput } from "@/components/CurrencyInput";
+import PropertyTypeSelector from "../components/PropertyTypeSelector";
+import { useCreateTenantMutation } from "./api/mutations";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import FormErrors from "@/components/FormErrors";
+import { useToast } from "@/hooks/useAlertToast";
+import { useNavigate } from "react-router";
+import { LoadingButton } from "@/components/ui/loading-button";
 
 const formSchema = z
   .object({
@@ -50,31 +58,26 @@ const formSchema = z
     region: z.string().min(1, "Region is required"),
     zipCode: z.string().min(1, "Zip code is required"),
     // Lease information
-    moveInDate: z
-      .date({
-        message: "Move-in date is required",
-      })
-      .refine((date) => date >= new Date(), {
-        message: "Move-in date cannot be in the past",
-      }),
     leaseStartDate: z
       .date({
         message: "Lease start date is required",
       })
-      .optional(),
+      .refine((date) => date >= new Date(), {
+        message: "Move-in date cannot be in the past",
+      }),
     leaseEndDate: z
       .date({
         message: "Lease end date is required",
       })
       .optional(),
-    leaseTerm: z.enum(["fixed-term", "month-to-month"]),
+    leaseTerm: z.enum(["Fixed Term", "Month-to-Month"]),
     uploadLater: z.boolean().optional(),
     photoId: z.any().optional(),
     proofOfIncome: z.any().optional(),
     otherDocs: z.any().optional(),
   })
   .superRefine((data, ctx) => {
-    if (data.leaseTerm === "fixed-term") {
+    if (data.leaseTerm === "Fixed Term") {
       if (!data.leaseStartDate) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -102,33 +105,66 @@ const formSchema = z
 
 export default function AddTenant() {
   const goBack = useGoBack();
+  const navigate = useNavigate();
+  const { mutateAsync } = useCreateTenantMutation();
+  const { showToast } = useToast();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fullName: "",
-      email: "",
-      phone: "",
-      rentAmount: "",
-      propertyType: "",
-      streetAddress: "",
-      unit: "",
-      city: "",
-      region: "",
-      zipCode: "",
-      moveInDate: new Date(),
-      leaseStartDate: new Date(),
-      leaseEndDate: new Date(),
-      leaseTerm: "fixed-term",
-      uploadLater: false,
-      photoId: undefined,
-      proofOfIncome: undefined,
-      otherDocs: undefined,
+      leaseTerm: "Fixed Term",
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log("Form Data:", data);
-    // Handle form submission here
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const valuesTOSubmit: ITenantCreateData = {
+        ...values,
+        propertyTypeId: values.propertyType,
+        mobileNumber: values.phone,
+        leaseTerm: {
+          termType: values.leaseTerm,
+          startDate: values.leaseStartDate.toISOString(),
+          endDate: values.leaseEndDate
+            ? values.leaseEndDate.toISOString()
+            : undefined,
+        },
+        propertyDetails: {
+          streetAddress: values.streetAddress,
+          unitNumber: values.unit,
+          city: values.city,
+          region: values.region,
+          zipCode: values.zipCode,
+        },
+        document: {
+          photo: "",
+          incomeProof: "",
+          otherDoc: undefined,
+        },
+      };
+      if (values.photoId) {
+        valuesTOSubmit.document.photo = URL.createObjectURL(values.photoId);
+      }
+      if (values.proofOfIncome) {
+        valuesTOSubmit.document.incomeProof = URL.createObjectURL(
+          values.proofOfIncome,
+        );
+      }
+      if (values.otherDocs) {
+        valuesTOSubmit.document.otherDoc = URL.createObjectURL(
+          values.otherDocs,
+        );
+      }
+      await mutateAsync(valuesTOSubmit);
+      showToast("Tenant added successfully", "success");
+      setTimeout(() => {
+        navigate("/landlord/renters/tenants");
+      }, 1000);
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   };
 
   return (
@@ -220,8 +256,7 @@ export default function AddTenant() {
                       <FormItem>
                         <FormLabel>Rent Amount</FormLabel>
                         <FormControl>
-                          <Input
-                            type="number"
+                          <CurrencyInput
                             placeholder="Enter rent amount"
                             {...field}
                           />
@@ -258,7 +293,6 @@ export default function AddTenant() {
                   "region",
                   "zipCode",
                   "leaseTerm",
-                  "moveInDate",
                   "leaseStartDate",
                   "leaseEndDate",
                 ])
@@ -388,7 +422,7 @@ export default function AddTenant() {
                           >
                             <div className="flex items-center space-x-2">
                               <RadioGroupItem
-                                value="fixed-term"
+                                value="Fixed Term"
                                 id="fixed-term"
                               />
                               <label
@@ -400,7 +434,7 @@ export default function AddTenant() {
                             </div>
                             <div className="flex items-center space-x-2">
                               <RadioGroupItem
-                                value="month-to-month"
+                                value="Month-to-Month"
                                 id="month-to-month"
                               />
                               <label
@@ -417,35 +451,22 @@ export default function AddTenant() {
                     )}
                   />
 
-                  <FormField
-                    control={form.control}
-                    name="moveInDate"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Start Date</FormLabel>
-                        <FormControl>
-                          <DateInput allowPastDates={false} {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <FormField
+                      control={form.control}
+                      name="leaseStartDate"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Lease Start Date</FormLabel>
+                          <FormControl>
+                            <DateInput {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                  {form.watch("leaseTerm") === "fixed-term" && (
-                    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                      <FormField
-                        control={form.control}
-                        name="leaseStartDate"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Lease Start Date</FormLabel>
-                            <FormControl>
-                              <DateInput {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                    {form.watch("leaseTerm") === "Fixed Term" && (
                       <FormField
                         control={form.control}
                         name="leaseEndDate"
@@ -462,8 +483,8 @@ export default function AddTenant() {
                           </FormItem>
                         )}
                       />
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               </div>
             </MultiStepperStep>
@@ -619,10 +640,20 @@ export default function AddTenant() {
                   typesetting industry. Lorem Ipsum has been the industry's
                   standard dummy text ever since the 1500s
                 </p>
+                <FormErrors errors={form.formState.errors} />
               </div>
             </MultiStepperStep>
 
-            <MultiStepperButton />
+            <MultiStepperButton>
+              <div className="flex justify-between">
+                <LoadingButton
+                  type="submit"
+                  isLoading={form.formState.isSubmitting}
+                >
+                  Add Tenant
+                </LoadingButton>
+              </div>
+            </MultiStepperButton>
           </MultiStepper>
         </form>
       </Form>
