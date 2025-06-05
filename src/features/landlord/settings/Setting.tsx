@@ -8,8 +8,11 @@ import {
 import { AccountForm } from "./components/AccountForm";
 import { NotificationPreferences } from "./components/NotificationPreferences";
 import { Navigate } from "react-router";
+import { useGetProfileQuery } from "./api/queries";
 
 export default function Setting() {
+  const { data, isLoading } = useGetProfileQuery();
+
   return (
     <div>
       <PageTitle title="Settings" />
@@ -24,7 +27,17 @@ export default function Setting() {
         </TabsList>
 
         <TabsContent value="account" className="space-y-6">
-          <AccountForm />
+          {isLoading ? (
+            <div className="flex h-96 items-center justify-center">
+              <p className="text-gray-500">Loading account information...</p>
+            </div>
+          ) : data ? (
+            <AccountForm data={data} />
+          ) : (
+            <div className="flex h-96 items-center justify-center">
+              <p className="text-gray-500">Loading account information...</p>
+            </div>
+          )}
         </TabsContent>
 
         <TabsContent value="notifications">
