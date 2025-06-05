@@ -9,3 +9,17 @@ export const useGetChargesQuery = () => {
     select: (data) => data.data.data,
   });
 };
+
+export const useGetPendingRentReportQuery = (params: {
+  year?: number;
+  month?: number;
+}) => {
+  return useQuery({
+    queryFn: () =>
+      axiosLandlord.get<IResponse<IPendingRentReport>>("/pending-rent/data", {
+        params,
+      }),
+    queryKey: ["pending-rent", params],
+    select: (data) => data.data.data,
+  });
+};

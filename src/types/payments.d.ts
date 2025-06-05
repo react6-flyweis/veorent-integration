@@ -60,3 +60,12 @@ interface IDailyChargeCreate {
   lease?: string;
   property?: string;
 }
+
+interface IPendingRentReport {
+  pastDue: number; // Total amount past due
+  unpaid: number; // Total unpaid amount
+  charges: number; // Total charges
+  paid: number; // Total paid amount
+  deposited: number; // Total deposited amount
+  history: number; // Total history amount
+}
