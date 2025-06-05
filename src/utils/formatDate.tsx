@@ -1,6 +1,6 @@
 export function formatDate(date: Date | string, withTime?: boolean): string {
   if (!date) {
-    return "Invalid date";
+    return "N/A";
   }
 
   const dateObj = typeof date === "string" ? new Date(date) : date;
