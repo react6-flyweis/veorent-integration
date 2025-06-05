@@ -15,3 +15,10 @@ export const useCreateLeadMutation = () => {
     },
   });
 };
+
+export const useCreateTenantMutation = () => {
+  return useMutation({
+    mutationFn: (data: ITenantCreateData) =>
+      axiosLandlord.post<IResponse<ITenant>>("/tenants", data),
+  });
+};

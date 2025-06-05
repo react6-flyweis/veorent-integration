@@ -79,3 +79,19 @@ interface ITenant {
   updatedAt: string; // ISO date string
   __v?: number; // Optional version key
 }
+
+interface ITenantCreateData {
+  // userId: string; // User ID of the tenant
+  propertyTypeId: string; // ID of the property type
+  fullName: string; // Full name of the tenant
+  email: string; // Email of the tenant
+  mobileNumber: string; // Mobile number of the tenant
+  rentAmount: string; // Monthly rent amount
+  leaseTerm: ILeaseTerm; // Lease term details
+  propertyDetails: Omit<IPropertyShortDetail, "beds" | "baths" | "squareFeet">; // Property details
+  document: {
+    photo: string; // URL to the tenant's photo
+    incomeProof: string; // URL to the income proof document
+    otherDoc?: string; // Optional URL to any other document
+  };
+}
