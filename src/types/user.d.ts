@@ -34,8 +34,8 @@ interface IUser {
   completeProfile: boolean;
   roomRentals: boolean;
   userType: "USER" | "PARTNER";
-  referralCode: string;
-  refferalCode?: string; // Legacy field
+  // referralCode: string;
+  refferalCode?: string;
   referredBy: string | null;
   invitedBy?: string;
   invitedDate?: string | null;
