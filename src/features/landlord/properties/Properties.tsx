@@ -117,7 +117,7 @@ export default function Properties() {
 
       <Link to="/landlord/properties/add">
         <Button
-          className="py- mt-6 flex h-24 w-full flex-col items-center justify-center gap-2"
+          className="mt-6 flex h-24 w-full flex-col items-center justify-center gap-2 border-dashed"
           variant="outline"
         >
           <HouseIcon className="size-7" />
