@@ -645,9 +645,11 @@ export default function AddTenant() {
             </MultiStepperStep>
 
             <MultiStepperButton>
-              <div className="flex justify-between">
+              <div className="flex w-full justify-center">
                 <LoadingButton
                   type="submit"
+                  size="lg"
+                  className="w-4/5"
                   isLoading={form.formState.isSubmitting}
                 >
                   Add Tenant
