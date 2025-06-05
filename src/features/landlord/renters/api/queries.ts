@@ -35,3 +35,12 @@ export const useGetTenantsQuery = (page: number = 1, limit: number = 5) => {
     select: (data) => data.data.data.docs,
   });
 };
+
+export const useGetTenantDetailsQuery = (tenantId: string) => {
+  return useQuery({
+    queryFn: () =>
+      axiosLandlord.get<IResponse<ITenant>>(`/tenants/${tenantId}`),
+    queryKey: ["tenant", tenantId],
+    select: (data) => data.data.data,
+  });
+};
