@@ -11,54 +11,45 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Link } from "react-router";
+import { formatDate } from "@/utils/formatDate";
+import { getInitial } from "@/utils/name";
 
-interface TenantCardProps {
-  name: string;
-  image?: string;
-  inviteDate?: string;
-  lastActive?: string;
-  address: string;
-  unit?: string;
-  room?: string;
-}
-
-export function TenantCard({
-  name,
-  image,
-  inviteDate,
-  lastActive,
-  address,
-  unit,
-  room,
-}: TenantCardProps) {
+export function TenantCard({ tenant }: { tenant: ITenant }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const formattedAddress = useMemo(() => {
-    return [address, unit && `Unit ${unit}`, room && `Room ${room}`]
+    return [
+      tenant.propertyDetails.streetAddress,
+      tenant.propertyDetails.unitNumber &&
+        `Unit ${tenant.propertyDetails.unitNumber}`,
+      "Na",
+    ]
       .filter(Boolean)
       .join(", ");
-  }, [address, unit, room]);
+  }, [tenant]);
 
   const statusText = useMemo(() => {
-    if (inviteDate) {
-      return `Invited to portal ${inviteDate}`;
+    if (tenant.createdAt) {
+      return `Invited to portal ${formatDate(tenant.createdAt)}`;
     }
-    if (lastActive) {
-      return `Last active ${lastActive}`;
+    if (tenant.updatedAt) {
+      return `Last active ${formatDate(tenant.updatedAt)}`;
     }
     return "";
-  }, [inviteDate, lastActive]);
+  }, [tenant]);
 
   return (
     <Card className="gap-0 p-0">
       <CardContent className="p-5">
         <div className="flex items-center gap-4">
           <Avatar className="h-16 w-16">
-            <AvatarImage src={image} alt={name} />
-            <AvatarFallback>{name.charAt(0).toUpperCase()}</AvatarFallback>
+            <AvatarImage src={tenant.document.photo} alt={tenant.fullName} />
+            <AvatarFallback>{getInitial(tenant.fullName)}</AvatarFallback>
           </Avatar>
 
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-gray-900">{name}</h3>
+            <h3 className="text-lg font-semibold text-gray-900">
+              {tenant.fullName}
+            </h3>
             <p className="text-sm text-gray-500">{statusText}</p>
             <p className="mt-0.5 text-sm text-gray-700">{formattedAddress}</p>
           </div>
@@ -81,7 +72,9 @@ export function TenantCard({
         </Button>
 
         <Button variant="outline" size="sm" asChild>
-          <Link to="/landlord/messages">Message</Link>
+          <Link to="/landlord/messages" state={{ tenant }}>
+            Message
+          </Link>
         </Button>
       </CardFooter>
       <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
