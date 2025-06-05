@@ -7,7 +7,7 @@ interface IPropertyAddress {
 }
 
 interface ILeaseTerm {
-  termType: string;
+  termType: "Fixed Term" | "Month-to-Month";
   startDate: string;
   endDate?: string;
 }
