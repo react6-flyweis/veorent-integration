@@ -9,3 +9,12 @@ export const useGetSubscriptionPlansQuery = () => {
     select: (data) => data.data.data,
   });
 };
+
+export const useGetSubscriptionPlanQuery = (id: string) => {
+  return useQuery({
+    queryFn: () =>
+      axiosLandlord.get<IResponse<ISubscription>>(`/subscriptions/${id}`),
+    queryKey: ["subscription-plan", id],
+    select: (data) => data.data.data,
+  });
+};
