@@ -27,7 +27,7 @@ const paymentOptions = [
   },
 ];
 
-export function PaymentModeDialog({ amount }: { amount: string }) {
+export function PaymentModeDialog({ amount }: { amount: number | string }) {
   const [selected, setSelected] = useState("orange");
   const { userType } = useUserPreferenceStore();
 
