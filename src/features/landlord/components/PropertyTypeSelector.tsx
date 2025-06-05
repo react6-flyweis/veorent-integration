@@ -1,57 +1,50 @@
 import { Card, CardContent } from "@/components/ui/card";
-
-import marketingImg from "@/assets/images/marketing.png";
-import sofaImg from "@/assets/images/sofa.png";
-import apartmentImg from "@/assets/images/apartment.png";
-import townhouseImg from "@/assets/images/townhouse.png";
-import villaImg from "@/assets/images/villa.png";
-import skyscraperImg from "@/assets/images/skyscraper.png";
-import factoryImg from "@/assets/images/factory.png";
-import requestImg from "@/assets/images/request.png";
+import { Skeleton } from "@/components/ui/skeleton";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useGetPropertyTypes } from "../api/queries";
 
-const propertyTypes = [
-  {
-    label: "Marketing",
-    image: marketingImg,
-    key: "marketing",
-  },
-  {
-    label: "Furnished Home",
-    image: sofaImg,
-    key: "furnished-home",
-  },
-  {
-    label: "Apartment",
-    image: apartmentImg,
-    key: "apartment",
-  },
-  {
-    label: "Townhouse",
-    image: townhouseImg,
-    key: "townhouse",
-  },
-  {
-    label: "Condo",
-    image: villaImg,
-    key: "condo",
-  },
-  {
-    label: "Multi-Family",
-    image: skyscraperImg,
-    key: "multi-family",
-  },
-  {
-    label: "Manufactured",
-    image: factoryImg,
-    key: "manufactured",
-  },
-  {
-    label: "Other",
-    image: requestImg,
-    key: "other",
-  },
-];
+// const propertyTypes = [
+//   {
+//     label: "Marketing",
+//     image: marketingImg,
+//     _id: "marketing",
+//   },
+//   {
+//     label: "Furnished Home",
+//     image: sofaImg,
+//     _id: "furnished-home",
+//   },
+//   {
+//     label: "Apartment",
+//     image: apartmentImg,
+//     _id: "apartment",
+//   },
+//   {
+//     label: "Townhouse",
+//     image: townhouseImg,
+//     _id: "townhouse",
+//   },
+//   {
+//     label: "Condo",
+//     image: villaImg,
+//     _id: "condo",
+//   },
+//   {
+//     label: "Multi-Family",
+//     image: skyscraperImg,
+//     _id: "multi-family",
+//   },
+//   {
+//     label: "Manufactured",
+//     image: factoryImg,
+//     _id: "manufactured",
+//   },
+//   {
+//     label: "Other",
+//     image: requestImg,
+//     _id: "other",
+//   },
+// ];
 
 const PropertyTypeSelector = ({
   value,
@@ -60,25 +53,45 @@ const PropertyTypeSelector = ({
   value: string;
   onChange: (value: string) => void;
 }) => {
+  const { data, isLoading } = useGetPropertyTypes();
+
+  if (isLoading) {
+    return (
+      <div className="mt-2 grid grid-cols-4 gap-4">
+        {Array.from({ length: 5 }).map((_, index) => (
+          <Card key={index} className="border-input border p-2">
+            <CardContent className="flex flex-col items-center justify-center gap-2 p-4">
+              <div className="absolute top-4 left-4">
+                <Skeleton className="h-4 w-4 rounded-full" />
+              </div>
+              <Skeleton className="size-12" />
+              <Skeleton className="h-6 w-20" />
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <RadioGroup
       onValueChange={onChange}
       defaultValue={value}
       className="mt-2 grid grid-cols-4 gap-4"
     >
-      {propertyTypes.map((type) => (
-        <label key={type.key} htmlFor={type.key} className="cursor-pointer">
+      {data?.map((type) => (
+        <label key={type._id} htmlFor={type._id} className="cursor-pointer">
           <Card
             className={`border-input relative cursor-pointer gap-0 border p-2 ${
-              value === type.key && "border-primary bg-blue-50"
+              value === type._id && "border-primary bg-blue-50"
             }`}
           >
             <CardContent className="flex flex-col items-center justify-center gap-2 p-4">
               <div className="absolute top-4 left-4">
-                <RadioGroupItem value={type.key} id={type.key} />
+                <RadioGroupItem value={type._id} id={type._id} />
               </div>
-              <img src={type.image} alt={type.label} className="size-12" />
-              <span className="text-primary text-lg">{type.label}</span>
+              <img src={type.image} alt={type.name} className="size-12" />
+              <span className="text-primary text-lg">{type.name}</span>
             </CardContent>
           </Card>
         </label>

@@ -184,3 +184,11 @@ interface IProperty {
   updatedAt: string;
   __v: number;
 }
+
+interface IPropertyType {
+  _id: string;
+  name: string;
+  image: string;
+  status: boolean;
+  __v: number;
+}

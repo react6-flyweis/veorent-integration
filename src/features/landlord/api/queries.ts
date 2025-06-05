@@ -9,6 +9,15 @@ export const useGetProperties = () => {
   });
 };
 
+export const useGetPropertyTypes = () => {
+  return useQuery({
+    queryFn: () =>
+      axiosLandlord.get<IResponse<IPropertyType[]>>("/propertyType"),
+    queryKey: ["propertyTypes"],
+    select: (data) => data.data.data,
+  });
+};
+
 export const useGetLeases = () => {
   return useQuery({
     queryFn: () => axiosLandlord.get<IResponse<ILease[]>>("/leases"),
