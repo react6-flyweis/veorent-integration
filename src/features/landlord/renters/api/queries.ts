@@ -24,3 +24,14 @@ export const useGetApplicantsQuery = () => {
     select: (data) => data.data.data,
   });
 };
+
+export const useGetTenantsQuery = (page: number = 1, limit: number = 5) => {
+  return useQuery({
+    queryFn: () =>
+      axiosLandlord.get<IPaginatedResponse<ITenant>>("/tenants", {
+        params: { page, limit },
+      }),
+    queryKey: ["tenants", page, limit],
+    select: (data) => data.data.data.docs,
+  });
+};

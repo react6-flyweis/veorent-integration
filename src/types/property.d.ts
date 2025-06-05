@@ -118,8 +118,7 @@ interface IReferralLevel {
   reward: number;
 }
 
-interface ITenant {
-  // Add specific tenant properties when they become known
+interface ITenantShort {
   id: string;
   name: string;
 }
@@ -145,7 +144,7 @@ interface IPropertyOwner {
   documentVerification: string;
   notificationPreference: boolean;
   referralLevels: IReferralLevel[];
-  tenants: ITenant[];
+  tenants: ITenantShort[];
   dummyImage: IPropertyImage[];
   createdAt: string;
   updatedAt: string;

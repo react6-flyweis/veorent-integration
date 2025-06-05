@@ -59,3 +59,23 @@ interface IApplicant {
   updatedAt: string; // ISO date string
   __v?: number; // Optional version key
 }
+
+interface ITenant {
+  _id: string;
+  leaseTerm: ILeaseTerm;
+  propertyDetails: IPropertyShortDetail;
+  document: {
+    photo: string; // URL to the tenant's photo
+    incomeProof: string; // URL to the income proof document
+    otherDoc?: string; // Optional URL to any other document
+  };
+  userId: IUser; // User ID of the tenant
+  propertyTypeId: string; // ID of the property type
+  fullName: string; // Full name of the tenant
+  email: string; // Email of the tenant
+  mobileNumber: string; // Mobile number of the tenant
+  rentAmount: string; // Monthly rent amount
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+  __v?: number; // Optional version key
+}
