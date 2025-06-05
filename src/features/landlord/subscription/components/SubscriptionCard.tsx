@@ -8,22 +8,10 @@ import {
 
 import premiumImage from "../assets/premium.png";
 
-interface SubscriptionPlan {
-  title: string;
-  price: string;
-  features: string[];
-  buttonText: string;
-  isPremium?: string;
-}
-
-interface SubscriptionCardProps {
-  plan: SubscriptionPlan;
-}
-
-export function SubscriptionCard({ plan }: SubscriptionCardProps) {
+export function SubscriptionCard({ plan }: { plan: ISubscription }) {
   return (
     <Card className="relative flex h-full flex-col gap-2 py-3 shadow-xl">
-      {plan.isPremium && (
+      {plan.name.toLowerCase().includes("premium") && (
         <img
           src={premiumImage}
           alt="Premium Plan"
@@ -32,11 +20,16 @@ export function SubscriptionCard({ plan }: SubscriptionCardProps) {
         />
       )}
       <CardHeader>
-        <h3 className="text-lg font-semibold">{plan.title}</h3>
+        <h3 className="text-lg font-semibold">{plan.name}</h3>
         <div className="mt-2">
           <span className="text-3xl font-bold">{plan.price}</span>
 
-          <span className="text-muted-foreground text-sm"> / Monthly</span>
+          {plan.billingCycle && (
+            <span className="text-muted-foreground text-sm">
+              {" "}
+              / {plan.billingCycle}
+            </span>
+          )}
         </div>
       </CardHeader>
       <CardContent className="flex-grow">
@@ -53,7 +46,7 @@ export function SubscriptionCard({ plan }: SubscriptionCardProps) {
         </p>
       </CardContent>
       <CardFooter>
-        <Button className="w-full rounded-full">{plan.buttonText}</Button>
+        <Button className="w-full rounded-full">Get Now</Button>
       </CardFooter>
     </Card>
   );
