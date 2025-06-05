@@ -1,6 +1,5 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import {
   Dialog,
   DialogContent,
@@ -19,6 +18,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useChangePasswordMutation } from "../api/mutation";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import { useToast } from "@/hooks/useAlertToast";
+import { LoadingButton } from "@/components/ui/loading-button";
+import FormErrors from "@/components/FormErrors";
 
 // Schema for password change validation
 const passwordChangeSchema = z
@@ -37,16 +41,16 @@ type PasswordChangeValues = z.infer<typeof passwordChangeSchema>;
 interface ChangePasswordDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  user: IUser;
 }
 
 export function ChangePasswordDialog({
   open,
   onOpenChange,
+  user,
 }: ChangePasswordDialogProps) {
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
+  const { mutateAsync } = useChangePasswordMutation();
+  const { showToast } = useToast();
   const form = useForm<PasswordChangeValues>({
     resolver: zodResolver(passwordChangeSchema),
     defaultValues: {
@@ -56,11 +60,24 @@ export function ChangePasswordDialog({
     },
   });
 
-  const onSubmit = (values: PasswordChangeValues) => {
-    console.log("Password change values:", values);
-    // TODO: Implement API call to change password
-    onOpenChange(false);
-    form.reset();
+  const onSubmit = async (values: PasswordChangeValues) => {
+    try {
+      const valuesToSubmit = {
+        otp: user.otp,
+        newPassword: values.newPassword,
+        confirmPassword: values.confirmPassword,
+      };
+      await mutateAsync(valuesToSubmit);
+      // show success message
+      showToast("Password changed successfully", "success");
+      form.reset();
+      onOpenChange(false);
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+        type: "manual",
+      });
+    }
   };
 
   return (
@@ -77,24 +94,9 @@ export function ChangePasswordDialog({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Current Password</FormLabel>
-                  <div className="relative">
-                    <FormControl>
-                      <Input
-                        type={showCurrentPassword ? "text" : "password"}
-                        {...field}
-                      />
-                    </FormControl>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      className="absolute top-0 right-0 h-full px-3 py-2 text-sm font-medium text-blue-900"
-                      onClick={() =>
-                        setShowCurrentPassword(!showCurrentPassword)
-                      }
-                    >
-                      {showCurrentPassword ? "HIDE" : "SHOW"}
-                    </Button>
-                  </div>
+                  <FormControl>
+                    <PasswordInput {...field} />
+                  </FormControl>
                   <div className="text-sm text-blue-500">
                     <a href="#" className="underline">
                       Forgot your password?
@@ -111,22 +113,9 @@ export function ChangePasswordDialog({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>New Password</FormLabel>
-                  <div className="relative">
-                    <FormControl>
-                      <Input
-                        type={showNewPassword ? "text" : "password"}
-                        {...field}
-                      />
-                    </FormControl>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      className="absolute top-0 right-0 h-full px-3 py-2 text-sm font-medium text-blue-900"
-                      onClick={() => setShowNewPassword(!showNewPassword)}
-                    >
-                      {showNewPassword ? "HIDE" : "SHOW"}
-                    </Button>
-                  </div>
+                  <FormControl>
+                    <PasswordInput {...field} />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -138,28 +127,15 @@ export function ChangePasswordDialog({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Confirm New Password</FormLabel>
-                  <div className="relative">
-                    <FormControl>
-                      <Input
-                        type={showConfirmPassword ? "text" : "password"}
-                        {...field}
-                      />
-                    </FormControl>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      className="absolute top-0 right-0 h-full px-3 py-2 text-sm font-medium text-blue-900"
-                      onClick={() =>
-                        setShowConfirmPassword(!showConfirmPassword)
-                      }
-                    >
-                      {showConfirmPassword ? "HIDE" : "SHOW"}
-                    </Button>
-                  </div>
+                  <FormControl>
+                    <PasswordInput {...field} />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
+            <FormErrors errors={form.formState.errors} />
 
             <DialogFooter className="gap-2 sm:justify-between">
               <Button
@@ -173,9 +149,13 @@ export function ChangePasswordDialog({
               >
                 CANCEL
               </Button>
-              <Button type="submit" className="w-36">
+              <LoadingButton
+                isLoading={form.formState.isSubmitting}
+                type="submit"
+                className="w-36"
+              >
                 CHANGE
-              </Button>
+              </LoadingButton>
             </DialogFooter>
           </form>
         </Form>
