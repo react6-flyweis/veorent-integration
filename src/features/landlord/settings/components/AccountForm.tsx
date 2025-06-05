@@ -11,7 +11,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { PlusIcon } from "lucide-react";
 import { ChangePasswordDialog } from "./ChangePasswordDialog";
 
@@ -46,21 +46,34 @@ const accountFormSchema = z.object({
 
 type AccountFormValues = z.infer<typeof accountFormSchema>;
 
-export function AccountForm() {
+export function AccountForm({ data }: { data: IUserFullDetails }) {
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
+
+  const [firstName, lastName] = useMemo(() => {
+    // if data has fullName split it into firstName and lastName
+    if (data.firstname && data.lastname) {
+      return [data.firstname, data.lastname];
+    }
+    if (data.fullName) {
+      const [first, last] = data.fullName.split(" ");
+      return [first, last];
+    }
+    return ["", ""];
+  }, [data]);
+
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      firstName: firstName || "",
+      lastName: lastName || "",
       company: "",
-      email: "",
-      phone: "",
-      streetAddress: "",
+      email: data.email || "",
+      phone: data.mobileNumber || "",
+      streetAddress: data.addressDetails?.streetAddress || "",
       unit: "",
-      city: "",
-      region: "",
-      zipCode: "",
+      city: data.addressDetails?.city || "",
+      region: data.addressDetails?.region || "",
+      zipCode: data.addressDetails?.zipCode || "",
     },
   });
 
@@ -268,6 +281,7 @@ export function AccountForm() {
       </Form>
 
       <ChangePasswordDialog
+        user={data}
         open={showPasswordDialog}
         onOpenChange={setShowPasswordDialog}
       />
