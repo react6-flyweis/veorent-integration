@@ -152,25 +152,27 @@ const Expenses = () => {
           </TableHeader>
           <TableBody>
             {expenses?.length ? (
-              expenses.map((expense) => (
-                <TableRow key={expense._id}>
-                  <TableCell className="p-4 text-gray-600">
-                    {expense.datePaid || ""}
-                  </TableCell>
-                  <TableCell className="p-4 text-lg font-medium">
-                    {expense.description}
-                  </TableCell>
-                  <TableCell className="p-4 text-blue-500 underline">
-                    {expense.property || ""}
-                  </TableCell>
-                  <TableCell className="p-4">
-                    <div className="flex items-center gap-1 text-lg font-medium">
-                      <CurrencyIcon />
-                      {expense.amountPaid?.toFixed(2)}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
+              expenses
+                .filter((e) => e.property)
+                .map((expense) => (
+                  <TableRow key={expense._id}>
+                    <TableCell className="p-4 text-gray-600">
+                      {expense.datePaid || ""}
+                    </TableCell>
+                    <TableCell className="p-4 text-lg font-medium">
+                      {expense.description}
+                    </TableCell>
+                    <TableCell className="p-4 text-blue-500 underline">
+                      {expense.property || ""}
+                    </TableCell>
+                    <TableCell className="p-4">
+                      <div className="flex items-center gap-1 text-lg font-medium">
+                        <CurrencyIcon />
+                        {expense.amountPaid?.toFixed(2)}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))
             ) : (
               <TableRow>
                 <TableCell
