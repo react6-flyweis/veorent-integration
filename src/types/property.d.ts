@@ -146,3 +146,22 @@ interface IPropertyCreateData {
   propertyDetails: IPropertyDetails;
   rentalDetails: IRentalDetails;
 }
+
+interface IPropertyUpdateData {
+  propertyTypeId?: string;
+  name?: string;
+  description?: string;
+  price?: number;
+  addressDetails?: IAddressDetails;
+  propertyDetails?: IPropertyDetails;
+  rentalDetails?: IRentalDetails;
+  propertySize?: IPropertySize;
+  leasingBasics?: ILeasingBasics;
+  permission?: IPermission;
+  isRoomRental?: boolean;
+  amenities?: IAmenities;
+  currentLocation?: ILocation;
+  image?: IPropertyImage[];
+  video?: IPropertyImage[];
+  status?: string; // enum: ['Available', 'Rented', 'Under Maintenance']
+}

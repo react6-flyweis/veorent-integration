@@ -7,3 +7,10 @@ export const useCreatePropertyMutation = () => {
       axiosLandlord.post<IResponse<IProperty>>("/properties", data),
   });
 };
+
+export const  useUpdatePropertyMutation = (id : string) => {
+  return useMutation({
+    mutationFn: (data: IPropertyUpdateData) =>
+      axiosLandlord.put<IResponse<IProperty>>(`/properties/${id}`, data),
+  });
+}
