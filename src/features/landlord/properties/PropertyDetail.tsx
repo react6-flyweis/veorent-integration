@@ -18,6 +18,7 @@ import { useGetPropertyByIdQuery } from "./api/queries";
 import { Badge } from "@/components/ui/badge";
 import { useMemo } from "react";
 import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // type PropertyDetailType = {
 //   id: string;
@@ -108,80 +109,116 @@ const statusColorMap: Record<string, string> = {
   marketing: "bg-blue-500",
   incomplete: "bg-orange-500",
 };
+
+function PropertyDetailSkeleton() {
+  return (
+    <div className="flex flex-col gap-4 pb-8">
+      <Card className="gap-0 rounded-sm p-0">
+        <CardHeader className="bg-primary h-64 flex-none px-0 py-0">
+          <div className="relative flex h-full w-full items-center justify-center">
+            <div className="absolute top-2 left-2 z-10">
+              <Skeleton className="h-8 w-8 rounded-full" />
+            </div>
+            <Skeleton className="size-32 rounded-full" />
+          </div>
+        </CardHeader>
+        <CardContent className="px-4 py-2">
+          <div className="flex flex-col gap-4">
+            <div>
+              <Skeleton className="mb-2 h-6 w-48" />
+              <Skeleton className="h-4 w-32" />
+            </div>
+            <div className="flex flex-wrap gap-6">
+              <Skeleton className="h-5 w-24" />
+              <Skeleton className="h-5 w-20" />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+      <Card className="gap-0 rounded-sm py-2">
+        <CardHeader className="px-3">
+          <Skeleton className="h-6 w-24" />
+        </CardHeader>
+        <CardContent className="px-3">
+          <Skeleton className="h-20 w-full" />
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
 export default function PropertyDetail() {
   const { id: propertyId } = useParams();
   const navigate = useNavigate();
-  const { data } = useGetPropertyByIdQuery(propertyId || "");
+  const { data, isLoading } = useGetPropertyByIdQuery(propertyId || "");
 
-  if (!data) {
-    return <div>Loading...</div>;
+  const isIncomplete = useMemo(() => {
+    if (!data?.formCompletionStatus) return false;
+    return !Object.values(data.formCompletionStatus).every(
+      (status) => status === true,
+    );
+  }, [data?.formCompletionStatus]);
+
+  const status = useMemo(() => {
+    if (!data) return undefined;
+    if (data.formCompletionStatus)
+      return isIncomplete ? "incomplete" : "complete";
+    return data.status;
+  }, [data, isIncomplete]);
+
+  if (isLoading || !data) {
+    return <PropertyDetailSkeleton />;
   }
 
   const property = data;
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const isIncomplete = useMemo(() => {
-    return (
-      property.formCompletionStatus &&
-      !Object.values(property.formCompletionStatus).every(
-        (status) => status === true,
-      )
-    );
-  }, [property.formCompletionStatus]);
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const status = useMemo(() => {
-    // logic for status marketing
-    if (property.formCompletionStatus)
-      return isIncomplete ? "incomplete" : "complete";
-    return property.status;
-  }, [property, isIncomplete]);
 
   return (
     <div className="flex flex-col gap-4 pb-8">
       <Card className="gap-0 rounded-sm p-0">
         {/* Property Hero Section */}
-        <CardHeader className="bg-primary h-64 items-center px-0 py-0">
-          <div className="relative flex h-full items-center justify-center">
-            <div className="absolute top-2 left-2 z-10">
-              <BackButton />
-            </div>
-            <div className="absolute top-2 right-2 z-10 flex gap-2">
-              <Button
-                size="icon"
-                variant="secondary"
-                className="rounded-full bg-white"
-              >
-                <EllipsisVerticalIcon className="size-5" />
-              </Button>
-              <Button
-                size="icon"
-                variant="secondary"
-                className="rounded-full bg-white"
-                onClick={() =>
-                  navigate(`/landlord/properties/${propertyId}/edit`)
-                }
-              >
-                <EditIcon className="size-5" />
-              </Button>
-            </div>
+        <CardHeader className="bg-primary relative flex h-64 flex-none items-center justify-center px-0 py-0">
+          <div className="absolute top-2 left-2 z-10">
+            <BackButton />
+          </div>
+          <div className="absolute top-2 right-2 z-10 flex gap-2">
+            <Button
+              size="icon"
+              variant="secondary"
+              className="rounded-full bg-white"
+            >
+              <EllipsisVerticalIcon className="size-5" />
+            </Button>
+            <Button
+              size="icon"
+              variant="secondary"
+              className="rounded-full bg-white"
+              onClick={() =>
+                navigate(`/landlord/properties/${propertyId}/edit`, {
+                  state: { property },
+                })
+              }
+            >
+              <EditIcon className="size-5" />
+            </Button>
+          </div>
 
+          {status && (
             <Badge
               className={cn(
-                "absolute top-2 left-2 z-10 text-white",
+                "absolute bottom-2 left-2 z-10 text-white",
                 statusColorMap[status] || "bg-gray-500",
               )}
             >
               {status.charAt(0).toUpperCase() + status.slice(1)}
             </Badge>
+          )}
 
-            <div className="size-32 rounded-full bg-gray-100">
-              <img
-                src={property.image[0]?.img}
-                alt={property.name}
-                className="h-full w-full object-cover"
-              />
-            </div>
+          <div className="size-32 rounded-full bg-gray-100">
+            <img
+              src={property.image[0]?.img}
+              alt={property.name}
+              className="h-full w-full object-cover"
+            />
           </div>
         </CardHeader>
         {/* Property Info Section */}
