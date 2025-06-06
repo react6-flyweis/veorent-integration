@@ -19,7 +19,7 @@ export const ImageInput = ({
   onChange,
   accept = ["image/jpeg", "image/png", "image/gif", "image/webp"],
   maxSize = 5, // Default 5MB
-  maxFiles = 1,
+  maxFiles = 10, // Default 10 files
   className = "",
   dragPrompt,
   variant = "default",
