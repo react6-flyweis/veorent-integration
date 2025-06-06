@@ -1,6 +1,5 @@
 import { axiosClint } from "@/api/axios";
 import { useAuthStore } from "@/store/useAuthStore";
-import type { IUser } from "@/types/user";
 
 export async function login({
   email,
