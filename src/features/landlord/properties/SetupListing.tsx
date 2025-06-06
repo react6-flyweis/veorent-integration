@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import {
   MultiStepper,
   MultiStepperIndicator,
@@ -12,7 +12,6 @@ import { PermissionsForm } from "./components/PermissionsForm";
 import { ListingDescriptionForm } from "./components/ListingDescriptionForm";
 import { PhotosVideosForm } from "./components/PhotosVideosForm";
 import { PhoneVerificationForm } from "./components/PhoneVerificationForm";
-import { PublishListingForm } from "./components/PublishListingForm";
 import { ListingSuccessScreen } from "./components/ListingSuccessScreen";
 import { UtilitiesForm } from "./components/UtilitiesForm";
 import { AmenitiesForm } from "./components/AmenitiesForm";
@@ -25,6 +24,37 @@ export default function SetupListing() {
   const { data } = useGetPropertyByIdQuery(id || "");
 
   const stepperRef = useRef<MultiStepperRef>(null);
+
+  // Function to determine the current step based on form completion status
+  const getCurrentStep = () => {
+    if (!data?.formCompletionStatus) return 1;
+
+    const completionStatus = data.formCompletionStatus;
+
+    // Check each step in order and return the first incomplete step
+    if (!completionStatus.propertySize) return 1; // PropertySizeForm
+    if (!completionStatus.leasingBasics) return 2; // LeasingBasicsForm
+    if (!completionStatus.permission) return 3; // PermissionsForm
+    if (!completionStatus.amenities) return 4; // UtilitiesForm (uses amenities data)
+    if (!completionStatus.amenities) return 5; // AmenitiesForm
+
+    // For steps not tracked in formCompletionStatus, check if data exists
+    if (!data.name || !data.description) return 6; // ListingDescriptionForm
+    if (!data.image || data.image.length === 0) return 7; // PhotosVideosForm
+
+    // If everything is complete, go to the last step (success screen)
+    return 8; // ListingSuccessScreen
+  };
+
+  // Navigate to the appropriate step when data loads
+  useEffect(() => {
+    if (data && stepperRef.current) {
+      const targetStep = getCurrentStep();
+      if (targetStep > 1) {
+        stepperRef.current.goToStep(targetStep);
+      }
+    }
+  }, [data]);
 
   const handleSuccess = () => {
     if (stepperRef.current) {
@@ -39,44 +69,78 @@ export default function SetupListing() {
       <MultiStepperStep>
         <PropertySizeForm
           defaultValues={data?.propertySize}
+          propertyName={data?.name}
           onSuccess={handleSuccess}
         />
       </MultiStepperStep>
 
       <MultiStepperStep>
-        <LeasingBasicsForm onSuccess={handleSuccess} />
+        <LeasingBasicsForm
+          defaultValues={data?.leasingBasics}
+          propertyName={data?.name}
+          onSuccess={handleSuccess}
+        />
       </MultiStepperStep>
 
       <MultiStepperStep>
-        <PermissionsForm onSuccess={handleSuccess} />
+        <PermissionsForm
+          defaultValues={data?.permission}
+          propertyName={data?.name}
+          onSuccess={handleSuccess}
+        />
       </MultiStepperStep>
 
       <MultiStepperStep>
-        <UtilitiesForm onSuccess={handleSuccess} />
+        <UtilitiesForm
+          defaultValues={data?.amenities}
+          propertyName={data?.name}
+          onSuccess={handleSuccess}
+        />
       </MultiStepperStep>
 
       <MultiStepperStep>
-        <AmenitiesForm onSuccess={handleSuccess} />
+        <AmenitiesForm
+          defaultValues={data?.amenities}
+          propertyName={data?.name}
+          onSuccess={handleSuccess}
+        />
       </MultiStepperStep>
 
       <MultiStepperStep>
-        <ListingDescriptionForm onSuccess={handleSuccess} />
+        <ListingDescriptionForm
+          defaultValues={{
+            title: data?.name,
+            description: data?.description,
+          }}
+          propertyName={data?.name}
+          onSuccess={handleSuccess}
+        />
       </MultiStepperStep>
 
       <MultiStepperStep>
-        <PhotosVideosForm onSuccess={handleSuccess} />
+        <PhotosVideosForm
+          defaultValues={{
+            photos: data?.image?.map((img) => img.img) || [],
+            videoUrl: data?.video?.[0]?.img,
+          }}
+          propertyName={data?.name}
+          onSuccess={handleSuccess}
+        />
       </MultiStepperStep>
 
       <MultiStepperStep>
-        <PhoneVerificationForm onSuccess={handleSuccess} />
+        <PhoneVerificationForm
+          defaultValues={{
+            phone: "", // These properties don't exist in IProperty
+            phoneVerified: false,
+          }}
+          propertyName={data?.name}
+          onSuccess={handleSuccess}
+        />
       </MultiStepperStep>
 
       <MultiStepperStep>
-        <PublishListingForm onSuccess={handleSuccess} />
-      </MultiStepperStep>
-
-      <MultiStepperStep>
-        <ListingSuccessScreen />
+        <ListingSuccessScreen propertyName={data?.name} />
       </MultiStepperStep>
     </MultiStepper>
   );
