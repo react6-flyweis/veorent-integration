@@ -95,7 +95,7 @@ export default function Properties() {
           </div>
         ) : properties?.length ? (
           properties?.map((property) =>
-            property.propertyTypeId?.name !== "Single Family" ? (
+            property.propertyTypeId?.name === "Multiple" ? (
               <PropertyCard property={property} />
             ) : (
               <Link

@@ -10,15 +10,31 @@ import { Button } from "@/components/ui/button";
 import { CurrencyIcon } from "@/components/CurrencyIcon";
 import { Dialog } from "@/components/ui/dialog";
 import { ScreenMethodDialog } from "../../dashboard/components/ScreenMethodDialog";
-import { useState } from "react";
-import { Link } from "react-router";
+import { useMemo, useState } from "react";
+// import { Link } from "react-router";
 
 export function PropertyCard({ property }: { property: IProperty }) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const isIncomplete = useMemo(() => {
+    return (
+      property.formCompletionStatus &&
+      !Object.values(property.formCompletionStatus).every(
+        (status) => status === true,
+      )
+    );
+  }, [property.formCompletionStatus]);
+
+  const status = useMemo(() => {
+    if (property.formCompletionStatus)
+      return isIncomplete ? "incomplete" : "marketing";
+    return property.status;
+  }, [property, isIncomplete]);
+
   return (
     <Card className="relative gap-0 overflow-hidden p-0">
       <CardHeader>
-        {property.status === "incomplete" && (
+        {status === "incomplete" && (
           <Badge
             className="absolute top-0 left-0 bg-orange-500 text-white"
             variant="secondary"
@@ -26,7 +42,7 @@ export function PropertyCard({ property }: { property: IProperty }) {
             Incomplete
           </Badge>
         )}
-        {property.status === "marketing" && (
+        {status === "marketing" && (
           <Badge
             className="bg-primary absolute top-0 left-0 text-white"
             variant="secondary"
@@ -48,11 +64,12 @@ export function PropertyCard({ property }: { property: IProperty }) {
             <div className="flex-1">
               <h3 className="text-lg font-semibold">{property.name}</h3>
               <p className="text-muted-foreground text-sm">
-                {property.addressDetails.streetAddress}
+                {property.addressDetails?.streetAddress}
               </p>
               <p>
-                {property.addressDetails.city}, {property.addressDetails.region}{" "}
-                {property.addressDetails.zipCode}
+                {property.addressDetails?.city},{" "}
+                {property.addressDetails?.region}{" "}
+                {property.addressDetails?.zipCode}
               </p>
               {/* {property.rating && (
                 <div className="mt-1 flex">
@@ -71,14 +88,15 @@ export function PropertyCard({ property }: { property: IProperty }) {
                   <div>
                     <span>Baths/Beds: </span>
                     <span className="text-sm font-medium text-gray-700">
-                      {property.propertySize.baths}/{property.propertySize.beds}
+                      {property.propertySize?.baths}/
+                      {property.propertySize?.beds}
                     </span>
                   </div>
                   <div className="flex items-center gap-1">
                     <span>Rent: </span>
                     <CurrencyIcon size="sm" />
                     <span className="text-sm font-medium text-gray-700">
-                      {property.leasingBasics.targetRent}/-
+                      {property.leasingBasics?.targetRent}/-
                     </span>
                   </div>
                 </div>
@@ -88,22 +106,22 @@ export function PropertyCard({ property }: { property: IProperty }) {
         </div>
       </CardContent>
       <CardFooter className="p-0">
-        {property.propertyTypeId?.name === "Single Family" ? (
-          <div className="grid w-full grid-cols-2 gap-1">
-            <Button variant="outline">Share Listing</Button>
+        {/* {property.propertyTypeId?.name === "Single Family" ? ( */}
+        <div className="grid w-full grid-cols-2 gap-1">
+          <Button variant="outline">Share Listing</Button>
 
-            <Button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setIsOpen(true);
-              }}
-              variant="outline"
-            >
-              Screen Tenant
-            </Button>
-          </div>
-        ) : (
+          <Button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsOpen(true);
+            }}
+            variant="outline"
+          >
+            Screen Tenant
+          </Button>
+        </div>
+        {/* ) : (
           <Link
             className="w-full"
             to={`/landlord/properties/${property._id}/units`}
@@ -112,7 +130,7 @@ export function PropertyCard({ property }: { property: IProperty }) {
               Show Units & Rooms
             </Button>
           </Link>
-        )}
+        )} */}
       </CardFooter>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <ScreenMethodDialog />
