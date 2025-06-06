@@ -15,6 +15,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { IconRound } from "@/components/IconRound";
+import { useUpdatePropertyMutation } from "../api/mutation";
+import { useParams } from "react-router";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import FormErrors from "@/components/FormErrors";
 
 import listingDescriptionIcon from "../assets/listing-description.png";
 import listingTitleIcon from "../assets/listing-title.png";
@@ -29,27 +33,43 @@ const formSchema = z.object({
 });
 
 type ListingDescriptionFormProps = {
+  defaultValues?: {
+    title?: string;
+    description?: string;
+  };
   onSuccess: () => void;
+  propertyName?: string;
 };
 
 export function ListingDescriptionForm({
+  defaultValues,
   onSuccess,
+  propertyName,
 }: ListingDescriptionFormProps) {
+  const { id } = useParams<{ id: string }>();
+  const { mutateAsync } = useUpdatePropertyMutation(id || "");
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      description: "",
+      title: defaultValues?.title || "",
+      description: defaultValues?.description || "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Here you would typically save the form data
-    console.log("Form values:", values);
-    // Simulate API call
-    setTimeout(() => {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const valuesToSubmit: IPropertyUpdateData = {
+        name: values.title,
+        description: values.description,
+      };
+      await mutateAsync(valuesToSubmit);
       onSuccess();
-    }, 500);
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   }
 
   return (
@@ -59,6 +79,9 @@ export function ListingDescriptionForm({
           <IconRound icon={listingDescriptionIcon} size="sm" />
           <h2 className="text-2xl font-semibold">Listing Description</h2>
         </div>
+        {propertyName && (
+          <div className="text-primary mb-5 text-xl">{propertyName}</div>
+        )}
         <p className="text-muted-foreground">
           Provide details about your property
         </p>
@@ -110,6 +133,8 @@ export function ListingDescriptionForm({
               </FormItem>
             )}
           />
+
+          <FormErrors errors={form.formState.errors} />
 
           <div className="flex items-center justify-center">
             <LoadingButton
