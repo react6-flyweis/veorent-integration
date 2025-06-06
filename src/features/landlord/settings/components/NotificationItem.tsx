@@ -2,32 +2,52 @@ import { useState, type FC } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
-import { ToggleNotificationPreferences } from "./ToggleNotificationPrefrence";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { SingleTogglePreference } from "./ToggleNotificationPreference";
+import { useUpdateNotificationPreferencesMutation } from "../api/mutation";
 
 interface NotificationItemProps {
   title: string;
   description: string;
-  channels?: (
-    | string
-    | {
-        type: string;
-        label: string;
-      }
-  )[];
+  channels: INotificationChannel | undefined;
+  itemKey: keyof INotificationPreferencesUpdate;
 }
 
 export const NotificationItem: FC<NotificationItemProps> = ({
   title,
   description,
   channels,
+  itemKey,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { mutateAsync } = useUpdateNotificationPreferencesMutation();
+
+  const handleToggle = async (
+    channel: keyof INotificationChannel,
+    isEnabled: boolean,
+  ) => {
+    try {
+      await mutateAsync({
+        [itemKey]: {
+          ...channels,
+          [channel]: isEnabled,
+        },
+      });
+      // setIsOpen(false);
+      // toast.success(`Notification preference for ${channel} updated successfully!`);
+    } catch (error) {
+      console.error("Error updating notification preferences:", error);
+      // toast.error(
+      //   `Failed to update notification preference for ${channel}. Please try again.`,
+      // );
+    }
+  };
+
   return (
     <Card className="mb-4 py-3 shadow-sm">
       <CardContent className="px-3">
@@ -51,21 +71,23 @@ export const NotificationItem: FC<NotificationItemProps> = ({
           <DialogContent className="w-full gap-0 py-3">
             <div className="">
               <DialogTitle className="text-2xl">{title}</DialogTitle>
-              <DialogDescription>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Earum,
-                voluptas.
-              </DialogDescription>
+              <DialogDescription>{description}</DialogDescription>
             </div>
             <div className="">
-              {channels && channels.length && (
-                <ToggleNotificationPreferences
-                  preferences={channels.map((channel) =>
-                    typeof channel === "string"
-                      ? { type: channel, label: channel }
-                      : channel,
-                  )}
+              {(
+                [
+                  "Email",
+                  "Call",
+                  "PushNotification",
+                ] as (keyof INotificationChannel)[]
+              ).map((channel) => (
+                <SingleTogglePreference
+                  key={channel}
+                  type={channel}
+                  isEnabled={channels?.[channel]}
+                  onChange={(isEnabled) => handleToggle(channel, isEnabled)}
                 />
-              )}
+              ))}
             </div>
           </DialogContent>
         </Dialog>
