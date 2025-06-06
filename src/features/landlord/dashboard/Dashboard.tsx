@@ -18,12 +18,27 @@ import expenseIcon from "./assets/expense.png";
 import signIcon from "./assets/sign.png";
 import { ActionButton } from "./components/ActionButton";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useMemo } from "react";
 
 export default function Dashboard() {
   const user = useAuthStore((state) => state.user);
+
+  const userFirstName = useMemo(() => {
+    if (user?.firstname) {
+      return user.firstname;
+    } else if (user?.fullName) {
+      const firstName = user.fullName.split(" ")[0];
+      return firstName || "User";
+    } else if (user?.email) {
+      const firstName = user.email.split("@")[0];
+      return firstName.charAt(0).toUpperCase() + firstName.slice(1) || "User";
+    }
+    return "User";
+  }, [user]);
+
   return (
     <div className="">
-      <h2 className="mb-2 text-3xl font-semibold">Hello, {user?.firstname}</h2>
+      <h2 className="mb-2 text-3xl font-semibold">Hello, {userFirstName}</h2>
       <div className="grid grid-cols-1 gap-4 @lg:grid-cols-2 @xl:grid-cols-3">
         {/* Top Summary Cards */}
         <div className="@container flex flex-col gap-2 @xl:col-span-2">
