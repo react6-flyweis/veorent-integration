@@ -30,19 +30,31 @@ import { Card } from "@/components/ui/card";
 import { CurrencyInput } from "@/components/CurrencyInput";
 import { HouseIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { useCreatePropertyMutation } from "./api/mutation";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import FormErrors from "@/components/FormErrors";
+import { useNavigate } from "react-router";
 
 const formSchema = z.object({
+  propertyName: z.string().min(1, "Property name is required"),
+  description: z
+    .string({
+      required_error: "Description is required",
+    })
+    .max(500, "Description cannot exceed 500 characters"),
   propertyType: z.string().min(1, "Please select a property type"),
   hasRoomRentals: z.enum(["yes", "no"]),
   streetAddress: z.string().min(1, "Street address is required"),
-  unit: z.string().optional(),
+  unit: z.string().min(1, "Unit is required"),
   city: z.string().min(1, "City is required"),
   region: z.string().min(1, "Region is required"),
   zipCode: z.string().min(1, "Zip code is required"),
   roomName: z.string().min(1, "Room name is required"),
   beds: z.coerce.number().min(1, "Number of beds must be at least 1"),
   baths: z.coerce.number().min(1, "Number of baths must be at least 1"),
-  unitNumber: z.string().optional(),
+  apartmentUnit: z.coerce.number().optional(),
+  studioUnit: z.coerce.number().optional(),
+  roomsUnit: z.coerce.number().optional(),
   targetRent: z.coerce.number().min(1, "Target rent must be greater than 0"),
   targetDeposit: z.coerce
     .number()
@@ -51,17 +63,47 @@ const formSchema = z.object({
 
 export default function AddProperty() {
   const stepperRef = useRef<MultiStepperRef>(null);
+  const { mutateAsync } = useCreatePropertyMutation();
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      propertyType: "",
       hasRoomRentals: "yes",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log("Form submitted:", values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const valuesToSubmit: IPropertyCreateData = {
+        name: values.propertyName,
+        description: values.description,
+        propertyTypeId: values.propertyType,
+        isRoomRental: values.hasRoomRentals === "yes",
+        propertyDetails: {
+          streetAddress: values.streetAddress,
+          unitNumber: values.unit,
+          city: values.city,
+          region: values.region,
+          zipCode: values.zipCode,
+        },
+        rentalDetails: {
+          beds: values.beds,
+          baths: values.baths,
+          targetRent: values.targetRent,
+          targetDeposite: values.targetDeposit,
+          apartmentUnit: values.apartmentUnit || 0,
+          studioUnit: values.studioUnit || 0,
+          roomsUnit: values.roomsUnit || 0,
+        },
+      };
+      const result = await mutateAsync(valuesToSubmit);
+      navigate("/landlord/properties/"+result.data.data._id+"/setup-prompt");
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   };
 
   return (
@@ -71,7 +113,12 @@ export default function AddProperty() {
           <MultiStepper ref={stepperRef}>
             <MultiStepperStep
               onValidate={() =>
-                form.trigger(["propertyType", "hasRoomRentals"])
+                form.trigger([
+                  "propertyName",
+                  "description",
+                  "propertyType",
+                  "hasRoomRentals",
+                ])
               }
             >
               <div className="space-y-4">
@@ -79,6 +126,7 @@ export default function AddProperty() {
                   title="Which best describes your property?"
                   withBack
                 />
+
                 <FormField
                   control={form.control}
                   name="propertyType"
@@ -90,7 +138,33 @@ export default function AddProperty() {
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={form.control}
+                  name="propertyName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Property Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="hasRoomRentals"
@@ -185,23 +259,6 @@ export default function AddProperty() {
 
                   <FormField
                     control={form.control}
-                    name="unitNumber"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Unit Number</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter unit number (optional)"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
                     name="beds"
                     render={({ field }) => (
                       <FormItem>
@@ -238,6 +295,51 @@ export default function AddProperty() {
                               field.onChange(Number(e.target.value))
                             }
                           />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="apartmentUnit"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Apartment Unit</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter apartment unit"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="studioUnit"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Studio Unit</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter studio unit" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="roomsUnit"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Rooms Unit</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter rooms unit" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -284,6 +386,7 @@ export default function AddProperty() {
                   </p>
                 </Card>
               </div>
+              <FormErrors errors={form.formState.errors} />
             </MultiStepperStep>
 
             <MultiStepperButton>
