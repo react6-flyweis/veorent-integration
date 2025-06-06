@@ -106,61 +106,6 @@ interface IPropertyImage {
   _id: string;
 }
 
-interface IGoal {
-  // Add specific goal properties when they become known
-  id: string;
-  name: string;
-}
-
-interface IReferralLevel {
-  // Add specific referral level properties when they become known
-  level: number;
-  reward: number;
-}
-
-interface ITenantShort {
-  id: string;
-  name: string;
-}
-
-interface IPropertyOwner {
-  _id: string;
-  userId: string;
-  goals: IGoal[];
-  image: string;
-  email: string;
-  password: string;
-  otp: string;
-  otpExpiration: string;
-  accountVerification: boolean;
-  completeProfile: boolean;
-  roomRentals: boolean;
-  userType: string;
-  refferalCode: string;
-  referredBy: null | string;
-  wallet: number;
-  isVerified: boolean;
-  status: boolean;
-  documentVerification: string;
-  notificationPreference: boolean;
-  referralLevels: IReferralLevel[];
-  tenants: ITenantShort[];
-  dummyImage: IPropertyImage[];
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-  mobileNumber: string;
-  fullName: string;
-}
-
-interface IPropertyType {
-  _id: string;
-  name: string;
-  image: string;
-  status: boolean;
-  __v: number;
-}
-
 interface IProperty {
   _id: string;
   addressDetails: IAddressDetails;
@@ -171,7 +116,7 @@ interface IProperty {
   permission: IPermission;
   amenities: IAmenities;
   currentLocation: ILocation;
-  owner: IPropertyOwner;
+  owner: IUser;
   propertyTypeId: IPropertyType;
   name: string;
   description: string;
@@ -191,4 +136,13 @@ interface IPropertyType {
   image: string;
   status: boolean;
   __v: number;
+}
+
+interface IPropertyCreateData {
+  name: string;
+  description: string;
+  propertyTypeId: string;
+  isRoomRental: boolean;
+  propertyDetails: IPropertyDetails;
+  rentalDetails: IRentalDetails;
 }
