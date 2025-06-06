@@ -21,6 +21,7 @@ import {
   MoreHorizontal,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { PageTitle } from "@/components/PageTitle";
 
 // Mock events data
 const mockEvents = [
@@ -170,7 +171,8 @@ export default function BookingCalendar() {
   };
 
   return (
-    <div className="flex h-full flex-col bg-white">
+    <div className="flex h-full flex-col">
+      <PageTitle title="Booking Calendar" />
       {/* Header */}
       <div className="flex items-center justify-between border-b border-gray-200 p-4">
         <div className="flex items-center space-x-4">
