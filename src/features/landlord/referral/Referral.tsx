@@ -15,7 +15,7 @@ export default function Referral() {
   const [copied, setCopied] = useState(false);
 
   const user = useAuthStore((state) => state.user);
-  const referralLink = user?.refferalCode || "";
+  const referralLink = "https://veorent.com/r/" + user?.refferalCode || "";
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(referralLink);
