@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { LoadingButton } from "@/components/ui/loading-button";
+import type { PropsWithChildren } from "react";
 
 const formSchema = z.object({
   streetAddress: z.string().min(1, "Street address is required"),
@@ -23,7 +24,13 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-export function PropertyAddressForm({ onSuccess }: { onSuccess: () => void }) {
+export function PropertyAddressForm({
+  onSuccess,
+  standAlone = false,
+}: {
+  onSuccess: (values: FormValues) => void;
+  standAlone?: boolean;
+}) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -36,13 +43,21 @@ export function PropertyAddressForm({ onSuccess }: { onSuccess: () => void }) {
   });
 
   const onSubmit = (values: FormValues) => {
-    console.log(values);
-    // Handle form submission
-    onSuccess();
+    onSuccess(values);
   };
+
+  const WrapperComponent = ({ children }: PropsWithChildren) =>
+    standAlone ? (
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {children}
+      </form>
+    ) : (
+      <div className="space-y-4">{children}</div>
+    );
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <WrapperComponent>
         <FormField
           control={form.control}
           name="streetAddress"
@@ -130,14 +145,15 @@ export function PropertyAddressForm({ onSuccess }: { onSuccess: () => void }) {
         <div className="flex items-center justify-center">
           <LoadingButton
             isLoading={form.formState.isSubmitting}
-            type="submit"
+            type={standAlone ? "submit" : "button"}
+            onClick={form.handleSubmit(onSubmit)}
             size="lg"
             className="w-4/5 @lg:w-3/5"
           >
             Continue
           </LoadingButton>
         </div>
-      </form>
+      </WrapperComponent>
     </Form>
   );
 }
