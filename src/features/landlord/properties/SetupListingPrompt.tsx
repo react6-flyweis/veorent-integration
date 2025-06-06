@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useParams } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
@@ -6,6 +6,7 @@ import setupListingImage from "./assets/setup-listing.gif";
 import { PageTitle } from "@/components/PageTitle";
 
 export default function SetupListingPrompt() {
+  const { id } = useParams<{ id: string }>();
   return (
     <div>
       <PageTitle title="Set Up Your Property Listing" withBack />
@@ -35,7 +36,7 @@ export default function SetupListingPrompt() {
             Skip For Now
           </Button>
         </Link>
-        <Link to="/landlord/properties/setup">
+        <Link to={`/landlord/properties/${id}/setup`}>
           <Button className="w-full">Set Up My Listing</Button>
         </Link>
       </div>

@@ -141,16 +141,16 @@ export const landlordRoutes: RouteObject[] = [
     element: <Properties />,
   },
   {
-    path: "/properties/setup",
+    path: "/properties/:id",
+    element: <PropertyDetail />,
+  },
+  {
+    path: "/properties/:id/setup",
     element: <SetupListing />,
   },
   {
-    path: "/properties/setup-prompt",
+    path: "/properties/:id/setup-prompt",
     element: <SetupListingPrompt />,
-  },
-  {
-    path: "/properties/:id",
-    element: <PropertyDetail />,
   },
   {
     path: "/properties/:id/units",
