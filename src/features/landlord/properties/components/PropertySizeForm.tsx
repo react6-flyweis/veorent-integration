@@ -13,18 +13,22 @@ import {
 } from "@/components/ui/form";
 import propertySizeIcon from "../assets/property-size.png";
 import { LoadingButton } from "@/components/ui/loading-button";
+import { useUpdatePropertyMutation } from "../api/mutation";
+import { useParams } from "react-router";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import FormErrors from "@/components/FormErrors";
 
 const propertySizeSchema = z.object({
-  beds: z.string().min(1, { message: "Number of beds is required" }),
-  baths: z.string().min(1, { message: "Number of baths is required" }),
-  squareFeet: z.string().optional(),
-  yearBuilt: z.string().optional(),
+  beds: z.coerce.number().min(1, { message: "Number of beds is required" }),
+  baths: z.coerce.number().min(1, { message: "Number of baths is required" }),
+  squareFeet: z.coerce.number().optional(),
+  yearBuilt: z.coerce.number().optional(),
 });
 
 export type PropertySizeFormValues = z.infer<typeof propertySizeSchema>;
 
 interface PropertySizeFormProps {
-  defaultValues?: Partial<PropertySizeFormValues>;
+  defaultValues?: IPropertySize;
   onSuccess: (data: PropertySizeFormValues) => void;
 }
 
@@ -32,19 +36,34 @@ export const PropertySizeForm = ({
   defaultValues,
   onSuccess,
 }: PropertySizeFormProps) => {
+  const { id } = useParams<{ id: string }>();
+  const { mutateAsync } = useUpdatePropertyMutation(id || "");
   const form = useForm<PropertySizeFormValues>({
     resolver: zodResolver(propertySizeSchema),
     defaultValues: {
-      beds: "",
-      baths: "",
-      squareFeet: "",
-      yearBuilt: "",
-      ...defaultValues,
+      beds: defaultValues?.beds || 0,
+      baths: defaultValues?.baths || 0,
+      squareFeet: defaultValues?.squareFeet || 0,
+      yearBuilt: defaultValues?.yearBuilt || 0,
     },
   });
 
-  const handleSubmit = (data: PropertySizeFormValues) => {
-    onSuccess(data);
+  const handleSubmit = async (data: PropertySizeFormValues) => {
+    try {
+      const valuesToSubmit: IPropertyUpdateData = {
+        propertySize: {
+          ...data,
+          squareFeet: data.squareFeet || 0,
+          yearBuilt: data.yearBuilt || 0,
+        },
+      };
+      await mutateAsync(valuesToSubmit);
+      onSuccess(data);
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   };
 
   return (
@@ -117,6 +136,8 @@ export const PropertySizeForm = ({
               )}
             />
           </div>
+
+          <FormErrors errors={form.formState.errors} />
 
           <div className="flex items-center justify-center">
             <LoadingButton
