@@ -16,9 +16,13 @@ import { PublishListingForm } from "./components/PublishListingForm";
 import { ListingSuccessScreen } from "./components/ListingSuccessScreen";
 import { UtilitiesForm } from "./components/UtilitiesForm";
 import { AmenitiesForm } from "./components/AmenitiesForm";
+import { useGetPropertyByIdQuery } from "./api/queries";
+import { useParams } from "react-router";
 
 export default function SetupListing() {
   const goBack = useGoBack();
+  const { id } = useParams<{ id: string }>();
+  const { data } = useGetPropertyByIdQuery(id || "");
 
   const stepperRef = useRef<MultiStepperRef>(null);
 
@@ -33,7 +37,10 @@ export default function SetupListing() {
       <MultiStepperIndicator routeBack={goBack} />
 
       <MultiStepperStep>
-        <PropertySizeForm onSuccess={handleSuccess} />
+        <PropertySizeForm
+          defaultValues={data?.propertySize}
+          onSuccess={handleSuccess}
+        />
       </MultiStepperStep>
 
       <MultiStepperStep>
