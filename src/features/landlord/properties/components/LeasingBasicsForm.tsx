@@ -17,9 +17,12 @@ import {
 import rentIcon from "../assets/rent.png";
 import rentLeaseIcon from "../assets/rent-lease.png";
 import { LoadingButton } from "@/components/ui/loading-button";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import { useParams } from "react-router";
+import { useUpdatePropertyMutation } from "../api/mutation";
+import FormErrors from "@/components/FormErrors";
 
 const leasingBasicsSchema = z.object({
-  address: z.string().min(1, { message: "Address is required" }),
   dateAvailable: z.date({
     required_error: "Please select a date",
   }),
@@ -29,67 +32,80 @@ const leasingBasicsSchema = z.object({
       required_error: "Please select a lease term",
     },
   ),
-  targetRent: z.string().min(1, { message: "Target rent is required" }),
-  targetDeposit: z.string().min(1, { message: "Target deposit is required" }),
+  targetRent: z.coerce.number().min(1, { message: "Target rent is required" }),
+  targetDeposit: z.coerce
+    .number()
+    .min(1, { message: "Target deposit is required" }),
 });
 
 export type LeasingBasicsFormValues = z.infer<typeof leasingBasicsSchema>;
 
 interface LeasingBasicsFormProps {
-  defaultValues?: Partial<LeasingBasicsFormValues>;
-  onSuccess?: (data: LeasingBasicsFormValues) => void;
+  defaultValues?: ILeasingBasics;
+  onSuccess: (data: LeasingBasicsFormValues) => void;
+  propertyName?: string;
 }
 
 export const LeasingBasicsForm = ({
   defaultValues,
   onSuccess,
+  propertyName,
 }: LeasingBasicsFormProps) => {
+  const { id } = useParams<{ id: string }>();
+  const { mutateAsync } = useUpdatePropertyMutation(id || "");
+
   const form = useForm<LeasingBasicsFormValues>({
     resolver: zodResolver(leasingBasicsSchema),
     defaultValues: {
-      address: "123 Main St",
       leaseTerm: "contact",
-      targetRent: "",
-      targetDeposit: "",
-      ...defaultValues,
+      targetRent: defaultValues?.targetRent || 0,
+      targetDeposit: defaultValues?.targetDeposit || 0,
+      dateAvailable: defaultValues?.Date
+        ? new Date(defaultValues.Date)
+        : undefined,
     },
   });
 
-  const handleSubmit = (data: LeasingBasicsFormValues) => {
-    onSuccess?.(data);
+  const handleSubmit = async (data: LeasingBasicsFormValues) => {
+    try {
+      const valuesToSubmit: IPropertyUpdateData = {
+        leasingBasics: {
+          ...data,
+          Date: data.dateAvailable.toISOString(),
+          desiredLeaseTerm: data.leaseTerm,
+          targetDeposit: data.targetDeposit || 0,
+        },
+      };
+      await mutateAsync(valuesToSubmit);
+      onSuccess(data);
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)}>
-        <div className="mb-6 flex items-center gap-2">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+        <div className="mb-3 flex items-center gap-2">
           <IconRound icon={rentIcon} size="sm" />
           <h2 className="text-xl font-semibold text-gray-800">
             Leasing Basics
           </h2>
         </div>
 
-        <div className="mb-4">
-          <FormField
-            control={form.control}
-            name="address"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Address</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+        {propertyName && (
+          <div className="text-primary mb-5 text-xl">{propertyName}</div>
+        )}
 
-        <div className="mb-4">
-          <h3 className="mb-2 flex items-center gap-2 text-base font-medium">
+        <div className="space-y-4">
+          <div className="mb-2 flex gap-2">
             <IconRound icon={rentLeaseIcon} size="xs" />
-            Leasing Term
-          </h3>
+            <h3 className="flex items-center gap-2 text-xl font-bold">
+              Leasing Term
+            </h3>
+          </div>
 
           <div className="mb-3">
             <FormField
@@ -97,7 +113,7 @@ export const LeasingBasicsForm = ({
               name="dateAvailable"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Date Available</FormLabel>
+                  <FormLabel className="text-base">Date Available</FormLabel>
                   <DateInput allowPastDates={false} {...field} />
                   <FormMessage />
                 </FormItem>
@@ -172,7 +188,7 @@ export const LeasingBasicsForm = ({
           />
         </div>
 
-        <div className="mb-4">
+        <div className="mb-4 space-y-4">
           <h3 className="mb-2 flex items-center gap-2 text-base font-medium">
             <IconRound icon={rentLeaseIcon} size="xs" />
             Rent & Deposit
@@ -217,6 +233,9 @@ export const LeasingBasicsForm = ({
               )}
             />
           </div>
+
+          <FormErrors errors={form.formState.errors} />
+
           <div className="flex items-center justify-center">
             <LoadingButton
               type="submit"
