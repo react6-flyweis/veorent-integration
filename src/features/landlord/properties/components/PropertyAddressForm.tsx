@@ -16,7 +16,7 @@ import type { PropsWithChildren } from "react";
 
 const formSchema = z.object({
   streetAddress: z.string().min(1, "Street address is required"),
-  unit: z.string().optional(),
+  unit: z.string().min(1, "Unit is required."),
   city: z.string().min(1, "City is required"),
   region: z.string().min(1, "Region is required"),
   zipCode: z.string().min(1, "Zip code is required"),
