@@ -13,7 +13,7 @@ interface IDummyImage {
   _id: string;
 }
 
-interface IRentalDetails {
+interface IRentalDetailsShort {
   beds: number;
   baths: number;
   squareFeet: number;
@@ -62,6 +62,6 @@ interface IUser {
 interface IUserFullDetails extends IUser {
   addressDetails?: IAddressDetails;
   propertyDetails?: IPropertyDetails;
-  rentalDetails?: IRentalDetails;
+  rentalDetails?: IRentalDetailsShort;
   memberSince: string;
 }
