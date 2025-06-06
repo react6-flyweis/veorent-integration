@@ -12,7 +12,7 @@ import {
   InfoIcon,
 } from "lucide-react";
 import propertyEditIcon from "./assets/edit-property.png";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 interface PropertySectionProps {
   title: string;
@@ -39,25 +39,29 @@ const PropertySection = ({ title, children, onEdit }: PropertySectionProps) => {
   );
 };
 
-const propertyData = {
-  address: "123 Main St.",
-  city: "Denver",
-  state: "CO",
-  zipCode: "80023",
-  propertyType: "Multi-Family",
-  beds: 0,
-  baths: 0,
-  title: "N/A",
-  description: "N/A",
-  requirements: {
-    noSmoking: true,
-  },
-  utilities: [],
-  amenities: [],
-};
+// const propertyData = {
+//   address: "123 Main St.",
+//   city: "Denver",
+//   state: "CO",
+//   zipCode: "80023",
+//   propertyType: "Multi-Family",
+//   beds: 0,
+//   baths: 0,
+//   title: "N/A",
+//   description: "N/A",
+//   requirements: {
+//     noSmoking: true,
+//   },
+//   utilities: [],
+//   amenities: [],
+// };
 
 export default function EditProperty() {
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const propertyData = state?.property as IProperty;
+
+  const propertyId = propertyData?._id;
 
   return (
     <div>
@@ -74,21 +78,27 @@ export default function EditProperty() {
       <div className="mt-5">
         <PropertySection
           title="Address"
-          onEdit={() => navigate("/landlord/properties/1/edit-address")}
+          onEdit={() =>
+            navigate(`/landlord/properties/${propertyId}/edit-address`)
+          }
         >
           <div className="flex items-start gap-2">
             <MapPinIcon size={18} className="mt-1 text-gray-500" />
             <p>
-              {propertyData.address}
+              {propertyData.propertyDetails?.streetAddress}
               <br />
-              {propertyData.city}, {propertyData.state} {propertyData.zipCode}
+              {propertyData.propertyDetails?.city},{" "}
+              {propertyData.propertyDetails?.region}{" "}
+              {propertyData.propertyDetails?.zipCode}
             </p>
           </div>
         </PropertySection>
 
         <PropertySection
           title="Leasing Details"
-          onEdit={() => navigate("/landlord/properties/1/edit-basics")}
+          onEdit={() =>
+            navigate(`/landlord/properties/${propertyId}/edit-basics`)
+          }
         >
           <div className="flex items-center gap-2">
             <BriefcaseIcon size={18} className="text-gray-500" />
@@ -98,27 +108,31 @@ export default function EditProperty() {
 
         <PropertySection
           title="Property Details"
-          onEdit={() => navigate("/landlord/properties/1/edit-size")}
+          onEdit={() =>
+            navigate(`/landlord/properties/${propertyId}/edit-size`)
+          }
         >
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
               <BedDoubleIcon size={18} className="text-gray-500" />
-              <span>{propertyData.beds} Beds</span>
+              <span>{propertyData.rentalDetails?.beds} Beds</span>
             </div>
             <div className="flex items-center gap-2">
               <HomeIcon size={18} className="text-gray-500" />
-              <span>{propertyData.propertyType}</span>
+              <span>{propertyData.propertyTypeId?.name}</span>
             </div>
             <div className="flex items-center gap-2">
               <BathIcon size={18} className="text-gray-500" />
-              <span>{propertyData.baths} Baths</span>
+              <span>{propertyData.propertySize?.baths} Baths</span>
             </div>
           </div>
         </PropertySection>
 
         <PropertySection
           title="Requirements"
-          onEdit={() => navigate("/landlord/properties/1/edit-permissions")}
+          onEdit={() =>
+            navigate(`/landlord/properties/${propertyId}/edit-permissions`)
+          }
         >
           <div className="flex items-center gap-2">
             <CigaretteIcon size={18} className="text-gray-500" />
@@ -128,7 +142,9 @@ export default function EditProperty() {
 
         <PropertySection
           title="Title & Description"
-          onEdit={() => navigate("/landlord/properties/1/edit-description")}
+          onEdit={() =>
+            navigate(`/landlord/properties/${propertyId}/edit-description`)
+          }
         >
           <div className="space-y-2">
             <p className="text-gray-500">N/A</p>
@@ -138,7 +154,9 @@ export default function EditProperty() {
 
         <PropertySection
           title="Included Utilities"
-          onEdit={() => navigate("/landlord/properties/1/edit-utilities")}
+          onEdit={() =>
+            navigate(`/landlord/properties/${propertyId}/edit-utilities`)
+          }
         >
           <div className="flex items-center gap-2">
             <InfoIcon size={18} className="text-gray-500" />
@@ -148,7 +166,9 @@ export default function EditProperty() {
 
         <PropertySection
           title="Amenities"
-          onEdit={() => navigate("/landlord/properties/1/edit-amenities")}
+          onEdit={() =>
+            navigate(`/landlord/properties/${propertyId}/edit-amenities`)
+          }
         >
           <div className="flex items-center gap-2">
             <InfoIcon size={18} className="text-gray-500" />
