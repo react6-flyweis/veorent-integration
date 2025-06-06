@@ -35,6 +35,7 @@ const StepperContext = createContext<{
 export type MultiStepperRef = {
   goNext: () => void;
   goPrev: () => void;
+  goToStep: (stepNumber: number) => void;
   currentStep: number;
   validateAndGoNext: (
     validator: () => boolean | Promise<boolean>,
@@ -83,6 +84,12 @@ export const MultiStepper = forwardRef<
     if (step > 1) setStep((s) => s - 1);
   }, [step]);
 
+  const goToStep = useCallback((stepNumber: number) => {
+    if (stepNumber >= 1 && stepNumber <= totalSteps) {
+      setStep(stepNumber);
+    }
+  }, [totalSteps]);
+
   const validateAndGoNext = useCallback(
     async (validator: () => boolean | Promise<boolean>) => {
       const isValid = await validator();
@@ -99,10 +106,11 @@ export const MultiStepper = forwardRef<
     () => ({
       goNext: nextStep,
       goPrev: prevStep,
+      goToStep,
       currentStep: step,
       validateAndGoNext,
     }),
-    [nextStep, prevStep, step, validateAndGoNext],
+    [nextStep, prevStep, goToStep, step, validateAndGoNext],
   );
 
   return (
