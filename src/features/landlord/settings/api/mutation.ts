@@ -19,13 +19,8 @@ export const useUpdateNotificationPreferencesMutation = () => {
         "/notification/upsertNotificationPreferences",
         data,
       ),
-    onSuccess: () => {
-      // update the cache with the new notification preferences
-      // queryClient.setQueryData(
-      //   ["notification-preferences"],
-      //   response.data.data,
-      // );
-      // Also invalidate to ensure fresh data
+    onSettled: () => {
+      // Invalidate the query to ensure fresh data
       queryClient.invalidateQueries({
         queryKey: ["notification-preferences"],
       });
