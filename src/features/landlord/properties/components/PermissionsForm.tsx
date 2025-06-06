@@ -16,56 +16,76 @@ import smokingIcon from "../assets/smoking.png";
 import petsIcon from "../assets/pets.png";
 import occupancyIcon from "../assets/occupancy.png";
 import { LoadingButton } from "@/components/ui/loading-button";
+import FormErrors from "@/components/FormErrors";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import { useParams } from "react-router";
+import { useUpdatePropertyMutation } from "../api/mutation";
 
 const permissionsSchema = z.object({
-  smoking: z.enum(["yes", "no", "outsideOnly"], {
+  smoking: z.boolean({
     required_error: "Please select a smoking policy",
   }),
-  pets: z.enum(["yes", "no"], {
+  pets: z.boolean({
     required_error: "Please specify if pets are allowed",
   }),
-  occupancyLimit: z.enum(["yes", "no"], {
+  occupancyLimit: z.boolean({
     required_error: "Please specify if there is an occupancy limit",
   }),
 });
 
 export type PermissionsFormValues = z.infer<typeof permissionsSchema>;
-
 interface PermissionsFormProps {
-  defaultValues?: Partial<PermissionsFormValues>;
-  onSuccess?: (data: PermissionsFormValues) => void;
-  address?: string;
+  defaultValues?: IPermission;
+  onSuccess: (data: PermissionsFormValues) => void;
+  propertyName?: string;
 }
 
 export const PermissionsForm = ({
   defaultValues,
   onSuccess,
-  address,
+  propertyName,
 }: PermissionsFormProps) => {
+  const { id } = useParams<{ id: string }>();
+  const { mutateAsync } = useUpdatePropertyMutation(id || "");
+
   const form = useForm<PermissionsFormValues>({
     resolver: zodResolver(permissionsSchema),
     defaultValues: {
-      smoking: "no",
-      pets: "no",
-      occupancyLimit: "no",
-      ...defaultValues,
+      smoking: Boolean(defaultValues?.smoking || false),
+      pets: Boolean(defaultValues?.pets || false),
+      occupancyLimit: Boolean(defaultValues?.occupancyLimits || false),
     },
   });
 
-  const handleSubmit = (data: PermissionsFormValues) => {
-    onSuccess?.(data);
+  const handleSubmit = async (data: PermissionsFormValues) => {
+    try {
+      const valuesToSubmit: IPropertyUpdateData = {
+        permission: {
+          smoking: data.smoking ? "Yes" : "No",
+          pets: data.pets,
+          occupancyLimits: data.occupancyLimit,
+        },
+      };
+      await mutateAsync(valuesToSubmit);
+      onSuccess(data);
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
-        <div className="mb-6 flex items-center gap-2">
+        <div className="mb-3 flex items-center gap-2">
           <IconRound icon={permissionsIcon} size="sm" />
           <h2 className="text-xl font-semibold text-gray-800">Permissions</h2>
         </div>
 
-        {address && <div className="mb-6 text-sm text-gray-600">{address}</div>}
-
+        {propertyName && (
+          <div className="text-primary mb-5 text-xl">{propertyName}</div>
+        )}
         <div className="space-y-8">
           {/* Smoking Section */}
           <div>
@@ -84,8 +104,8 @@ export const PermissionsForm = ({
                   </FormLabel>
                   <FormControl>
                     <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      onValueChange={(value) => field.onChange(value === "yes")}
+                      value={field.value ? "yes" : "no"}
                       className="mt-2 flex flex-col"
                     >
                       <FormItem className="flex items-center space-y-0 space-x-3">
@@ -102,14 +122,6 @@ export const PermissionsForm = ({
                         </FormControl>
                         <FormLabel className="text-base font-normal">
                           No
-                        </FormLabel>
-                      </FormItem>
-                      <FormItem className="flex items-center space-y-0 space-x-3">
-                        <FormControl>
-                          <RadioGroupItem value="outsideOnly" />
-                        </FormControl>
-                        <FormLabel className="text-base font-normal">
-                          Outside Only
                         </FormLabel>
                       </FormItem>
                     </RadioGroup>
@@ -137,8 +149,8 @@ export const PermissionsForm = ({
                   </FormLabel>
                   <FormControl>
                     <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      onValueChange={(value) => field.onChange(value === "yes")}
+                      value={field.value ? "yes" : "no"}
                       className="mt-2 flex flex-col"
                     >
                       <FormItem className="flex items-center space-y-0 space-x-3">
@@ -182,8 +194,8 @@ export const PermissionsForm = ({
                   </FormLabel>
                   <FormControl>
                     <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      onValueChange={(value) => field.onChange(value === "yes")}
+                      value={field.value ? "yes" : "no"}
                       className="mt-2 flex flex-col"
                     >
                       <FormItem className="flex items-center space-y-0 space-x-3">
@@ -208,6 +220,7 @@ export const PermissionsForm = ({
                 </FormItem>
               )}
             />
+            <FormErrors errors={form.formState.errors} />
           </div>
           <div className="flex items-center justify-center">
             <LoadingButton
