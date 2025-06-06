@@ -4,7 +4,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Link } from "react-router";
 import { TabsContent } from "@/components/ui/ghost-tabs";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { CurrencyIcon } from "@/components/CurrencyIcon";
 import { useGetLeases } from "../api/queries";
 
@@ -39,6 +39,24 @@ export default function Leases() {
   const handleTabChange = (value: string) => {
     setActiveTab(value);
   };
+
+  const currentLeases = useMemo(() => {
+    if (!leases) return [];
+
+    const today = new Date();
+
+    return leases.filter((lease) => {
+      const startDate = new Date(lease.startDate);
+      const endDate = new Date(lease.endDate);
+
+      if (activeTab === "active") {
+        return startDate <= today && endDate >= today;
+      } else {
+        return startDate > today;
+      }
+    });
+  }, [leases, activeTab]);
+
   return (
     <div className="space-y-5">
       <div className="flex items-end justify-between">
@@ -64,8 +82,8 @@ export default function Leases() {
               <div className="flex items-center justify-center py-20">
                 <p className="text-gray-500">Loading...</p>
               </div>
-            ) : leases?.length ? (
-              leases.map((lease) => (
+            ) : currentLeases.length ? (
+              currentLeases.map((lease) => (
                 <Card key={lease._id} className="gap-0 py-3">
                   <CardHeader className="px-3">
                     <p className="text-sm text-gray-500">
