@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { IconRound } from "@/components/IconRound";
 import {
@@ -30,14 +31,17 @@ export type PropertySizeFormValues = z.infer<typeof propertySizeSchema>;
 interface PropertySizeFormProps {
   defaultValues?: IPropertySize;
   onSuccess: (data: PropertySizeFormValues) => void;
+  propertyName?: string;
 }
 
 export const PropertySizeForm = ({
   defaultValues,
   onSuccess,
+  propertyName,
 }: PropertySizeFormProps) => {
   const { id } = useParams<{ id: string }>();
   const { mutateAsync } = useUpdatePropertyMutation(id || "");
+
   const form = useForm<PropertySizeFormValues>({
     resolver: zodResolver(propertySizeSchema),
     defaultValues: {
@@ -47,6 +51,18 @@ export const PropertySizeForm = ({
       yearBuilt: defaultValues?.yearBuilt || 0,
     },
   });
+
+  // Update form values when defaultValues prop changes
+  useEffect(() => {
+    if (defaultValues) {
+      form.reset({
+        beds: defaultValues.beds || 0,
+        baths: defaultValues.baths || 0,
+        squareFeet: defaultValues.squareFeet || 0,
+        yearBuilt: defaultValues.yearBuilt || 0,
+      });
+    }
+  }, [defaultValues, form]);
 
   const handleSubmit = async (data: PropertySizeFormValues) => {
     try {
@@ -76,6 +92,10 @@ export const PropertySizeForm = ({
               Property Size
             </h2>
           </div>
+
+          {propertyName && (
+            <div className="text-primary mb-5 text-xl">{propertyName}</div>
+          )}
 
           <div className="mb-4 grid grid-cols-2 gap-4">
             <FormField
