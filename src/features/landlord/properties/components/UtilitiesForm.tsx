@@ -13,6 +13,10 @@ import {
 import utilitiesIcon from "../assets/utilities.png";
 import utilitiesCoveredIcon from "../assets/utilities-covered.png";
 import { LoadingButton } from "@/components/ui/loading-button";
+import { useUpdatePropertyMutation } from "../api/mutation";
+import { useParams } from "react-router";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import FormErrors from "@/components/FormErrors";
 
 const utilitiesSchema = z.object({
   cable: z.boolean(),
@@ -28,33 +32,54 @@ const utilitiesSchema = z.object({
 export type UtilitiesFormValues = z.infer<typeof utilitiesSchema>;
 
 interface UtilitiesFormProps {
-  defaultValues?: Partial<UtilitiesFormValues>;
-  onSuccess?: (data: UtilitiesFormValues) => void;
-  address?: string;
+  defaultValues?: IAmenities;
+  onSuccess: (data: UtilitiesFormValues) => void;
+  propertyName?: string;
 }
 
 export const UtilitiesForm = ({
   defaultValues,
   onSuccess,
-  address,
+  propertyName,
 }: UtilitiesFormProps) => {
+  const { id } = useParams<{ id: string }>();
+  const { mutateAsync } = useUpdatePropertyMutation(id || "");
   const form = useForm<UtilitiesFormValues>({
     resolver: zodResolver(utilitiesSchema),
     defaultValues: {
-      cable: false,
-      internet: false,
-      electricity: false,
-      satelliteTV: false,
-      garbage: false,
-      sewage: false,
-      gas: false,
-      water: false,
-      ...defaultValues,
+      cable: defaultValues?.cable || false,
+      internet: defaultValues?.internet || false,
+      electricity: defaultValues?.electricty || false,
+      satelliteTV: defaultValues?.sateliteTv || false,
+      garbage: defaultValues?.garbage || false,
+      sewage: defaultValues?.sewage || false,
+      gas: defaultValues?.gas || false,
+      water: defaultValues?.water || false,
     },
   });
 
-  const handleSubmit = (data: UtilitiesFormValues) => {
-    onSuccess?.(data);
+  const handleSubmit = async (data: UtilitiesFormValues) => {
+    try {
+      const valuesToSubmit: IPropertyUpdateData = {
+        amenities: {
+          ...defaultValues,
+          cable: data.cable,
+          internet: data.internet,
+          electricty: data.electricity,
+          sateliteTv: data.satelliteTV,
+          garbage: data.garbage,
+          sewage: data.sewage,
+          gas: data.gas,
+          water: data.water,
+        } as IAmenities,
+      };
+      await mutateAsync(valuesToSubmit);
+      onSuccess(data);
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   };
 
   return (
@@ -68,8 +93,8 @@ export const UtilitiesForm = ({
             </h2>
           </div>
 
-          {address && (
-            <div className="mb-6 text-sm text-gray-600">{address}</div>
+          {propertyName && (
+            <div className="text-primary mb-5 text-xl">{propertyName}</div>
           )}
 
           <div className="space-y-6">
@@ -225,6 +250,8 @@ export const UtilitiesForm = ({
                 />
               </div>
             </div>
+
+            <FormErrors errors={form.formState.errors} />
 
             <div className="flex items-center justify-center">
               <LoadingButton
