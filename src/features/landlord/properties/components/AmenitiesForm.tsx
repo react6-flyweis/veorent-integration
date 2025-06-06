@@ -17,6 +17,10 @@ import appliancesIcon from "../assets/appliances.png";
 import floorCoveringIcon from "../assets/floor-covering.png";
 import acIcon from "../assets/ac.png";
 import { LoadingButton } from "@/components/ui/loading-button";
+import { useUpdatePropertyMutation } from "../api/mutation";
+import { useParams } from "react-router";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import FormErrors from "@/components/FormErrors";
 
 const amenitiesSchema = z.object({
   accessibility: z.boolean(),
@@ -77,15 +81,17 @@ export type AmenitiesFormValues = z.infer<typeof amenitiesSchema>;
 
 interface AmenitiesFormProps {
   defaultValues?: Partial<AmenitiesFormValues>;
-  onSuccess?: (data: AmenitiesFormValues) => void;
-  address?: string;
+  onSuccess: (data: AmenitiesFormValues) => void;
+  propertyName?: string;
 }
 
 export const AmenitiesForm = ({
   defaultValues,
   onSuccess,
-  address,
+  propertyName,
 }: AmenitiesFormProps) => {
+  const { id } = useParams<{ id: string }>();
+  const { mutateAsync } = useUpdatePropertyMutation(id || "");
   const form = useForm<AmenitiesFormValues>({
     resolver: zodResolver(amenitiesSchema),
     defaultValues: {
@@ -146,8 +152,67 @@ export const AmenitiesForm = ({
     },
   });
 
-  const handleSubmit = (data: AmenitiesFormValues) => {
-    onSuccess?.(data);
+  const handleSubmit = async (data: AmenitiesFormValues) => {
+    try {
+      const amenitiesData: Partial<IAmenities> = {
+        acessibility: data.accessibility,
+        alarmSystem: data.alarmSystem,
+        biCycleParking: data.bicycleParking,
+        cableReady: data.cableReady,
+        lawn: data.lawn,
+        onSiteLaundry: data.onSiteLaundry,
+        swimmingPool: data.swimmingPool,
+        fencedyard: data.fencedYard,
+        firePlace: data.fireplace,
+        fitnessCenter: data.fitnessCenter,
+        furnished: data.furnished,
+        nearPark: data.nearPark,
+        secureBuilding: data.secureBuilding,
+        vaultedCeiling: data.vaultedCeiling,
+        garage: data.garage,
+        hotTub: data.hotTubSpa,
+        intercom: data.intercom,
+        loundryHookups: data.laundryHookups,
+        offStreetParking: data.offStreetParking,
+        securityCameras: data.securityCameras,
+        wiredFromInternet: data.wiredForInternet,
+
+        // Map appliances
+        dishwasher: data.appliances.dishwasher,
+        garbageDisposal: data.appliances.garbageDisposal,
+        refrigerator: data.appliances.refrigerator,
+        dryer: data.appliances.dryer,
+        microwave: data.appliances.microwave,
+        washer: data.appliances.washer,
+        freezer: data.appliances.freezer,
+        oven: data.appliances.oven,
+
+        // Map floor coverings (note different spellings)
+        carPet: data.floorCoverings.carpet,
+        concrete: data.floorCoverings.concrete,
+        hardWood: data.floorCoverings.hardwood,
+        laminate: data.floorCoverings.laminate,
+        linoleum: data.floorCoverings.linoleumVinyl,
+        slate: data.floorCoverings.slate,
+        softWood: data.floorCoverings.softwood,
+        tile: data.floorCoverings.tile,
+        other: data.floorCoverings.other,
+
+        // Map HVAC
+        airCondition: data.hvac.airConditioning,
+        heating: data.hvac.heating,
+      };
+
+      const valuesToSubmit: IPropertyUpdateData = {
+        amenities: amenitiesData as IAmenities,
+      };
+      await mutateAsync(valuesToSubmit);
+      onSuccess(data);
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   };
 
   return (
@@ -161,8 +226,8 @@ export const AmenitiesForm = ({
             </h2>
           </div>
 
-          {address && (
-            <div className="mb-6 text-sm text-gray-600">{address}</div>
+          {propertyName && (
+            <div className="text-primary mb-5 text-xl">{propertyName}</div>
           )}
 
           <div className="space-y-6">
@@ -973,6 +1038,8 @@ export const AmenitiesForm = ({
                 </div>
               </div>
             </div>
+
+            <FormErrors errors={form.formState.errors} />
 
             <div className="flex items-center justify-center">
               <LoadingButton
