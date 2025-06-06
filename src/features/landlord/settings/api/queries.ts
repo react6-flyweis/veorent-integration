@@ -8,3 +8,15 @@ export const useGetProfileQuery = () => {
     select: (data) => data.data.data,
   });
 };
+
+// /notification/getNotificationPreferences
+export const useGetNotificationPreferencesQuery = () => {
+  return useQuery({
+    queryFn: () =>
+      axiosLandlord.get<IResponse<INotificationPreferences>>(
+        "/notification/getNotificationPreferences",
+      ),
+    queryKey: ["notification-preferences"],
+    select: (data) => data.data.data,
+  });
+};
