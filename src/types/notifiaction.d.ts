@@ -22,3 +22,10 @@ interface INotificationPreferences {
   updatedAt: string;
   __v: number;
 }
+
+type INotificationPreferencesUpdate = Partial<
+  Omit<
+    INotificationPreferences,
+    "_id" | "userId" | "createdAt" | "updatedAt" | "__v"
+  >
+>;
