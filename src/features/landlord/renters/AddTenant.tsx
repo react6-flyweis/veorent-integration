@@ -33,7 +33,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { PlusCircleIcon } from "lucide-react";
 import { CurrencyInput } from "@/components/CurrencyInput";
-import PropertyTypeSelector from "../components/PropertyTypeSelector";
+import { PropertyTypeSelector } from "../components/PropertyTypeSelector";
 import { useCreateTenantMutation } from "./api/mutations";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import FormErrors from "@/components/FormErrors";

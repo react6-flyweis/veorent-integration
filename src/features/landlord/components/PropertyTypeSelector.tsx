@@ -46,7 +46,7 @@ import { useGetPropertyTypes } from "../api/queries";
 //   },
 // ];
 
-const PropertyTypeSelector = ({
+export const PropertyTypeSelector = ({
   value,
   onChange,
 }: {
@@ -99,5 +99,3 @@ const PropertyTypeSelector = ({
     </RadioGroup>
   );
 };
-
-export default PropertyTypeSelector;
