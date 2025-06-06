@@ -35,11 +35,11 @@ interface ILeasingBasics {
   Date: string;
   desiredLeaseTerm: string;
   targetRent: number;
-  targetDeposite: number;
+  targetDeposit: number;
 }
 
 interface IPermission {
-  smoking: string;
+  smoking: "Yes" | "No";
   pets: boolean;
   occupancyLimits: boolean;
 }
@@ -105,7 +105,15 @@ interface IPropertyImage {
   img: string;
   _id: string;
 }
-
+interface IFormCompletionStatus {
+  addressDetails: boolean;
+  propertyDetails: boolean;
+  rentalDetails: boolean;
+  propertySize: boolean;
+  leasingBasics: boolean;
+  amenities: boolean;
+  permission: boolean;
+}
 interface IProperty {
   _id: string;
   addressDetails: IAddressDetails;
@@ -124,6 +132,7 @@ interface IProperty {
   image: IPropertyImage[];
   video: IPropertyImage[];
   isPublishListing: boolean;
+  formCompletionStatus?: IFormCompletionStatus;
   status: string;
   createdAt: string;
   updatedAt: string;
