@@ -73,6 +73,7 @@ export const MultiStepper = forwardRef<
     | ReactElement<MultiStepperStepProps>
     | undefined;
   const currentStepValidator = currentStepElement?.props.onValidate;
+  const hideCurrentStepButton = currentStepElement?.props.hideButton;
 
   const nextStep = useCallback(() => {
     if (step < totalSteps) setStep((s) => s + 1);
@@ -126,7 +127,7 @@ export const MultiStepper = forwardRef<
           )}
         </div>
 
-        {button && <div>{button}</div>}
+        {button && !hideCurrentStepButton && <div>{button}</div>}
       </div>
     </StepperContext.Provider>
   );
@@ -138,6 +139,7 @@ MultiStepper.displayName = "MultiStepper";
 export interface MultiStepperStepProps {
   children: ReactNode;
   onValidate?: () => boolean | Promise<boolean>;
+  hideButton?: boolean;
 }
 
 export function MultiStepperStep({ children }: MultiStepperStepProps) {
