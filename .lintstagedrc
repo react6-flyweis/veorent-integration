@@ -1,0 +1,3 @@
+{
+  "src/**/*.{js,css,ts,tsx,jsx}": ["pnpm format", "pnpm lint:fix"]
+}
