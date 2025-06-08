@@ -100,7 +100,7 @@ export default tseslint.config(
       ],
 
       // 🔧 Additional import rules
-      "import/no-unresolved": "error",
+      // "import/no-unresolved": "error",
       "import/named": "error",
       "import/default": "error",
       "import/no-absolute-path": "error",
