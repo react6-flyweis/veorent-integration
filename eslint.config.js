@@ -4,6 +4,7 @@ import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 import importPlugin from "eslint-plugin-import";
+import prettier from "eslint-config-prettier";
 
 export default tseslint.config(
   { ignores: ["dist"] },
@@ -18,6 +19,7 @@ export default tseslint.config(
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
       import: importPlugin,
+      prettier: prettier,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
@@ -25,9 +27,12 @@ export default tseslint.config(
         "warn",
         { allowConstantExport: true },
       ],
+
+      prettier: "error",
+
       // 🚀 Import organization and sorting rules
       "import/order": [
-        "error",
+        "warn",
         {
           groups: [
             "builtin", // Node.js built-in modules
