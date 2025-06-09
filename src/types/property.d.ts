@@ -49,7 +49,7 @@ interface IAmenities {
   cable: boolean;
   internet: boolean;
   electricty: boolean;
-  sateliteTv: boolean;
+  satelliteTv: boolean;
   garbage: boolean;
   sewage: boolean;
   gas: boolean;

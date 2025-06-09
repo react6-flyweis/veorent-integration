@@ -1,6 +1,9 @@
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+
+import FormErrors from "@/components/FormErrors";
 import { IconRound } from "@/components/IconRound";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -10,13 +13,12 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import utilitiesIcon from "../assets/utilities.png";
-import utilitiesCoveredIcon from "../assets/utilities-covered.png";
 import { LoadingButton } from "@/components/ui/loading-button";
-import { useUpdatePropertyMutation } from "../api/mutation";
-import { useParams } from "react-router";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import FormErrors from "@/components/FormErrors";
+
+import { useUpdatePropertyMutation } from "../api/mutation";
+import utilitiesCoveredIcon from "../assets/utilities-covered.png";
+import utilitiesIcon from "../assets/utilities.png";
 
 const utilitiesSchema = z.object({
   cable: z.boolean(),
@@ -50,7 +52,7 @@ export const UtilitiesForm = ({
       cable: defaultValues?.cable || false,
       internet: defaultValues?.internet || false,
       electricity: defaultValues?.electricty || false,
-      satelliteTV: defaultValues?.sateliteTv || false,
+      satelliteTV: defaultValues?.satelliteTv || false,
       garbage: defaultValues?.garbage || false,
       sewage: defaultValues?.sewage || false,
       gas: defaultValues?.gas || false,
@@ -66,7 +68,7 @@ export const UtilitiesForm = ({
           cable: data.cable,
           internet: data.internet,
           electricty: data.electricity,
-          sateliteTv: data.satelliteTV,
+          satelliteTv: data.satelliteTV,
           garbage: data.garbage,
           sewage: data.sewage,
           gas: data.gas,
