@@ -1,3 +1,5 @@
+import { useCallback } from "react";
+
 import {
   Select,
   SelectContent,
@@ -18,21 +20,32 @@ export function PropertiesSelector({
 }) {
   const { data } = useGetProperties();
 
+  const isIncomplete = useCallback((property: IProperty) => {
+    if (!property.formCompletionStatus) return false;
+    return !Object.values(property.formCompletionStatus).every(
+      (status) => status === true,
+    );
+  }, []);
+
+  const completedProperties = data?.filter(
+    (property) => !isIncomplete(property),
+  );
+
   return (
     <Select onValueChange={onChange} defaultValue={value} value={value}>
       <SelectTrigger>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
-        {data?.length ? (
-          data.map((property) => (
+        {completedProperties?.length ? (
+          completedProperties.map((property) => (
             <SelectItem key={property._id} value={property._id}>
               {property.name}
             </SelectItem>
           ))
         ) : (
           <SelectItem value="no-properties" disabled>
-            No properties found
+            No completed properties found
           </SelectItem>
         )}
       </SelectContent>
