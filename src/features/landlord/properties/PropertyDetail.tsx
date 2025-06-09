@@ -1,7 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CurrencyIcon } from "@/components/CurrencyIcon";
-import { BackButton } from "@/components/BackButton";
+import { useMemo } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   UserIcon,
   EditIcon,
@@ -11,99 +9,23 @@ import {
   PenLineIcon,
   BadgeInfoIcon,
   LinkIcon,
+  StarIcon,
 } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { useGetPropertyByIdQuery } from "./api/queries";
+
+import { BackButton } from "@/components/BackButton";
+import { CurrencyIcon } from "@/components/CurrencyIcon";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { useMemo } from "react";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import { PROPERTY_URL_PREFIX } from "@/constants";
+import { cn } from "@/lib/utils";
+import { getDaysLeft } from "@/utils/date";
+import { formatDate } from "@/utils/formatDate";
 
-// type PropertyDetailType = {
-//   id: string;
-//   name: string;
-//   address: string;
-//   city: string;
-//   state: string;
-//   zipCode: string;
-//   image: string;
-//   baths?: number;
-//   beds?: number;
-//   rent?: number;
-//   rating?: number;
-//   status?: "complete" | "incomplete" | "marketing" | undefined;
-//   type?: "single" | "multi";
-//   description?: string;
-//   propertyId?: string;
-//   marketingExpires?: string;
-//   listingUrl?: string;
-//   preScreenerUrl?: string;
-// };
-
-// const properties: PropertyDetailType[] = [
-//   {
-//     id: "1",
-//     name: "Ft. Collins Home",
-//     address: "700 H St",
-//     city: "Ft Collins",
-//     state: "CO",
-//     zipCode: "80992",
-//     image: "/property.png",
-//     baths: 2,
-//     beds: 3,
-//     rent: 900,
-//     rating: 5,
-//     status: "marketing",
-//     type: "single",
-//     description:
-//       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-//     propertyId: "742148",
-//     marketingExpires: "08/17/2024 (29 DAYS LEFT)",
-//     listingUrl: "https://example/examplewebsite.com",
-//     preScreenerUrl: "https://example/examplewebsite.com",
-//   },
-//   {
-//     id: "2",
-//     name: "46 Bryant Way",
-//     address: "46 Bryant Way",
-//     city: "Denver",
-//     state: "CO",
-//     zipCode: "80219",
-//     image: "/property.png",
-//     baths: 2,
-//     beds: 2,
-//     rent: 4000,
-//     status: undefined,
-//     type: "single",
-//     description:
-//       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-//     propertyId: "749289",
-//     marketingExpires: "08/17/2024 (29 DAYS LEFT)",
-//     listingUrl: "https://example/examplewebsite.com",
-//     preScreenerUrl: "https://example/examplewebsite.com",
-//   },
-//   {
-//     id: "3",
-//     name: "Family House in Santa Barbara",
-//     address: "2100 Circle Drive",
-//     city: "Santa Barbara",
-//     state: "CA",
-//     zipCode: "87692",
-//     image: "/property.png",
-//     baths: 1,
-//     beds: 2,
-//     rent: 1500,
-//     status: "incomplete",
-//     type: "single",
-//     description:
-//       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-//     propertyId: "742151",
-//     marketingExpires: "08/17/2024 (29 DAYS LEFT)",
-//     listingUrl: "https://example/examplewebsite.com",
-//     preScreenerUrl: "https://example/examplewebsite.com",
-//   },
-// ];
+import { useGetPropertyByIdQuery } from "./api/queries";
 
 const statusColorMap: Record<string, string> = {
   marketing: "bg-blue-500",
@@ -152,19 +74,18 @@ export default function PropertyDetail() {
   const navigate = useNavigate();
   const { data, isLoading } = useGetPropertyByIdQuery(propertyId || "");
 
-  const isIncomplete = useMemo(() => {
-    if (!data?.formCompletionStatus) return false;
-    return !Object.values(data.formCompletionStatus).every(
-      (status) => status === true,
-    );
-  }, [data?.formCompletionStatus]);
-
   const status = useMemo(() => {
-    if (!data) return undefined;
-    if (data.formCompletionStatus)
-      return isIncomplete ? "incomplete" : "complete";
-    return data.status;
-  }, [data, isIncomplete]);
+    // Check if property has incomplete form status
+    const hasIncompleteForm =
+      data?.formCompletionStatus &&
+      !Object.values(data?.formCompletionStatus).every(
+        (status) => status === true,
+      );
+
+    if (hasIncompleteForm) return "incomplete";
+    if (data?.isMarketing) return "marketing";
+    return data?.status;
+  }, [data]);
 
   if (isLoading || !data) {
     return <PropertyDetailSkeleton />;
@@ -212,14 +133,16 @@ export default function PropertyDetail() {
               {status.charAt(0).toUpperCase() + status.slice(1)}
             </Badge>
           )}
-
-          <div className="size-32 rounded-full bg-gray-100">
-            <img
-              src={property.image[0]?.img}
-              alt={property.name}
-              className="h-full w-full object-cover"
+          <Avatar className="size-32">
+            <AvatarImage
+              src={property.image?.[0]?.img}
+              alt={property.addressDetails?.streetAddress}
+              className="object-cover"
             />
-          </div>
+            <AvatarFallback className="text-2xl font-semibold">
+              {property.addressDetails?.streetAddress?.charAt(0)}
+            </AvatarFallback>
+          </Avatar>
         </CardHeader>
         {/* Property Info Section */}
         <CardContent className="px-4 py-2">
@@ -229,16 +152,16 @@ export default function PropertyDetail() {
                 <h2 className="text-xl font-semibold">
                   {property.addressDetails?.streetAddress}
                 </h2>
-                {/* {property.rating && (
+                {property.rating && (
                   <div className="mt-1 flex">
                     {Array.from({ length: property.rating }).map((_, i) => (
-                      <Star
+                      <StarIcon
                         key={i}
                         className="size-3 fill-yellow-200 text-yellow-400"
                       />
                     ))}
                   </div>
-                )} */}
+                )}
               </div>
               <p className="text-muted-foreground">
                 {property.addressDetails?.city},{" "}
@@ -281,21 +204,28 @@ export default function PropertyDetail() {
       <Card className="rounded-sm py-0">
         {status === "marketing" && (
           <div className="rounded-md p-4">
-            <h3 className="mb-2 text-lg font-medium">Marketing Online: ON</h3>
+            <h3 className="mb-2 text-lg font-medium">
+              Marketing Online: {property.isMarketing ? "ON" : "OFF"}
+            </h3>
             <p className="text-muted-foreground text-sm">
-              <span>EXPIRES ON</span>
-              {/* <span>{property.marketingExpires}</span> */}
+              <span>EXPIRES ON:</span>{" "}
+              <span>
+                {formatDate(property.marketingExtendedDate)} (
+                {getDaysLeft(property.marketingExtendedDate)} Days left)
+              </span>
             </p>
             <div className="mt-4 flex justify-around gap-5">
               <Button className="flex-1" variant="outlinePrimary">
                 Turn Off
               </Button>
-              <Link
-                to="/landlord/properties/marketing-extended"
-                className="flex-1"
-              >
-                <Button className="w-full">Extend</Button>
-              </Link>
+              {!property.isMarketingExtended && (
+                <Link
+                  to="/landlord/properties/marketing-extended"
+                  className="flex-1"
+                >
+                  <Button className="w-full">Extend</Button>
+                </Link>
+              )}
             </div>
           </div>
         )}
@@ -366,7 +296,10 @@ export default function PropertyDetail() {
           <CardContent className="space-y-5 px-4">
             <div className="space-y-1">
               <h3 className="text-lg font-medium">Listing Page</h3>
-              <p className="text-blue-600">{property._id}</p>
+              <p className="text-blue-600">
+                {PROPERTY_URL_PREFIX}
+                {property._id}
+              </p>
               <div className="flex gap-5">
                 <Button
                   size="sm"
@@ -421,20 +354,6 @@ export default function PropertyDetail() {
           </CardContent>
         </Card>
       )}
-
-      {/* Footer action buttons for non-marketing properties */}
-      {/* {status !== "marketing" && (
-        <Card>
-          <CardFooter className="grid grid-cols-2 gap-4 p-4">
-            <Button variant="outline" className="w-full">
-              Share Listing
-            </Button>
-            <Button variant="outline" className="w-full">
-              Screen Tenant
-            </Button>
-          </CardFooter>
-        </Card>
-      )} */}
     </div>
   );
 }
