@@ -22,6 +22,7 @@ import {
 import { LoadingButton } from "@/components/ui/loading-button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { PropertyTypeSelector } from "@/features/landlord/components/PropertyTypeSelector";
+import { useToast } from "@/hooks/useAlertToast";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 
 import { useRegisterLandlordMutation } from "./api/mutation";
@@ -38,6 +39,8 @@ type SignUpFormValues = z.infer<typeof formSchema>;
 export default function SignUpLandlord() {
   const navigate = useNavigate();
   const { state } = useLocation();
+  const { showToast } = useToast();
+
   const { mutateAsync } = useRegisterLandlordMutation();
   const { data: businessData } = useGetBusinessQuery();
   const { data: rentalProcessData } = useGetRentalProcessQuery();
@@ -68,6 +71,7 @@ export default function SignUpLandlord() {
         // referralCode: state.landlordData.referralSource || "",
       };
       await mutateAsync(valuesToSubmit);
+      showToast("Registration successful! Redirecting...", "success");
       navigate("/landlord");
     } catch (error) {
       form.setError("root", {
