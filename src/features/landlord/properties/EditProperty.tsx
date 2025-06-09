@@ -1,6 +1,4 @@
-import { BackButton } from "@/components/BackButton";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { useLocation, useNavigate, useParams } from "react-router";
 import {
   BathIcon,
   BedDoubleIcon,
@@ -10,9 +8,18 @@ import {
   CigaretteIcon,
   BriefcaseIcon,
   InfoIcon,
+  GroupIcon,
+  PawPrintIcon,
 } from "lucide-react";
-import propertyEditIcon from "./assets/edit-property.png";
-import { useLocation, useNavigate } from "react-router";
+
+import { BackButton } from "@/components/BackButton";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+
+
+import { useGetPropertyByIdQuery } from "./api/queries";
 
 interface PropertySectionProps {
   title: string;
@@ -39,29 +46,46 @@ const PropertySection = ({ title, children, onEdit }: PropertySectionProps) => {
   );
 };
 
-// const propertyData = {
-//   address: "123 Main St.",
-//   city: "Denver",
-//   state: "CO",
-//   zipCode: "80023",
-//   propertyType: "Multi-Family",
-//   beds: 0,
-//   baths: 0,
-//   title: "N/A",
-//   description: "N/A",
-//   requirements: {
-//     noSmoking: true,
-//   },
-//   utilities: [],
-//   amenities: [],
-// };
-
 export default function EditProperty() {
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
   const { state } = useLocation();
-  const propertyData = state?.property as IProperty;
+  const { data, isLoading } = useGetPropertyByIdQuery(id || "", {
+    skip: !id && !state?.property?._id,
+  });
 
+  const propertyData = state?.property || data;
   const propertyId = propertyData?._id;
+
+  // Show loading skeleton when there's no state.property and data is loading
+  if (!state?.property && isLoading) {
+    return (
+      <div>
+        <div className="bg-primary relative flex h-64 flex-col items-center justify-center gap-5">
+          <div className="absolute top-0 left-0 p-4">
+            <BackButton />
+          </div>
+          <Skeleton className="h-8 w-48 bg-white/20" />
+          <Skeleton className="size-32 rounded-full bg-white/20" />
+        </div>
+
+        <div className="mt-5 space-y-4">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <Card key={index} className="p-4">
+              <div className="mb-3 flex items-center justify-between">
+                <Skeleton className="h-6 w-32" />
+                <Skeleton className="h-8 w-16" />
+              </div>
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-3/4" />
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -71,7 +95,16 @@ export default function EditProperty() {
         </div>
         <h2 className="text-2xl font-bold text-white">Edit Property</h2>
         <div className="rounded-full">
-          <img src={propertyEditIcon} alt="Edit" className="h-32" />
+          <Avatar className="size-32">
+            <AvatarImage
+              src={propertyData.image?.[0]?.img}
+              alt={propertyData.addressDetails?.streetAddress}
+              className="object-cover"
+            />
+            <AvatarFallback className="text-2xl font-semibold">
+              {propertyData.addressDetails?.streetAddress?.charAt(0)}
+            </AvatarFallback>
+          </Avatar>
         </div>
       </div>
 
@@ -119,7 +152,7 @@ export default function EditProperty() {
             </div>
             <div className="flex items-center gap-2">
               <HomeIcon size={18} className="text-gray-500" />
-              <span>{propertyData.propertyTypeId?.name}</span>
+              <span>{propertyData.propertyTypeId?.name || "N/A"}</span>
             </div>
             <div className="flex items-center gap-2">
               <BathIcon size={18} className="text-gray-500" />
@@ -134,9 +167,31 @@ export default function EditProperty() {
             navigate(`/landlord/properties/${propertyId}/edit-permissions`)
           }
         >
-          <div className="flex items-center gap-2">
-            <CigaretteIcon size={18} className="text-gray-500" />
-            <span>No Smoking</span>
+          <div className="">
+            <div className="flex items-center gap-2">
+              <CigaretteIcon size={18} className="text-gray-500" />
+              <span>
+                {propertyData.permission?.smoking === "No"
+                  ? "No Smoking"
+                  : "Smoking Allowed"}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <GroupIcon size={18} className="text-gray-500" />
+              <span>
+                Occupancy Limits :{" "}
+                {propertyData.permission?.occupancyLimitsCount || "N/A"}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <PawPrintIcon size={18} className="text-gray-500" />
+              <span>
+                {" "}
+                {propertyData.permission?.pets
+                  ? "Pets Allowed"
+                  : "No Pets Allowed"}
+              </span>
+            </div>
           </div>
         </PropertySection>
 
@@ -146,9 +201,9 @@ export default function EditProperty() {
             navigate(`/landlord/properties/${propertyId}/edit-description`)
           }
         >
-          <div className="space-y-2">
-            <p className="text-gray-500">N/A</p>
-            <p className="text-gray-500">N/A</p>
+          <div className="space-y-1">
+            <p className="text-gray-500">{propertyData.name || "N/A"}</p>
+            <p className="text-gray-500">{propertyData.description || "N/A"}</p>
           </div>
         </PropertySection>
 
