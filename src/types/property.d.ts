@@ -54,7 +54,7 @@ interface IAmenities {
   sewage: boolean;
   gas: boolean;
   water: boolean;
-  acessibility: boolean;
+  accessibility: boolean;
   alarmSystem: boolean;
   biCycleParking: boolean;
   cableReady: boolean;
@@ -65,7 +65,7 @@ interface IAmenities {
   garage: boolean;
   hotTub: boolean;
   intercom: boolean;
-  loundryHookups: boolean;
+  laundryHookups: boolean;
   lawn: boolean;
   nearPark: boolean;
   offStreetParking: boolean;

@@ -1,9 +1,11 @@
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+
+import FormErrors from "@/components/FormErrors";
 import { IconRound } from "@/components/IconRound";
 import { Checkbox } from "@/components/ui/checkbox";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Form,
   FormControl,
@@ -11,16 +13,16 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import utilitiesIcon from "../assets/utilities.png";
+import { LoadingButton } from "@/components/ui/loading-button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+
+import { useUpdatePropertyMutation } from "../api/mutation";
+import acIcon from "../assets/ac.png";
 import amenititesIcon from "../assets/amenitites.png";
 import appliancesIcon from "../assets/appliances.png";
 import floorCoveringIcon from "../assets/floor-covering.png";
-import acIcon from "../assets/ac.png";
-import { LoadingButton } from "@/components/ui/loading-button";
-import { useUpdatePropertyMutation } from "../api/mutation";
-import { useParams } from "react-router";
-import { getErrorMessage } from "@/utils/getErrorMessage";
-import FormErrors from "@/components/FormErrors";
+import utilitiesIcon from "../assets/utilities.png";
 
 const amenitiesSchema = z.object({
   accessibility: z.boolean(),
@@ -80,7 +82,7 @@ const amenitiesSchema = z.object({
 export type AmenitiesFormValues = z.infer<typeof amenitiesSchema>;
 
 interface AmenitiesFormProps {
-  defaultValues?: Partial<AmenitiesFormValues>;
+  defaultValues?: IAmenities;
   onSuccess: (data: AmenitiesFormValues) => void;
   propertyName?: string;
 }
@@ -92,31 +94,32 @@ export const AmenitiesForm = ({
 }: AmenitiesFormProps) => {
   const { id } = useParams<{ id: string }>();
   const { mutateAsync } = useUpdatePropertyMutation(id || "");
+
   const form = useForm<AmenitiesFormValues>({
     resolver: zodResolver(amenitiesSchema),
     defaultValues: {
       // Utilities defaults
+      bicycleParking: defaultValues?.biCycleParking || false,
+      fencedYard: defaultValues?.fencedyard || false,
+      fireplace: defaultValues?.firePlace || false,
+      hotTubSpa: defaultValues?.hotTub || false,
+      wiredForInternet: defaultValues?.wiredFromInternet || false,
       accessibility: false,
       alarmSystem: false,
-      bicycleParking: false,
       cableReady: false,
       lawn: false,
       onSiteLaundry: false,
       swimmingPool: false,
-      fencedYard: false,
-      fireplace: false,
       fitnessCenter: false,
       furnished: false,
       nearPark: false,
       secureBuilding: false,
       vaultedCeiling: false,
       garage: false,
-      hotTubSpa: false,
       intercom: false,
       laundryHookups: false,
       offStreetParking: false,
       securityCameras: false,
-      wiredForInternet: false,
 
       // Appliances defaults
       appliances: {
@@ -128,25 +131,27 @@ export const AmenitiesForm = ({
         washer: false,
         freezer: false,
         oven: false,
+        ...defaultValues,
       },
 
       // Floor Coverings defaults
       floorCoverings: {
-        carpet: false,
-        concrete: false,
-        hardwood: false,
+        carpet: defaultValues?.carPet || false,
+        hardwood: defaultValues?.hardWood || false,
+        linoleumVinyl: defaultValues?.linoleum || false,
+        softwood: defaultValues?.softWood || false,
         laminate: false,
-        linoleumVinyl: false,
+        concrete: false,
         slate: false,
-        softwood: false,
         tile: false,
         other: false,
+        ...defaultValues,
       },
 
       // HVAC defaults
       hvac: {
-        airConditioning: false,
-        heating: false,
+        airConditioning: defaultValues?.airCondition || false,
+        heating: defaultValues?.heating || false,
       },
       ...defaultValues,
     },
@@ -155,7 +160,7 @@ export const AmenitiesForm = ({
   const handleSubmit = async (data: AmenitiesFormValues) => {
     try {
       const amenitiesData: Partial<IAmenities> = {
-        acessibility: data.accessibility,
+        accessibility: data.accessibility,
         alarmSystem: data.alarmSystem,
         biCycleParking: data.bicycleParking,
         cableReady: data.cableReady,
@@ -172,7 +177,7 @@ export const AmenitiesForm = ({
         garage: data.garage,
         hotTub: data.hotTubSpa,
         intercom: data.intercom,
-        loundryHookups: data.laundryHookups,
+        laundryHookups: data.laundryHookups,
         offStreetParking: data.offStreetParking,
         securityCameras: data.securityCameras,
         wiredFromInternet: data.wiredForInternet,

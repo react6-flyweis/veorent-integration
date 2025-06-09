@@ -60,10 +60,10 @@ export const PermissionsForm = ({
   const form = useForm<PermissionsFormValues>({
     resolver: zodResolver(permissionsSchema),
     defaultValues: {
-      smoking: Boolean(defaultValues?.smoking || false),
+      smoking: defaultValues?.smoking === "Yes",
       pets: Boolean(defaultValues?.pets || false),
       occupancyLimit: Boolean(defaultValues?.occupancyLimits || false),
-      occupancyCount: 0,
+      occupancyCount: Number(defaultValues?.occupancyLimitsCount) || 0,
     },
   });
 
