@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { Link, useLocation, useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 import {
   Form,
@@ -12,8 +13,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { LoadingButton } from "@/components/ui/loading-button";
-import { Link, useNavigate } from "react-router";
 import { useUserPreferenceStore } from "@/store/useUserPreferenceStore";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 const signUpSchema = z.object({
   fName: z.string().min(2, "First name is required."),
@@ -27,6 +28,8 @@ type SignUpFormValues = z.infer<typeof signUpSchema>;
 export function SignUpForm() {
   const { userType } = useUserPreferenceStore();
   const navigate = useNavigate();
+  const { state } = useLocation();
+
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -36,10 +39,22 @@ export function SignUpForm() {
   });
 
   const onSubmit = (data: SignUpFormValues) => {
-    console.log("SignUp Data:", data);
-    //
-    // get user preferences from the store
-    navigate(userType === "landlord" ? "/signup-landlord" : "/tenant/search");
+    if (userType === "landlord") {
+      return navigate("/signup-landlord", {
+        state: {
+          ...data,
+          ...state,
+        },
+      });
+    }
+    try {
+      console.debug("SignUp Data:", data);
+      navigate("/tenant/search");
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   };
 
   return (
