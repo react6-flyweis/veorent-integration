@@ -1,4 +1,12 @@
 import { useRef } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { HouseIcon } from "lucide-react";
+import { z } from "zod";
+
+import { CurrencyInput } from "@/components/CurrencyInput";
+import FormErrors from "@/components/FormErrors";
 import {
   MultiStepper,
   MultiStepperBackButton,
@@ -6,11 +14,8 @@ import {
   MultiStepperStep,
   type MultiStepperRef,
 } from "@/components/MultiStepper";
-
 import { PageTitle } from "@/components/PageTitle";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Card } from "@/components/ui/card";
 import {
   Form,
   FormField,
@@ -19,29 +24,26 @@ import {
   FormMessage,
   FormControl,
 } from "@/components/ui/form";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Input } from "@/components/ui/input";
 import { LoadingButton } from "@/components/ui/loading-button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 import { PropertyTypeSelector } from "../components/PropertyTypeSelector";
+import { useCreatePropertyMutation } from "./api/mutation";
+import mapPinIcon from "./assets/map-pin.png";
 import { PropertyAddressForm } from "./components/PropertyAddressForm";
 
-import mapPinIcon from "./assets/map-pin.png";
-import { Card } from "@/components/ui/card";
-import { CurrencyInput } from "@/components/CurrencyInput";
-import { HouseIcon } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { useCreatePropertyMutation } from "./api/mutation";
-import { getErrorMessage } from "@/utils/getErrorMessage";
-import FormErrors from "@/components/FormErrors";
-import { useNavigate } from "react-router";
+
+
 
 const formSchema = z.object({
-  propertyName: z.string().min(1, "Property name is required"),
-  description: z
-    .string({
-      required_error: "Description is required",
-    })
-    .max(500, "Description cannot exceed 500 characters"),
+  // propertyName: z.string().min(1, "Property name is required"),
+  // description: z
+  //   .string({
+  //     required_error: "Description is required",
+  //   })
+  //   .max(500, "Description cannot exceed 500 characters"),
   propertyType: z.string().min(1, "Please select a property type"),
   hasRoomRentals: z.enum(["yes", "no"]),
   streetAddress: z.string().min(1, "Street address is required"),
@@ -76,8 +78,8 @@ export default function AddProperty() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const valuesToSubmit: IPropertyCreateData = {
-        name: values.propertyName,
-        description: values.description,
+        // name: values.propertyName,
+        // description: values.description,
         propertyTypeId: values.propertyType,
         isRoomRental: values.hasRoomRentals === "yes",
         propertyDetails: {
@@ -98,7 +100,7 @@ export default function AddProperty() {
         },
       };
       const result = await mutateAsync(valuesToSubmit);
-      navigate("/landlord/properties/"+result.data.data._id+"/setup-prompt");
+      navigate(`/landlord/properties/${result.data.data._id}/setup-prompt`);
     } catch (error) {
       form.setError("root", {
         message: getErrorMessage(error),
@@ -114,8 +116,8 @@ export default function AddProperty() {
             <MultiStepperStep
               onValidate={() =>
                 form.trigger([
-                  "propertyName",
-                  "description",
+                  // "propertyName",
+                  // "description",
                   "propertyType",
                   "hasRoomRentals",
                 ])
@@ -138,7 +140,7 @@ export default function AddProperty() {
                     </FormItem>
                   )}
                 />
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="propertyName"
                   render={({ field }) => (
@@ -164,7 +166,7 @@ export default function AddProperty() {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
                 <FormField
                   control={form.control}
                   name="hasRoomRentals"

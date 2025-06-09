@@ -117,18 +117,18 @@ interface IFormCompletionStatus {
 }
 interface IProperty {
   _id: string;
-  addressDetails: IAddressDetails;
-  propertyDetails: IPropertyDetails;
-  rentalDetails: IRentalDetails;
-  propertySize: IPropertySize;
-  leasingBasics: ILeasingBasics;
-  permission: IPermission;
-  amenities: IAmenities;
-  currentLocation: ILocation;
+  addressDetails?: IAddressDetails;
+  propertyDetails?: IPropertyDetails;
+  rentalDetails?: IRentalDetails;
+  propertySize?: IPropertySize;
+  leasingBasics?: ILeasingBasics;
+  permission?: IPermission;
+  amenities?: IAmenities;
+  currentLocation?: ILocation;
   owner: IUser;
   propertyTypeId: IPropertyType;
-  name: string;
-  description: string;
+  name?: string;
+  description?: string;
   isRoomRental: boolean;
   image: IPropertyImage[];
   video: IPropertyImage[];
@@ -153,8 +153,8 @@ interface IPropertyType {
 }
 
 interface IPropertyCreateData {
-  name: string;
-  description: string;
+  // name: string;
+  // description: string;
   propertyTypeId: string;
   isRoomRental: boolean;
   propertyDetails: IPropertyDetails;
