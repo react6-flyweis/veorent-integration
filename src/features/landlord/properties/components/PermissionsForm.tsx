@@ -1,8 +1,12 @@
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Minus, Plus } from "lucide-react";
 import * as z from "zod";
+
+import FormErrors from "@/components/FormErrors";
 import { IconRound } from "@/components/IconRound";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -11,15 +15,16 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import permissionsIcon from "../assets/permissions.png";
-import smokingIcon from "../assets/smoking.png";
-import petsIcon from "../assets/pets.png";
-import occupancyIcon from "../assets/occupancy.png";
+import { Input } from "@/components/ui/input";
 import { LoadingButton } from "@/components/ui/loading-button";
-import FormErrors from "@/components/FormErrors";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import { useParams } from "react-router";
+
 import { useUpdatePropertyMutation } from "../api/mutation";
+import occupancyIcon from "../assets/occupancy.png";
+import permissionsIcon from "../assets/permissions.png";
+import petsIcon from "../assets/pets.png";
+import smokingIcon from "../assets/smoking.png";
 
 const permissionsSchema = z.object({
   smoking: z.boolean({
@@ -31,9 +36,13 @@ const permissionsSchema = z.object({
   occupancyLimit: z.boolean({
     required_error: "Please specify if there is an occupancy limit",
   }),
+  occupancyCount: z
+    .number()
+    .min(1, "Occupancy count must be at least 1")
+    .optional(),
 });
 
-export type PermissionsFormValues = z.infer<typeof permissionsSchema>;
+type PermissionsFormValues = z.infer<typeof permissionsSchema>;
 interface PermissionsFormProps {
   defaultValues?: IPermission;
   onSuccess: (data: PermissionsFormValues) => void;
@@ -54,20 +63,26 @@ export const PermissionsForm = ({
       smoking: Boolean(defaultValues?.smoking || false),
       pets: Boolean(defaultValues?.pets || false),
       occupancyLimit: Boolean(defaultValues?.occupancyLimits || false),
+      occupancyCount: 0,
     },
   });
 
-  const handleSubmit = async (data: PermissionsFormValues) => {
+  const watchOccupancyLimit = form.watch("occupancyLimit");
+
+  const handleSubmit = async (values: PermissionsFormValues) => {
     try {
       const valuesToSubmit: IPropertyUpdateData = {
         permission: {
-          smoking: data.smoking ? "Yes" : "No",
-          pets: data.pets,
-          occupancyLimits: data.occupancyLimit,
+          smoking: values.smoking ? "Yes" : "No",
+          pets: values.pets,
+          occupancyLimits: values.occupancyLimit,
+          occupancyLimitsCount: values.occupancyCount
+            ? values.occupancyCount.toString()
+            : undefined,
         },
       };
       await mutateAsync(valuesToSubmit);
-      onSuccess(data);
+      onSuccess(values);
     } catch (error) {
       form.setError("root", {
         message: getErrorMessage(error),
@@ -106,7 +121,7 @@ export const PermissionsForm = ({
                     <RadioGroup
                       onValueChange={(value) => field.onChange(value === "yes")}
                       value={field.value ? "yes" : "no"}
-                      className="mt-2 flex flex-col"
+                      className="mt-2 flex"
                     >
                       <FormItem className="flex items-center space-y-0 space-x-3">
                         <FormControl>
@@ -151,7 +166,7 @@ export const PermissionsForm = ({
                     <RadioGroup
                       onValueChange={(value) => field.onChange(value === "yes")}
                       value={field.value ? "yes" : "no"}
-                      className="mt-2 flex flex-col"
+                      className="mt-2 flex"
                     >
                       <FormItem className="flex items-center space-y-0 space-x-3">
                         <FormControl>
@@ -194,9 +209,14 @@ export const PermissionsForm = ({
                   </FormLabel>
                   <FormControl>
                     <RadioGroup
-                      onValueChange={(value) => field.onChange(value === "yes")}
+                      onValueChange={(value) => {
+                        field.onChange(value === "yes");
+                        if (value === "no") {
+                          form.setValue("occupancyCount", 0);
+                        }
+                      }}
                       value={field.value ? "yes" : "no"}
-                      className="mt-2 flex flex-col"
+                      className="mt-2 flex"
                     >
                       <FormItem className="flex items-center space-y-0 space-x-3">
                         <FormControl>
@@ -220,6 +240,62 @@ export const PermissionsForm = ({
                 </FormItem>
               )}
             />
+
+            {watchOccupancyLimit && (
+              <FormField
+                control={form.control}
+                name="occupancyCount"
+                render={({ field }) => (
+                  <FormItem className="mt-4">
+                    <FormLabel className="sr-only text-gray-700">
+                      Maximum number of occupants
+                    </FormLabel>
+                    <FormControl>
+                      <div className="flex items-center gap-3">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="icon"
+                          className="h-10 w-10 rounded-full"
+                          onClick={() => {
+                            const newValue = Math.max(
+                              0,
+                              (field.value || 0) - 1,
+                            );
+                            field.onChange(newValue);
+                          }}
+                        >
+                          <Minus className="h-4 w-4" />
+                        </Button>
+                        <Input
+                          type="number"
+                          min="0"
+                          className="w-16 text-center"
+                          value={field.value || 0}
+                          onChange={(e) =>
+                            field.onChange(parseInt(e.target.value) || 0)
+                          }
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="icon"
+                          className="h-10 w-10 rounded-full"
+                          onClick={() => {
+                            const newValue = (field.value || 0) + 1;
+                            field.onChange(newValue);
+                          }}
+                        >
+                          <Plus className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
             <FormErrors errors={form.formState.errors} />
           </div>
           <div className="flex items-center justify-center">

@@ -42,6 +42,7 @@ interface IPermission {
   smoking: "Yes" | "No";
   pets: boolean;
   occupancyLimits: boolean;
+  occupancyLimitsCount?: string;
 }
 
 interface IAmenities {
