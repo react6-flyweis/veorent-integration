@@ -1,4 +1,4 @@
-import { useLocation, useNavigate, useParams } from "react-router";
+import { Link, useLocation, useNavigate, useParams } from "react-router";
 import {
   BathIcon,
   BedDoubleIcon,
@@ -10,14 +10,13 @@ import {
   InfoIcon,
   GroupIcon,
   PawPrintIcon,
+  ArrowLeftIcon,
 } from "lucide-react";
 
-import { BackButton } from "@/components/BackButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-
 
 import { useGetPropertyByIdQuery } from "./api/queries";
 
@@ -63,7 +62,12 @@ export default function EditProperty() {
       <div>
         <div className="bg-primary relative flex h-64 flex-col items-center justify-center gap-5">
           <div className="absolute top-0 left-0 p-4">
-            <BackButton />
+            <Button
+              variant="outline"
+              className="size-9 items-center justify-center rounded-full"
+            >
+              <ArrowLeftIcon className="text-primary size-5" />
+            </Button>
           </div>
           <Skeleton className="h-8 w-48 bg-white/20" />
           <Skeleton className="size-32 rounded-full bg-white/20" />
@@ -91,7 +95,14 @@ export default function EditProperty() {
     <div>
       <div className="bg-primary relative flex h-64 flex-col items-center justify-center gap-5">
         <div className="absolute top-0 left-0 p-4">
-          <BackButton />
+          <Link to={`/landlord/properties/${propertyId}`}>
+            <Button
+              variant="outline"
+              className="size-9 items-center justify-center rounded-full"
+            >
+              <ArrowLeftIcon className="text-primary size-5" />
+            </Button>
+          </Link>
         </div>
         <h2 className="text-2xl font-bold text-white">Edit Property</h2>
         <div className="rounded-full">
