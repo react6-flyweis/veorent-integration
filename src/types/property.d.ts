@@ -133,6 +133,10 @@ interface IProperty {
   video: IPropertyImage[];
   isPublishListing: boolean;
   formCompletionStatus?: IFormCompletionStatus;
+  isMarketing: boolean;
+  marketingExtendedDate: string; // ISO date string
+  isMarketingExtended?: false;
+  rating?: number;
   status: string;
   createdAt: string;
   updatedAt: string;
