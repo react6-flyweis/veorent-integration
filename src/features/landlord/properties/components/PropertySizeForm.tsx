@@ -1,8 +1,9 @@
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useEffect } from "react";
-import { Input } from "@/components/ui/input";
+
+import FormErrors from "@/components/FormErrors";
 import { IconRound } from "@/components/IconRound";
 import {
   Form,
@@ -12,12 +13,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import propertySizeIcon from "../assets/property-size.png";
+import { Input } from "@/components/ui/input";
 import { LoadingButton } from "@/components/ui/loading-button";
-import { useUpdatePropertyMutation } from "../api/mutation";
-import { useParams } from "react-router";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import FormErrors from "@/components/FormErrors";
+
+import { useUpdatePropertyMutation } from "../api/mutation";
+import propertySizeIcon from "../assets/property-size.png";
 
 const propertySizeSchema = z.object({
   beds: z.coerce.number().min(1, { message: "Number of beds is required" }),
@@ -26,7 +27,7 @@ const propertySizeSchema = z.object({
   yearBuilt: z.coerce.number().optional(),
 });
 
-export type PropertySizeFormValues = z.infer<typeof propertySizeSchema>;
+type PropertySizeFormValues = z.infer<typeof propertySizeSchema>;
 
 interface PropertySizeFormProps {
   defaultValues?: IPropertySize;
@@ -51,18 +52,6 @@ export const PropertySizeForm = ({
       yearBuilt: defaultValues?.yearBuilt || 0,
     },
   });
-
-  // Update form values when defaultValues prop changes
-  useEffect(() => {
-    if (defaultValues) {
-      form.reset({
-        beds: defaultValues.beds || 0,
-        baths: defaultValues.baths || 0,
-        squareFeet: defaultValues.squareFeet || 0,
-        yearBuilt: defaultValues.yearBuilt || 0,
-      });
-    }
-  }, [defaultValues, form]);
 
   const handleSubmit = async (data: PropertySizeFormValues) => {
     try {
