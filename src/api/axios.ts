@@ -1,6 +1,7 @@
-import { API_URL } from "@/constants/api";
 import axios from "axios";
 
-export const axiosClint = axios.create({
+import { API_URL } from "@/constants/api";
+
+export const axiosClient = axios.create({
   baseURL: API_URL,
 });

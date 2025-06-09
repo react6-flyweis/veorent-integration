@@ -1,4 +1,4 @@
-import { axiosClint } from "@/api/axios";
+import { axiosClient } from "@/api/axios";
 import { useAuthStore } from "@/store/useAuthStore";
 
 export async function login({
@@ -8,7 +8,7 @@ export async function login({
   email: string;
   password: string;
 }): Promise<string> {
-  const response = await axiosClint.post<IResponse<ILoginResponse>>(
+  const response = await axiosClient.post<IResponse<ILoginResponse>>(
     "/partner/loginWithPhone",
     {
       email,
@@ -24,7 +24,7 @@ export async function login({
 
 export async function getProfile(): Promise<IUser> {
   const token = useAuthStore.getState().token;
-  const response = await axiosClint.get<IResponse<IUser>>("/partner/profile", {
+  const response = await axiosClient.get<IResponse<IUser>>("/partner/profile", {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
