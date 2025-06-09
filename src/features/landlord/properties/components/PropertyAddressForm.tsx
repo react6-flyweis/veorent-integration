@@ -1,5 +1,10 @@
+import type { PropsWithChildren } from "react";
+import { useForm } from "react-hook-form";
+import { useParams } from "react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -8,11 +13,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { Input } from "@/components/ui/input";
 import { LoadingButton } from "@/components/ui/loading-button";
-import type { PropsWithChildren } from "react";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+
+import { useUpdatePropertyMutation } from "../api/mutation";
 
 const formSchema = z.object({
   streetAddress: z.string().min(1, "Street address is required"),
@@ -25,25 +30,48 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export function PropertyAddressForm({
+  defaultValues,
   onSuccess,
   standAlone = false,
 }: {
+  defaultValues?: IPropertyAddress;
   onSuccess: (values: FormValues) => void;
   standAlone?: boolean;
 }) {
+  const { id } = useParams<{ id: string }>();
+  const { mutateAsync } = useUpdatePropertyMutation(id || "");
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      streetAddress: "",
-      unit: "",
-      city: "",
-      region: "",
-      zipCode: "",
+      streetAddress: defaultValues?.streetAddress || "",
+      unit: defaultValues?.unit || "",
+      city: defaultValues?.city || "",
+      region: defaultValues?.region || "",
+      zipCode: defaultValues?.zipCode || "",
     },
   });
 
-  const onSubmit = (values: FormValues) => {
-    onSuccess(values);
+  const onSubmit = async (data: FormValues) => {
+    try {
+      if (!standAlone) {
+        const valuesToSubmit: IPropertyUpdateData = {
+          addressDetails: {
+            houseNumber: "",
+            streetAddress: data.streetAddress,
+            city: data.city,
+            region: data.region,
+            zipCode: data.zipCode,
+          },
+        };
+        await mutateAsync(valuesToSubmit);
+      }
+      onSuccess(data);
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   };
 
   const WrapperComponent = ({ children }: PropsWithChildren) =>
