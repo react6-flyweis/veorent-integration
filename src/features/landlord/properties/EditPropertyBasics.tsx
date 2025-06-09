@@ -18,9 +18,9 @@ export default function EditPropertyBasics() {
       <div className="border-primary mb-5 border-b-6 pb-3">
         <BackButton />
       </div>
-      <h3 className="text-primary mb-3 text-xl">{propertyAddress}</h3>
       <LeasingBasicsForm
         defaultValues={data?.leasingBasics}
+        propertyName={propertyAddress}
         onSuccess={() => navigate(`/landlord/properties/${id}/edit`)}
       />
     </div>

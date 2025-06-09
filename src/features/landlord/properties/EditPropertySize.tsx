@@ -17,7 +17,9 @@ export default function EditPropertySize() {
       </div>
       <PropertySizeForm
         defaultValues={data?.propertySize}
-        propertyName={data?.name}
+        propertyName={
+          data?.propertyDetails?.streetAddress || data?.name || "Property"
+        }
         onSuccess={() => navigate(`/landlord/properties/${id}/edit`)}
       />
     </div>
