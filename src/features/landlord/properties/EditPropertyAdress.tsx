@@ -24,9 +24,9 @@ export default function EditPropertyAddress() {
         <IconRound icon={houseIcon} size="sm" />
         <h2 className="text-2xl font-bold">Property Address & Units</h2>
       </div>
-      <h3 className="text-primary mb-3 text-xl">{propertyAddress}</h3>
       <PropertyAddressForm
         defaultValues={data?.propertyDetails}
+        propertyName={propertyAddress}
         onSuccess={() => navigate(`/landlord/properties/${id}/edit`)}
       />
     </div>

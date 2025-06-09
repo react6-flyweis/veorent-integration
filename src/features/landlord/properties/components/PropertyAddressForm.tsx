@@ -33,10 +33,12 @@ export function PropertyAddressForm({
   defaultValues,
   onSuccess,
   standAlone = false,
+  propertyName,
 }: {
   defaultValues?: IPropertyAddress;
   onSuccess: (values: FormValues) => void;
   standAlone?: boolean;
+  propertyName?: string;
 }) {
   const { id } = useParams<{ id: string }>();
   const { mutateAsync } = useUpdatePropertyMutation(id || "");
@@ -86,6 +88,10 @@ export function PropertyAddressForm({
   return (
     <Form {...form}>
       <WrapperComponent>
+        {propertyName && (
+          <div className="text-primary mb-5 text-xl">{propertyName}</div>
+        )}
+
         <FormField
           control={form.control}
           name="streetAddress"
