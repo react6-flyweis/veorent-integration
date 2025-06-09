@@ -1,7 +1,10 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { login, getProfile } from "./authApi";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { axiosClient } from "@/api/axios";
 import { useAuthStore } from "@/store/useAuthStore";
+
+import { login, getProfile } from "./authApi";
 
 export function useLoginMutation() {
   const navigate = useNavigate();
@@ -42,5 +45,12 @@ export function useLoginMutation() {
       useAuthStore.getState().logout();
     },
     retry: 1, // Retry once on failure
+  });
+}
+
+export function useRegisterLandlordMutation() {
+  return useMutation({
+    mutationFn: async (data: INewLandlordUser) =>
+      await axiosClient.post<IResponse<unknown>>("/partner/signup", data),
   });
 }

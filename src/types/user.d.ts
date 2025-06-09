@@ -65,3 +65,20 @@ interface IUserFullDetails extends IUser {
   rentalDetails?: IRentalDetailsShort;
   memberSince: string;
 }
+
+interface INewLandlordUser {
+  firstname: string;
+  lastname: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  goals: {
+    goalId: string;
+    selectedOptionId: string;
+  }[];
+  propertyCount: string;
+  businessId: string;
+  propertyTypeId: string;
+  rentalProcessId: string;
+  referralCode?: string; // Optional, if not provided, will be handled in the backend
+}
