@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Skeleton } from "@/components/ui/skeleton";
+
 import { useGetPropertyTypes } from "../api/queries";
 
 // const propertyTypes = [
@@ -57,7 +58,7 @@ export const PropertyTypeSelector = ({
 
   if (isLoading) {
     return (
-      <div className="mt-2 grid grid-cols-4 gap-4">
+      <div className="mt-2 grid grid-cols-2 gap-4 @md:grid-cols-3 @lg:grid-cols-4">
         {Array.from({ length: 5 }).map((_, index) => (
           <Card key={index} className="border-input border p-2">
             <CardContent className="flex flex-col items-center justify-center gap-2 p-4">
@@ -77,7 +78,7 @@ export const PropertyTypeSelector = ({
     <RadioGroup
       onValueChange={onChange}
       defaultValue={value}
-      className="mt-2 grid grid-cols-4 gap-4"
+      className="mt-2 grid grid-cols-2 gap-4 @md:grid-cols-3 @lg:grid-cols-4"
     >
       {data?.map((type) => (
         <label key={type._id} htmlFor={type._id} className="cursor-pointer">
