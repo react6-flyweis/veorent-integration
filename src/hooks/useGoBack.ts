@@ -1,7 +1,8 @@
 import { useCallback } from "react";
 import type { MouseEvent } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useUserPreferenceStore } from "@/store/useUserPreferenceStore";
+
+import { useAuthStore } from "@/store/useAuthStore";
 
 /**
  * A hook that provides a function to navigate back to the previous page.
@@ -11,7 +12,9 @@ import { useUserPreferenceStore } from "@/store/useUserPreferenceStore";
 export function useGoBack(customFallbackPath?: string) {
   const navigate = useNavigate();
   const location = useLocation();
-  const userType = useUserPreferenceStore((state) => state.userType);
+  const user = useAuthStore((state) => state.user);
+
+  const userType = user?.userType || "guest";
 
   const goBack = useCallback(
     (eventOrSteps?: MouseEvent<HTMLButtonElement> | number) => {
@@ -26,9 +29,9 @@ export function useGoBack(customFallbackPath?: string) {
       let fallbackPath = "/";
 
       if (!customFallbackPath) {
-        if (userType === "landlord") {
+        if (userType === "PARTNER") {
           fallbackPath = "/landlord";
-        } else if (userType === "tenant") {
+        } else if (userType === "USER") {
           fallbackPath = "/tenant";
         }
       } else {
