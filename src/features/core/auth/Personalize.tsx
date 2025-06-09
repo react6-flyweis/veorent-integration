@@ -1,14 +1,16 @@
-import tenantIcon from "@/assets/icons/tenant.png";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import landlordIcon from "@/assets/icons/landlord.png";
+import tenantIcon from "@/assets/icons/tenant.png";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useUserPreferenceStore } from "@/store/useUserPreferenceStore";
+
 import {
   type LandlordFormData,
   LandlordPersonalizeForm,
-} from "@/features/landlord/components/LandlordPersonalizeForm";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+} from "./components/LandlordPersonalizeForm";
 
 export default function Personalize() {
   const { setUserType } = useUserPreferenceStore();
@@ -16,20 +18,21 @@ export default function Personalize() {
     "tenant",
   );
   const [landlordData, setLandlordData] = useState<LandlordFormData>({
-    rentalType: "own",
+    goals: [],
     propertiesCount: 0,
-    managementExperience: "none-yet",
     referralSource: "",
   });
   const navigate = useNavigate();
 
   const handleContinue = () => {
     setUserType(selectedType);
-    if (selectedType === "landlord") {
-      // Store landlord data if needed
-      console.log("Landlord data:", landlordData);
-    }
-    navigate(`/signup`);
+    navigate(`/signup`, {
+      state: {
+        userType: selectedType,
+        landlordData: selectedType === "landlord" ? landlordData : undefined,
+      },
+    });
+    // Redirect to the signup page with the selected user type
   };
 
   const handleTypeChange = (value: string) => {
