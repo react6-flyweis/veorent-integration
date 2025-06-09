@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { useAuthStore } from "@/store/useAuthStore";
 
+import { useGetDashboardCounts } from "./api/queries";
 import addendumIcon from "./assets/addendum.png";
 import agreementIcon from "./assets/agreement.png";
 import appIcon from "./assets/application.png";
@@ -15,16 +16,14 @@ import expenseIcon from "./assets/expense.png";
 import formsIcon from "./assets/forms.png";
 import houseIcon from "./assets/house.png";
 import recruitIcon from "./assets/recruitment.png";
-
-
 import screenIcon from "./assets/screen.png";
 import signIcon from "./assets/sign.png";
 import { ActionButton } from "./components/ActionButton";
 import { ScreenMethodDialog } from "./components/ScreenMethodDialog";
 
-
 export default function Dashboard() {
   const user = useAuthStore((state) => state.user);
+  const { data } = useGetDashboardCounts();
 
   const userFirstName = useMemo(() => {
     if (user?.firstname) {
@@ -50,7 +49,7 @@ export default function Dashboard() {
               <CardContent className="flex flex-col items-center justify-center">
                 <img src={houseIcon} className="size-10" />
                 <h3 className="text-lg font-medium @lg:text-xl">MARKETING</h3>
-                <div className="text-lg font-bold">1</div>
+                <div className="text-lg font-bold">{data?.marketing}</div>
               </CardContent>
             </Card>
             <Link to="/landlord/renters">
@@ -58,7 +57,7 @@ export default function Dashboard() {
                 <CardContent className="flex flex-col items-center justify-center">
                   <img src={recruitIcon} className="size-10" />
                   <h3 className="text-lg font-medium @lg:text-xl">LEADS</h3>
-                  <div className="text-lg font-bold">3</div>
+                  <div className="text-lg font-bold">{data?.leads}</div>
                 </CardContent>
               </Card>
             </Link>
@@ -69,7 +68,7 @@ export default function Dashboard() {
                   <h3 className="text-lg font-medium @lg:text-xl">
                     APPLICANTS
                   </h3>
-                  <div className="text-lg font-bold">2</div>
+                  <div className="text-lg font-bold">{data?.applicants}</div>
                 </CardContent>
               </Card>
             </Link>
