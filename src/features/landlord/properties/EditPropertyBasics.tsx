@@ -1,17 +1,27 @@
+import { useNavigate, useParams } from "react-router";
+
 import { BackButton } from "@/components/BackButton";
-import { useNavigate } from "react-router";
+
+import { useGetPropertyByIdQuery } from "./api/queries";
 import { LeasingBasicsForm } from "./components/LeasingBasicsForm";
 
 export default function EditPropertyBasics() {
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const { data } = useGetPropertyByIdQuery(id || "");
+
+  const propertyAddress =
+    data?.propertyDetails?.streetAddress || "Property Address";
+
   return (
     <div>
       <div className="border-primary mb-5 border-b-6 pb-3">
         <BackButton />
       </div>
-      <h3 className="text-primary mb-3 text-xl">123 Main St.</h3>
+      <h3 className="text-primary mb-3 text-xl">{propertyAddress}</h3>
       <LeasingBasicsForm
-        onSuccess={() => navigate("/landlord/properties/1/edit")}
+        defaultValues={data?.leasingBasics}
+        onSuccess={() => navigate(`/landlord/properties/${id}/edit`)}
       />
     </div>
   );
