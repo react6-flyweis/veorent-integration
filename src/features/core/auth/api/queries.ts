@@ -10,3 +10,21 @@ export const useGetGoalsQuery = () => {
     select: (data) => data.data.data,
   });
 };
+
+export const useGetBusinessQuery = () => {
+  return useQuery({
+    queryFn: () => axiosClient.get<IResponse<IBusiness[]>>("/partner/business"),
+    queryKey: ["businessGoals"],
+    select: (data) => data.data.data,
+  });
+};
+
+// /RentalProcess
+export const useGetRentalProcessQuery = () => {
+  return useQuery({
+    queryFn: () =>
+      axiosClient.get<IResponse<IRentalProcess[]>>("/partner/rentalProcess"),
+    queryKey: ["rentalProcess"],
+    select: (data) => data.data.data,
+  });
+};
