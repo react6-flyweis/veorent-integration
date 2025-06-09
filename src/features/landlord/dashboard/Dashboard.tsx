@@ -1,24 +1,27 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-
-import houseIcon from "./assets/house.png";
-import appIcon from "./assets/application.png";
-import recruitIcon from "./assets/recruitment.png";
+import { useMemo } from "react";
 import { Link } from "react-router";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import { ScreenMethodDialog } from "./components/ScreenMethodDialog";
+import { useAuthStore } from "@/store/useAuthStore";
+
+import addendumIcon from "./assets/addendum.png";
+import agreementIcon from "./assets/agreement.png";
+import appIcon from "./assets/application.png";
+import applyIcon from "./assets/apply.png";
+import expenseIcon from "./assets/expense.png";
+import formsIcon from "./assets/forms.png";
+import houseIcon from "./assets/house.png";
+import recruitIcon from "./assets/recruitment.png";
+
 
 import screenIcon from "./assets/screen.png";
-import applyIcon from "./assets/apply.png";
-import agreementIcon from "./assets/agreement.png";
-import addendumIcon from "./assets/addendum.png";
-import formsIcon from "./assets/forms.png";
-import expenseIcon from "./assets/expense.png";
 import signIcon from "./assets/sign.png";
 import { ActionButton } from "./components/ActionButton";
-import { useAuthStore } from "@/store/useAuthStore";
-import { useMemo } from "react";
+import { ScreenMethodDialog } from "./components/ScreenMethodDialog";
+
 
 export default function Dashboard() {
   const user = useAuthStore((state) => state.user);
@@ -41,7 +44,7 @@ export default function Dashboard() {
       <h2 className="mb-2 text-3xl font-semibold">Hello, {userFirstName}</h2>
       <div className="grid grid-cols-1 gap-4 @lg:grid-cols-2 @xl:grid-cols-3">
         {/* Top Summary Cards */}
-        <div className="@container flex flex-col gap-2 @xl:col-span-2">
+        <div className="flex flex-col gap-2 @xl:col-span-2">
           <div className="grid grid-cols-1 gap-2 @sm:grid-cols-2 @md:grid-cols-3">
             <Card className="bg-blue-100">
               <CardContent className="flex flex-col items-center justify-center">
@@ -114,7 +117,7 @@ export default function Dashboard() {
               },
             ].map((tool, index) => (
               <Link
-                to={"/landlord" + tool.path}
+                to={`/landlord${tool.path}`}
                 key={index}
                 style={{ textDecoration: "none" }}
               >

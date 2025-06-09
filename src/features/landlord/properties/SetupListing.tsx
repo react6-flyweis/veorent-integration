@@ -1,4 +1,6 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useCallback } from "react";
+import { useParams } from "react-router";
+
 import {
   MultiStepper,
   MultiStepperIndicator,
@@ -6,17 +8,17 @@ import {
   type MultiStepperRef,
 } from "@/components/MultiStepper";
 import { useGoBack } from "@/hooks/useGoBack";
-import { PropertySizeForm } from "./components/PropertySizeForm";
-import { LeasingBasicsForm } from "./components/LeasingBasicsForm";
-import { PermissionsForm } from "./components/PermissionsForm";
-import { ListingDescriptionForm } from "./components/ListingDescriptionForm";
-import { PhotosVideosForm } from "./components/PhotosVideosForm";
-import { PhoneVerificationForm } from "./components/PhoneVerificationForm";
-import { ListingSuccessScreen } from "./components/ListingSuccessScreen";
-import { UtilitiesForm } from "./components/UtilitiesForm";
-import { AmenitiesForm } from "./components/AmenitiesForm";
+
 import { useGetPropertyByIdQuery } from "./api/queries";
-import { useParams } from "react-router";
+import { AmenitiesForm } from "./components/AmenitiesForm";
+import { LeasingBasicsForm } from "./components/LeasingBasicsForm";
+import { ListingDescriptionForm } from "./components/ListingDescriptionForm";
+import { ListingSuccessScreen } from "./components/ListingSuccessScreen";
+import { PermissionsForm } from "./components/PermissionsForm";
+import { PhoneVerificationForm } from "./components/PhoneVerificationForm";
+import { PhotosVideosForm } from "./components/PhotosVideosForm";
+import { PropertySizeForm } from "./components/PropertySizeForm";
+import { UtilitiesForm } from "./components/UtilitiesForm";
 
 export default function SetupListing() {
   const goBack = useGoBack();
@@ -26,7 +28,7 @@ export default function SetupListing() {
   const stepperRef = useRef<MultiStepperRef>(null);
 
   // Function to determine the current step based on form completion status
-  const getCurrentStep = () => {
+  const getCurrentStep = useCallback(() => {
     if (!data?.formCompletionStatus) return 1;
 
     const completionStatus = data.formCompletionStatus;
@@ -44,7 +46,7 @@ export default function SetupListing() {
 
     // If everything is complete, go to the last step (success screen)
     return 8; // ListingSuccessScreen
-  };
+  }, [data]);
 
   // Navigate to the appropriate step when data loads
   useEffect(() => {
@@ -54,7 +56,7 @@ export default function SetupListing() {
         stepperRef.current.goToStep(targetStep);
       }
     }
-  }, [data]);
+  }, [data, getCurrentStep]);
 
   const handleSuccess = () => {
     if (stepperRef.current) {
