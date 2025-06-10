@@ -27,6 +27,10 @@ export async function login({
 
 export async function getProfile(): Promise<IUser> {
   const token = useAuthStore.getState().token;
+  // console.log("Token:", token);
+  if (!token) {
+    throw new Error("User is not authenticated");
+  }
   const response = await axiosClient.get<
     IResponse<IUser | { memberSince: string; user: IUser }>
   >(
