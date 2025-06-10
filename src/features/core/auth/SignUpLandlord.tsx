@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import FormErrors from "@/components/FormErrors";
@@ -22,7 +23,6 @@ import {
 import { LoadingButton } from "@/components/ui/loading-button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { PropertyTypeSelector } from "@/features/landlord/components/PropertyTypeSelector";
-import { useToast } from "@/hooks/useAlertToast";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 
 import { useRegisterLandlordMutation } from "./api/mutation";
@@ -39,7 +39,6 @@ type SignUpFormValues = z.infer<typeof formSchema>;
 export default function SignUpLandlord() {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { showToast } = useToast();
 
   const { mutateAsync } = useRegisterLandlordMutation();
   const { data: businessData } = useGetBusinessQuery();
@@ -71,7 +70,7 @@ export default function SignUpLandlord() {
         // referralCode: state.landlordData.referralSource || "",
       };
       await mutateAsync(valuesToSubmit);
-      showToast("Registration successful! Redirecting...", "success");
+      toast.success("Registration successful! Redirecting...");
       navigate("/landlord");
     } catch (error) {
       form.setError("root", {
