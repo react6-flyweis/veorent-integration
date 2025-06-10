@@ -1,3 +1,6 @@
+import { InfoIcon } from "lucide-react";
+
+import balanceImg from "@/assets/images/balance.png";
 import { IconRound } from "@/components/IconRound";
 import { PageTitle } from "@/components/PageTitle";
 import {
@@ -7,11 +10,23 @@ import {
   TabsTrigger,
 } from "@/components/ui/ghost-tabs";
 
-import balanceImg from "@/assets/images/balance.png";
-import { InfoIcon } from "lucide-react";
-import { Transactions } from "./components/Transactions";
+import { BalanceDisplay } from "./components/BalanceDisplay";
 import { RecentActivity } from "./components/RecentActivity";
-import { CurrencyIcon } from "@/components/CurrencyIcon";
+import { Transactions } from "./components/Transactions";
+
+// Extracted components for DRY principle
+interface SectionHeaderProps {
+  title: string;
+}
+
+function SectionHeader({ title }: SectionHeaderProps) {
+  return (
+    <div className="flex items-center gap-2">
+      <IconRound icon={balanceImg} size="xs" />
+      <p className="text-primary text-2xl">{title}</p>
+    </div>
+  );
+}
 
 export default function Payments() {
   return (
@@ -25,32 +40,14 @@ export default function Payments() {
         </TabsList>
 
         <TabsContent value="balance" className="flex flex-col gap-3">
-          <div className="flex items-center gap-2">
-            <IconRound icon={balanceImg} size="xs" />
-            <p className="text-primary text-2xl">Account balance</p>
-          </div>
-          <div className="flex items-center text-xl font-bold">
-            <span className="mr-2">Your Current Balance is:</span>
-            <div className="flex items-center">
-              <CurrencyIcon size="sm" />
-              <span>100.00</span>
-            </div>
-          </div>
+          <SectionHeader title="Account balance" />
+          <BalanceDisplay />
           <Transactions />
         </TabsContent>
 
         <TabsContent value="activity" className="flex flex-col gap-3">
-          <div className="flex items-center gap-2">
-            <IconRound icon={balanceImg} size="xs" />
-            <p className="text-primary text-2xl">Account Activity</p>
-          </div>
-          <div className="flex items-center text-xl font-bold">
-            <span>Your Current Balance is:</span>
-            <div className="flex items-center">
-              <CurrencyIcon size="sm" />
-              <span>100.00</span>
-            </div>
-          </div>
+          <SectionHeader title="Account Activity" />
+          <BalanceDisplay />
           <RecentActivity />
         </TabsContent>
 
