@@ -1,5 +1,7 @@
 import { Outlet } from "react-router";
 
+import { Toaster } from "@/components/ui/sonner";
+
 export function AuthLayout() {
   return (
     <div className="flex h-screen w-full">
@@ -12,6 +14,7 @@ export function AuthLayout() {
       <div className="hidden w-2/5 overflow-hidden md:block">
         <img src="/scene.jpg" alt="Interior" className="object-cover" />
       </div>
+      <Toaster />
     </div>
   );
 }
