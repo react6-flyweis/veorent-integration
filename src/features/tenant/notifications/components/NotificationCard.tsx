@@ -1,18 +1,13 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import type { FC } from "react";
 import {
   type LucideIcon,
   CalendarClock,
   Wrench,
   PackageCheck,
 } from "lucide-react";
-import type { FC } from "react";
 
-interface NotificationProps {
-  title: string;
-  time: string;
-  message: string;
-  icon: keyof typeof iconMap;
-}
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { formatDate } from "@/utils/formatDate";
 
 const iconMap: Record<string, LucideIcon> = {
   Wrench,
@@ -20,27 +15,28 @@ const iconMap: Record<string, LucideIcon> = {
   PackageCheck,
 };
 
-export const NotificationCard: FC<NotificationProps> = ({
+export const NotificationCard: FC<INotification> = ({
   title,
-  time,
-  message,
-  icon,
+  createdAt,
+  content,
 }) => {
-  const Icon = iconMap[icon];
+  const Icon = iconMap["CalendarClock"]; // You can replace "Wrench" with a dynamic key if needed
 
   return (
     <Card className="border-primary relative gap-0">
       <CardHeader>
-        <div className="absolute -top-2 -left-2 bg-primary text-white rounded-full p-2 size-7 flex justify-center  items-center">
+        <div className="bg-primary absolute -top-2 -left-2 flex size-7 items-center justify-center rounded-full p-2 text-white">
           <Icon size={16} />
         </div>
-        <div className="flex justify-between items-center">
-          <h3 className="font-bold text-lg text-primary">{title}</h3>
-          <span className="text-xs text-muted-foreground">{time}</span>
+        <div className="flex items-center justify-between">
+          <h3 className="text-primary text-lg font-bold">{title}</h3>
+          <span className="text-muted-foreground text-xs">
+            {formatDate(createdAt)}
+          </span>
         </div>
       </CardHeader>
       <CardContent className="">
-        <p className="text-muted-foreground leading-snug">{message}</p>
+        <p className="text-muted-foreground leading-snug">{content}</p>
       </CardContent>
     </Card>
   );
