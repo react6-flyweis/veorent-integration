@@ -11,11 +11,12 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/ghost-tabs";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import { useGetMaintenanceRequests } from "./api/queries";
 
 export default function Maintenance() {
-  const { data } = useGetMaintenanceRequests();
+  const { data, isLoading } = useGetMaintenanceRequests();
   const [activeTab, setActiveTab] = useState("open");
 
   const filteredAndGroupedData = useMemo(() => {
@@ -74,7 +75,27 @@ export default function Maintenance() {
           <TabsTrigger value="all">All Requests</TabsTrigger>
         </TabsList>
         <TabsContent value={activeTab} className="">
-          {filteredAndGroupedData.length > 0 ? (
+          {isLoading ? (
+            <div className="space-y-6">
+              {/* Date header skeleton */}
+              <Skeleton className="h-12 w-full" />
+
+              {/* Request cards skeleton */}
+              {Array.from({ length: 3 }).map((_, i) => (
+                <Card key={i} className="mt-1 border py-0">
+                  <CardContent className="p-3">
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-2">
+                        <Skeleton className="h-5 w-40" />
+                        <Skeleton className="h-4 w-64" />
+                      </div>
+                      <Skeleton className="h-4 w-20" />
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : filteredAndGroupedData.length > 0 ? (
             <div className="space-y-6">
               {filteredAndGroupedData.map(([date, requests]) => (
                 <div key={date}>
