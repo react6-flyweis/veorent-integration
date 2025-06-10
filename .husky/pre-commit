@@ -3,4 +3,9 @@ export NVM_DIR="$HOME/.nvm"
 # Load nvm and your node version
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
+# Run lint-staged for staged files
 npx lint-staged
+
+# Run type checking on the entire project
+echo "Running TypeScript type checking..."
+npm run type-check
