@@ -1,16 +1,11 @@
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardFooter,
-} from "@/components/ui/card";
+import { Link } from "react-router";
 import { EuroIcon, SearchIcon } from "lucide-react";
-import userImage from "@/assets/user.jpg";
+
 import applicationsIcon from "@/assets/icons/applications.png";
+import insuranceImgIcon from "@/assets/icons/home-insurance.png";
+import truckImgIcon from "@/assets/icons/truck.png";
+import userImage from "@/assets/user.jpg";
+import { IconCard } from "@/components/IconCard";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,17 +15,27 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Link } from "react-router";
-import { IconCard } from "@/components/IconCard";
-import truckImgIcon from "@/assets/icons/truck.png";
-import insuranceImgIcon from "@/assets/icons/home-insurance.png";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardFooter,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { useAuthStore } from "@/store/useAuthStore";
+import { getInitial } from "@/utils/name";
 
 export default function Dashboard() {
+  const user = useAuthStore((state) => state.user);
   return (
     <div className="flex flex-col gap-5">
       {/* Header and Search */}
       <header className="flex flex-col items-center justify-between @md:flex-row">
-        <h1 className="text-xl font-semibold">Hello, Kaiya</h1>
+        <h1 className="text-xl font-semibold">Hello, {user?.firstname}</h1>
         <Link to="/tenant/search">
           <div className="relative w-full max-w-sm">
             <Input placeholder="Search property" className="pr-10" />
@@ -44,14 +49,15 @@ export default function Dashboard() {
         {/* User Info Card */}
         <Card className="md:col-span-3">
           <CardHeader className="flex flex-row items-center space-x-4">
-            <img
-              src={userImage}
-              alt="Kaiya"
-              className="size-16 rounded-full object-cover"
-            />
+            <Avatar className="size-16">
+              <AvatarImage src={user?.image || ""} alt={user?.firstname} />
+              <AvatarFallback>
+                {getInitial((user?.firstname || "") + (user?.lastname || ""))}
+              </AvatarFallback>
+            </Avatar>
             <div>
               <CardTitle className="text-primary text-2xl">
-                Kaiya Lipshutz
+                {user?.firstname} {user?.lastname}
               </CardTitle>
               <CardDescription className="text-lg">
                 123 Main St. CA 70000
