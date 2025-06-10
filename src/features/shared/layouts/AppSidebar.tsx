@@ -1,3 +1,14 @@
+import { useRef, useEffect, useState } from "react";
+import { NavLink, useNavigate, type To } from "react-router-dom";
+import { ChevronRight, CircleIcon } from "lucide-react";
+import { motion } from "motion/react";
+
+import { LogoutConfirmDialog } from "@/components/LogoutConfirmDialog";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   Sidebar,
   SidebarContent,
@@ -13,22 +24,13 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { ChevronRight, CircleIcon } from "lucide-react";
-import { NavLink, useNavigate, type To } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { motion } from "motion/react";
-import { useRef, useEffect, useState } from "react";
-import { LogoutConfirmDialog } from "@/components/LogoutConfirmDialog";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useUserPreferenceStore } from "@/store/useUserPreferenceStore";
 
 export type SidebarSubItem = {
   title: string;
@@ -59,10 +61,12 @@ export function AppSidebar({ navigationItems, ...props }: AppSidebarProps) {
   const { state } = useSidebar();
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const logout = useAuthStore((store) => store.logout);
+  const clearUserType = useUserPreferenceStore((store) => store.clearUserType);
 
   const logoutHandler = () => {
     setShowLogoutDialog(false);
     logout();
+    clearUserType();
     navigate("/login", { replace: true });
   };
 
@@ -173,7 +177,7 @@ export function AppSidebar({ navigationItems, ...props }: AppSidebarProps) {
                             )}
                           >
                             <img
-                              src={"/icons/" + item.icon}
+                              src={`/icons/${  item.icon}`}
                               alt={item.title}
                               className="max-h-4 max-w-4 flex-shrink-0 transition-all duration-300"
                             />
@@ -191,7 +195,7 @@ export function AppSidebar({ navigationItems, ...props }: AppSidebarProps) {
                         )}
                       >
                         <img
-                          src={"/icons/" + item.icon}
+                          src={`/icons/${  item.icon}`}
                           alt={item.title}
                           className="max-h-4 max-w-4 flex-shrink-0 transition-all duration-300"
                         />
@@ -255,7 +259,7 @@ export function AppSidebar({ navigationItems, ...props }: AppSidebarProps) {
                               isActive={isActive}
                             >
                               <img
-                                src={"/icons/" + item.icon}
+                                src={`/icons/${  item.icon}`}
                                 alt={item.title}
                                 className="max-h-4 max-w-4 flex-shrink-0 transition-all duration-300"
                               />
@@ -275,7 +279,7 @@ export function AppSidebar({ navigationItems, ...props }: AppSidebarProps) {
                           isActive={isActive}
                         >
                           <img
-                            src={"/icons/" + item.icon}
+                            src={`/icons/${  item.icon}`}
                             alt={item.title}
                             className="max-h-4 max-w-4 flex-shrink-0 transition-all duration-300"
                           />
