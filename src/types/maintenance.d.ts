@@ -1,5 +1,5 @@
 // Maintenance request status enum
-type MaintenanceStatus = "Pending" | "Opened" | "Completed";
+type MaintenanceStatus = "Pending" | "Open" | "Completed";
 
 // Maintenance category enum
 type MaintenanceCategory = "Starred";

@@ -153,8 +153,8 @@ interface IPropertyType {
 }
 
 interface IPropertyCreateData {
-  // name: string;
-  // description: string;
+  name: string;
+  description: string;
   propertyTypeId: string;
   isRoomRental: boolean;
   propertyDetails: IPropertyDetails;
