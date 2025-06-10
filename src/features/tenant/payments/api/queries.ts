@@ -10,3 +10,11 @@ export const useGetTransactionsQuery = () => {
     select: (data) => data.data.data,
   });
 };
+
+export const useGetWalletQuery = () => {
+  return useQuery({
+    queryFn: () => axiosTenant.get<IResponse<number>>("/wallet/getwallet"),
+    queryKey: ["wallet"],
+    select: (data) => data.data.data,
+  });
+};
