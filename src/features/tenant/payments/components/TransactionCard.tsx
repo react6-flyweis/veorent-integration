@@ -1,33 +1,40 @@
+import { MinusIcon, PlusIcon } from "lucide-react";
+
+import { CurrencyIcon } from "@/components/CurrencyIcon";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { MinusIcon, PlusIcon } from "lucide-react";
-import type { ITransaction } from "./Transactions";
-import { CurrencyIcon } from "@/components/CurrencyIcon";
 
 export function TransactionCard({
-  data: { amount, description, id, type, status, method },
+  data,
   showSymbol,
 }: {
   data: ITransaction;
   showSymbol?: boolean;
 }) {
+  const type = data.cr ? "Credit" : "Debit";
   return (
-    <Card key={id} className="mt-1 border py-0">
+    <Card key={data._id} className="mt-1 border py-0">
       <CardContent className="flex items-center justify-between p-3!">
         <div>
-          <p className="text-primary text-lg font-bold">TransactionId #{id}</p>
-          <p className="text-muted-foreground">{description}</p>
+          <p className="text-primary text-lg font-bold">
+            TransactionId #{data._id}
+          </p>
+          <p className="text-muted-foreground">{data.details}</p>
           <p className="text-muted-foreground">
-            {method} - {status}
+            {data.paymentMode} - {data.paymentStatus}
           </p>
         </div>
-        <p
-          className={cn(
-            type.toLowerCase() === "credit" ? "text-green-500" : "text-red-500",
-          )}
-        >
-          {type}
-        </p>
+        {!showSymbol && (
+          <p
+            className={cn(
+              type.toLowerCase() === "credit"
+                ? "text-green-500"
+                : "text-red-500",
+            )}
+          >
+            {type}
+          </p>
+        )}
         <div className="flex items-center">
           {showSymbol &&
             (type.toLowerCase() === "credit" ? (
@@ -38,7 +45,7 @@ export function TransactionCard({
 
           <div className="flex items-center gap-1">
             <CurrencyIcon />
-            <p className="text-2xl font-semibold">{amount}</p>
+            <p className="text-2xl font-semibold">{data.amount}</p>
           </div>
         </div>
       </CardContent>
