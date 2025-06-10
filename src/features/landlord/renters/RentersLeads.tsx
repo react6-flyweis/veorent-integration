@@ -1,13 +1,15 @@
 import { useState } from "react";
-import { PageTitle } from "@/components/PageTitle";
-import { CreateButton } from "@/components/CreateButton";
-
-import { RenterItem } from "./RenterItem";
-import { AddLeadDialog } from "./components/AddLeadDialog";
-
 import { Link } from "react-router-dom";
-import RentersTablist from "./components/RentersTablist";
+
+import { CreateButton } from "@/components/CreateButton";
+import { PageTitle } from "@/components/PageTitle";
+
 import { useGetLeadsQuery } from "./api/queries";
+import { AddLeadDialog } from "./components/AddLeadDialog";
+import RentersTablist from "./components/RentersTablist";
+import { RenterItem } from "./RenterItem";
+
+
 
 // Sample renter data - in a real app, this would come from a database or API
 // const leads = [
@@ -45,7 +47,7 @@ export default function RentersLeads() {
           leads
             .filter((r) => r.propertyInterested) // Filter out renters for dev
             .map((renter, index) => (
-              <Link to={"/landlord/renters/leads/" + renter._id} key={index}>
+              <Link to={`/landlord/renters/leads/${renter._id}`} key={index}>
                 <RenterItem
                   key={index}
                   name={renter.fullName}

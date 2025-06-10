@@ -1,11 +1,14 @@
-import { CreateButton } from "@/components/CreateButton";
-import { PageTitle } from "@/components/PageTitle";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Link } from "react-router";
-import { TabsContent } from "@/components/ui/ghost-tabs";
 import { useMemo, useState } from "react";
+import { Link } from "react-router";
+
+import { CreateButton } from "@/components/CreateButton";
 import { CurrencyIcon } from "@/components/CurrencyIcon";
+import { PageTitle } from "@/components/PageTitle";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { TabsContent } from "@/components/ui/ghost-tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+
 import { useGetLeases } from "../api/queries";
 
 // const upcomingLeases = [
@@ -102,7 +105,7 @@ export default function Leases() {
                     {lease.rentalProperty && (
                       <p className="text-gray-600">
                         {lease.rentalProperty?.name},
-                        {lease.rentalProperty?.addressDetails.streetAddress}
+                        {lease.rentalProperty?.addressDetails?.streetAddress}
                       </p>
                     )}
                   </CardHeader>
@@ -111,7 +114,7 @@ export default function Leases() {
                       <span className="text-gray-500 uppercase">RENT</span>
                       <span className="flex items-center gap-1 font-semibold">
                         <CurrencyIcon size="sm" />
-                        {lease.rentalProperty?.rentalDetails.targetRent.toLocaleString()}
+                        {lease.rentalProperty?.rentalDetails?.targetRent.toLocaleString()}
                       </span>
                     </div>
                     {/* 

@@ -9,7 +9,11 @@ import prettier from "eslint-config-prettier";
 export default tseslint.config(
   { ignores: ["dist"] },
   {
-    extends: [js.configs.recommended, ...tseslint.configs.recommended, prettier],
+    extends: [
+      js.configs.recommended,
+      ...tseslint.configs.recommended,
+      prettier,
+    ],
     files: ["**/*.{ts,tsx}"],
     languageOptions: {
       ecmaVersion: 2020,
@@ -109,10 +113,10 @@ export default tseslint.config(
       "import/no-self-import": "error",
       "import/no-cycle": "error",
       "import/no-useless-path-segments": "error",
-      "import/newline-after-import": "error",
       "import/no-duplicates": "error",
-      "import/first": "error",
-      "import/exports-last": "error",
+      "import/newline-after-import": "warn",
+      "import/first": "warn",
+      "import/exports-last": "warn",
 
       // 📝 Component and file naming conventions
       // "import/no-default-export": "off", // Allow default exports for pages/components
@@ -121,7 +125,7 @@ export default tseslint.config(
       "prefer-const": "error",
       "no-var": "error",
       "object-shorthand": "error",
-      "prefer-template": "error",
+      "prefer-template": "warn",
       "no-console": ["warn", { allow: ["warn", "error"] }],
       "no-debugger": "error",
     },

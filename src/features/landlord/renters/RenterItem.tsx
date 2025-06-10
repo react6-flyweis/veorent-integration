@@ -2,7 +2,7 @@ import doubleCheckIcon from "./assets/double-tick.png";
 
 interface RenterItemProps {
   name: string;
-  address: string;
+  address?: string;
   invited?: boolean;
   selected?: boolean;
 }

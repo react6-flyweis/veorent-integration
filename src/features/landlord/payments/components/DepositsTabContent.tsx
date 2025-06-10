@@ -1,4 +1,5 @@
 import depositsIcon from "../assets/deposits.png";
+
 export const DepositsTabContent = () => {
   return (
     <div className="flex flex-col items-center justify-center py-16">
