@@ -34,16 +34,13 @@ import { useCreatePropertyMutation } from "./api/mutation";
 import mapPinIcon from "./assets/map-pin.png";
 import { PropertyAddressForm } from "./components/PropertyAddressForm";
 
-
-
-
 const formSchema = z.object({
-  // propertyName: z.string().min(1, "Property name is required"),
-  // description: z
-  //   .string({
-  //     required_error: "Description is required",
-  //   })
-  //   .max(500, "Description cannot exceed 500 characters"),
+  propertyName: z.string().min(1, "Property name is required"),
+  description: z
+    .string({
+      required_error: "Description is required",
+    })
+    .max(500, "Description cannot exceed 500 characters"),
   propertyType: z.string().min(1, "Please select a property type"),
   hasRoomRentals: z.enum(["yes", "no"]),
   streetAddress: z.string().min(1, "Street address is required"),
@@ -78,8 +75,8 @@ export default function AddProperty() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const valuesToSubmit: IPropertyCreateData = {
-        // name: values.propertyName,
-        // description: values.description,
+        name: values.propertyName,
+        description: values.description,
         propertyTypeId: values.propertyType,
         isRoomRental: values.hasRoomRentals === "yes",
         propertyDetails: {
@@ -116,8 +113,8 @@ export default function AddProperty() {
             <MultiStepperStep
               onValidate={() =>
                 form.trigger([
-                  // "propertyName",
-                  // "description",
+                  "propertyName",
+                  "description",
                   "propertyType",
                   "hasRoomRentals",
                 ])
@@ -140,7 +137,7 @@ export default function AddProperty() {
                     </FormItem>
                   )}
                 />
-                {/* <FormField
+                <FormField
                   control={form.control}
                   name="propertyName"
                   render={({ field }) => (
@@ -166,7 +163,7 @@ export default function AddProperty() {
                       <FormMessage />
                     </FormItem>
                   )}
-                /> */}
+                />
                 <FormField
                   control={form.control}
                   name="hasRoomRentals"

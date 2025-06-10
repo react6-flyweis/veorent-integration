@@ -21,7 +21,7 @@ import { useUpdatePropertyMutation } from "../api/mutation";
 
 const formSchema = z.object({
   streetAddress: z.string().min(1, "Street address is required"),
-  unit: z.string().min(1, "Unit is required."),
+  unit: z.string().min(1, "Unit is required"),
   city: z.string().min(1, "City is required"),
   region: z.string().min(1, "Region is required"),
   zipCode: z.string().min(1, "Zip code is required"),
@@ -56,7 +56,7 @@ export function PropertyAddressForm({
 
   const onSubmit = async (data: FormValues) => {
     try {
-      if (!standAlone) {
+      if (standAlone && id) {
         const valuesToSubmit: IPropertyUpdateData = {
           addressDetails: {
             houseNumber: "",
@@ -180,7 +180,7 @@ export function PropertyAddressForm({
           <LoadingButton
             isLoading={form.formState.isSubmitting}
             type={standAlone ? "submit" : "button"}
-            onClick={form.handleSubmit(onSubmit)}
+            onClick={standAlone ? undefined : form.handleSubmit(onSubmit)}
             size="lg"
             className="w-4/5 @lg:w-3/5"
           >
