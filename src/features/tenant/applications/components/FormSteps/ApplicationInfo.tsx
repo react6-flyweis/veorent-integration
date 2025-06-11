@@ -1,6 +1,13 @@
-import { z } from "zod";
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+import applicationIcon from "@/assets/icons/application.png";
+import FormErrors from "@/components/FormErrors";
+import { IconRound } from "@/components/IconRound";
+import { CounterInput } from "@/components/ui/counter-input";
+import { DateInput } from "@/components/ui/date-input";
 import {
   Form,
   FormField,
@@ -10,14 +17,12 @@ import {
   FormControl,
   FormDescription,
 } from "@/components/ui/form";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { DateInput } from "@/components/ui/date-input";
-import { Button } from "@/components/ui/button";
-import { IconRound } from "@/components/IconRound";
+import { LoadingButton } from "@/components/ui/loading-button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
-import applicationIcon from "@/assets/icons/application.png";
-import { CounterInput } from "@/components/ui/counter-input";
+import { useUpdateBookingMutation } from "../../api/mutation";
 
 const contactFormSchema = z.object({
   date: z.date({
@@ -30,21 +35,48 @@ const contactFormSchema = z.object({
 
 type ContactFormValues = z.infer<typeof contactFormSchema>;
 
-export function ApplicationInfo({ onSuccess }: { onSuccess: () => void }) {
+export function ApplicationInfo({
+  bookingData,
+  onSuccess,
+}: {
+  bookingData?: IBooking;
+  onSuccess: () => void;
+}) {
+  const { id } = useParams<{ id: string }>();
+  const { mutateAsync, isPending } = useUpdateBookingMutation(id || "");
+
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
-      date: new Date(),
-      coSigners: false,
-      isShortPeriod: false,
-      people: 1,
+      date: bookingData?.applicationInfo?.moveDate
+        ? new Date(bookingData.applicationInfo.moveDate)
+        : undefined,
+      coSigners: bookingData?.applicationInfo?.othersApplyWithYou ?? false,
+      isShortPeriod: bookingData?.applicationInfo?.shortTimeOfPeriod ?? false,
+      people: bookingData?.applicationInfo?.peopleLivingCount
+        ? parseInt(bookingData.applicationInfo.peopleLivingCount)
+        : 1,
     },
   });
 
-  function onSubmit(values: ContactFormValues) {
-    console.log("Form submitted", values);
-    // You can integrate email/send logic here or pass data to an API
-    onSuccess();
+  async function onSubmit(values: ContactFormValues) {
+    try {
+      await mutateAsync({
+        applicationInfo: {
+          moveDate: values.date.toISOString(),
+          othersApplyWithYou: values.coSigners,
+          shortTimeOfPeriod: values.isShortPeriod,
+          peopleLivingCount: values.people.toString(),
+          fromDate: values.date.toISOString(),
+          endDate: values.date.toISOString(),
+        },
+      });
+      onSuccess();
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   }
 
   return (
@@ -150,10 +182,17 @@ export function ApplicationInfo({ onSuccess }: { onSuccess: () => void }) {
             )}
           />
 
+          <FormErrors errors={form.formState.errors} />
+
           <div className="flex justify-center">
-            <Button type="submit" size="lg" className="w-4/5 @lg:w-3/5">
+            <LoadingButton
+              type="submit"
+              size="lg"
+              className="w-4/5 @lg:w-3/5"
+              isLoading={isPending}
+            >
               Save & Next
-            </Button>
+            </LoadingButton>
           </div>
         </form>
       </Form>
