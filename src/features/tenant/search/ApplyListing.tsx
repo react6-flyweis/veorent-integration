@@ -1,5 +1,7 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   BathIcon,
   BedDoubleIcon,
@@ -9,12 +11,14 @@ import {
   CheckCircle2Icon,
   CalendarIcon,
 } from "lucide-react";
-import { BackButton } from "@/components/BackButton";
-import { Logo } from "@/components/Logo";
-
 import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+
+import { BackButton } from "@/components/BackButton";
+import FormErrors from "@/components/FormErrors";
+import { Logo } from "@/components/Logo";
+import { PhotoGallery } from "@/components/PhotoGallery";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormField,
@@ -23,11 +27,17 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 
+import { Input } from "@/components/ui/input";
+import { useGetPropertyByIdQuery } from "@/features/landlord/properties/api/queries";
 import { cn } from "@/lib/utils";
 import { DateInput } from "@/components/ui/date-input";
-import { useNavigate } from "react-router";
+import { formatDate } from "@/utils/formatDate";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+
+import { useCreateBookingMutation } from "./api/mutation";
+import { LoadingButton } from "@/components/ui/loading-button";
 
 const applicationSchema = z.object({
   role: z.enum(["tenant", "cosigner"], {
@@ -44,6 +54,11 @@ type ApplicationFormValues = z.infer<typeof applicationSchema>;
 
 export default function ApplyListing() {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const { data, isLoading } = useGetPropertyByIdQuery(id || "");
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const { mutateAsync } = useCreateBookingMutation();
+
   const form = useForm<ApplicationFormValues>({
     resolver: zodResolver(applicationSchema),
     defaultValues: {
@@ -56,10 +71,32 @@ export default function ApplyListing() {
     },
   });
 
-  function onSubmit(values: ApplicationFormValues) {
-    console.log("Submitted:", values);
-    navigate("/tenant/applying");
-  }
+  const onSubmit = async (values: ApplicationFormValues) => {
+    try {
+      const bookingData = {
+        applyingFor:
+          values.role === "tenant"
+            ? "Tenant"
+            : ("Co-signer" as "Tenant" | "Co-signer"),
+        propertyId: id || "",
+        personalDetails: {
+          firstName: values.firstName,
+          lastName: values.lastName,
+          email: values.email,
+          phone: values.phone,
+          dateOfBirth: values.dob.toISOString().split("T")[0], // Format as YYYY-MM-DD
+        },
+      };
+
+      const booking = await mutateAsync(bookingData);
+      navigate(`/tenant/applying/${booking.data.data._id}`);
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
+  };
+
   return (
     <div className="space-y-5">
       <div className="flex justify-between">
@@ -73,55 +110,109 @@ export default function ApplyListing() {
             <div className="mx-auto grid grid-cols-1 gap-5 md:grid-cols-5">
               {/* Left: Listing Info */}
               <div className="space-y-4 md:col-span-3">
-                <div className="relative">
-                  <img
-                    src="/listing.jpg"
-                    alt="Brighton Lake"
-                    className="h-64 w-full rounded-xl object-cover"
-                  />
-                  <Button
-                    variant="ghost"
-                    className="absolute right-2 bottom-2 rounded-full bg-white"
-                  >
-                    <GalleryHorizontalEndIcon className="rotate-180" />
-                    <span className="font-semibold">29 photos</span>
-                  </Button>
-                </div>
+                {isLoading ? (
+                  <>
+                    <Skeleton className="h-64 w-full rounded-xl" />
+                    <div className="space-y-2">
+                      <Skeleton className="h-6 w-3/4" />
+                      <Skeleton className="h-5 w-1/2" />
+                      <div className="mt-2 flex w-full items-end justify-around">
+                        {Array.from({ length: 4 }).map((_, i) => (
+                          <div
+                            key={i}
+                            className="flex flex-col items-center gap-1"
+                          >
+                            <Skeleton className="size-7 rounded-full" />
+                            <Skeleton className="h-4 w-16" />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <Skeleton className="h-4 w-40" />
+                  </>
+                ) : (
+                  <>
+                    <div className="relative">
+                      <img
+                        src={data?.image?.[0]?.img || "/listing.jpg"}
+                        alt={data?.name || "Property"}
+                        className="h-64 w-full rounded-xl object-cover"
+                      />
+                      {(data?.image?.length ?? 0) > 1 && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          className="absolute right-2 bottom-2 rounded-full bg-white"
+                          onClick={() => setIsGalleryOpen(true)}
+                        >
+                          <GalleryHorizontalEndIcon className="rotate-180" />
+                          <span className="font-semibold">
+                            {data?.image?.length || 0} photos
+                          </span>
+                        </Button>
+                      )}
+                    </div>
 
-                <div>
-                  <h2 className="text-xl font-semibold">
-                    Brighton Lake Front Fully Furnished 7 month lease
-                  </h2>
-                  <div className="flex gap-1">
-                    <a href="#" className="text-lg tracking-wide text-blue-600">
-                      3110 Causeway Dr, Brighton, MI 48114
-                    </a>
-                    <MapIcon className="text-blue-600" />
-                  </div>
-                  <div className="mt-2 flex w-full items-end justify-around text-gray-700">
-                    <div className="flex flex-col items-center gap-1">
-                      <BedDoubleIcon className="size-7" />
-                      <span> 3 Beds</span>
+                    <div>
+                      <h2 className="text-xl font-semibold">
+                        {data?.name || "Property Name"}
+                      </h2>
+                      <div className="flex gap-1">
+                        <a
+                          href="#"
+                          className="text-lg tracking-wide text-blue-600"
+                        >
+                          {data?.addressDetails?.streetAddress ||
+                            "Street Address"}
+                          , {data?.addressDetails?.city || "City"},{" "}
+                          {data?.addressDetails?.region || "Region"}{" "}
+                          {data?.addressDetails?.zipCode || "Zip"}
+                        </a>
+                        <MapIcon className="text-blue-600" />
+                      </div>
+                      <div className="mt-2 flex w-full items-end justify-around text-gray-700">
+                        <div className="flex flex-col items-center gap-1">
+                          <BedDoubleIcon className="size-7" />
+                          <span>
+                            {" "}
+                            {data?.rentalDetails?.beds || "N/A"} Beds
+                          </span>
+                        </div>
+                        <div className="flex flex-col items-center gap-1">
+                          <BathIcon className="size-7" />
+                          <span>
+                            {" "}
+                            {data?.rentalDetails?.baths || "N/A"} Baths
+                          </span>
+                        </div>
+                        <div className="flex flex-col items-center gap-1">
+                          <HomeIcon className="size-7" />
+                          <span>
+                            {data?.propertyTypeId?.name || "Property Type"}
+                          </span>
+                        </div>
+                        <div className="flex flex-col items-center gap-1">
+                          <CalendarIcon className="size-7" />
+                          <span>
+                            Available{" "}
+                            {data?.leasingBasics?.Date
+                              ? formatDate(data.leasingBasics.Date)
+                              : "TBD"}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex flex-col items-center gap-1">
-                      <BathIcon className="size-7" />
-                      <span> 2 Baths</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-1">
-                      <HomeIcon className="size-7" />
-                      <span>Single Family</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-1">
-                      <CalendarIcon className="size-7" />
-                      <span>Available 17/5/24</span>
-                    </div>
-                  </div>
-                </div>
 
-                <div className="">
-                  <span className="font-semibold uppercase">Landlord:</span>
-                  <span className="">Donna VanAntwerp</span>
-                </div>
+                    <div className="">
+                      <span className="font-semibold uppercase">Landlord:</span>
+                      <span className="">
+                        {data?.owner?.firstname && data?.owner?.lastname
+                          ? ` ${data.owner.firstname} ${data.owner.lastname}`
+                          : " Property Owner"}
+                      </span>
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Right: Sidebar */}
@@ -267,17 +358,31 @@ export default function ApplyListing() {
                       </FormItem>
                     )}
                   />
+
+                  <FormErrors errors={form.formState.errors} />
                 </div>
               </div>
             </div>
             <div className="flex justify-center">
-              <Button size="lg" type="submit" className="w-3/5">
+              <LoadingButton
+                size="lg"
+                type="submit"
+                className="w-3/5"
+                isLoading={form.formState.isSubmitting}
+              >
                 Next
-              </Button>
+              </LoadingButton>
             </div>
           </form>
         </Form>
       </div>
+
+      {/* Photo Gallery */}
+      <PhotoGallery
+        images={data?.image || []}
+        isOpen={isGalleryOpen}
+        onClose={() => setIsGalleryOpen(false)}
+      />
     </div>
   );
 }
