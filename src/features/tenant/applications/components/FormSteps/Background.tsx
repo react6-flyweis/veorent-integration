@@ -1,6 +1,11 @@
-import { z } from "zod";
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+import bgCheckIcon from "@/assets/icons/bg-check.png";
+import FormErrors from "@/components/FormErrors";
+import { IconRound } from "@/components/IconRound";
 import {
   Form,
   FormField,
@@ -9,12 +14,12 @@ import {
   FormMessage,
   FormControl,
 } from "@/components/ui/form";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { IconRound } from "@/components/IconRound";
+import { LoadingButton } from "@/components/ui/loading-button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
-import bgCheckIcon from "@/assets/icons/bg-check.png";
+import { useUpdateBookingMutation } from "../../api/mutation";
 
 const bgInfoFormSchema = z.object({
   evicted: z.boolean(),
@@ -24,19 +29,40 @@ const bgInfoFormSchema = z.object({
 
 type BgFormValues = z.infer<typeof bgInfoFormSchema>;
 
-export function BackgroundInfo({ onSuccess }: { onSuccess: () => void }) {
+export function BackgroundInfo({
+  bookingData,
+  onSuccess,
+}: {
+  bookingData?: IBooking;
+  onSuccess: () => void;
+}) {
+  const { id } = useParams<{ id: string }>();
+  const { mutateAsync, isPending } = useUpdateBookingMutation(id || "");
+
   const form = useForm<BgFormValues>({
     resolver: zodResolver(bgInfoFormSchema),
     defaultValues: {
-      evicted: false,
-      criminalOffense: false,
-      bankrupted: false,
+      evicted: false, // This field might need to be added to the backend schema
+      criminalOffense:
+        bookingData?.background?.criminalOffenseExplain === "Yes",
+      bankrupted: bookingData?.background?.civilSuitExplain === "Yes",
     },
   });
 
-  function onSubmit(values: BgFormValues) {
-    console.log("Form submitted", values);
-    onSuccess();
+  async function onSubmit(values: BgFormValues) {
+    try {
+      await mutateAsync({
+        background: {
+          criminalOffenseExplain: values.criminalOffense ? "Yes" : "No",
+          civilSuitExplain: values.bankrupted ? "Yes" : "No",
+        },
+      });
+      onSuccess();
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   }
 
   return (
@@ -138,10 +164,17 @@ export function BackgroundInfo({ onSuccess }: { onSuccess: () => void }) {
             )}
           />
 
+          <FormErrors errors={form.formState.errors} />
+
           <div className="flex justify-center">
-            <Button type="submit" size="lg" className="w-4/5 @lg:w-3/5">
+            <LoadingButton
+              type="submit"
+              size="lg"
+              className="w-4/5 @lg:w-3/5"
+              isLoading={isPending}
+            >
               Save & Next
-            </Button>
+            </LoadingButton>
           </div>
         </form>
       </Form>
