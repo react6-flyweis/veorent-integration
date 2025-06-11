@@ -10,6 +10,7 @@ import {
   GalleryHorizontalEndIcon,
   CheckCircle2Icon,
   CalendarIcon,
+  HouseIcon,
 } from "lucide-react";
 import { z } from "zod";
 
@@ -17,8 +18,10 @@ import { BackButton } from "@/components/BackButton";
 import FormErrors from "@/components/FormErrors";
 import { Logo } from "@/components/Logo";
 import { PhotoGallery } from "@/components/PhotoGallery";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { DateInput } from "@/components/ui/date-input";
 import {
   Form,
   FormField,
@@ -27,17 +30,15 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { Skeleton } from "@/components/ui/skeleton";
-
 import { Input } from "@/components/ui/input";
+import { LoadingButton } from "@/components/ui/loading-button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useGetPropertyByIdQuery } from "@/features/landlord/properties/api/queries";
 import { cn } from "@/lib/utils";
-import { DateInput } from "@/components/ui/date-input";
 import { formatDate } from "@/utils/formatDate";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 
 import { useCreateBookingMutation } from "./api/mutation";
-import { LoadingButton } from "@/components/ui/loading-button";
 
 const applicationSchema = z.object({
   role: z.enum(["tenant", "cosigner"], {
@@ -133,11 +134,16 @@ export default function ApplyListing() {
                 ) : (
                   <>
                     <div className="relative">
-                      <img
-                        src={data?.image?.[0]?.img || "/listing.jpg"}
-                        alt={data?.name || "Property"}
-                        className="h-64 w-full rounded-xl object-cover"
-                      />
+                      <Avatar className="h-64 w-full rounded-xl">
+                        <AvatarImage
+                          src={data?.image?.[0]?.img}
+                          alt={data?.name || "Property"}
+                          className="h-64 w-full rounded-xl object-cover"
+                        />
+                        <AvatarFallback className="bg-muted flex h-64 w-full items-center justify-center rounded-xl">
+                          <HouseIcon className="text-muted-foreground size-10" />
+                        </AvatarFallback>
+                      </Avatar>
                       {(data?.image?.length ?? 0) > 1 && (
                         <Button
                           type="button"

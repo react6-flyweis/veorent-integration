@@ -26,12 +26,14 @@ import {
   DumbbellIcon,
   ZapIcon,
   AccessibilityIcon,
+  HouseIcon,
 } from "lucide-react";
 
 import { BackButton } from "@/components/BackButton";
 import { CurrencyIcon } from "@/components/CurrencyIcon";
 import { Logo } from "@/components/Logo";
 import { PhotoGallery } from "@/components/PhotoGallery";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -39,6 +41,7 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useGetPropertyByIdQuery } from "@/features/landlord/properties/api/queries";
 import { formatDate } from "@/utils/formatDate";
 
@@ -84,7 +87,7 @@ const applianceMap = {
 
 export default function PropertyListingDetail() {
   const { id } = useParams();
-  const { data } = useGetPropertyByIdQuery(id || "");
+  const { data, isLoading } = useGetPropertyByIdQuery(id || "");
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
   // Helper function to render feature/amenity sections
@@ -131,6 +134,115 @@ export default function PropertyListingDetail() {
       </div>
     );
   };
+
+  if (isLoading) {
+    return (
+      <div className="space-y-5">
+        <div className="flex justify-between">
+          <BackButton />
+          <Logo />
+        </div>
+        <div className="mx-auto grid grid-cols-1 gap-5 md:grid-cols-3">
+          {/* Left: Listing Info Skeleton */}
+          <div className="space-y-4 md:col-span-2">
+            {/* Image Skeleton */}
+            <Skeleton className="h-64 w-full rounded-xl" />
+
+            {/* Title and Address Skeleton */}
+            <div className="space-y-2">
+              <Skeleton className="h-6 w-3/4" />
+              <Skeleton className="h-5 w-1/2" />
+            </div>
+
+            {/* Property Details Skeleton */}
+            <div className="mt-2 flex w-full items-end justify-around">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="flex flex-col items-center gap-1">
+                  <Skeleton className="size-7 rounded-full" />
+                  <Skeleton className="h-4 w-16" />
+                </div>
+              ))}
+            </div>
+
+            {/* Description Skeleton */}
+            <div className="space-y-2">
+              <Skeleton className="h-6 w-32" />
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-5/6" />
+                <Skeleton className="h-4 w-4/5" />
+              </div>
+            </div>
+
+            {/* Features Skeleton */}
+            <div className="space-y-2">
+              <Skeleton className="h-6 w-24" />
+              <div className="flex flex-wrap gap-5">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <Skeleton key={i} className="h-5 w-32" />
+                ))}
+              </div>
+            </div>
+
+            {/* Utilities/Amenities Skeleton */}
+            {Array.from({ length: 3 }).map((_, sectionIndex) => (
+              <div key={sectionIndex} className="space-y-2">
+                <Skeleton className="h-6 w-40" />
+                <div className="flex flex-wrap gap-5">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <Skeleton key={i} className="h-5 w-28" />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Right: Sidebar Skeleton */}
+          <div className="space-y-4">
+            {/* Rent Card Skeleton */}
+            <Card className="gap-2 rounded bg-gray-50 p-3 shadow-none">
+              <CardHeader className="px-1">
+                <div className="flex items-center justify-between">
+                  <Skeleton className="h-6 w-16" />
+                  <Skeleton className="h-8 w-24" />
+                </div>
+              </CardHeader>
+              <CardContent className="px-1">
+                <div className="space-y-2">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="flex items-center justify-between">
+                      <Skeleton className="h-4 w-20" />
+                      <Skeleton className="h-4 w-16" />
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+              <CardFooter className="flex justify-center">
+                <Skeleton className="h-8 w-24 rounded-full" />
+              </CardFooter>
+            </Card>
+
+            {/* Contact Form Skeleton */}
+            <Card className="gap-2 rounded bg-gray-50 p-3 shadow-none">
+              <CardContent className="space-y-3 px-3">
+                <div className="space-y-2">
+                  <Skeleton className="h-6 w-48" />
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-3/4" />
+                </div>
+                <div className="space-y-3">
+                  <Skeleton className="h-10 w-full" />
+                  <Skeleton className="h-20 w-full" />
+                  <Skeleton className="h-10 w-full" />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-5">
       <div className="flex justify-between">
@@ -141,11 +253,16 @@ export default function PropertyListingDetail() {
         {/* Left: Listing Info */}
         <div className="space-y-4 md:col-span-2">
           <div className="relative">
-            <img
-              src={data?.image?.[0].img}
-              alt="Brighton Lake"
-              className="h-64 w-full rounded-xl object-cover"
-            />
+            <Avatar className="h-64 w-full rounded-xl">
+              <AvatarImage
+                src={data?.image?.[0]?.img}
+                alt={data?.name || "Property"}
+                className="h-64 w-full rounded-xl object-cover"
+              />
+              <AvatarFallback className="bg-muted flex h-64 w-full items-center justify-center rounded-xl">
+                <HouseIcon className="text-muted-foreground size-10" />
+              </AvatarFallback>
+            </Avatar>
 
             {(data?.image?.length ?? 0) > 1 && (
               <Button
