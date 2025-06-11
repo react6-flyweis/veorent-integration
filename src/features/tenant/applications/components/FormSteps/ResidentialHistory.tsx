@@ -1,11 +1,13 @@
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
+import { useParams } from "react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { PlusCircleIcon, XIcon } from "lucide-react";
+import { z } from "zod";
+
+import fileIcon from "@/assets/icons/file.png";
+import FormErrors from "@/components/FormErrors";
+import { IconRound } from "@/components/IconRound";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -15,18 +17,20 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { PlusCircleIcon, XIcon } from "lucide-react";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { LoadingButton } from "@/components/ui/loading-button";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
-import { useForm, useWatch } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import { useState } from "react";
-import fileIcon from "@/assets/icons/file.png";
-import { IconRound } from "@/components/IconRound";
-import { AddressSummaryCard } from "../AddressSummaryCard";
-
-import { z } from "zod";
+import { useUpdateBookingMutation } from "../../api/mutation";
 import { AddressEditor, addressSchema, type IAddress } from "../AddressEditor";
+import { AddressSummaryCard } from "../AddressSummaryCard";
 
 const residentialHistorySchema = z
   .object({
@@ -46,11 +50,59 @@ const residentialHistorySchema = z
 
 type FormSchemaType = z.infer<typeof residentialHistorySchema>;
 
-export function ResidentialHistory({ onSuccess }: { onSuccess: () => void }) {
+const AddressDialog = ({
+  title,
+  open,
+  setOpen,
+  address,
+  setAddress,
+}: {
+  title: "Current" | "Past";
+  open: boolean;
+  setOpen: (show: boolean) => void;
+  address: IAddress | undefined;
+  setAddress: (address: IAddress) => void;
+}) => {
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent className="h-screen min-w-screen overflow-scroll [&>button:last-child]:hidden">
+        <DialogHeader className="flex-row items-center gap-3">
+          <DialogClose className="flex size-9 items-center justify-center rounded-full border">
+            <XIcon />
+          </DialogClose>
+          <DialogTitle className="text-2xl">
+            {address ? "Edit" : "Add"} {title} address
+          </DialogTitle>
+        </DialogHeader>
+        <AddressEditor
+          data={address}
+          onSubmit={(add) => {
+            setAddress(add);
+            setOpen(false);
+          }}
+        />
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export function ResidentialHistory({
+  bookingData,
+  onSuccess,
+}: {
+  bookingData?: IBooking;
+  onSuccess: () => void;
+}) {
+  const { id } = useParams<{ id: string }>();
+  const { mutateAsync, isPending } = useUpdateBookingMutation(id || "");
+
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(residentialHistorySchema),
     defaultValues: {
-      pastNotApplicable: false,
+      currentAddress: bookingData?.currentAddress,
+      pastAddress: bookingData?.pastAddress,
+      pastNotApplicable:
+        bookingData?.currentAddress?.pastAddressNotApplicable ?? false,
     },
   });
 
@@ -62,9 +114,37 @@ export function ResidentialHistory({ onSuccess }: { onSuccess: () => void }) {
   const [currentOpen, setCurrentOpen] = useState(false);
   const [pastOpen, setPastOpen] = useState(false);
 
-  const submitHandler = (data: FormSchemaType) => {
-    console.log(data);
-    onSuccess();
+  const submitHandler = async (data: FormSchemaType) => {
+    try {
+      await mutateAsync({
+        currentAddress: {
+          ...data.currentAddress,
+          streetAddress: data.currentAddress?.streetAddress || "",
+          city: data.currentAddress?.city || "",
+          unit: data.currentAddress?.unit || "",
+          region: data.currentAddress?.region || "",
+          zipCode: data.currentAddress?.zipCode || "",
+
+          monthlyRent: data.currentAddress?.monthlyRent || "",
+
+          residence: "current",
+          pastAddressNotApplicable: data.pastNotApplicable,
+          month: "",
+          year: false,
+          whyMove: "",
+          firstName: "",
+          lastName: "",
+          email: "",
+          phone: "",
+        },
+        pastAddress: data.pastNotApplicable ? undefined : data.pastAddress,
+      });
+      onSuccess();
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   };
 
   return (
@@ -194,49 +274,20 @@ export function ResidentialHistory({ onSuccess }: { onSuccess: () => void }) {
             />
           </div>
 
+          <FormErrors errors={form.formState.errors} />
+
           <div className="flex justify-center">
-            <Button type="submit" size="lg" className="w-4/5 @lg:w-3/5">
+            <LoadingButton
+              type="submit"
+              size="lg"
+              className="w-4/5 @lg:w-3/5"
+              isLoading={isPending}
+            >
               Save & Next
-            </Button>
+            </LoadingButton>
           </div>
         </form>
       </Form>
     </div>
   );
 }
-
-const AddressDialog = ({
-  title,
-  open,
-  setOpen,
-  address,
-  setAddress,
-}: {
-  title: "Current" | "Past";
-  open: boolean;
-  setOpen: (show: boolean) => void;
-  address: IAddress | undefined;
-  setAddress: (address: IAddress) => void;
-}) => {
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="h-screen min-w-screen overflow-scroll [&>button:last-child]:hidden">
-        <DialogHeader className="flex-row items-center gap-3">
-          <DialogClose className="flex size-9 items-center justify-center rounded-full border">
-            <XIcon />
-          </DialogClose>
-          <DialogTitle className="text-2xl">
-            {address ? "Edit" : "Add"} {title} address
-          </DialogTitle>
-        </DialogHeader>
-        <AddressEditor
-          data={address}
-          onSubmit={(add) => {
-            setAddress(add);
-            setOpen(false);
-          }}
-        />
-      </DialogContent>
-    </Dialog>
-  );
-};
