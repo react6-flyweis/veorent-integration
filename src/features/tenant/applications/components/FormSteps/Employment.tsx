@@ -168,7 +168,7 @@ export function EmploymentDetails({
                 data.currentEmployer?.referenceName || "",
               employemntReferenceNumber:
                 data.currentEmployer?.referenceNumber || "",
-              pastemployemntNotApplicable: data.noPast,
+              pastemployemntNotApplicable: data.noPast || false,
             },
         pastEmployment: data.noPast
           ? undefined
