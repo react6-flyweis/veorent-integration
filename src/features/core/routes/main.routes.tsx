@@ -1,8 +1,9 @@
+import { type RouteObject } from "react-router-dom";
+
 import ApplicationProcess from "@/features/tenant/applications/ApplicationProcess";
 import ApplyListing from "@/features/tenant/search/ApplyListing";
 import PropertyListingDetail from "@/features/tenant/search/Listing";
 import SearchProperty from "@/features/tenant/search/SearchProperty";
-import { type RouteObject } from "react-router-dom";
 
 export const mainRoutes: RouteObject[] = [
   {
@@ -18,7 +19,7 @@ export const mainRoutes: RouteObject[] = [
     element: <ApplyListing />,
   },
   {
-    path: "/applying",
+    path: "/applying/:id",
     element: <ApplicationProcess />,
   },
 ];
