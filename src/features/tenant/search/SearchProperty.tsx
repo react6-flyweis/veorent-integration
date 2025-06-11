@@ -1,49 +1,53 @@
+import { SearchIcon } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SearchIcon } from "lucide-react";
-import { RentalListingCard } from "./components/ListingCard";
-import { FilterDialog } from "./components/FilterDialog";
 
-const listings = [
-  {
-    id: "65gds54gsd46sag",
-    type: "SINGLE-FAMILY",
-    title: "Brighton Lake Front Fully Furnished 7 month lease",
-    address: "3110 Causeway Dr, Brighton, MI 48114",
-    beds: 3,
-    baths: 2,
-    available: "10/01/2024",
-    price: "€2,400.00",
-    landlord: "Donna VanAntwerp",
-    imageUrl: "/property.png",
-  },
-  {
-    id: "45sg55sgs16sd6",
-    type: "APARTMENT",
-    title: "Oceanview ,2 bed/1 Ba steps to beach, Ocean Beach",
-    address: "5127 Cape May Ave 1, San Diego, CA 92107",
-    beds: 2,
-    baths: 1,
-    available: "09/10/2024",
-    price: "€3,200.00",
-    landlord: "Susan Steinbarth",
-    imageUrl: "/property.png",
-  },
-  {
-    id: "f65664e45s4des",
-    type: "APARTMENT",
-    title: "Luxury apt. near T. F. Green Airport/Providence",
-    address: "28 Yucatan Drive, Warwick, RI 02889",
-    beds: 1,
-    baths: 1,
-    available: "09/01/2024",
-    price: "€1,875.00",
-    landlord: "Landlord Name",
-    imageUrl: "/property.png",
-  },
-];
+import { useGetPropertiesQuery } from "./api/queries";
+import { FilterDialog } from "./components/FilterDialog";
+import { RentalListingCard } from "./components/ListingCard";
+
+// const listings = [
+//   {
+//     id: "65gds54gsd46sag",
+//     type: "SINGLE-FAMILY",
+//     title: "Brighton Lake Front Fully Furnished 7 month lease",
+//     address: "3110 Causeway Dr, Brighton, MI 48114",
+//     beds: 3,
+//     baths: 2,
+//     available: "10/01/2024",
+//     price: "€2,400.00",
+//     landlord: "Donna VanAntwerp",
+//     imageUrl: "/property.png",
+//   },
+//   {
+//     id: "45sg55sgs16sd6",
+//     type: "APARTMENT",
+//     title: "Oceanview ,2 bed/1 Ba steps to beach, Ocean Beach",
+//     address: "5127 Cape May Ave 1, San Diego, CA 92107",
+//     beds: 2,
+//     baths: 1,
+//     available: "09/10/2024",
+//     price: "€3,200.00",
+//     landlord: "Susan Steinbarth",
+//     imageUrl: "/property.png",
+//   },
+//   {
+//     id: "f65664e45s4des",
+//     type: "APARTMENT",
+//     title: "Luxury apt. near T. F. Green Airport/Providence",
+//     address: "28 Yucatan Drive, Warwick, RI 02889",
+//     beds: 1,
+//     baths: 1,
+//     available: "09/01/2024",
+//     price: "€1,875.00",
+//     landlord: "Landlord Name",
+//     imageUrl: "/property.png",
+//   },
+// ];
 
 export default function SearchProperty() {
+  const { data } = useGetPropertiesQuery();
   return (
     <div className="space-y-5">
       {/* Header */}
@@ -60,9 +64,8 @@ export default function SearchProperty() {
 
       {/* Listings */}
       <div className="space-y-4">
-        {listings.map((listing) => (
-          <RentalListingCard data={listing} />
-        ))}
+        {data?.length &&
+          data.map((listing) => <RentalListingCard data={listing} />)}
       </div>
     </div>
   );
