@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { BedDoubleIcon, BathIcon, CalendarIcon } from "lucide-react";
+import { BedDoubleIcon, BathIcon, CalendarIcon, HouseIcon } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -19,7 +19,9 @@ export function RentalListingCard({ data }: ListingProps) {
             src={data.image[0].img || "/property.png"}
             alt={data.name}
           />
-          <AvatarFallback className="rounded-md">N/A</AvatarFallback>
+          <AvatarFallback className="rounded-md">
+            <HouseIcon className="size-6" />
+          </AvatarFallback>
         </Avatar>
         <div className="flex flex-1 justify-between">
           <div className="">
