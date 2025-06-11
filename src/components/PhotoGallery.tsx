@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, ImageOff } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -18,6 +18,8 @@ export function PhotoGallery({ images, isOpen, onClose }: PhotoGalleryProps) {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(
     null,
   );
+  const [imageErrors, setImageErrors] = useState<Set<number>>(new Set());
+  const [imageLoading, setImageLoading] = useState<Set<number>>(new Set());
 
   // When gallery opens, start with the first image in slider view
   React.useEffect(() => {
@@ -30,6 +32,27 @@ export function PhotoGallery({ images, isOpen, onClose }: PhotoGalleryProps) {
     setSelectedImageIndex(null);
     onClose();
   }, [onClose]);
+
+  const handleImageError = useCallback((index: number) => {
+    setImageErrors((prev) => new Set(prev).add(index));
+    setImageLoading((prev) => {
+      const newSet = new Set(prev);
+      newSet.delete(index);
+      return newSet;
+    });
+  }, []);
+
+  const handleImageLoad = useCallback((index: number) => {
+    setImageLoading((prev) => {
+      const newSet = new Set(prev);
+      newSet.delete(index);
+      return newSet;
+    });
+  }, []);
+
+  const handleImageLoadStart = useCallback((index: number) => {
+    setImageLoading((prev) => new Set(prev).add(index));
+  }, []);
 
   const goToPrevious = useCallback(() => {
     if (selectedImageIndex !== null && selectedImageIndex > 0) {
@@ -94,11 +117,33 @@ export function PhotoGallery({ images, isOpen, onClose }: PhotoGalleryProps) {
           {/* Image Container */}
           <div className="relative h-[calc(98vh-120px)] w-full bg-gray-50">
             {selectedImageIndex !== null && (
-              <img
-                src={images[selectedImageIndex].img}
-                alt={`Property photo ${selectedImageIndex + 1}`}
-                className="h-full w-full object-contain"
-              />
+              <>
+                {imageErrors.has(selectedImageIndex) ? (
+                  <div className="flex h-full w-full flex-col items-center justify-center text-gray-500">
+                    <ImageOff className="mb-4 h-16 w-16" />
+                    <p className="text-lg font-medium">Failed to load image</p>
+                    <p className="text-sm">This image couldn't be displayed</p>
+                  </div>
+                ) : (
+                  <>
+                    {imageLoading.has(selectedImageIndex) && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+                        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></div>
+                      </div>
+                    )}
+                    <img
+                      src={images[selectedImageIndex].img}
+                      alt={`Property photo ${selectedImageIndex + 1}`}
+                      className="h-full w-full object-contain"
+                      onError={() => handleImageError(selectedImageIndex)}
+                      onLoad={() => handleImageLoad(selectedImageIndex)}
+                      onLoadStart={() =>
+                        handleImageLoadStart(selectedImageIndex)
+                      }
+                    />
+                  </>
+                )}
+              </>
             )}
 
             {/* Navigation Buttons */}
@@ -139,11 +184,27 @@ export function PhotoGallery({ images, isOpen, onClose }: PhotoGalleryProps) {
                   }`}
                   onClick={() => setSelectedImageIndex(index)}
                 >
-                  <img
-                    src={photo.img}
-                    alt={`Thumbnail ${index + 1}`}
-                    className="h-full w-full object-cover"
-                  />
+                  {imageErrors.has(index) ? (
+                    <div className="flex h-full w-full items-center justify-center bg-gray-200 text-gray-400">
+                      <ImageOff className="h-6 w-6" />
+                    </div>
+                  ) : (
+                    <>
+                      {imageLoading.has(index) && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+                          <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-500 border-t-transparent"></div>
+                        </div>
+                      )}
+                      <img
+                        src={photo.img}
+                        alt={`Thumbnail ${index + 1}`}
+                        className="h-full w-full object-cover"
+                        onError={() => handleImageError(index)}
+                        onLoad={() => handleImageLoad(index)}
+                        onLoadStart={() => handleImageLoadStart(index)}
+                      />
+                    </>
+                  )}
                 </div>
               ))}
             </div>
