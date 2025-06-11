@@ -1,7 +1,15 @@
 "use client";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+
+import {
+  CardCvcInput,
+  CardExpiryInput,
+  CardNumberInput,
+} from "@/components/ui/card-input";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -12,47 +20,71 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { LoadingButton } from "@/components/ui/loading-button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useToast } from "@/hooks/useAlertToast";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+
+import { useCreateCardMutation } from "../api/mutations";
 
 const formSchema = z.object({
-  name: z.string().min(1),
-  number: z.number().min(12).max(12),
-  expiration: z.number().min(4).max(4),
-  cvv: z.number().min(3).max(3),
-  zip: z.number().min(3).max(5),
+  cardHolderName: z.string().min(1, "Cardholder name is required"),
+  cardNumber: z.string().regex(/^\d{16}$/, "Card number must be 16 digits"),
+  expiryDate: z.string().regex(/^\d{2}\/\d{2}$/, "Use MM/YY format"),
+  cvv: z.string().regex(/^\d{3,4}$/, "CVV must be 3 or 4 digits"),
+  country: z.string().min(1, "Country is required"),
+  isDefault: z.boolean(),
+  isCarSaved: z.boolean(),
 });
 
 export function CardDetailsForm() {
+  const navigate = useNavigate();
+  const { showToast } = useToast();
+  const { mutateAsync, isPending } = useCreateCardMutation();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      cardHolderName: "",
+      cardNumber: "",
+      expiryDate: "",
+      cvv: "",
+      country: "",
+      isDefault: false,
+      isCarSaved: true,
+    },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      console.log(values);
-      //   toast(
-      //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-      //       <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-      //     </pre>
-      //   );
+      await mutateAsync(values);
+      showToast("Card details added successfully!", "success");
+      navigate(-1); // Go back to the previous page
     } catch (error) {
-      console.error("Form submission error", error);
-      //   toast.error("Failed to submit the form. Please try again.");
+      showToast(getErrorMessage(error), "error");
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
     }
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
         <FormField
           control={form.control}
-          name="name"
+          name="cardHolderName"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Cardholder Name</FormLabel>
               <FormControl>
-                <Input placeholder="" type="text" {...field} />
+                <Input type="text" {...field} />
               </FormControl>
-
               <FormMessage />
             </FormItem>
           )}
@@ -60,14 +92,13 @@ export function CardDetailsForm() {
 
         <FormField
           control={form.control}
-          name="number"
+          name="cardNumber"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Card Number</FormLabel>
               <FormControl>
-                <Input placeholder="" type="number" {...field} />
+                <CardNumberInput {...field} />
               </FormControl>
-
               <FormMessage />
             </FormItem>
           )}
@@ -77,14 +108,13 @@ export function CardDetailsForm() {
           <div className="col-span-4">
             <FormField
               control={form.control}
-              name="expiration"
+              name="expiryDate"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Expiration</FormLabel>
                   <FormControl>
-                    <Input placeholder="MM/YY" type="number" {...field} />
+                    <CardExpiryInput {...field} />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
@@ -99,9 +129,8 @@ export function CardDetailsForm() {
                 <FormItem>
                   <FormLabel>CVV</FormLabel>
                   <FormControl>
-                    <Input placeholder="777" type="number" {...field} />
+                    <CardCvcInput {...field} />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
@@ -111,22 +140,80 @@ export function CardDetailsForm() {
           <div className="col-span-4">
             <FormField
               control={form.control}
-              name="zip"
+              name="country"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Zip Code</FormLabel>
-                  <FormControl>
-                    <Input placeholder="" type="number" {...field} />
-                  </FormControl>
-
+                  <FormLabel>Country</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select country" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="USA">USA</SelectItem>
+                      <SelectItem value="Canada">Canada</SelectItem>
+                      <SelectItem value="UK">UK</SelectItem>
+                      <SelectItem value="France">France</SelectItem>
+                      <SelectItem value="Germany">Germany</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
         </div>
-        <div className="w-full flex justify-center">
-          <LoadingButton size="lg" className="w-3/5">
+
+        <div className="space-y-4">
+          <FormField
+            control={form.control}
+            name="isDefault"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-y-0 space-x-3">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>Set as default payment method</FormLabel>
+                </div>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="isCarSaved"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-y-0 space-x-3">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>Save card for future payments</FormLabel>
+                </div>
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className="flex w-full justify-center">
+          <LoadingButton
+            size="lg"
+            className="w-3/5"
+            isLoading={isPending}
+            type="submit"
+          >
             Submit
           </LoadingButton>
         </div>
