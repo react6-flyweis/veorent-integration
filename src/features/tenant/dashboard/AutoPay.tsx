@@ -1,16 +1,75 @@
-import { PageTitle } from "@/components/PageTitle";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-
-import paymentMethodImg from "@/assets/images/payment-method.png";
-import rentIconImg from "@/assets/icons/rent.png";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
 import { DownloadIcon, EuroIcon } from "lucide-react";
+
+import rentIconImg from "@/assets/icons/rent.png";
+import paymentMethodImg from "@/assets/images/payment-method.png";
+import { PageTitle } from "@/components/PageTitle";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Switch } from "@/components/ui/switch";
 import { useGoBack } from "@/hooks/useGoBack";
+
+import { useGetCardsQuery } from "./api/queries";
 
 export default function AutoPay() {
   const goBack = useGoBack();
+  const navigate = useNavigate();
+  const { data: cards, isLoading, error } = useGetCardsQuery();
+
+  // Redirect to add card page if no cards exist
+  useEffect(() => {
+    if (!isLoading && cards && cards.length === 0) {
+      navigate("/tenant/add-card");
+    }
+  }, [cards, isLoading, navigate]);
+
+  // Get the default card or first card
+  const defaultCard = cards?.find((card) => card.isDefault) || cards?.[0];
+
+  if (isLoading) {
+    return (
+      <div className="space-y-5">
+        <PageTitle title="Rent Payment Method" withBack />
+        <div className="flex items-center gap-3">
+          <Skeleton className="size-6" />
+          <Skeleton className="h-6 w-32" />
+        </div>
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-48" />
+          <Skeleton className="h-4 w-64" />
+        </div>
+        <Skeleton className="h-10 w-24" />
+        <Skeleton className="h-32 w-full" />
+        <div className="flex w-full justify-center">
+          <Skeleton className="h-12 w-3/5" />
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !cards || cards.length === 0) {
+    return (
+      <div className="space-y-5">
+        <PageTitle title="Rent Payment Method" withBack />
+        <div className="py-8 text-center">
+          <p className="text-muted-foreground mb-4">
+            No payment methods found. Please add a card to continue.
+          </p>
+          <Button onClick={() => navigate("/tenant/add-card")}>
+            Add Card Details
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  const maskedCardNumber = defaultCard?.cardNumber
+    ? `**** **** **** ${defaultCard.cardNumber.slice(-4)}`
+    : "****";
+
   return (
     <div className="space-y-5">
       <PageTitle title="Rent Payment Method" withBack />
@@ -21,11 +80,13 @@ export default function AutoPay() {
       <div className="">
         <p className="space-x-1">
           <span>Card Holder Name:</span>
-          <span className="text-primary">Kaiya Lipshutz</span>
+          <span className="text-primary">
+            {defaultCard?.cardHolderName || "N/A"}
+          </span>
         </p>
         <p className="space-x-1">
           <span>Card Number:</span>
-          <span className="text-primary">1234 5678 9012 3456</span>
+          <span className="text-primary">{maskedCardNumber}</span>
         </p>
       </div>
       <div className="flex gap-1">
