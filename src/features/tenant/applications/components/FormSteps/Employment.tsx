@@ -1,11 +1,13 @@
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
+import { useParams } from "react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { PlusCircleIcon, XIcon } from "lucide-react";
+import { z } from "zod";
+
+import businessmanIcon from "@/assets/icons/businessman.png";
+import FormErrors from "@/components/FormErrors";
+import { IconRound } from "@/components/IconRound";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -15,21 +17,24 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { PlusCircleIcon, XIcon } from "lucide-react";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { LoadingButton } from "@/components/ui/loading-button";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
-import { useForm, useWatch } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import { useState } from "react";
-import businessmanIcon from "@/assets/icons/businessman.png";
-import { IconRound } from "@/components/IconRound";
-import { z } from "zod";
-import { EmployerSummaryCard } from "../EmploymentSummaryCard";
+import { useUpdateBookingMutation } from "../../api/mutation";
 import {
   EmployerEditor,
   employerSchema,
   type IEmployer,
 } from "../EmployerEditor";
+import { EmployerSummaryCard } from "../EmploymentSummaryCard";
 
 const employerDetailsSchema = z
   .object({
@@ -57,12 +62,80 @@ const employerDetailsSchema = z
 
 type FormSchemaType = z.infer<typeof employerDetailsSchema>;
 
-export function EmploymentDetails({ onSuccess }: { onSuccess: () => void }) {
+const EmployerDialog = ({
+  title,
+  open,
+  setOpen,
+  employer,
+  setEmployer,
+}: {
+  title: "Current" | "Past";
+  open: boolean;
+  setOpen: (show: boolean) => void;
+  employer: IEmployer | undefined;
+  setEmployer: (address: IEmployer) => void;
+}) => {
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent className="h-screen min-w-screen overflow-scroll [&>button:last-child]:hidden">
+        <DialogHeader className="flex-row items-center gap-3">
+          <DialogClose className="flex size-9 items-center justify-center rounded-full border">
+            <XIcon />
+          </DialogClose>
+          <DialogTitle className="text-2xl">
+            {employer ? "Edit" : "Add"} {title} Employer
+          </DialogTitle>
+        </DialogHeader>
+        <EmployerEditor
+          data={employer}
+          onSubmit={(add) => {
+            setEmployer(add);
+            setOpen(false);
+          }}
+        />
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export function EmploymentDetails({
+  bookingData,
+  onSuccess,
+}: {
+  bookingData?: IBooking;
+  onSuccess: () => void;
+}) {
+  const { id } = useParams<{ id: string }>();
+  const { mutateAsync, isPending } = useUpdateBookingMutation(id || "");
+
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(employerDetailsSchema),
     defaultValues: {
-      noCurrent: false,
-      noPast: false,
+      currentEmployer: bookingData?.employment
+        ? {
+            employerName: bookingData.employment.employer,
+            position: bookingData.employment.occuption,
+            monthStarted: bookingData.employment.month,
+            yearStarted: bookingData.employment.year,
+            monthlyIncome: bookingData.employment.income,
+            referenceName: bookingData.employment.employemntReferenceName,
+            referenceNumber: bookingData.employment.employemntReferenceNumber,
+          }
+        : undefined,
+      pastEmployer: bookingData?.pastEmployment
+        ? {
+            employerName: bookingData.pastEmployment.employer,
+            position: bookingData.pastEmployment.occuption,
+            monthStarted: bookingData.pastEmployment.month,
+            yearStarted: bookingData.pastEmployment.year,
+            monthlyIncome: bookingData.pastEmployment.income,
+            referenceName: bookingData.pastEmployment.employemntReferenceName,
+            referenceNumber:
+              bookingData.pastEmployment.employemntReferenceNumber,
+          }
+        : undefined,
+      noCurrent: !bookingData?.employment,
+      noPast: bookingData?.employment?.pastemployemntNotApplicable ?? false,
     },
   });
 
@@ -79,9 +152,44 @@ export function EmploymentDetails({ onSuccess }: { onSuccess: () => void }) {
   const [currentOpen, setCurrentOpen] = useState(false);
   const [pastOpen, setPastOpen] = useState(false);
 
-  const submitHandler = (data: FormSchemaType) => {
-    console.log(data);
-    onSuccess();
+  const submitHandler = async (data: FormSchemaType) => {
+    try {
+      await mutateAsync({
+        employment: data.noCurrent
+          ? undefined
+          : {
+              currentEmployer: false,
+              employer: data.currentEmployer?.employerName || "",
+              occuption: data.currentEmployer?.position || "",
+              month: data.currentEmployer?.monthStarted || "",
+              year: data.currentEmployer?.yearStarted || "",
+              income: data.currentEmployer?.monthlyIncome || "",
+              employemntReferenceName:
+                data.currentEmployer?.referenceName || "",
+              employemntReferenceNumber:
+                data.currentEmployer?.referenceNumber || "",
+              pastemployemntNotApplicable: data.noPast,
+            },
+        pastEmployment: data.noPast
+          ? undefined
+          : {
+              currentEmployer: false,
+              employer: data.pastEmployer?.employerName || "",
+              occuption: data.pastEmployer?.position || "",
+              month: data.pastEmployer?.monthStarted || "",
+              year: data.pastEmployer?.yearStarted || "",
+              income: data.pastEmployer?.monthlyIncome || "",
+              employemntReferenceName: data.pastEmployer?.referenceName || "",
+              employemntReferenceNumber:
+                data.pastEmployer?.referenceNumber || "",
+            },
+      });
+      onSuccess();
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   };
 
   return (
@@ -231,48 +339,19 @@ export function EmploymentDetails({ onSuccess }: { onSuccess: () => void }) {
           />
         </div>
 
+        <FormErrors errors={form.formState.errors} />
+
         <div className="flex justify-center">
-          <Button type="submit" size="lg" className="w-4/5 @lg:w-3/5">
+          <LoadingButton
+            type="submit"
+            size="lg"
+            className="w-4/5 @lg:w-3/5"
+            isLoading={isPending}
+          >
             Save & Next
-          </Button>
+          </LoadingButton>
         </div>
       </form>
     </Form>
   );
 }
-
-const EmployerDialog = ({
-  title,
-  open,
-  setOpen,
-  employer,
-  setEmployer,
-}: {
-  title: "Current" | "Past";
-  open: boolean;
-  setOpen: (show: boolean) => void;
-  employer: IEmployer | undefined;
-  setEmployer: (address: IEmployer) => void;
-}) => {
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="h-screen min-w-screen overflow-scroll [&>button:last-child]:hidden">
-        <DialogHeader className="flex-row items-center gap-3">
-          <DialogClose className="flex size-9 items-center justify-center rounded-full border">
-            <XIcon />
-          </DialogClose>
-          <DialogTitle className="text-2xl">
-            {employer ? "Edit" : "Add"} {title} Employer
-          </DialogTitle>
-        </DialogHeader>
-        <EmployerEditor
-          data={employer}
-          onSubmit={(add) => {
-            setEmployer(add);
-            setOpen(false);
-          }}
-        />
-      </DialogContent>
-    </Dialog>
-  );
-};
