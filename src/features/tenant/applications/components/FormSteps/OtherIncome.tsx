@@ -1,6 +1,11 @@
-import { z } from "zod";
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+import otherIncomeIcon from "@/assets/icons/other-income.png";
+import FormErrors from "@/components/FormErrors";
+import { IconRound } from "@/components/IconRound";
 import {
   Form,
   FormField,
@@ -10,33 +15,59 @@ import {
   FormControl,
   FormDescription,
 } from "@/components/ui/form";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { IconRound } from "@/components/IconRound";
-
-import otherIncomeIcon from "@/assets/icons/other-income.png";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { LoadingButton } from "@/components/ui/loading-button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+
+import { useUpdateBookingMutation } from "../../api/mutation";
 
 const incomeFormSchema = z.object({
   otherSources: z.boolean(),
+  source: z.string().optional(),
+  monthlyIncome: z.string().optional(),
   bank: z.string().min(1, "Bank name is required."),
 });
 
 type OtherIncomeFormValues = z.infer<typeof incomeFormSchema>;
 
-export function OtherIncome({ onSuccess }: { onSuccess: () => void }) {
+export function OtherIncome({
+  bookingData,
+  onSuccess,
+}: {
+  bookingData?: IBooking;
+  onSuccess: () => void;
+}) {
+  const { id } = useParams<{ id: string }>();
+  const { mutateAsync, isPending } = useUpdateBookingMutation(id || "");
+
   const form = useForm<OtherIncomeFormValues>({
     resolver: zodResolver(incomeFormSchema),
     defaultValues: {
-      bank: "",
-      otherSources: false,
+      bank: bookingData?.otherIncome?.bank || "",
+      otherSources: bookingData?.otherIncome?.otherSourceOfIncome ?? false,
+      source: bookingData?.otherIncome?.source || "",
+      monthlyIncome: bookingData?.otherIncome?.monthlyIncome || "",
     },
   });
 
-  function onSubmit(values: OtherIncomeFormValues) {
-    console.log("Form submitted", values);
-    onSuccess();
+  async function onSubmit(values: OtherIncomeFormValues) {
+    try {
+      await mutateAsync({
+        otherIncome: {
+          otherSourceOfIncome: values.otherSources,
+          source: values.source || "",
+          monthlyIncome: values.monthlyIncome || "",
+          bank: values.bank,
+        },
+      });
+      onSuccess();
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   }
 
   return (
@@ -104,10 +135,17 @@ export function OtherIncome({ onSuccess }: { onSuccess: () => void }) {
             )}
           />
 
+          <FormErrors errors={form.formState.errors} />
+
           <div className="flex justify-center">
-            <Button type="submit" size="lg" className="w-4/5 @lg:w-3/5">
+            <LoadingButton
+              type="submit"
+              size="lg"
+              className="w-4/5 @lg:w-3/5"
+              isLoading={isPending}
+            >
               Save & Next
-            </Button>
+            </LoadingButton>
           </div>
         </form>
       </Form>
