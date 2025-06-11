@@ -1,19 +1,13 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import infoCircleIcon from "@/assets/icons/info-circle.png";
+import FormErrors from "@/components/FormErrors";
+import { IconRound } from "@/components/IconRound";
 import {
   Form,
   FormControl,
@@ -23,8 +17,19 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { IconRound } from "@/components/IconRound";
-import infoCircleIcon from "@/assets/icons/info-circle.png";
+import { Input } from "@/components/ui/input";
+import { LoadingButton } from "@/components/ui/loading-button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+
+import { useUpdateBookingMutation } from "../../api/mutation";
 
 const EmergencySchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -37,24 +42,43 @@ const EmergencySchema = z.object({
 type EmergencyFormType = z.infer<typeof EmergencySchema>;
 
 export default function EmergencyContactForm({
+  bookingData,
   onSuccess,
 }: {
+  bookingData?: IBooking;
   onSuccess: () => void;
 }) {
+  const { id } = useParams<{ id: string }>();
+  const { mutateAsync, isPending } = useUpdateBookingMutation(id || "");
+
   const form = useForm<EmergencyFormType>({
     resolver: zodResolver(EmergencySchema),
     defaultValues: {
-      firstName: "",
-      relationship: "",
-      phoneNumber: "",
-      additionalComments: "",
-      foundThrough: "",
+      firstName: bookingData?.emergencyContact?.fullName || "",
+      relationship: bookingData?.emergencyContact?.relationShip || "",
+      phoneNumber: bookingData?.emergencyContact?.phoneNumber || "",
+      additionalComments: bookingData?.emergencyContact?.comment || "",
+      foundThrough: bookingData?.emergencyContact?.findProperty || "",
     },
   });
 
-  function onSubmit(data: EmergencyFormType) {
-    console.log("Form submitted:", data);
-    onSuccess();
+  async function onSubmit(data: EmergencyFormType) {
+    try {
+      await mutateAsync({
+        emergencyContact: {
+          fullName: data.firstName,
+          relationShip: data.relationship,
+          phoneNumber: data.phoneNumber,
+          comment: data.additionalComments || "",
+          findProperty: data.foundThrough,
+        },
+      });
+      onSuccess();
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   }
 
   return (
@@ -165,11 +189,17 @@ export default function EmergencyContactForm({
             )}
           />
 
+          <FormErrors errors={form.formState.errors} />
+
           {/* Submit */}
           <div className="flex items-center justify-center">
-            <Button type="submit" className="mt-2 w-4/5 @lg:w-3/5">
-              Next
-            </Button>
+            <LoadingButton
+              type="submit"
+              className="mt-2 w-4/5 @lg:w-3/5"
+              isLoading={isPending}
+            >
+              Save & Next
+            </LoadingButton>
           </div>
         </form>
       </Form>

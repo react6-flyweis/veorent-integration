@@ -1,8 +1,12 @@
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { PlusCircleIcon } from "lucide-react";
+import { z } from "zod";
+
+import documentsIcon from "@/assets/icons/documents.png";
+import FormErrors from "@/components/FormErrors";
+import { IconRound } from "@/components/IconRound";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
@@ -13,49 +17,80 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
-import { IconRound } from "@/components/IconRound";
-import documentsIcon from "@/assets/icons/documents.png";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { PlusCircleIcon } from "lucide-react";
+import { LoadingButton } from "@/components/ui/loading-button";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
-const UploadSchema = z.object({
-  photoId: z.any().optional(),
-  proofOfIncome: z.any().optional(),
-  otherDocs: z.any().optional(),
-  uploadLater: z.boolean().optional(),
-}).refine((data) => {
-  // If uploadLater is checked, skip validation for required files
-  if (data.uploadLater) {
-    return true;
-  }
-  
-  // Otherwise, validate required files
-  const hasPhotoId = data.photoId instanceof File || (data.photoId && data.photoId.length > 0);
-  const hasProofOfIncome = data.proofOfIncome instanceof File || (data.proofOfIncome && data.proofOfIncome.length > 0);
-  
-  return hasPhotoId && hasProofOfIncome;
-}, {
-  message: "Photo ID and Proof of Income are required when not uploading later",
-  path: ["photoId"], // This will show the error on the photoId field
-});
+import { useUpdateBookingMutation } from "../../api/mutation";
+
+const UploadSchema = z
+  .object({
+    photoId: z.any().optional(),
+    proofOfIncome: z.any().optional(),
+    otherDocs: z.any().optional(),
+    uploadLater: z.boolean().optional(),
+  })
+  .refine(
+    (data) => {
+      // If uploadLater is checked, skip validation for required files
+      if (data.uploadLater) {
+        return true;
+      }
+
+      // Otherwise, validate required files
+      const hasPhotoId =
+        data.photoId instanceof File ||
+        (data.photoId && data.photoId.length > 0);
+      const hasProofOfIncome =
+        data.proofOfIncome instanceof File ||
+        (data.proofOfIncome && data.proofOfIncome.length > 0);
+
+      return hasPhotoId && hasProofOfIncome;
+    },
+    {
+      message:
+        "Photo ID and Proof of Income are required when not uploading later",
+      path: ["photoId"], // This will show the error on the photoId field
+    },
+  );
 
 type UploadFormType = z.infer<typeof UploadSchema>;
 
 export default function UploadDocumentsForm({
+  bookingData,
   onSuccess,
 }: {
+  bookingData?: IBooking;
   onSuccess: () => void;
 }) {
+  const { id } = useParams<{ id: string }>();
+  const { mutateAsync, isPending } = useUpdateBookingMutation(id || "");
+
   const form = useForm<UploadFormType>({
     resolver: zodResolver(UploadSchema),
     defaultValues: {
-      uploadLater: false,
+      uploadLater:
+        !bookingData?.document?.photo && !bookingData?.document?.incomeProof,
     },
   });
 
-  const onSubmit = (data: UploadFormType) => {
-    console.log("Uploaded Data:", data);
-    onSuccess();
+  const onSubmit = async (data: UploadFormType) => {
+    try {
+      await mutateAsync({
+        document: {
+          photo: data.uploadLater ? "" : data.photoId || "",
+          incomeProof: data.uploadLater ? "" : data.proofOfIncome || "",
+          otherDoc: data.otherDocs || "",
+          comment: "",
+        },
+      });
+      onSuccess();
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   };
 
   return (
@@ -204,10 +239,16 @@ export default function UploadDocumentsForm({
             industry...
           </p>
 
+          <FormErrors errors={form.formState.errors} />
+
           <div className="flex items-center justify-center">
-            <Button type="submit" className="w-4/5 @lg:w-3/5">
-              Next
-            </Button>
+            <LoadingButton
+              type="submit"
+              className="w-4/5 @lg:w-3/5"
+              isLoading={isPending}
+            >
+              Save & Next
+            </LoadingButton>
           </div>
         </form>
       </Form>
