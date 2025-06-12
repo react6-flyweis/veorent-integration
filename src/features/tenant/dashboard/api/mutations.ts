@@ -54,3 +54,11 @@ export const useCreateMoveRequestMutation = () => {
     },
   });
 };
+
+// buy-insurance
+export const useBuyInsuranceMutation = () => {
+  return useMutation({
+    mutationFn: (data: IInsurancePurchase) =>
+      axiosTenant.post<IResponse<IInsurancePurchase>>("/buy-insurance", data),
+  });
+};

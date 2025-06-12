@@ -18,3 +18,30 @@ interface IInsurancePlan {
   logo: string;
   additionalPlans: number;
 }
+
+interface IInsurancePurchase {
+  insurancePlanId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  propertyTypeId: string;
+  propertyDetails: {
+    streetAddress: string;
+    unitNumber: string;
+    city: string;
+    region: string;
+    zipCode: string;
+    beds: number;
+    baths: number;
+    squareFeet: number;
+    yearBuilt: number;
+  };
+  startDate: string;
+  endDate: string;
+  premiumPaymentMode: string;
+  totalPremiumPaid: number;
+  policyNumber: string;
+  status: string;
+  paymentStatus: string;
+}
