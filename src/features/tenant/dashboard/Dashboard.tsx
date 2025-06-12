@@ -1,11 +1,11 @@
 import { Link } from "react-router";
 import { EuroIcon, SearchIcon } from "lucide-react";
 
-import applicationsIcon from "@/assets/icons/applications.png";
 import insuranceImgIcon from "@/assets/icons/home-insurance.png";
 import truckImgIcon from "@/assets/icons/truck.png";
 import userImage from "@/assets/user.jpg";
 import { IconCard } from "@/components/IconCard";
+import { RentalApplicationCard } from "@/components/RentalApplicationCard";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -88,15 +88,7 @@ export default function Dashboard() {
         </Card>
 
         {/* Rental Application Card */}
-        <IconCard
-          className="md:col-span-2"
-          title="Rental Application"
-          description="
-            Lorem Ipsum is simply dummy text"
-          icon={applicationsIcon}
-          actionText="Finish My Application"
-          url="/tenant/applying"
-        />
+        <RentalApplicationCard className="md:col-span-2" />
       </div>
 
       {/* Landlord Card */}
