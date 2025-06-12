@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -27,24 +28,37 @@ const profileSchema = z.object({
 type ProfileFormData = z.infer<typeof profileSchema>;
 
 interface ProfileFormProps {
-  profile: IUser;
+  profile?: IUser;
 }
 
 export function ProfileForm({ profile }: ProfileFormProps) {
   const editProfileMutation = useEditProfileMutation();
   const { showToast } = useToast();
 
-  const [firstName, lastName] = profile.fullName?.split(" ") || [];
+  const [firstName, lastName] = profile?.fullName?.split(" ") || [];
 
   const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
       firstName: firstName || "",
       lastName: lastName || "",
-      mobileNumber: profile.mobileNumber || "",
-      email: profile.email || "",
+      mobileNumber: profile?.mobileNumber || "",
+      email: profile?.email || "",
     },
   });
+
+  // Update form values when profile changes
+  useEffect(() => {
+    if (profile) {
+      const [firstName, lastName] = profile.fullName?.split(" ") || [];
+      form.reset({
+        firstName: firstName || "",
+        lastName: lastName || "",
+        mobileNumber: profile.mobileNumber || "",
+        email: profile.email || "",
+      });
+    }
+  }, [profile, form]);
 
   const onSubmit = async (data: ProfileFormData) => {
     try {

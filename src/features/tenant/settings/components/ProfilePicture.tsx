@@ -6,7 +6,7 @@ import { useToast } from "@/hooks/useAlertToast";
 
 import { useUploadProfilePictureMutation } from "../api/mutations";
 
-export function ProfilePicture({ profile }: { profile: IUser }) {
+export function ProfilePicture({ profile }: { profile?: IUser }) {
   const uploadProfilePictureMutation = useUploadProfilePictureMutation();
   const { showToast } = useToast();
 

@@ -36,7 +36,7 @@ const formSchema = z
   });
 
 interface ChangePasswordFormProps {
-  profile: IUser;
+  profile?: IUser;
   onClose: () => void;
 }
 
@@ -54,7 +54,7 @@ export function ChangePasswordForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: profile.email,
+      email: profile?.email,
       otp: "",
       newPassword: "",
       confirmPassword: "",
