@@ -19,17 +19,16 @@ export function useLoginMutation() {
         // 1. Store token immediately
         setToken(token);
 
-        // 2. Fetch user profile data using the token
-        const userProfile = await getProfile();
+        // 2. Fetch user profile data using React Query and cache it
+        const userProfile = await queryClient.fetchQuery({
+          queryKey: ["user", "profile"],
+          queryFn: getProfile,
+        });
 
         // 3. Store user data and complete login
         loginToStore(token, userProfile);
 
-        // 4. Invalidate related queries to refetch fresh data
-        await queryClient.invalidateQueries({ queryKey: ["user", "profile"] });
-        await queryClient.invalidateQueries({ queryKey: ["auth"] });
-
-        // 5. Redirect based on user type
+        // 4. Redirect based on user type
         const redirectPath =
           userProfile.userType === "USER" ? "/tenant" : "/landlord";
         navigate(redirectPath);
