@@ -1,12 +1,25 @@
 import type { FieldErrors } from "react-hook-form";
 
-export default function FormErrors({ errors }: { errors: FieldErrors }) {
+import { cn } from "@/lib/utils";
+
+export default function FormErrors({
+  className,
+  errors,
+}: {
+  className?: string;
+  errors: FieldErrors;
+}) {
   if (!errors) {
     return null;
   }
   return (
     errors.root && (
-      <div className="flex gap-2 rounded border border-red-500 p-2">
+      <div
+        className={cn(
+          "flex gap-2 rounded border border-red-500 p-2",
+          className,
+        )}
+      >
         <p className="text-sm text-red-500">{errors.root.message}</p>
       </div>
     )
