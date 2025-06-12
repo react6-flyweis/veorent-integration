@@ -1,23 +1,17 @@
+import { useState } from "react";
+import { format, subYears } from "date-fns";
+import { CalendarDaysIcon } from "lucide-react";
+
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { format, subYears } from "date-fns";
-import { useState } from "react";
-import { FormControl } from "./form";
-import { Button } from "./button";
-import { CalendarDaysIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { DropdownNavProps, DropdownProps } from "react-day-picker";
-import {
-  Select,
-  SelectContent,
-  SelectValue,
-  SelectTrigger,
-  SelectItem,
-} from "./select";
+
+import { Button } from "./button";
+import { FormControl } from "./form";
 
 type DateConstraints = {
   allowPastDates?: boolean;
@@ -68,32 +62,22 @@ export function DateInput({
     return false;
   };
 
-  const handleCalendarChange = (
-    _value: string | number,
-    _e: React.ChangeEventHandler<HTMLSelectElement>,
-  ) => {
-    const _event = {
-      target: {
-        value: String(_value),
-      },
-    } as React.ChangeEvent<HTMLSelectElement>;
-    _e(_event);
-  };
-
-  // Custom function to determine the year range for the dropdown
-  const getYearRange = () => {
+  // Calculate the start and end months for the calendar navigation
+  const getDateRange = () => {
     const startYear = isDob
       ? dobMinDate.getFullYear()
       : minDate?.getFullYear() ||
         (allowPastDates ? today.getFullYear() - 10 : today.getFullYear());
 
-    // For future years, add 10 years by default or respect maxDate if provided
     const endYear = isDob
       ? dobMaxDate.getFullYear()
       : maxDate?.getFullYear() ||
         (allowFutureDates ? today.getFullYear() + 10 : today.getFullYear());
 
-    return { fromYear: startYear, toYear: endYear };
+    return {
+      startMonth: new Date(startYear, 0), // January of start year
+      endMonth: new Date(endYear, 11), // December of end year
+    };
   };
 
   // Default month to show in calendar — 20 years ago if isDob and no value selected
@@ -133,44 +117,7 @@ export function DateInput({
           captionLayout="dropdown"
           defaultMonth={defaultMonth}
           showOutsideDays={false}
-          fromYear={getYearRange().fromYear}
-          toYear={getYearRange().toYear}
-          components={{
-            DropdownNav: (props: DropdownNavProps) => {
-              return (
-                <div className="flex w-full items-center gap-2">
-                  {props.children}
-                </div>
-              );
-            },
-            Dropdown: (props: DropdownProps) => {
-              return (
-                <Select
-                  value={String(props.value)}
-                  onValueChange={(value) => {
-                    if (props.onChange) {
-                      handleCalendarChange(value, props.onChange);
-                    }
-                  }}
-                >
-                  <SelectTrigger className="h-8 w-fit font-medium first:grow">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-[min(26rem,var(--radix-select-content-available-height))]">
-                    {props.options?.map((option) => (
-                      <SelectItem
-                        key={option.value}
-                        value={String(option.value)}
-                        disabled={option.disabled}
-                      >
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              );
-            },
-          }}
+          {...getDateRange()}
         />
       </PopoverContent>
     </Popover>
