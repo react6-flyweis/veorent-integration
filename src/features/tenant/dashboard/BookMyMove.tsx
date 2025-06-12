@@ -37,9 +37,14 @@ export default function BookMyMove() {
               startDate: data.newLeaseStart,
               endDate: data.newLeaseEnd,
             },
-            moveDate: data.moveEnd,
-            moveTime: data.moveStart,
+            moveDate: data.moveStart,
+            moveTime: data.moveStartTime,
+
+            moveEnd: data.moveEnd,
+            moveEndTime: data.moveEndTime,
+
             flexibleTimings: data.isFlexible,
+            flexibleTimingsData: data.flexibilityDuration,
           };
           navigate("/tenant/move-in-process", {
             state: { data: dataToSend },

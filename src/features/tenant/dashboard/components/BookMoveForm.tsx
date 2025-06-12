@@ -50,7 +50,9 @@ const schema = z.object({
   newLeaseEnd: z.date().optional(),
 
   moveStart: z.date(),
+  moveStartTime: z.string().optional(),
   moveEnd: z.date(),
+  moveEndTime: z.string().optional(),
   isFlexible: z.enum(["yes", "no"]),
   flexibilityDuration: z.enum(["30m", "1hr", "2hr"]).optional(),
 });
@@ -349,7 +351,7 @@ export function BookMyMoveForm({
             <img src={fastIcon} alt="Fast Icon" className="max-h-8 max-w-8" />
             <h3 className="text-lg font-semibold">Move In Date & Time</h3>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-4 gap-4">
             <FormField
               name="moveStart"
               control={form.control}
@@ -361,12 +363,36 @@ export function BookMyMoveForm({
               )}
             />
             <FormField
+              name="moveStartTime"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Start Time</FormLabel>
+                  <FormControl>
+                    <Input type="time" {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
               name="moveEnd"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>End Date</FormLabel>
                   <DateInput {...field} />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="moveEndTime"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>End Time</FormLabel>
+                  <FormControl>
+                    <Input type="time" {...field} />
+                  </FormControl>
                 </FormItem>
               )}
             />
