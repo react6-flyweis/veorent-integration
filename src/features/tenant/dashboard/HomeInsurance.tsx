@@ -1,7 +1,10 @@
-import { z } from "zod";
-import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
+import legacyIconImg from "@/assets/icons/legacy.png";
+import { IconRound } from "@/components/IconRound";
 import {
   MultiStepper,
   MultiStepperButton,
@@ -18,63 +21,7 @@ import {
   FormItem,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Card, CardContent } from "@/components/ui/card";
-import { IconRound } from "@/components/IconRound";
-
-import legacyIconImg from "@/assets/icons/legacy.png";
-import marketingImg from "@/assets/images/marketing.png";
-import sofaImg from "@/assets/images/sofa.png";
-import apartmentImg from "@/assets/images/apartment.png";
-import townhouseImg from "@/assets/images/townhouse.png";
-import villaImg from "@/assets/images/villa.png";
-import skyscraperImg from "@/assets/images/skyscraper.png";
-import factoryImg from "@/assets/images/factory.png";
-import requestImg from "@/assets/images/request.png";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-const propertyTypes = [
-  {
-    label: "Marketing",
-    image: marketingImg,
-    key: "marketing",
-  },
-  {
-    label: "Furnished Home",
-    image: sofaImg,
-    key: "furnished-home",
-  },
-  {
-    label: "Apartment",
-    image: apartmentImg,
-    key: "apartment",
-  },
-  {
-    label: "Townhouse",
-    image: townhouseImg,
-    key: "townhouse",
-  },
-  {
-    label: "Condo",
-    image: villaImg,
-    key: "condo",
-  },
-  {
-    label: "Multi-Family",
-    image: skyscraperImg,
-    key: "multi-family",
-  },
-  {
-    label: "Manufactured",
-    image: factoryImg,
-    key: "manufactured",
-  },
-  {
-    label: "Other",
-    image: requestImg,
-    key: "other",
-  },
-];
+import { PropertyTypeSelector } from "@/features/landlord/components/PropertyTypeSelector";
 
 const formSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -96,9 +43,9 @@ const formSchema = z.object({
     .min(4, "Zip code is too short")
     .max(10, "Zip code is too long"),
 
-  beds: z.number().min(0, "Beds cannot be negative"),
-  bath: z.number().min(0, "Bathrooms cannot be negative"),
-  squareFeet: z.number().min(0, "Square footage cannot be negative"),
+  beds: z.coerce.number().min(0, "Beds cannot be negative"),
+  bath: z.coerce.number().min(0, "Bathrooms cannot be negative"),
+  squareFeet: z.coerce.number().min(0, "Square footage cannot be negative"),
 
   year: z
     .string()
@@ -131,8 +78,24 @@ export default function HomeInsuranceForm() {
   });
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log("Form Data:", data);
-    navigate("/tenant/insurance-plans");
+    navigate("/tenant/insurance-plans", {
+      state: {
+        formData: {
+          propertyDetails: {
+            streetAddress: data.street,
+            unitNumber: data.unit,
+            city: data.city,
+            region: data.region,
+            zipCode: data.zipCode,
+            beds: data.beds,
+            bath: data.bath,
+            squareFeet: data.squareFeet,
+            yearBuilt: data.year,
+          },
+          ...data,
+        },
+      },
+    });
   };
 
   return (
@@ -225,39 +188,11 @@ export default function HomeInsuranceForm() {
                 control={form.control}
                 name="propertyType"
                 render={({ field }) => (
-                  <div>
+                  <FormItem>
                     <FormLabel>Property Type</FormLabel>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="mt-2 grid grid-cols-2 gap-4 @md:grid-cols-3 @lg:grid-cols-4"
-                    >
-                      {propertyTypes.map((type) => (
-                        <label htmlFor={type.key} className="cursor-pointer">
-                          <Card
-                            key={type.key}
-                            className={`border-input cursor-pointer gap-0 border p-2 ${
-                              field.value === type.key &&
-                              "border-primary bg-blue-50"
-                            }`}
-                          >
-                            <RadioGroupItem value={type.key} id={type.key} />
-                            <CardContent className="flex flex-col items-center justify-center gap-2">
-                              <img
-                                src={type.image}
-                                alt=""
-                                className="size-12"
-                              />
-                              <span className="text-primary text-lg">
-                                {type.label}
-                              </span>
-                            </CardContent>
-                          </Card>
-                        </label>
-                      ))}
-                    </RadioGroup>
+                    <PropertyTypeSelector {...field} />
                     <FormMessage />
-                  </div>
+                  </FormItem>
                 )}
               />
             </MultiStepperStep>
@@ -375,7 +310,12 @@ export default function HomeInsuranceForm() {
                     <FormItem>
                       <FormLabel>Year</FormLabel>
                       <FormControl>
-                        <Input type="number" {...field} />
+                        <Input
+                          placeholder="YYYY"
+                          type="text"
+                          maxLength={4}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
