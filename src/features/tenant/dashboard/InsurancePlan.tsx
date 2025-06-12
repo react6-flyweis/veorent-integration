@@ -1,37 +1,29 @@
 import React from "react";
+import { Link, useLocation } from "react-router";
+import { useNavigate } from "react-router-dom";
+import { ChevronRight } from "lucide-react";
+
+import { BackButton } from "@/components/BackButton";
+import { CurrencyIcon } from "@/components/CurrencyIcon";
+import { IconRound } from "@/components/IconRound";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ChevronRight, Info } from "lucide-react";
-import { BackButton } from "@/components/BackButton";
+import { Skeleton } from "@/components/ui/skeleton";
 
+import { useGetInsurancePlansQuery } from "./api/queries";
 import homeInsuranceIcon from "./assets/home-insurance.png";
-import { IconRound } from "@/components/IconRound";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router";
 
-interface InsurancePlanProps {
-  logo: string;
-  name: string;
-  coverType: string;
-  coverAmount: string;
-  price: number;
-  additionalPlans: number;
-}
-
-export const InsurancePlan: React.FC<InsurancePlanProps> = ({
-  logo,
-  name,
-  coverType,
-  coverAmount,
-  price,
-  additionalPlans,
-}) => {
+export const InsurancePlan: React.FC<{ plan: IInsurancePlan }> = ({ plan }) => {
   const navigate = useNavigate();
+  const { state } = useLocation();
+
+  const { _id, planName, coverAmount, premium, logo, additionalPlans } = plan;
 
   const handleViewPlanDetails = () => {
-    navigate("/tenant/insurance-plans/_id", {
+    navigate(`/tenant/insurance-plans/${_id}`, {
       state: {
-        plan: { logo, name, coverType, coverAmount, price, additionalPlans },
+        plan,
+        formData: state?.formData,
       },
     });
   };
@@ -41,11 +33,18 @@ export const InsurancePlan: React.FC<InsurancePlanProps> = ({
       <div className="flex w-full flex-col justify-between gap-4 md:flex-row">
         <div className="">
           <div className="flex gap-2">
-            <div className="relative h-[40px] min-w-[80px]">
-              <img src={logo} alt={`${name} logo`} className="object-contain" />
+            <div className="relative flex h-[40px] min-w-[80px] items-center justify-center rounded bg-gray-50">
+              <img
+                src={logo || homeInsuranceIcon}
+                alt={`${planName} logo`}
+                className="max-h-full max-w-full object-contain"
+                onError={(e) => {
+                  e.currentTarget.src = homeInsuranceIcon;
+                }}
+              />
             </div>
             <div className="flex flex-col">
-              <h3 className="text-lg font-semibold">{name}</h3>
+              <h3 className="text-lg font-semibold">{planName}</h3>
               <button className="flex items-center text-left text-sm text-blue-600">
                 View {additionalPlans} more plans{" "}
                 <ChevronRight className="h-4 w-4" />
@@ -55,8 +54,10 @@ export const InsurancePlan: React.FC<InsurancePlanProps> = ({
           <div className="mt-2">
             <p className="text-sm text-gray-500">Cover</p>
             <div className="flex items-center gap-1">
-              <Info className="h-4 w-4" />
-              <span className="font-medium">{coverAmount}</span>
+              <CurrencyIcon size="sm" />
+              <span className="font-medium">
+                {coverAmount.toLocaleString()}
+              </span>
             </div>
           </div>
         </div>
@@ -72,7 +73,8 @@ export const InsurancePlan: React.FC<InsurancePlanProps> = ({
           </Button>
 
           <div className="bg-primary flex items-center gap-2 rounded-lg px-3 py-1 text-white">
-            <span className="font-medium">${price}/month</span>
+            <CurrencyIcon className="text-white" size="sm" />
+            <span className="font-medium">{premium.monthlyPremium}/month</span>
           </div>
         </div>
       </div>
@@ -80,42 +82,15 @@ export const InsurancePlan: React.FC<InsurancePlanProps> = ({
   );
 };
 
-const plans = [
-  {
-    logo: "/logos/home-insurance.png",
-    name: "Core Plus",
-    coverType: "Cover",
-    coverAmount: "9L",
-    price: 716,
-    additionalPlans: 12,
-  },
-  {
-    logo: "/logos/home-insurance-premium.png",
-    name: "1Cr Super Saver",
-    coverType: "Cover",
-    coverAmount: "1Cr",
-    price: 890,
-    additionalPlans: 8,
-  },
-  {
-    logo: "/logos/nationwide.png",
-    name: "Super Care Option",
-    coverType: "Cover",
-    coverAmount: "5L",
-    price: 371,
-    additionalPlans: 4,
-  },
-  {
-    logo: "/logos/american-family.png",
-    name: "Young Star Gold",
-    coverType: "Cover",
-    coverAmount: "5L",
-    price: 553,
-    additionalPlans: 6,
-  },
-];
-
 export default function InsurancePlans() {
+  const { state } = useLocation();
+  const navigate = useNavigate();
+  const { data: plans, isLoading } = useGetInsurancePlansQuery();
+
+  if (!state?.formData) {
+    navigate("/tenant/home-insurance");
+  }
+
   return (
     <div className="">
       <BackButton />
@@ -130,9 +105,42 @@ export default function InsurancePlans() {
       </p>
 
       <div className="space-y-4">
-        {plans.map((plan, index) => (
-          <InsurancePlan key={index} {...plan} />
-        ))}
+        {isLoading ? (
+          Array.from({ length: 4 }).map((_, index) => (
+            <Card
+              key={index}
+              className="mb-4 flex flex-col items-start justify-between p-4 md:flex-row"
+            >
+              <div className="flex w-full flex-col justify-between gap-4 md:flex-row">
+                <div className="">
+                  <div className="flex gap-2">
+                    <Skeleton className="h-[40px] w-[80px] rounded" />
+                    <div className="flex flex-col gap-2">
+                      <Skeleton className="h-6 w-32" />
+                      <Skeleton className="h-4 w-40" />
+                    </div>
+                  </div>
+                  <div className="mt-2">
+                    <Skeleton className="mb-1 h-4 w-16" />
+                    <Skeleton className="h-4 w-24" />
+                  </div>
+                </div>
+                <div className="mt-4 flex flex-col items-end justify-between gap-2 md:mt-0">
+                  <Skeleton className="h-9 w-32" />
+                  <Skeleton className="h-8 w-20" />
+                </div>
+              </div>
+            </Card>
+          ))
+        ) : plans && plans.length > 0 ? (
+          plans.map((plan) => <InsurancePlan key={plan._id} plan={plan} />)
+        ) : (
+          <div className="py-8 text-center">
+            <p className="text-gray-500">
+              No insurance plans available at this time.
+            </p>
+          </div>
+        )}
       </div>
       <div className="mt-4 flex items-center justify-center">
         <Link to="/tenant" className="w-4/5 @lg:w-3/5">
