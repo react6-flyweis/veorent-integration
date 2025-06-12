@@ -37,3 +37,12 @@ export const useGetInsurancePlanQuery = (id: string) => {
     enabled: !!id,
   });
 };
+
+// /pending-rent
+export const useGetPendingRentQuery = () => {
+  return useQuery({
+    queryFn: () => axiosTenant.get<IResponse<IPendingRent[]>>("/pending-rent"),
+    queryKey: ["pending-rent"],
+    select: (data) => data.data.data,
+  });
+};
