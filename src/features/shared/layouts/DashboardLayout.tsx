@@ -1,14 +1,17 @@
+import { Outlet, useLocation } from "react-router-dom";
+
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Outlet, useLocation } from "react-router-dom";
-import { AppSidebar } from "./AppSidebar";
-import { tenantNavigation } from "@/features/tenant/config/navigation";
-import { landlordNavigation } from "@/features/landlord/config/navigation";
+import { Toaster } from "@/components/ui/sonner";
 import { ToastProvider } from "@/contexts/ToastContext";
+import { landlordNavigation } from "@/features/landlord/config/navigation";
+import { tenantNavigation } from "@/features/tenant/config/navigation";
 import { useIsMobile, useScreenSize } from "@/hooks/use-screen-size";
+
+import { AppSidebar } from "./AppSidebar";
 
 export function DashboardLayout() {
   const location = useLocation();
@@ -64,6 +67,7 @@ export function DashboardLayout() {
           }
           <Outlet />
         </SidebarInset>
+        <Toaster />
       </ToastProvider>
     </SidebarProvider>
   );
