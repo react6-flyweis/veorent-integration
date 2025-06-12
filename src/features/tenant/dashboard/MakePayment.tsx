@@ -1,8 +1,10 @@
-import { PageTitle } from "@/components/PageTitle";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { EuroIcon } from "lucide-react";
-import paperMoneyImg from "@/assets/images/paper-money.png";
 import { useForm, Controller, useWatch } from "react-hook-form";
+import { useNavigate } from "react-router";
+
+import duesImg from "@/assets/images/charges.png";
+import paperMoneyImg from "@/assets/images/paper-money.png";
+import { CurrencyIcon } from "@/components/CurrencyIcon";
+import { Loader } from "@/components/Loader";
 import {
   MultiStepper,
   MultiStepperBackButton,
@@ -10,10 +12,11 @@ import {
   MultiStepperHeader,
   MultiStepperStep,
 } from "@/components/MultiStepper";
-
+import { PageTitle } from "@/components/PageTitle";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -21,33 +24,11 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-
-import duesImg from "@/assets/images/charges.png";
-import { useNavigate } from "react-router";
-import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { PaymentModeDialog } from "@/features/shared/payments/components/PaymentModeDialog";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
-const dues = [
-  {
-    _id: "g785g4fgs4",
-    date: "August 1, 2004",
-    total: 2000,
-    status: "Unpaid",
-    due: 2000,
-    title: "Rent",
-    type: "rent",
-  },
-  {
-    _id: "df57ggd5ag",
-    type: "deposit",
-    date: "August 1, 2024",
-    total: 2000,
-    status: "Unpaid",
-    title: "Security Deposit",
-    due: 2000,
-  },
-];
+import { useGetPendingRentQuery } from "./api/queries";
 
 type FormValues = {
   selectedDues: string[];
@@ -56,6 +37,8 @@ type FormValues = {
 
 export default function MakePayment() {
   const navigate = useNavigate();
+  const { data: pendingRent, isLoading, error } = useGetPendingRentQuery();
+
   const form = useForm<FormValues>({
     defaultValues: {
       selectedDues: [],
@@ -66,13 +49,55 @@ export default function MakePayment() {
   const selectedDues =
     useWatch({ control: form.control, name: "selectedDues" }) || [];
 
+  const dues = pendingRent || [];
   const selectedItems = dues.filter((due) => selectedDues.includes(due._id));
-  const total = selectedItems.reduce((sum, due) => sum + due.total, 0);
+  const total = selectedItems.reduce((sum, due) => sum + due.amount, 0);
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[200px] items-center justify-center">
+        <Loader />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex min-h-[200px] items-center justify-center">
+        <p className="text-red-500">
+          Error loading pending rent data. Please try again.
+        </p>
+      </div>
+    );
+  }
+
+  if (!dues.length) {
+    return (
+      <div className="flex min-h-[200px] flex-col items-center justify-center space-y-4">
+        <img
+          src={paperMoneyImg}
+          alt="No pending rent"
+          className="size-16 opacity-50"
+        />
+        <div className="text-center">
+          <h3 className="text-lg font-semibold">No Pending Rent</h3>
+          <p className="text-muted-foreground">
+            You don't have any pending rent payments at the moment.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-5">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit((data) => console.log(data))}>
+        <form
+          onSubmit={form.handleSubmit(() => {
+            // Handle form submission here
+            // TODO: Implement payment submission logic
+          })}
+        >
           <MultiStepper>
             <MultiStepperHeader>
               <div className="flex items-center gap-2">
@@ -90,7 +115,9 @@ export default function MakePayment() {
                   <div className="space-y-2">
                     {dues.map((due) => (
                       <FormItem key={due._id} className="space-y-1">
-                        <FormLabel className="sr-only">{due.title}</FormLabel>
+                        <FormLabel className="sr-only">
+                          {`Rent - Due: ${due.dueDate}`}
+                        </FormLabel>
                         <FormControl>
                           <label className="cursor-pointer">
                             <Card className="gap-1 py-2">
@@ -102,7 +129,7 @@ export default function MakePayment() {
                                     alt=""
                                   />
                                   <p className="text-primary text-2xl font-semibold">
-                                    {due.title}
+                                    Rent
                                   </p>
                                 </div>
                                 <Controller
@@ -127,24 +154,28 @@ export default function MakePayment() {
                                 <div className="flex justify-between">
                                   <div>
                                     <div>
-                                      <span>Date: </span>
-                                      <span>{due.date}</span>
+                                      <span>Due Date: </span>
+                                      <span>
+                                        {new Date(
+                                          due.dueDate,
+                                        ).toLocaleDateString()}
+                                      </span>
                                     </div>
                                     <div className="flex items-center gap-1">
-                                      <span>Rent: </span>
-                                      <EuroIcon className="size-3" />
-                                      <span>{due.total}</span>
+                                      <span>Amount: </span>
+                                      <CurrencyIcon size="xs" />
+                                      <span>{due.amount}</span>
                                     </div>
                                   </div>
                                   <div>
                                     <div>
                                       <span>Status: </span>
-                                      <span>{due.status}</span>
+                                      <span>{due.amountStatus}</span>
                                     </div>
                                     <div className="flex items-center gap-1">
-                                      <span>Due: </span>
-                                      <EuroIcon className="size-3" />
-                                      <span>{due.due}</span>
+                                      <span>Late Fee: </span>
+                                      <CurrencyIcon size="xs" />
+                                      <span>{due.lateFee}</span>
                                     </div>
                                   </div>
                                 </div>
@@ -161,79 +192,96 @@ export default function MakePayment() {
 
             {/* Step 2: Summary */}
             <MultiStepperStep>
-              <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <img src={duesImg} alt="icon" className="h-6 w-6" />
-                  <h2 className="text-lg font-semibold">
-                    Selected dues you would like to pay:
-                  </h2>
+              {selectedItems.length === 0 ? (
+                <div className="flex flex-col items-center justify-center space-y-4 py-8">
+                  <img
+                    src={duesImg}
+                    alt="No selection"
+                    className="size-16 opacity-50"
+                  />
+                  <div className="text-center">
+                    <h3 className="text-lg font-semibold">No Dues Selected</h3>
+                    <p className="text-muted-foreground">
+                      Please go back and select the dues you want to pay.
+                    </p>
+                  </div>
                 </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <img src={duesImg} alt="icon" className="h-6 w-6" />
+                    <h2 className="text-lg font-semibold">
+                      Selected dues you would like to pay:
+                    </h2>
+                  </div>
 
-                <Card>
-                  <CardContent className="flex flex-col gap-2">
-                    {dues.map((due) => (
-                      <div className="flex items-center gap-2" key={due._id}>
-                        <Checkbox checked={selectedDues.includes(due._id)} />
-                        <div className="flex flex-1 items-center justify-between">
-                          <div className="flex-1 space-y-1">
-                            <p className="text-muted-foreground text-sm">
-                              Due On: {due.date}
-                            </p>
-                            <p className="text-base font-semibold text-blue-900">
-                              {due.title}
-                            </p>
-                          </div>
-                          <div className="text-right font-bold text-blue-900">
-                            <span className="flex items-center gap-1">
-                              <EuroIcon className="h-4 w-4" />
-                              {due.total.toLocaleString(undefined, {
-                                minimumFractionDigits: 2,
-                              })}
-                            </span>
+                  <Card>
+                    <CardContent className="flex flex-col gap-2">
+                      {selectedItems.map((due) => (
+                        <div className="flex items-center gap-2" key={due._id}>
+                          <Checkbox checked={true} disabled />
+                          <div className="flex flex-1 items-center justify-between">
+                            <div className="flex-1 space-y-1">
+                              <p className="text-muted-foreground text-sm">
+                                Due On:{" "}
+                                {new Date(due.dueDate).toLocaleDateString()}
+                              </p>
+                              <p className="text-base font-semibold text-blue-900">
+                                Rent
+                              </p>
+                            </div>
+                            <div className="text-right font-bold text-blue-900">
+                              <span className="flex items-center gap-1">
+                                <CurrencyIcon size="xs" />
+                                {due.amount.toLocaleString(undefined, {
+                                  minimumFractionDigits: 2,
+                                })}
+                              </span>
+                            </div>
                           </div>
                         </div>
+                      ))}
+                    </CardContent>
+                  </Card>
+
+                  <FormField
+                    control={form.control}
+                    name="note"
+                    render={({ field }) => (
+                      <div>
+                        <Label htmlFor="note">Payment Note (Optional)</Label>
+                        <Textarea
+                          id="note"
+                          className="mt-1"
+                          rows={3}
+                          {...field}
+                        />
                       </div>
-                    ))}
-                  </CardContent>
-                </Card>
+                    )}
+                  />
 
-                <FormField
-                  control={form.control}
-                  name="note"
-                  render={({ field }) => (
-                    <div>
-                      <Label htmlFor="note">Payment Note (Optional)</Label>
-                      <Textarea
-                        id="note"
-                        className="mt-1"
-                        rows={3}
-                        {...field}
-                      />
-                    </div>
-                  )}
-                />
+                  <div>
+                    <h3 className="">Summary</h3>
+                    <p className="text-muted-foreground text-sm">
+                      Lorem Ipsum is simply dummy text of the printing and
+                      typesetting industry. Lorem Ipsum has been the industry's
+                      standard dummy text ever since the 1500s
+                    </p>
+                  </div>
 
-                <div>
-                  <h3 className="">Summary</h3>
-                  <p className="text-muted-foreground text-sm">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s
-                  </p>
+                  <div className="mt-4 flex items-center justify-between border-t pt-4">
+                    <p className="text-lg font-semibold text-blue-900">
+                      Total Payable Amount:
+                    </p>
+                    <p className="flex items-center gap-1 text-lg font-bold text-blue-900">
+                      <CurrencyIcon size="sm" />
+                      {total.toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                      })}
+                    </p>
+                  </div>
                 </div>
-
-                <div className="mt-4 flex items-center justify-between border-t pt-4">
-                  <p className="text-lg font-semibold text-blue-900">
-                    Total Payable Amount:
-                  </p>
-                  <p className="flex items-center gap-1 text-lg font-bold text-blue-900">
-                    <EuroIcon className="h-5 w-5" />
-                    {total.toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                    })}
-                  </p>
-                </div>
-              </div>
+              )}
             </MultiStepperStep>
 
             {/* Submit */}
