@@ -42,7 +42,7 @@ interface IEmployment {
   income: string;
   employemntReferenceName: string;
   employemntReferenceNumber: string;
-  pastemployemntNotApplicable?: boolean;
+  pastemployemntNotApplicable: boolean;
 }
 
 interface IOtherIncome {
