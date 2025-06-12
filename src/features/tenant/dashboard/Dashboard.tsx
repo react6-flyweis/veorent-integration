@@ -1,25 +1,15 @@
 import { Link } from "react-router";
-import { EuroIcon, SearchIcon } from "lucide-react";
+import { SearchIcon } from "lucide-react";
 
 import insuranceImgIcon from "@/assets/icons/home-insurance.png";
 import truckImgIcon from "@/assets/icons/truck.png";
 import { IconCard } from "@/components/IconCard";
 import { RentalApplicationCard } from "@/components/RentalApplicationCard";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardFooter,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useAuthStore } from "@/store/useAuthStore";
-import { getInitial } from "@/utils/name";
 
 import { LandlordCard } from "./components/LandlordCard";
+import { UserInfoCard } from "./components/UserInfoCard";
 
 export default function Dashboard() {
   const user = useAuthStore((state) => state.user);
@@ -39,45 +29,7 @@ export default function Dashboard() {
       {/* User Card + Rental Application */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-5">
         {/* User Info Card */}
-        <Card className="md:col-span-3">
-          <CardHeader className="flex flex-row items-center space-x-4">
-            <Avatar className="size-16">
-              <AvatarImage src={user?.image || ""} alt={user?.firstname} />
-              <AvatarFallback>
-                {getInitial((user?.firstname || "") + (user?.lastname || ""))}
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <CardTitle className="text-primary text-2xl">
-                {user?.firstname} {user?.lastname}
-              </CardTitle>
-              <CardDescription className="text-lg">
-                123 Main St. CA 70000
-              </CardDescription>
-            </div>
-          </CardHeader>
-          <CardContent className="flex flex-col">
-            <div className="flex justify-between">
-              <h3 className="text-2xl font-bold">Account Balance</h3>
-              <div className="text-primary text-2xl font-bold">
-                <EuroIcon />
-                <span>200.00</span>
-              </div>
-            </div>
-          </CardContent>
-          <CardFooter className="flex-col gap-2 @md:flex-row">
-            <Link to="/tenant/make-payment" className="w-full flex-1">
-              <Button size="lg" className="w-full">
-                Make Payment
-              </Button>
-            </Link>
-            <Link to="/tenant/auto-pay" className="w-full flex-1">
-              <Button variant="outline" size="lg" className="w-full">
-                Auto Pay
-              </Button>
-            </Link>
-          </CardFooter>
-        </Card>
+        <UserInfoCard />
 
         {/* Rental Application Card */}
         <RentalApplicationCard className="md:col-span-2" />
