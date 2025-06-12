@@ -1,5 +1,6 @@
-import { SwissFrancIcon } from "lucide-react";
 import { cva, type VariantProps } from "class-variance-authority";
+import { SwissFrancIcon } from "lucide-react";
+
 import { cn } from "@/lib/utils";
 
 const currencyIconVariants = cva(
@@ -15,6 +16,7 @@ const currencyIconVariants = cva(
         danger: "border-red-600",
       },
       size: {
+        xs: "size-3",
         sm: "size-4",
         md: "size-5",
         lg: "size-6",
@@ -29,6 +31,7 @@ const currencyIconVariants = cva(
 );
 
 const iconSizeMap = {
+  xs: "size-1.5",
   sm: "size-2",
   md: "size-3",
   lg: "size-4",
