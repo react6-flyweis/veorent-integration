@@ -59,7 +59,7 @@ export const PropertyTypeSelector = ({
   if (isLoading) {
     return (
       <div className="mt-2 grid grid-cols-2 gap-4 @md:grid-cols-3 @lg:grid-cols-4">
-        {Array.from({ length: 5 }).map((_, index) => (
+        {Array.from({ length: 8 }).map((_, index) => (
           <Card key={index} className="border-input border p-2">
             <CardContent className="flex flex-col items-center justify-center gap-2 p-4">
               <div className="absolute top-4 left-4">
