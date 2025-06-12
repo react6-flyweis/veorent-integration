@@ -1,10 +1,14 @@
+import { useState } from "react";
+
+import { Loader } from "@/components/Loader";
 import { PageTitle } from "@/components/PageTitle";
+import { Button } from "@/components/ui/button";
+import { CustomSwitch } from "@/components/ui/custom-switch";
+
+import { useGetProfileQuery } from "./api/queries";
+import { ChangePasswordForm } from "./components/ChangePasswordForm";
 import { ProfileForm } from "./components/ProfileForm";
 import { ProfilePicture } from "./components/ProfilePicture";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { ChangePasswordForm } from "./components/ChangePasswordForm";
-import { CustomSwitch } from "@/components/ui/custom-switch";
 
 export default function Settings() {
   const [showPasswordForm, setShowPasswordForm] = useState(false);
@@ -12,13 +16,35 @@ export default function Settings() {
   const [showNotificationPreferences, setShowNotificationPreferences] =
     useState(false);
 
+  // Fetch profile data once at the top level
+  const { data: profile, isLoading, error } = useGetProfileQuery();
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-5">
+        <PageTitle title="Account Settings" />
+        <div className="text-center text-red-500">
+          Failed to load profile data. Please try again.
+        </div>
+      </div>
+    );
+  }
+
+  if (!profile) {
+    return <Loader />;
+  }
+
   return (
     <div className="space-y-5">
       <PageTitle title="Account Settings" />
       <div className="space-y-4">
-        <ProfilePicture />
+        <ProfilePicture profile={profile} />
         <h2 className="text-primary text-lg font-semibold">My Information</h2>
-        <ProfileForm />
+        <ProfileForm profile={profile} />
         <div>
           <h2 className="text-primary mb-1 text-xl font-semibold">Password</h2>
           <Button
@@ -29,7 +55,10 @@ export default function Settings() {
             Change Password
           </Button>
           {showPasswordForm && (
-            <ChangePasswordForm onClose={() => setShowPasswordForm(false)} />
+            <ChangePasswordForm
+              profile={profile}
+              onClose={() => setShowPasswordForm(false)}
+            />
           )}
         </div>
         <div className="space-y-1">

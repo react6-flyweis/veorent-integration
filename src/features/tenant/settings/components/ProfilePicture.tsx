@@ -1,22 +1,36 @@
+import { User2Icon } from "lucide-react";
+
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { User2Icon } from "lucide-react";
-import { useState } from "react";
+import { useToast } from "@/hooks/useAlertToast";
 
-export function ProfilePicture() {
-  const [imageUrl, setImageUrl] = useState("/avatar-placeholder.png");
+import { useUploadProfilePictureMutation } from "../api/mutations";
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+export function ProfilePicture({ profile }: { profile: IUser }) {
+  const uploadProfilePictureMutation = useUploadProfilePictureMutation();
+  const { showToast } = useToast();
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setImageUrl(imageUrl);
+      try {
+        const formData = new FormData();
+        formData.append("image", file);
+
+        await uploadProfilePictureMutation.mutateAsync(formData);
+        showToast("Profile picture updated successfully", "success");
+      } catch {
+        showToast("Failed to upload profile picture", "error");
+      }
     }
   };
   return (
     <div className="flex items-center space-x-4">
       <Avatar className="size-16">
-        <AvatarImage src={imageUrl} alt="Profile Photo" />
+        <AvatarImage
+          src={profile?.image || "/avatar-placeholder.png"}
+          alt="Profile Photo"
+        />
         <AvatarFallback>
           <User2Icon />
         </AvatarFallback>
@@ -27,8 +41,16 @@ export function ProfilePicture() {
           accept="image/*"
           onChange={handleImageChange}
           className="hidden"
+          disabled={uploadProfilePictureMutation.isPending}
         />
-        <Button variant="outlinePrimary">Upload Photo</Button>
+        <Button
+          variant="outlinePrimary"
+          disabled={uploadProfilePictureMutation.isPending}
+        >
+          {uploadProfilePictureMutation.isPending
+            ? "Uploading..."
+            : "Upload Photo"}
+        </Button>
       </label>
     </div>
   );

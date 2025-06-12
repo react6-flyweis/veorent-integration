@@ -1,6 +1,8 @@
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -10,31 +12,53 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/useAlertToast";
+import { getFullName } from "@/utils/name";
 
-// ✅ Zod Schema
+import { useEditProfileMutation } from "../api/mutations";
+
 const profileSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
+  mobileNumber: z.string().min(10, "Mobile number is too short"),
   email: z.string().email("Invalid email"),
-  phone: z.string().min(10, "Phone number is too short"),
 });
 
 type ProfileFormData = z.infer<typeof profileSchema>;
 
-export function ProfileForm() {
+interface ProfileFormProps {
+  profile: IUser;
+}
+
+export function ProfileForm({ profile }: ProfileFormProps) {
+  const editProfileMutation = useEditProfileMutation();
+  const { showToast } = useToast();
+
+  const [firstName, lastName] = profile.fullName?.split(" ") || [];
+
   const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      phone: "",
+      firstName: firstName || "",
+      lastName: lastName || "",
+      mobileNumber: profile.mobileNumber || "",
+      email: profile.email || "",
     },
   });
 
-  const onSubmit = (data: ProfileFormData) => {
-    console.log("Profile updated:", data);
+  const onSubmit = async (data: ProfileFormData) => {
+    try {
+      // Combine first and last name for the API
+      const apiData = {
+        fullName: getFullName(data.firstName, data.lastName),
+        mobileNumber: data.mobileNumber,
+        email: data.email,
+      };
+      await editProfileMutation.mutateAsync(apiData);
+      showToast("Profile updated successfully", "success");
+    } catch {
+      showToast("Failed to update profile", "error");
+    }
   };
 
   return (
@@ -70,6 +94,21 @@ export function ProfileForm() {
           )}
         />
 
+        {/* Mobile Number */}
+        <FormField
+          control={form.control}
+          name="mobileNumber"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Mobile Number</FormLabel>
+              <FormControl>
+                <Input type="tel" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         {/* Email */}
         <FormField
           control={form.control}
@@ -85,23 +124,13 @@ export function ProfileForm() {
           )}
         />
 
-        {/* Phone */}
-        <FormField
-          control={form.control}
-          name="phone"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Phone Number</FormLabel>
-              <FormControl>
-                <Input type="tel" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <Button type="submit" size="lg" className="w-full">
-          Save Changes
+        <Button
+          type="submit"
+          size="lg"
+          className="w-full"
+          disabled={editProfileMutation.isPending}
+        >
+          {editProfileMutation.isPending ? "Saving..." : "Save Changes"}
         </Button>
       </form>
     </Form>
