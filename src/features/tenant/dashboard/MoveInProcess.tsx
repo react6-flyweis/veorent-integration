@@ -1,8 +1,10 @@
-import { z } from "zod";
 import { useForm } from "react-hook-form";
+import { Navigate, useLocation, useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router";
+import { z } from "zod";
 
+import personImgIcon from "@/assets/icons/person.png";
+import FormErrors from "@/components/FormErrors";
 import { IconRound } from "@/components/IconRound";
 import {
   MultiStepper,
@@ -11,7 +13,8 @@ import {
   MultiStepperIndicator,
   MultiStepperStep,
 } from "@/components/MultiStepper";
-import personImgIcon from "@/assets/icons/person.png";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -21,6 +24,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Form,
   FormControl,
   FormDescription,
@@ -29,37 +40,16 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { LoadingButton } from "@/components/ui/loading-button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/useAlertToast";
+import { formatDate } from "@/utils/formatDate";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
-const units = [
-  {
-    id: 1,
-    propertyName: "Property Name",
-    address: "Address line 1 region",
-    unitName: "Unit Name",
-    type: "Type Of Unit",
-    totalUnits: 1,
-    availableUnits: 20,
-  },
-  {
-    id: 2,
-    propertyName: "Property Name",
-    address: "Address line 1 region",
-    unitName: "Unit Name",
-    type: "Type Of Unit",
-    totalUnits: 1,
-    availableUnits: 20,
-  },
-];
+import { useCreateMoveRequestMutation } from "./api/mutations";
 
 const formSchema = z.object({
-  selectedUnitId: z.string({ required_error: "Please select a unit" }),
   action: z.enum(["deny", "active"], {
     required_error: "Please select an action",
   }),
@@ -68,21 +58,46 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export default function MoveInProcess() {
-  const { showToast } = useToast();
   const navigate = useNavigate();
+  const { showToast } = useToast();
+  const { state } = useLocation();
+
+  const { mutateAsync } = useCreateMoveRequestMutation();
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      selectedUnitId: undefined,
-      action: undefined,
-    },
   });
 
-  function onSubmit(values: FormValues) {
-    console.log(values);
-    showToast("Move in process completed successfully!", "success");
-    navigate("/tenant");
+  const onSubmit = async (values: FormValues) => {
+    try {
+      const dataToSubmit: IMoveIn = {
+        ...state.data,
+        availableUnit: state.data.availableUnit || "",
+        allocateUnit: state.data.allocateUnit || "",
+        otherApplicants:
+          values.action === "deny"
+            ? "Deny-And-Send-A-Notification"
+            : "Keep-As-An-Active-Applicant",
+      };
+
+      await mutateAsync(dataToSubmit);
+      showToast("Move in process completed successfully!", "success");
+      navigate("/tenant");
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
+  };
+
+  if (!state || !state.data) {
+    return <Navigate to="/tenant" replace />;
   }
+
+  const data = state.data as Omit<
+    IMoveIn,
+    "availableUnit" | "allocateUnit" | "otherApplicants"
+  >;
 
   return (
     <Form {...form}>
@@ -95,70 +110,42 @@ export default function MoveInProcess() {
           <MultiStepperHeader>
             <div className="flex items-center gap-3">
               <IconRound icon={personImgIcon} size="sm" />
-              <h2 className="text-2xl font-bold text-blue-900">
+              <h2 className="text-primary text-2xl font-bold">
                 Move in Process
               </h2>
             </div>
           </MultiStepperHeader>
 
-          <MultiStepperStep onValidate={() => form.trigger("selectedUnitId")}>
-            <FormField
-              control={form.control}
-              name="selectedUnitId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Select a Unit</FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      value={field.value}
-                      className="grid gap-5 @lg:grid-cols-2"
-                    >
-                      {units.map((unit) => (
-                        <Label key={unit.id} className="w-full cursor-pointer">
-                          <RadioGroupItem
-                            value={unit.id.toString()}
-                            className="sr-only"
-                          />
-                          <Card
-                            className={cn(
-                              "w-full p-2",
-                              field.value === unit.id.toString() &&
-                                "border-primary border-2",
-                            )}
-                          >
-                            <CardHeader className="px-2">
-                              <CardTitle className="text-lg">
-                                {unit.propertyName}
-                              </CardTitle>
-                              <CardDescription>{unit.address}</CardDescription>
-                            </CardHeader>
-                            <CardContent className="px-2">
-                              <div className="text-primary flex justify-between font-semibold">
-                                <span>{unit.unitName}</span>
-                                <span>No. of Units</span>
-                              </div>
-                              <div className="text-muted-foreground flex justify-between text-sm">
-                                <span>{unit.type}</span>
-                                <span>{unit.totalUnits}</span>
-                              </div>
-                            </CardContent>
-                            <CardFooter className="flex justify-between border-t px-2 pt-2">
-                              <p className="text-sm">
-                                <span>Available No. of Units: </span>
-                                <span className="font-bold">
-                                  {unit.availableUnits}
-                                </span>
-                              </p>
-                            </CardFooter>
-                          </Card>
-                        </Label>
-                      ))}
-                    </RadioGroup>
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+          <MultiStepperStep onValidate={() => true}>
+            <h3 className="text-primary text-2xl font-bold">Units</h3>
+            <div className="flex gap-5">
+              <Card className="w-full p-2">
+                <CardHeader className="px-2">
+                  <CardTitle className="text-lg">
+                    {data.destinationProperty.streetAddress}
+                  </CardTitle>
+                  <CardDescription>
+                    {data.destinationProperty.streetAddress}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="px-2">
+                  <div className="text-primary flex justify-between font-semibold">
+                    <span>{data.destinationProperty.unitNumber}</span>
+                    <span>No. of Units</span>
+                  </div>
+                  <div className="text-muted-foreground flex justify-between text-sm">
+                    <span>Type</span>
+                    <span>1</span>
+                  </div>
+                </CardContent>
+                <CardFooter className="flex justify-between border-t px-2 pt-2">
+                  <p className="text-sm">
+                    <span>Available No. of Units: </span>
+                    <span className="font-bold">1</span>
+                  </p>
+                </CardFooter>
+              </Card>
+            </div>
           </MultiStepperStep>
 
           <MultiStepperStep onValidate={() => form.trigger("action")}>
@@ -198,116 +185,73 @@ export default function MoveInProcess() {
 
           <MultiStepperStep>
             <div className="space-y-6">
-              <h3 className="text-primary text-2xl font-semibold">Lease</h3>
-              <div className="flex items-start gap-4">
-                <div className="h-12 w-12 rounded-full bg-gray-200" />
+              <div>
+                <h3 className="text-primary text-2xl font-bold">Lease</h3>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <Avatar className="size-14">
+                  <AvatarImage src="" alt="Tenant avatar" />
+                  <AvatarFallback>TN</AvatarFallback>
+                </Avatar>
                 <div>
-                  <h3 className="font-medium">Kaiya Lipshultz</h3>
-                  {form.watch("selectedUnitId") && (
-                    <div className="text-muted-foreground text-sm">
-                      {
-                        units.find(
-                          (unit) =>
-                            unit.id.toString() === form.watch("selectedUnitId"),
-                        )?.propertyName
-                      }
-                      <br />
-                      {
-                        units.find(
-                          (unit) =>
-                            unit.id.toString() === form.watch("selectedUnitId"),
-                        )?.unitName
-                      }
-                    </div>
-                  )}
+                  <p className="text-primary font-semibold">Current Tenant</p>
+                  <p className="text-sm text-gray-500">
+                    {data.currentProperty.streetAddress}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    {data.currentProperty.unitNumber}
+                  </p>
                 </div>
               </div>
 
-              <div className="flex flex-col gap-3 @lg:flex-row">
-                <div className="grid flex-1 gap-6">
-                  <div className="rounded-lg border p-4">
-                    <h4 className="text-muted-foreground mb-4 text-sm font-medium">
-                      Draft Lease
-                    </h4>
-                    <div>
-                      <div className="font-medium">Lease Name</div>
-                      <div className="text-muted-foreground text-sm">
-                        {
-                          units.find(
-                            (unit) =>
-                              unit.id.toString() ===
-                              form.watch("selectedUnitId"),
-                          )?.propertyName
-                        }
-                        ,
-                        {
-                          units.find(
-                            (unit) =>
-                              unit.id.toString() ===
-                              form.watch("selectedUnitId"),
-                          )?.unitName
-                        }
-                      </div>
-                    </div>
-
-                    <div className="flex justify-between">
-                      <div className="">
-                        <div className="font-medium">Lease Term</div>
-                        <div className="text-muted-foreground text-sm">
-                          Start Date - End Date
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                {[
+                  {
+                    id: "draft",
+                    status: "Draft",
+                    leaseName: "New Lease",
+                    propertyName: `${data.destinationProperty.streetAddress}, ${data.destinationProperty.unitNumber}`,
+                    term: `${formatDate(data.destinationPropertyLeaseTerm.startDate)} - ${formatDate(data.destinationPropertyLeaseTerm.endDate)}`,
+                    rent: "2000 F.CFA/Month",
+                  },
+                  {
+                    id: "endingSoon",
+                    status: "Ending Soon",
+                    leaseName: "Current Lease",
+                    propertyName: `${data.currentProperty.streetAddress}, ${data.currentProperty.unitNumber}`,
+                    term: `${formatDate(data.currentPropertyLeaseTerm.startDate)} - ${formatDate(data.currentPropertyLeaseTerm.endDate)}`,
+                    rent: "2000 F.CFA/Month",
+                  },
+                ].map((lease) => (
+                  <Card key={lease.id} className="w-full p-3">
+                    <CardHeader className="mb-2 p-0">
+                      <p className="text-sm text-gray-500">{lease.status}</p>
+                      <CardTitle className="text-primary text-lg">
+                        {lease.leaseName}
+                      </CardTitle>
+                      <CardDescription className="text-xs">
+                        {lease.propertyName}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-2 p-0">
+                      <div className="flex justify-between">
+                        <div>
+                          <p className="text-xs text-gray-500">Lease term</p>
+                          <p className="text-primary text-sm font-semibold">
+                            {lease.term}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-500">Rent</p>
+                          <p className="text-primary text-sm font-semibold">
+                            {lease.rent}
+                          </p>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <div className="font-medium">Rent</div>
-                        <div className="text-muted-foreground text-sm">
-                          2000 F.CFA/Month
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="grid flex-1 gap-6">
-                  <div className="rounded-lg border p-4">
-                    <h4 className="text-muted-foreground mb-4 text-sm font-medium">
-                      Ending Soon
-                    </h4>
-                    <div>
-                      <div className="font-medium">Lease Name</div>
-                      <div className="text-muted-foreground text-sm">
-                        {
-                          units.find(
-                            (unit) =>
-                              unit.id.toString() ===
-                              form.watch("selectedUnitId"),
-                          )?.propertyName
-                        }
-                        ,
-                        {
-                          units.find(
-                            (unit) =>
-                              unit.id.toString() ===
-                              form.watch("selectedUnitId"),
-                          )?.unitName
-                        }
-                      </div>
-                    </div>
-
-                    <div className="flex justify-between">
-                      <div className="">
-                        <div className="font-medium">Lease Term</div>
-                        <div className="text-muted-foreground text-sm">
-                          Start Date - End Date
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className="font-medium">Rent</div>
-                        <div className="text-muted-foreground text-sm">
-                          2000 F.CFA/Month
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             </div>
           </MultiStepperStep>
@@ -315,71 +259,103 @@ export default function MoveInProcess() {
           <MultiStepperButton>
             <Dialog>
               <DialogTrigger asChild>
-                <Button type="button" className="w-4/5 @lg:w-3/5">
-                  Move In
+                <Button size="lg" type="button" className="w-3/5">
+                  Next
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-md">
-                <div className="flex flex-col gap-3">
-                  <div className="flex items-center gap-3 pb-2">
-                    <Avatar>
+              <DialogContent className="max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>Confirm Move In</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-5">
+                    <Avatar className="h-12 w-12">
                       <AvatarImage src="" alt="Tenant avatar" />
-                      <AvatarFallback>KL</AvatarFallback>
+                      <AvatarFallback>TN</AvatarFallback>
                     </Avatar>
-                    <h3 className="text-lg font-semibold">Kaiya Lipshutz</h3>
-                  </div>
-
-                  <div className="rounded-lg border px-3 py-2">
-                    <h4 className="mb-1 font-semibold text-blue-900">Unit</h4>
-                    <div className="space-y-3">
-                      <div>
-                        <p className="font-semibold text-blue-900">
-                          Property Name
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          Address line 1 region
-                        </p>
+                    <div className="">
+                      <div className="text-lg font-bold">Current Tenant</div>
+                      <div className="text-muted-foreground mb-1 text-xs">
+                        Move Date: {formatDate(data.moveDate, true)}
                       </div>
-                      <div>
-                        <p className="font-semibold text-blue-900">Unit Name</p>
-                        <p className="text-sm text-gray-500">Type Of Unit</p>
-                        <p className="text-sm text-gray-500">No.of unit</p>
+                      <div className="mb-2 text-sm font-semibold text-gray-700">
+                        {data.currentProperty.streetAddress},{" "}
+                        {data.currentProperty.unitNumber}
                       </div>
                     </div>
                   </div>
 
-                  <div className="rounded-lg border px-3 py-2">
-                    <h4 className="mb-1 font-semibold text-blue-900">Lease</h4>
-                    <div className="space-y-3">
-                      <div>
-                        <p className="font-semibold text-blue-900">
-                          Peter Shop Jan
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          Peter shop, Shop number 305
-                        </p>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-blue-900">Rent</p>
-                        <p className="text-sm text-gray-500">50 FCFA/day</p>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-blue-900">
-                          Lease term
-                        </p>
-                        <p className="text-sm text-gray-500">Month - Month</p>
-                      </div>
-                    </div>
+                  <div>
+                    <h3 className="mb-1 text-lg font-bold">Unit</h3>
+                    <Card className="gap-1 p-3">
+                      <CardContent className="space-y-2 p-0">
+                        <div>
+                          <p className="text-primary font-bold">
+                            Destination Property
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            {data.destinationProperty.streetAddress}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-primary font-bold">Unit Name</p>
+                          <p className="text-sm text-gray-500">
+                            {data.destinationProperty.unitNumber}
+                          </p>
+                          <p className="text-sm text-gray-500">No.of.unit</p>
+                          <p className="text-sm text-gray-500">1</p>
+                        </div>
+                      </CardContent>
+                    </Card>
                   </div>
 
-                  <Button
-                    className="mt-2 w-full"
-                    type="submit"
+                  <div>
+                    <h3 className="text-primary mb-1 text-lg font-bold">
+                      Lease
+                    </h3>
+                    <Card className="gap-1 p-3">
+                      <CardContent className="space-y-2 p-0">
+                        <div>
+                          <p className="text-primary font-bold">New Lease</p>
+                          <p className="text-sm text-gray-500">
+                            Destination property,{" "}
+                            {data.destinationProperty.streetAddress}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-primary font-bold">Rent</p>
+                          <p className="text-sm text-gray-500">50 F.CFA/day</p>
+                        </div>
+                        <div>
+                          <p className="text-primary font-bold">Lease term</p>
+                          <p className="text-sm text-gray-500">
+                            {formatDate(
+                              data.destinationPropertyLeaseTerm.startDate,
+                            )}{" "}
+                            -{" "}
+                            {formatDate(
+                              data.destinationPropertyLeaseTerm.endDate,
+                            )}
+                          </p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                    <FormErrors
+                      className="mt-2"
+                      errors={form.formState.errors}
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <LoadingButton
+                    type="button"
+                    className="w-full"
                     onClick={form.handleSubmit(onSubmit)}
+                    isLoading={form.formState.isSubmitting}
                   >
                     Move IN
-                  </Button>
-                </div>
+                  </LoadingButton>
+                </DialogFooter>
               </DialogContent>
             </Dialog>
           </MultiStepperButton>
