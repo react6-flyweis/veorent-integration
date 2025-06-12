@@ -1,27 +1,93 @@
+import { useLocation, useParams } from "react-router-dom";
+
+import { BackButton } from "@/components/BackButton";
+import { CurrencyIcon } from "@/components/CurrencyIcon";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { BackButton } from "@/components/BackButton";
-import { useNavigate, useLocation } from "react-router-dom";
-import { CurrencyIcon } from "@/components/CurrencyIcon";
+import { Skeleton } from "@/components/ui/skeleton";
+
+import { useBuyInsuranceMutation } from "./api/mutations";
+import { useGetInsurancePlanQuery } from "./api/queries";
+import homeInsuranceIcon from "./assets/home-insurance.png";
 
 export default function PlanDetails() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const plan = location.state?.plan;
+  const { state } = useLocation();
+  const { id } = useParams();
+  const { mutateAsync } = useBuyInsuranceMutation();
 
-  if (!plan) {
-    return <div>Plan information not found</div>;
+  // Try to get plan from state first, fallback to API call
+  const planFromState = state?.plan;
+  const {
+    data: planFromApi,
+    isLoading,
+    error,
+  } = useGetInsurancePlanQuery(id || "");
+
+  const plan = (planFromState || planFromApi) as IInsurancePlan;
+
+  const handleProceedToBuy = async () => {
+    const dataToSubmit: IInsurancePurchase = {
+      insurancePlanId: plan._id,
+      firstName: state?.formData?.firstName || "",
+      lastName: state?.formData?.lastName || "",
+      email: state?.formData?.email || "",
+      phone: state?.formData?.phone || "",
+      propertyTypeId: state?.formData?.propertyTypeId || "",
+      propertyDetails: state?.formData?.propertyDetails,
+      startDate: state.formData?.startDate || "new Date().toISOString()",
+      endDate: state.formData?.endDate || "",
+      premiumPaymentMode: "Monthly",
+      totalPremiumPaid: plan.premium.monthlyPremium,
+      policyNumber: `POL${Math.floor(Math.random() * 1000000)}`,
+      status: "Active",
+      paymentStatus: "Pending",
+    };
+    console.log("Submitting data:", dataToSubmit);
+    await mutateAsync(dataToSubmit);
+  };
+
+  if (isLoading) {
+    return (
+      <div>
+        <BackButton />
+        <Card className="my-6 flex-col justify-between pb-6 md:flex-row">
+          <CardContent className="flex w-full justify-between">
+            <div className="mb-4 flex items-center gap-4 md:mb-0">
+              <Skeleton className="h-[50px] w-[100px] rounded" />
+              <div>
+                <Skeleton className="mb-2 h-6 w-32" />
+                <Skeleton className="h-4 w-24" />
+              </div>
+            </div>
+            <div className="flex flex-col items-end">
+              <Skeleton className="mb-1 h-4 w-20" />
+              <Skeleton className="mb-1 h-5 w-24" />
+              <Skeleton className="h-4 w-20" />
+            </div>
+          </CardContent>
+        </Card>
+        <Skeleton className="mb-4 h-20 w-full" />
+        <Card className="mb-4 py-3">
+          <CardContent>
+            <Skeleton className="h-6 w-40" />
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
-  const handleProceedToBuy = () => {
-    // You can add logic here to handle the purchase flow
-    navigate("/tenant/payment/success", {
-      state: {
-        type: "insurance",
-        details: plan,
-      },
-    });
-  };
+  if (error || !plan) {
+    return (
+      <div>
+        <BackButton />
+        <div className="mt-8 text-center">
+          <p className="text-red-500">
+            Plan information not found. Please try again later.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -30,11 +96,14 @@ export default function PlanDetails() {
       <Card className="my-6 flex-col justify-between pb-6 md:flex-row">
         <CardContent className="flex w-full justify-between">
           <div className="mb-4 flex items-center gap-4 md:mb-0">
-            <div className="relative h-[50px] min-w-[100px]">
+            <div className="relative flex h-[50px] min-w-[100px] items-center justify-center rounded bg-gray-50">
               <img
-                src={plan.logo}
-                alt={`${plan.name} logo`}
-                className="object-contain"
+                src={plan.logo || homeInsuranceIcon}
+                alt={`${plan.planName} logo`}
+                className="max-h-full max-w-full object-contain"
+                onError={(e) => {
+                  e.currentTarget.src = homeInsuranceIcon;
+                }}
               />
             </div>
 
@@ -42,28 +111,37 @@ export default function PlanDetails() {
               <h3 className="text-xl font-bold">Plan Details</h3>
               <div className="mb-2 flex items-center gap-2">
                 <span className="text-sm text-gray-500">Cover</span>
-                <span className="text-lg font-medium">{plan.coverAmount}</span>
+                <CurrencyIcon size="sm" />
+                <span className="text-lg font-medium">
+                  {plan.coverAmount.toLocaleString()}
+                </span>
               </div>
             </div>
           </div>
 
           <div className="flex flex-col items-end">
             <div className="flex flex-col">
-              <span className="text-sm">{plan.name}</span>
+              <span className="text-sm">{plan.planName}</span>
               <div className="flex items-center gap-2">
                 <CurrencyIcon size="sm" />
-                <span className="font-medium">{plan.price}/month</span>
+                <span className="font-medium">
+                  ${plan.premium.monthlyPremium}/month
+                </span>
               </div>
-              <span className="text-sm">889 paid annually</span>
+              <div className="flex items-center gap-1">
+                <CurrencyIcon size="xs" />
+                <span className="text-sm">
+                  {plan.premium.annualPremium} paid annually
+                </span>
+              </div>
             </div>
           </div>
         </CardContent>
       </Card>
 
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum
-        asperiores molestias voluptatibus sunt quibusdam accusamus deleniti
-        alias nobis nemo animi!
+      <p className="mb-4">
+        {plan.description ||
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum asperiores molestias voluptatibus sunt quibusdam accusamus deleniti alias nobis nemo animi!"}
       </p>
 
       <Card className="mb-4 py-3">
@@ -74,14 +152,32 @@ export default function PlanDetails() {
 
       <Card className="mb-4 py-3">
         <CardContent>
-          <ul className="list-disc">
-            {new Array(7)
-              .fill(
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-              )
-              .map((detail) => (
-                <li>{detail}</li>
-              ))}
+          <ul className="list-disc pl-5">
+            {plan.coverageDetails && plan.coverageDetails.length > 0
+              ? plan.coverageDetails.map(
+                  (
+                    coverage: {
+                      coverageType: string;
+                      isCovered: boolean;
+                      _id: string;
+                    },
+                    index: number,
+                  ) =>
+                    coverage.isCovered && (
+                      <li key={coverage._id || index} className="mb-1">
+                        {coverage.coverageType}
+                      </li>
+                    ),
+                )
+              : new Array(7)
+                  .fill(
+                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                  )
+                  .map((detail, index) => (
+                    <li key={index} className="mb-1">
+                      {detail}
+                    </li>
+                  ))}
           </ul>
         </CardContent>
       </Card>
