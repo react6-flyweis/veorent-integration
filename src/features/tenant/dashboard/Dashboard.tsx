@@ -3,18 +3,8 @@ import { EuroIcon, SearchIcon } from "lucide-react";
 
 import insuranceImgIcon from "@/assets/icons/home-insurance.png";
 import truckImgIcon from "@/assets/icons/truck.png";
-import userImage from "@/assets/user.jpg";
 import { IconCard } from "@/components/IconCard";
 import { RentalApplicationCard } from "@/components/RentalApplicationCard";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,6 +18,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { useAuthStore } from "@/store/useAuthStore";
 import { getInitial } from "@/utils/name";
+
+import { LandlordCard } from "./components/LandlordCard";
 
 export default function Dashboard() {
   const user = useAuthStore((state) => state.user);
@@ -92,46 +84,7 @@ export default function Dashboard() {
       </div>
 
       {/* Landlord Card */}
-      <Card className="gap-0 p-0">
-        <CardContent className="flex items-center space-x-4 p-5">
-          <img
-            src={userImage}
-            alt="Landlord"
-            className="h-12 w-12 rounded-full object-cover"
-          />
-          <div className="space-y-1">
-            <CardDescription className="font-bold uppercase">
-              Landlord
-            </CardDescription>
-            <CardTitle className="text-primary">Donna VanAntwerp</CardTitle>
-            <CardDescription>123 Main St.</CardDescription>
-          </div>
-        </CardContent>
-        <CardFooter className="px-0">
-          <div className="grid w-full grid-cols-3">
-            <Button variant="outline">Email</Button>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="outline">Call</Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle className="text-center">
-                    This feature is only accessible through our mobile app.
-                    Please download the app by clicking this link.
-                  </AlertDialogTitle>
-                </AlertDialogHeader>
-                <AlertDialogFooter className="w-full justify-center!">
-                  <AlertDialogAction>Click here</AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-            <Button variant="outline" asChild>
-              <Link to="/tenant/messages">Message</Link>
-            </Button>
-          </div>
-        </CardFooter>
-      </Card>
+      <LandlordCard />
       <div className="grid gap-5 @md:grid-cols-2">
         <IconCard
           title="Ready to move? We got you covered."
