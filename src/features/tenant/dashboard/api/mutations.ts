@@ -41,3 +41,16 @@ export const useDeleteCardMutation = () => {
     },
   });
 };
+
+export const useCreateMoveRequestMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: IMoveIn) =>
+      axiosTenant.post<IResponse<IMoveIn>>("/move-requests", data),
+    onSuccess: () => {
+      // Invalidate and refetch move requests data
+      queryClient.invalidateQueries({ queryKey: ["moveRequests"] });
+    },
+  });
+};
