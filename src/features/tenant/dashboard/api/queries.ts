@@ -46,3 +46,20 @@ export const useGetPendingRentQuery = () => {
     select: (data) => data.data.data,
   });
 };
+
+// Get all bookings
+export const useGetBookingsQuery = () => {
+  return useQuery({
+    queryFn: () => axiosTenant.get<IResponse<IBooking[]>>("/bookings"),
+    queryKey: ["bookings"],
+    select: (data) => {
+      // Sort by creation date descending to get the latest first
+      const sortedBookings = data.data.data;
+      // .sort(
+      //   (a, b) =>
+      //     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      // );
+      return sortedBookings;
+    },
+  });
+};
