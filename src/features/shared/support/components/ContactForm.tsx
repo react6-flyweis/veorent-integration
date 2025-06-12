@@ -1,6 +1,8 @@
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -10,13 +12,18 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/useAlertToast";
+import { useAuthStore } from "@/store/useAuthStore";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+
+import { contactApi } from "../api/contactApi";
 
 const formSchema = z.object({
-  phone: z.string().min(10, "Enter a valid phone number"),
+  fullName: z.string().min(2, "Full name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
+  mobileNumber: z.string().min(10, "Enter a valid mobile number"),
   message: z.string().min(5, "Message must be at least 5 characters"),
 });
 
@@ -24,27 +31,64 @@ type ContactFormData = z.infer<typeof formSchema>;
 
 export function ContactForm() {
   const { showToast } = useToast();
+  const user = useAuthStore((state) => state.user);
+
   const form = useForm<ContactFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      phone: "",
+      fullName: "",
       email: "",
+      mobileNumber: "",
       message: "",
     },
   });
 
-  const onSubmit = (data: ContactFormData) => {
-    console.log("Submitted data:", data);
-    showToast("Your message is sent successfully!", "success");
+  const onSubmit = async (data: ContactFormData) => {
+    try {
+      // Determine which API endpoint to use based on user type
+      const isPartner = user?.userType === "PARTNER";
+
+      if (isPartner) {
+        await contactApi.submitPartnerContact(data);
+      } else {
+        await contactApi.submitUserContact(data);
+      }
+
+      showToast("Your message has been sent successfully!", "success");
+      form.reset(); // Reset form after successful submission
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        {/* Phone */}
+        {/* Full Name */}
         <FormField
           control={form.control}
-          name="phone"
+          name="fullName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Full Name</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Enter your full name"
+                  {...field}
+                  className="bg-muted border-0"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Mobile Number */}
+        <FormField
+          control={form.control}
+          name="mobileNumber"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Mobile</FormLabel>
@@ -100,9 +144,13 @@ export function ContactForm() {
 
         {/* Buttons */}
         <div className="flex flex-col justify-between gap-2 pt-4 @lg:flex-row">
-          <Button type="submit" className="w-full @lg:w-44">
+          <LoadingButton
+            type="submit"
+            className="w-full @lg:w-44"
+            isLoading={form.formState.isSubmitting}
+          >
             Send
-          </Button>
+          </LoadingButton>
           <Button
             type="button"
             className="w-full bg-green-600 @lg:w-44"
