@@ -18,3 +18,22 @@ export const useGetCardQuery = (id: string) => {
     enabled: !!id,
   });
 };
+
+export const useGetInsurancePlansQuery = () => {
+  return useQuery({
+    queryFn: () =>
+      axiosTenant.get<IResponse<IInsurancePlan[]>>("/insurance-plans"),
+    queryKey: ["insurance-plans"],
+    select: (data) => data.data.data,
+  });
+};
+
+export const useGetInsurancePlanQuery = (id: string) => {
+  return useQuery({
+    queryFn: () =>
+      axiosTenant.get<IResponse<IInsurancePlan>>(`/insurance-plans/${id}`),
+    queryKey: ["insurance-plan", id],
+    select: (data) => data.data.data,
+    enabled: !!id,
+  });
+};
