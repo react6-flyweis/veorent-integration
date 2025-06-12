@@ -8,7 +8,7 @@ export const useGetProfileQuery = () => {
       axiosTenant.get<IResponse<{ memberSince: string; user: IUser }>>(
         "/profile",
       ),
-    queryKey: ["profile"],
+    queryKey: ["user", "profile"],
     select: (data) => data.data.data.user,
   });
 };

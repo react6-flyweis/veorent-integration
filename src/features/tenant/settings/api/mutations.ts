@@ -23,10 +23,24 @@ export const useEditProfileMutation = () => {
 
   return useMutation({
     mutationFn: (data: IEditProfileData) =>
-      axiosTenant.post<IResponse<IUser>>("/edit-profile", data),
-    onSuccess: () => {
+      axiosTenant.post<IResponse<IUser>>("/registration", data),
+    onSettled: () => {
       // Invalidate and refetch profile data
       queryClient.invalidateQueries({ queryKey: ["profile"] });
+      queryClient.invalidateQueries({ queryKey: ["user", "profile"] });
+    },
+  });
+};
+
+export const useUpdateNotificationPreferenceMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: { notificationPreference: boolean }) =>
+      axiosTenant.post<IResponse<IUser>>("/registration", data),
+    onSettled: () => {
+      // Invalidate and refetch profile data
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
+      queryClient.invalidateQueries({ queryKey: ["user", "profile"] });
     },
   });
 };
@@ -58,6 +72,7 @@ export const useUploadProfilePictureMutation = () => {
     onSuccess: () => {
       // Invalidate and refetch profile data
       queryClient.invalidateQueries({ queryKey: ["profile"] });
+      queryClient.invalidateQueries({ queryKey: ["user", "profile"] });
     },
   });
 };
