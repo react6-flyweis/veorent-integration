@@ -2,7 +2,7 @@
 type MaintenanceStatus = "Pending" | "Open" | "Completed";
 
 // Maintenance category enum
-type MaintenanceCategory = "Starred";
+type MaintenanceCategory = "Starred" | "Rentals";
 
 // Time period enum
 type TimePeriod = "Any-Time" | "Coordinate-A-Time-First";

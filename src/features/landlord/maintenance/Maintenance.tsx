@@ -1,3 +1,19 @@
+import { useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router";
+import {
+  Calendar1,
+  Home,
+  Search,
+  Star,
+  ClipboardList,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+
+import { CreateButton } from "@/components/CreateButton";
+import { PageTitle } from "@/components/PageTitle";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -8,13 +24,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calendar1, Home, Search, Star, ClipboardList } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Link, useNavigate } from "react-router";
-import { CreateButton } from "@/components/CreateButton";
-import { PageTitle } from "@/components/PageTitle";
-import { useGetMaintenanceRequests } from "./api/queries";
 import { formatDate } from "@/utils/formatDate";
+
+import { useGetMaintenanceRequests } from "./api/queries";
 
 // interface MaintenanceIssue {
 //   id: string;
@@ -42,14 +54,99 @@ import { formatDate } from "@/utils/formatDate";
 //   },
 // ];
 
+// Define maintenance categories with their corresponding icons
+const maintenanceCategories = [
+  { value: "all-time", label: "All Time", icon: Calendar1 },
+  { value: "rentals", label: "Rentals", icon: Home },
+  { value: "all-status", label: "All Status", icon: ClipboardList },
+  { value: "starred", label: "Starred", icon: Star },
+];
+
 export default function Maintenance() {
-  const { data: maintenanceRequests,isLoading } = useGetMaintenanceRequests();
+  const { data: maintenanceRequests, isLoading } = useGetMaintenanceRequests();
+  const [activeTab, setActiveTab] = useState("all-time");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
+  const otherTabsLimit = 8;
 
   const navigate = useNavigate();
 
   const handleClick = (issueId: string) => {
     navigate(`/landlord/maintenance/${issueId}`);
   };
+
+  // Reset pagination when tab changes
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    setCurrentPage(1);
+  };
+
+  // Filter maintenance requests based on active tab and search term
+  const filteredMaintenanceRequests = useMemo(() => {
+    if (!maintenanceRequests) return [];
+
+    let filtered = maintenanceRequests;
+
+    // Filter by category based on active tab
+    if (activeTab === "rentals") {
+      filtered = filtered.filter(
+        (request) => request.category?.toLowerCase() === "rentals",
+      );
+    } else if (activeTab === "starred") {
+      filtered = filtered.filter(
+        (request) => request.category?.toLowerCase() === "starred",
+      );
+    }
+    // For "all-time" and "all-status", show all requests
+
+    // Filter by search term
+    if (searchTerm) {
+      const searchLower = searchTerm.toLowerCase();
+      filtered = filtered.filter(
+        (request) =>
+          request.issueTitle?.toLowerCase().includes(searchLower) ||
+          request.issueDescription?.toLowerCase().includes(searchLower) ||
+          request.status?.toLowerCase().includes(searchLower),
+      );
+    }
+
+    return filtered;
+  }, [maintenanceRequests, activeTab, searchTerm]);
+
+  // Apply pagination and limit logic
+  const paginatedRequests = useMemo(() => {
+    const filtered = filteredMaintenanceRequests;
+
+    if (activeTab === "all-time") {
+      // For "All Time" tab, apply pagination
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      return filtered.slice(startIndex, endIndex);
+    } else {
+      // For other tabs, show only latest items based on otherTabsLimit
+      return filtered
+        .sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        )
+        .slice(0, otherTabsLimit);
+    }
+  }, [
+    filteredMaintenanceRequests,
+    activeTab,
+    currentPage,
+    itemsPerPage,
+    otherTabsLimit,
+  ]);
+
+  // Calculate total pages for "All Time" tab
+  const totalPages = useMemo(() => {
+    if (activeTab === "all-time") {
+      return Math.ceil(filteredMaintenanceRequests.length / itemsPerPage);
+    }
+    return 1;
+  }, [filteredMaintenanceRequests.length, activeTab, itemsPerPage]);
 
   return (
     <div className="w-full space-y-8">
@@ -61,45 +158,36 @@ export default function Maintenance() {
       </div>
 
       <div className="flex items-center space-x-4">
-        <Tabs defaultValue="all-time" className="flex-1">
+        <Tabs
+          value={activeTab}
+          onValueChange={handleTabChange}
+          className="flex-1"
+        >
           <TabsList className="flex flex-col items-start gap-2 border-0 @lg:flex-row">
-            <div className="flex gap-2">
-              <TabsTrigger
-                value="all-time"
-                className="flex h-8 items-center bg-blue-100 font-semibold text-gray-700"
-              >
-                <Calendar1 className="size-5 text-gray-700" />
-                <span className="hidden align-bottom @md:block"> All Time</span>
-              </TabsTrigger>
-              <TabsTrigger
-                value="rentals"
-                className="flex h-8 items-center bg-blue-100 font-semibold text-gray-700"
-              >
-                <Home className="size-5 text-gray-700" />
-                <span className="hidden align-bottom @md:block"> Rentals</span>
-              </TabsTrigger>
-              <TabsTrigger
-                value="all-status"
-                className="flex h-8 items-center bg-blue-100 font-semibold text-gray-700"
-              >
-                <ClipboardList className="size-5 text-gray-700" />
-                <span className="hidden align-bottom @md:block">
-                  All Status
-                </span>
-              </TabsTrigger>
-              <TabsTrigger
-                value="starred"
-                className="flex h-8 items-center bg-blue-100 font-semibold text-gray-700"
-              >
-                <Star className="size-5 text-gray-700" />
-                <span className="hidden align-bottom @md:block"> Starred</span>
-              </TabsTrigger>
+            <div className="flex flex-wrap gap-2">
+              {maintenanceCategories.map((category) => {
+                const IconComponent = category.icon;
+                return (
+                  <TabsTrigger
+                    key={category.value}
+                    value={category.value}
+                    className="flex h-8 items-center bg-blue-100 font-semibold text-gray-700"
+                  >
+                    <IconComponent className="size-5 text-gray-700" />
+                    <span className="hidden align-bottom @md:block">
+                      {category.label}
+                    </span>
+                  </TabsTrigger>
+                );
+              })}
             </div>
-            <div className="focus-within-within:ring-2 focus-within-within:ring-blue-500 flex h-8 w-32 items-center justify-center rounded-md border px-1">
+            <div className="flex h-8 w-32 items-center justify-center rounded-md border px-1 focus-within:ring-2 focus-within:ring-blue-500">
               <Search className="size-5 text-gray-500" />
               <Input
                 type="search"
                 placeholder="Search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="h-5 border-0 shadow-none ring-0 focus-visible:ring-0 focus-visible:outline-none"
               />
             </div>
@@ -117,6 +205,7 @@ export default function Maintenance() {
               <TableRow className="font-medium">
                 <TableHead className="">DATE</TableHead>
                 <TableHead className="font-medium">TITLE</TableHead>
+                <TableHead className="font-medium">CATEGORY</TableHead>
                 <TableHead className="font-medium">RENTAL</TableHead>
                 <TableHead className="font-medium">LAST ACTIVITY</TableHead>
                 <TableHead className="font-medium">STATUS</TableHead>
@@ -125,15 +214,18 @@ export default function Maintenance() {
             <TableBody>
               {isLoading ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center text-gray-500 py-8">
+                  <TableCell
+                    colSpan={6}
+                    className="py-8 text-center text-gray-500"
+                  >
                     <div className="flex items-center justify-center space-x-2">
-                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+                      <div className="h-6 w-6 animate-spin rounded-full border-b-2 border-blue-500"></div>
                       <span>Loading maintenance requests...</span>
                     </div>
                   </TableCell>
                 </TableRow>
-              ) : maintenanceRequests?.length ? (
-                maintenanceRequests.map((issue) => (
+              ) : paginatedRequests?.length ? (
+                paginatedRequests.map((issue) => (
                   <TableRow
                     key={issue._id}
                     onClick={() => handleClick(issue._id)}
@@ -144,6 +236,11 @@ export default function Maintenance() {
                     </TableCell>
                     <TableCell className="text-primary text-xl font-bold">
                       {issue.issueTitle}
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline" className="capitalize">
+                        {issue.category || "N/A"}
+                      </Badge>
                     </TableCell>
                     <TableCell>
                       <Link
@@ -164,14 +261,71 @@ export default function Maintenance() {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center text-gray-500">
-                    No maintenance requests found.
+                  <TableCell
+                    colSpan={6}
+                    className="py-8 text-center text-gray-500"
+                  >
+                    {searchTerm ||
+                    (activeTab !== "all-time" && activeTab !== "all-status")
+                      ? `No maintenance requests found for the selected filters.`
+                      : "No maintenance requests found."}
                   </TableCell>
                 </TableRow>
               )}
             </TableBody>
           </Table>
         </div>
+
+        {/* Pagination for All Time tab */}
+        {activeTab === "all-time" && totalPages > 1 && (
+          <div className="mt-4 flex items-center justify-between">
+            <div className="text-sm text-gray-500">
+              Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+              {Math.min(
+                currentPage * itemsPerPage,
+                filteredMaintenanceRequests.length,
+              )}{" "}
+              of {filteredMaintenanceRequests.length} results
+            </div>
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft className="h-4 w-4" />
+                Previous
+              </Button>
+              <div className="flex items-center space-x-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (page) => (
+                    <Button
+                      key={page}
+                      variant={currentPage === page ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setCurrentPage(page)}
+                      className="h-8 w-8 p-0"
+                    >
+                      {page}
+                    </Button>
+                  ),
+                )}
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+              >
+                Next
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
