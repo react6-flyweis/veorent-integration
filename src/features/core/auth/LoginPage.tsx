@@ -1,9 +1,17 @@
-import { Button } from "@/components/ui/button";
-import { LoginForm } from "./components/LoginForm";
+import { Navigate } from "react-router";
+
 import facebookIcon from "@/assets/icons/facebook.png";
 import googleIcon from "@/assets/icons/google.png";
+import { Button } from "@/components/ui/button";
+import { useUserPreferenceStore } from "@/store/useUserPreferenceStore";
+
+import { LoginForm } from "./components/LoginForm";
 
 export function LoginPage() {
+  const userType = useUserPreferenceStore((state) => state.userType);
+  if (!userType) {
+    return <Navigate to="/choose" replace />;
+  }
   return (
     <div className="w-full max-w-lg">
       <img src="/logo-dark.png" alt="Veorent Logo" className="mb-6 h-8" />
