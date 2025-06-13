@@ -181,4 +181,7 @@ interface IPropertyUpdateData {
   video?: Omit<IServerImage, "_id">[];
   status?: string; // enum: ['Available', 'Rented', 'Under Maintenance']
   formCompletionStatus?: Partial<IFormCompletionStatus>;
+  isMarketing?: boolean;
+  marketingExtendedDate?: string; // ISO date string
+  isMarketingExtended?: boolean;
 }

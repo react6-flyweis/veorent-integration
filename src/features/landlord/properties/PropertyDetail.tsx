@@ -11,6 +11,7 @@ import {
   LinkIcon,
   StarIcon,
 } from "lucide-react";
+import { toast } from "sonner";
 
 import { BackButton } from "@/components/BackButton";
 import { CurrencyIcon } from "@/components/CurrencyIcon";
@@ -18,6 +19,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PROPERTY_URL_PREFIX } from "@/constants";
@@ -25,6 +27,7 @@ import { cn } from "@/lib/utils";
 import { getDaysLeft } from "@/utils/date";
 import { formatDate } from "@/utils/formatDate";
 
+import { useUpdatePropertyMutation } from "./api/mutation";
 import { useGetPropertyByIdQuery } from "./api/queries";
 
 const statusColorMap: Record<string, string> = {
@@ -73,6 +76,9 @@ export default function PropertyDetail() {
   const { id: propertyId } = useParams();
   const navigate = useNavigate();
   const { data, isLoading } = useGetPropertyByIdQuery(propertyId || "");
+  const { mutateAsync: updateProperty, isPending } = useUpdatePropertyMutation(
+    propertyId || "",
+  );
 
   const status = useMemo(() => {
     // Check if property has incomplete form status
@@ -84,6 +90,7 @@ export default function PropertyDetail() {
 
     if (hasIncompleteForm) return "incomplete";
     if (data?.isMarketing) return "marketing";
+
     return data?.status;
   }, [data]);
 
@@ -92,6 +99,59 @@ export default function PropertyDetail() {
   }
 
   const property = data;
+
+  const handleExtendMarketing = async () => {
+    try {
+      const currentDate = new Date(property.marketingExtendedDate);
+      const extendedDate = new Date(currentDate);
+      extendedDate.setDate(extendedDate.getDate() + 30); // Add 30 days
+
+      await updateProperty({
+        marketingExtendedDate: extendedDate.toISOString(),
+        isMarketingExtended: true,
+      });
+
+      // Navigate to the marketing extended success page
+      navigate("/landlord/properties/marketing-extended");
+    } catch (error) {
+      console.error("Failed to extend marketing date:", error);
+      toast.error("Failed to extend marketing date. Please try again.");
+    }
+  };
+
+  const handleTurnOffMarketing = async () => {
+    try {
+      await updateProperty({
+        isMarketing: false,
+        isMarketingExtended: false,
+        marketingExtendedDate: "",
+      });
+
+      toast.success("Marketing has been turned off successfully.");
+    } catch (error) {
+      console.error("Failed to turn off marketing:", error);
+      toast.error("Failed to turn off marketing. Please try again.");
+    }
+  };
+
+  const handleMarketNow = async () => {
+    try {
+      const currentDate = new Date();
+      const marketingEndDate = new Date(currentDate);
+      marketingEndDate.setDate(marketingEndDate.getDate() + 30); // Add 30 days
+
+      await updateProperty({
+        isMarketing: true,
+        isMarketingExtended: false,
+        marketingExtendedDate: marketingEndDate.toISOString(),
+      });
+
+      toast.success("Marketing has been turned on for 30 days!");
+    } catch (error) {
+      console.error("Failed to start marketing:", error);
+      toast.error("Failed to start marketing. Please try again.");
+    }
+  };
 
   return (
     <div className="flex flex-col gap-4 pb-8">
@@ -215,22 +275,28 @@ export default function PropertyDetail() {
               </span>
             </p>
             <div className="mt-4 flex justify-around gap-5">
-              <Button className="flex-1" variant="outlinePrimary">
+              <LoadingButton
+                className="flex-1"
+                variant="outlinePrimary"
+                onClick={handleTurnOffMarketing}
+                isLoading={isPending}
+              >
                 Turn Off
-              </Button>
+              </LoadingButton>
               {!property.isMarketingExtended && (
-                <Link
-                  to="/landlord/properties/marketing-extended"
+                <LoadingButton
                   className="flex-1"
+                  onClick={handleExtendMarketing}
+                  isLoading={isPending}
                 >
-                  <Button className="w-full">Extend</Button>
-                </Link>
+                  Extend
+                </LoadingButton>
               )}
             </div>
           </div>
         )}
 
-        {status === "complete" && (
+        {status === "Available" && (
           <div className="rounded-md p-4">
             <h3 className="mb-2 text-2xl font-bold">
               Market My Rental For Free
@@ -263,6 +329,17 @@ export default function PropertyDetail() {
                   Fill your vacancy with the perfect tenant!
                 </p>
               </div>
+            </div>
+
+            <div className="mt-6 flex justify-center">
+              <LoadingButton
+                size="lg"
+                className="w-full"
+                onClick={handleMarketNow}
+                isLoading={isPending}
+              >
+                Market Now
+              </LoadingButton>
             </div>
           </div>
         )}

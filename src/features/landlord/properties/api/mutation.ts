@@ -1,18 +1,30 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { axiosLandlord } from "../../api/axios";
 
 export const useCreatePropertyMutation = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (data: IPropertyCreateData) =>
       axiosLandlord.post<IResponse<IProperty>>("/properties", data),
+    onSuccess: () => {
+      // Invalidate properties list
+      queryClient.invalidateQueries({ queryKey: ["properties"] });
+    },
   });
 };
 
 export const useUpdatePropertyMutation = (id: string) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (data: IPropertyUpdateData) =>
       axiosLandlord.put<IResponse<IProperty>>(`/properties/${id}`, data),
+    onSuccess: () => {
+      // Invalidate the specific property query
+      queryClient.invalidateQueries({ queryKey: ["properties", id] });
+    },
   });
 };
 
