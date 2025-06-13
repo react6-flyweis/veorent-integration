@@ -1,14 +1,14 @@
-import { ArrowLeft, Calendar, Users2Icon } from "lucide-react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import { Card, CardContent } from "@/components/ui/card";
+import { ArrowLeft, Calendar, Users2Icon } from "lucide-react";
 
-import penApplicationIcon from "./assets/pen-application.png";
-import policyIcon from "./assets/policy.png";
-import infoIcon from "./assets/info.png";
-import { useGetTenantDetailsQuery } from "./api/queries";
-import { useMemo } from "react";
 import { CurrencyIcon } from "@/components/CurrencyIcon";
+import { Card, CardContent } from "@/components/ui/card";
 import { formatDate } from "@/utils/formatDate";
+
+import { useGetTenantDetailsQuery } from "./api/queries";
+import penApplicationIcon from "./assets/pen-application.png";
+// import policyIcon from "./assets/policy.png";
+// import infoIcon from "./assets/info.png";
 
 // Mock data - in a real app, this would come from an API or store
 // const mockTenantData = [
@@ -35,30 +35,30 @@ import { formatDate } from "@/utils/formatDate";
 //   },
 // ];
 
-const insuranceStatusMap = {
-  verified: {
-    text: "Verified",
-    color: "text-green-600",
-  },
-  waiting: {
-    text: "Waiting on Proof",
-    color: "text-orange-600",
-  },
-  none: {
-    text: "No Insurance",
-    color: "text-red-600",
-  },
-};
+// const insuranceStatusMap = {
+//   verified: {
+//     text: "Verified",
+//     color: "text-green-600",
+//   },
+//   waiting: {
+//     text: "Waiting on Proof",
+//     color: "text-orange-600",
+//   },
+//   none: {
+//     text: "No Insurance",
+//     color: "text-red-600",
+//   },
+// };
 
 export function TenantDetails() {
   const { id } = useParams<{ id: string }>();
   const { data: tenant, isLoading } = useGetTenantDetailsQuery(id || "");
-  console.log("tenant", tenant);
+  // console.log("tenant", tenant);
 
-  const insuranceStatus: keyof typeof insuranceStatusMap = useMemo(() => {
-    // randomly select insurance status for demo
-    return Math.random() > 0.5 ? "verified" : "waiting";
-  }, []);
+  // const insuranceStatus: keyof typeof insuranceStatusMap = useMemo(() => {
+  //   // randomly select insurance status for demo
+  //   return Math.random() > 0.5 ? "verified" : "waiting";
+  // }, []);
 
   // const formatCurrency = (amount: number) => {
   //   return amount.toLocaleString("en-US", {
@@ -145,7 +145,7 @@ export function TenantDetails() {
             </span>
           </div>
 
-          <div>
+          {/* <div>
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
                 <span className="font-semibold">Renters Insurance:</span>
@@ -161,9 +161,9 @@ export function TenantDetails() {
                   : "The tenant still needs to provide valid proof of renter's insurance."}
               </p>
             </div>
-          </div>
+          </div> */}
 
-          {insuranceStatus === "verified" && (
+          {/* {insuranceStatus === "verified" && (
             <div className="mt-5">
               <div className="flex items-center gap-4">
                 <div className="flex size-8 items-center justify-center rounded-full bg-gray-100">
@@ -182,11 +182,11 @@ export function TenantDetails() {
                 </div>
               </div>
             </div>
-          )}
+          )} */}
         </CardContent>
       </Card>
 
-      {insuranceStatus === "verified" && (
+      {/* {insuranceStatus === "verified" && (
         <Card className="mt-6">
           <CardContent className="">
             <div className="mb-4 flex items-center gap-5">
@@ -204,7 +204,7 @@ export function TenantDetails() {
             </div>
           </CardContent>
         </Card>
-      )}
+      )} */}
     </div>
   );
 }

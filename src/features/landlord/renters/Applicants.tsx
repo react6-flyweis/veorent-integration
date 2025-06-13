@@ -1,15 +1,19 @@
+import { Link } from "react-router";
+
+import { PageTitle } from "@/components/PageTitle";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
+// import { Badge } from "@/components/ui/badge";
 
-import verifiedIcon from "./assets/verified.png";
-import { Link } from "react-router";
-import { PageTitle } from "@/components/PageTitle";
-import RentersTablist from "./components/RentersTablist";
-import { useGetApplicantsQuery } from "./api/queries";
-import { getFullName, getInitial } from "@/utils/name";
+// import verifiedIcon from "./assets/verified.png";
+
+
 import { formatDate } from "@/utils/formatDate";
+import { getFullName, getInitial } from "@/utils/name";
+
+import { useGetApplicantsQuery } from "./api/queries";
+import RentersTablist from "./components/RentersTablist";
 
 export default function Applicants() {
   const { data: applicants, isLoading } = useGetApplicantsQuery();
@@ -38,9 +42,9 @@ export default function Applicants() {
                     />
                     <AvatarFallback>
                       {getInitial(
-                        applicant.userId?.firstname +
-                          " " +
-                          applicant.userId.lastname,
+                        `${applicant.userId?.firstname 
+                          } ${ 
+                          applicant.userId.lastname}`,
                       )}
                     </AvatarFallback>
                   </Avatar>
@@ -109,7 +113,7 @@ export default function Applicants() {
         )}
 
         {/* Applicants List */}
-        <div className="flex flex-col gap-4">
+        {/* <div className="flex flex-col gap-4">
           {[
             {
               name: "Kianna Dias",
@@ -154,7 +158,7 @@ export default function Applicants() {
               </Card>
             </Link>
           ))}
-        </div>
+        </div> */}
       </div>
     </div>
   );
