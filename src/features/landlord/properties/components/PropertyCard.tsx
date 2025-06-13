@@ -70,12 +70,12 @@ export function PropertyCard({ property }: { property: IProperty }) {
             <div className="flex-1">
               <h3 className="text-lg font-semibold">{property.name}</h3>
               <p className="text-muted-foreground text-sm">
-                {property.addressDetails?.streetAddress}
+                {property.propertyDetails?.streetAddress}
               </p>
               <p>
-                {property.addressDetails?.city},{" "}
-                {property.addressDetails?.region}{" "}
-                {property.addressDetails?.zipCode}
+                {property.propertyDetails?.city},{" "}
+                {property.propertyDetails?.region}{" "}
+                {property.propertyDetails?.zipCode}
               </p>
               {property.rating && (
                 <div className="mt-1 flex">

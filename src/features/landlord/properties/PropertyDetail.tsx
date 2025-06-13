@@ -136,11 +136,11 @@ export default function PropertyDetail() {
           <Avatar className="size-32">
             <AvatarImage
               src={property.image?.[0]?.img}
-              alt={property.addressDetails?.streetAddress}
+              alt={property.propertyDetails?.streetAddress}
               className="object-cover"
             />
             <AvatarFallback className="text-2xl font-semibold">
-              {property.addressDetails?.streetAddress?.charAt(0)}
+              {property.propertyDetails?.streetAddress?.charAt(0)}
             </AvatarFallback>
           </Avatar>
         </CardHeader>
@@ -150,7 +150,7 @@ export default function PropertyDetail() {
             <div>
               <div className="flex gap-2">
                 <h2 className="text-xl font-semibold">
-                  {property.addressDetails?.streetAddress}
+                  {property.propertyDetails?.streetAddress}
                 </h2>
                 {property.rating && (
                   <div className="mt-1 flex">
@@ -164,9 +164,9 @@ export default function PropertyDetail() {
                 )}
               </div>
               <p className="text-muted-foreground">
-                {property.addressDetails?.city},{" "}
-                {property.addressDetails?.region}{" "}
-                {property.addressDetails?.zipCode}
+                {property.propertyDetails?.city},{" "}
+                {property.propertyDetails?.region}{" "}
+                {property.propertyDetails?.zipCode}
               </p>
             </div>
 
