@@ -117,8 +117,8 @@ interface IBooking {
   totalAmount: number;
   isWalletUsed: boolean;
   isCouponApplied: boolean;
-  status: "Pending";
-  paymentStatus: "Pending";
+  status: "Pending" | "Approved" | "Canceled";
+  paymentStatus: "Pending" | "Paid" | "Canceled";
   _id: string;
   createdAt: string;
   updatedAt: string;

@@ -20,14 +20,20 @@ export function RentalApplicationCard({
     return <Navigate to="/tenant/search" replace />;
   }
 
+  // Determine title and action text based on payment status
+  const isPaid = latestBooking?.paymentStatus === "Paid";
+  const title = isPaid ? "Rental Booked" : "Rental Application";
+  const actionText = isPaid ? "View Booking" : "Finish My Application";
+  const actionUrl = isPaid ? "#" : `/tenant/applying/${latestBooking?._id}`;
+
   return (
     <IconCard
       className={className}
-      title="Rental Application"
+      title={title}
       description="Lorem Ipsum is simply dummy text"
       icon={applicationsIcon}
-      actionText="Finish My Application"
-      url={`/tenant/applying/${latestBooking?._id}`}
+      actionText={actionText}
+      url={actionUrl}
     />
   );
 }
