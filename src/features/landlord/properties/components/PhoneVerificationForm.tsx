@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Button } from "@/components/ui/button";
+
+import FormErrors from "@/components/FormErrors";
 import { IconRound } from "@/components/IconRound";
-import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -15,13 +15,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useUpdatePropertyMutation } from "../api/mutation";
-import { useParams } from "react-router";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import FormErrors from "@/components/FormErrors";
 
-// You may want to replace this with an actual phone icon
-import infoIcon from "@/assets/icons/info.png";
+import { useSendOtpMutation, useVerifyOtpMutation } from "../api/mutation";
+import verifyIcon from "../assets/verify.png";
 
 // Zod schemas for form validation
 const phoneVerificationSchema = z.object({
@@ -57,7 +57,11 @@ export const PhoneVerificationForm = ({
   propertyName,
 }: PhoneVerificationFormProps) => {
   const { id } = useParams<{ id: string }>();
-  const { mutateAsync } = useUpdatePropertyMutation(id || "");
+  const { mutateAsync: sendOtp, isPending: isSendingOtp } = useSendOtpMutation(
+    id || "",
+  );
+  const { mutateAsync: verifyOtp, isPending: isVerifyingOtp } =
+    useVerifyOtpMutation(id || "");
 
   const [otpSent, setOtpSent] = useState(false);
   const [isSending, setIsSending] = useState(false);
@@ -86,10 +90,10 @@ export const PhoneVerificationForm = ({
 
     setIsSending(true);
     phoneForm.clearErrors();
+    const { phone } = phoneForm.getValues();
 
     try {
-      // Simulate API call to send code
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await sendOtp({ mobileNumber: phone });
       setOtpSent(true);
     } catch (error) {
       phoneForm.setError("root", {
@@ -107,17 +111,18 @@ export const PhoneVerificationForm = ({
 
     setIsSending(true);
     otpForm.clearErrors();
+    const { otp } = otpForm.getValues();
+    const otpString = otp.join("");
 
     try {
-      // Simulate API call to verify OTP and update property
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await verifyOtp({ otp: otpString });
 
       // Update property with phone verification status
-      const valuesToSubmit: IPropertyUpdateData = {
-        // phoneVerified: true, // Commenting out until proper field is available
-        // contactPhone: phoneForm.getValues("phone"), // Commenting out until proper field is available
-      };
-      await mutateAsync(valuesToSubmit);
+      // const valuesToSubmit: IPropertyUpdateData = {
+      //   phoneVerified: true,
+      //   contactPhone: phoneForm.getValues("phone"),
+      // };
+      // await mutateAsync(valuesToSubmit);
 
       onSuccess();
     } catch (error) {
@@ -180,7 +185,7 @@ export const PhoneVerificationForm = ({
   return (
     <div>
       <div className="mb-6 flex items-center">
-        <IconRound icon={infoIcon} size="sm" />
+        <IconRound icon={verifyIcon} size="sm" />
         <h2 className="ml-2 text-xl font-semibold">
           Verify Your Phone to Publish the Listing
         </h2>
@@ -275,14 +280,14 @@ export const PhoneVerificationForm = ({
                   variant="outline"
                   className="flex-1"
                   onClick={handleSkip}
-                  disabled={isSending || isSkipping}
+                  disabled={isSending || isSkipping || isSendingOtp}
                 >
                   Skip Marketing For Now
                 </Button>
                 <Button
                   type="submit"
                   className="flex-1"
-                  disabled={isSending || isSkipping}
+                  disabled={isSending || isSkipping || isSendingOtp}
                 >
                   Send Code
                 </Button>
@@ -301,10 +306,10 @@ export const PhoneVerificationForm = ({
                   control={otpForm.control}
                   name="otp"
                   render={({ field }) => {
-                    const otpValue = Array.isArray(field.value) 
-                      ? field.value 
+                    const otpValue = Array.isArray(field.value)
+                      ? field.value
                       : ["", "", "", "", "", ""];
-                    
+
                     return (
                       <FormItem>
                         <FormControl>
@@ -344,7 +349,7 @@ export const PhoneVerificationForm = ({
                   variant="outline"
                   className="flex-1"
                   onClick={handleSkip}
-                  disabled={isSending || isSkipping}
+                  disabled={isSending || isSkipping || isVerifyingOtp}
                 >
                   Skip Marketing For Now
                 </Button>
@@ -352,7 +357,7 @@ export const PhoneVerificationForm = ({
                   type="submit"
                   size="lg"
                   className="flex-1"
-                  disabled={isSending || isSkipping}
+                  disabled={isSending || isSkipping || isVerifyingOtp}
                 >
                   Please Verify
                 </Button>
