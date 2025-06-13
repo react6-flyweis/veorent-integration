@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -13,6 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { useToast } from "@/hooks/useAlertToast";
 import { getFullName } from "@/utils/name";
 
@@ -32,7 +32,7 @@ interface ProfileFormProps {
 }
 
 export function ProfileForm({ profile }: ProfileFormProps) {
-  const editProfileMutation = useEditProfileMutation();
+  const { mutateAsync } = useEditProfileMutation();
   const { showToast } = useToast();
 
   const [firstName, lastName] = profile?.fullName?.split(" ") || [];
@@ -68,7 +68,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
         mobileNumber: data.mobileNumber,
         email: data.email,
       };
-      await editProfileMutation.mutateAsync(apiData);
+      await mutateAsync(apiData);
       showToast("Profile updated successfully", "success");
     } catch {
       showToast("Failed to update profile", "error");
@@ -138,14 +138,14 @@ export function ProfileForm({ profile }: ProfileFormProps) {
           )}
         />
 
-        <Button
+        <LoadingButton
           type="submit"
           size="lg"
           className="w-full"
-          disabled={editProfileMutation.isPending}
+          isLoading={form.formState.isSubmitting}
         >
-          {editProfileMutation.isPending ? "Saving..." : "Save Changes"}
-        </Button>
+          Save Changes
+        </LoadingButton>
       </form>
     </Form>
   );
