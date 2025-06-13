@@ -1,19 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SwissFrancIcon } from "lucide-react";
-
 import { z } from "zod";
+
 import amexImg from "@/assets/images/amex.png";
+import discoverImg from "@/assets/images/discover.png";
+import masterImg from "@/assets/images/master.png";
 import mtnIcon from "@/assets/images/mtn.png";
 import orangePayIcon from "@/assets/images/orange-money.png";
-
-import discoverImg from "@/assets/images/discover.png";
 import visaImg from "@/assets/images/visa.png";
-import masterImg from "@/assets/images/master.png";
-
 import { CurrencyIcon } from "@/components/CurrencyIcon";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,6 +29,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { LoadingButton } from "@/components/ui/loading-button";
+
+import { useUpdateBookingMutation } from "../../api/mutation";
 
 const PaymentSchema = z.object({
   cardHolderName: z.string().min(1, "Cardholder name is required"),
@@ -44,17 +46,41 @@ type PaymentFormType = z.infer<typeof PaymentSchema>;
 const SCREENING_AMOUNT = 55.0; // Example amount, can be dynamic
 
 export function PaymentFee() {
+  const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const { mutateAsync: updateBooking } = useUpdateBookingMutation(id || "");
+
   const form = useForm<PaymentFormType>({
     resolver: zodResolver(PaymentSchema),
   });
 
   const onSubmit = (data: PaymentFormType) => {
-    console.log("Payment Data:", data);
+    // Form submission for card payment if needed
+    // This would handle the card payment flow
+    console.log("Form submitted with data:", data);
   };
 
-  const successPayment = () => {
-    navigate("/tenant/payment/success");
+  const handlePayment = async () => {
+    setIsPaymentProcessing(true);
+    try {
+      // Simulate a successful payment
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Update the booking status and payment status
+      await updateBooking({
+        paymentStatus: "Paid",
+      });
+
+      navigate("/tenant/payment/success", {
+        state: { amount: SCREENING_AMOUNT, redirectUrl: "/tenant" },
+      });
+    } catch (error) {
+      console.error("Payment failed:", error);
+      // Handle payment failure (e.g., show error message)
+    } finally {
+      setIsPaymentProcessing(false);
+    }
   };
 
   return (
@@ -80,22 +106,32 @@ export function PaymentFee() {
           </div>
 
           <div className="space-y-2">
-            <Button type="button" onClick={successPayment} className="w-full">
+            <LoadingButton
+              type="button"
+              onClick={handlePayment}
+              className="w-full"
+              isLoading={isPaymentProcessing}
+            >
               <img
                 src={orangePayIcon}
                 alt="orange pay"
                 className="size-5 rounded-full"
               />
               Orange money pay
-            </Button>
-            <Button type="button" onClick={successPayment} className="w-full">
+            </LoadingButton>
+            <LoadingButton
+              type="button"
+              onClick={handlePayment}
+              className="w-full"
+              isLoading={isPaymentProcessing}
+            >
               <img
                 src={mtnIcon}
                 alt="mtn money"
                 className="size-5 rounded-full"
               />
               MTN money pay
-            </Button>
+            </LoadingButton>
           </div>
 
           <div className="relative flex items-center justify-center py-5">
@@ -185,7 +221,7 @@ export function PaymentFee() {
             />
           </div>
 
-          <Button type="submit" className="w-full">
+          <Button disabled type="submit" className="w-full">
             <span>Pay</span>
             <CurrencyIcon size="sm" />
             <span>{SCREENING_AMOUNT}</span>
