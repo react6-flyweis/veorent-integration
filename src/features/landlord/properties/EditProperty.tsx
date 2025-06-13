@@ -95,7 +95,7 @@ export default function EditProperty() {
     <div>
       <div className="bg-primary relative flex h-64 flex-col items-center justify-center gap-5">
         <div className="absolute top-0 left-0 p-4">
-          <Link to={`/landlord/properties/${propertyId}`}>
+          <Link to={`/landlord/properties/${propertyId}`} replace>
             <Button
               variant="outline"
               className="size-9 items-center justify-center rounded-full"
