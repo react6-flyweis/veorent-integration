@@ -1,7 +1,12 @@
-import { z } from "zod";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { PlusCircleIcon } from "lucide-react";
+import { z } from "zod";
 
+import { CurrencyInput } from "@/components/CurrencyInput";
+import FormErrors from "@/components/FormErrors";
+import { IconRound } from "@/components/IconRound";
 import {
   MultiStepper,
   MultiStepperBackButton,
@@ -9,6 +14,9 @@ import {
   MultiStepperHeader,
   MultiStepperStep,
 } from "@/components/MultiStepper";
+import { PageTitle } from "@/components/PageTitle";
+import { Checkbox } from "@/components/ui/checkbox";
+import { DateInput } from "@/components/ui/date-input";
 import {
   Form,
   FormField,
@@ -18,28 +26,21 @@ import {
   FormItem,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { PageTitle } from "@/components/PageTitle";
 
+import leaseIcon from "./assets/lease.png";
 import personalInfoIcon from "./assets/personal-info.png";
 import villaIcon from "./assets/villa.png";
-import leaseIcon from "./assets/lease.png";
 import uploadDocIcon from "./assets/documents.png";
-
 import { useGoBack } from "@/hooks/useGoBack";
-import { IconRound } from "@/components/IconRound";
-import { DateInput } from "@/components/ui/date-input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { PlusCircleIcon } from "lucide-react";
-import { CurrencyInput } from "@/components/CurrencyInput";
+
+
 import { PropertyTypeSelector } from "../components/PropertyTypeSelector";
-import { useCreateTenantMutation } from "./api/mutations";
+import { useCreateTenantMutation, fetchUserByEmail } from "./api/mutations";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import FormErrors from "@/components/FormErrors";
 import { useToast } from "@/hooks/useAlertToast";
-import { useNavigate } from "react-router";
-import { LoadingButton } from "@/components/ui/loading-button";
 
 const formSchema = z
   .object({
@@ -118,8 +119,20 @@ export default function AddTenant() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      // First, fetch the user ID by email
+      let user: IUser;
+      try {
+        user = await fetchUserByEmail(values.email);
+      } catch {
+        form.setError("root", {
+          message: "User not found. Please check the email address.",
+        });
+        return;
+      }
+
       const valuesTOSubmit: ITenantCreateData = {
         ...values,
+        userId: user._id, // Add the fetched user ID
         propertyTypeId: values.propertyType,
         mobileNumber: values.phone,
         leaseTerm: {

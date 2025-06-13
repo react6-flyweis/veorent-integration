@@ -1,5 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+
 import { axiosLandlord } from "../../api/axios";
+
+// Function to fetch user by email
+export const fetchUserByEmail = async (email: string): Promise<IUser> => {
+  const response = await axiosLandlord.get<IResponse<IUser>>(
+    `/profile/filter?email=${email}`,
+  );
+  return response.data.data;
+};
 
 export const useCreateLeadMutation = () => {
   const queryClient = useQueryClient();

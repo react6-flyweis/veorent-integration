@@ -81,7 +81,7 @@ interface ITenant {
 }
 
 interface ITenantCreateData {
-  // userId: string; // User ID of the tenant
+  userId: string; // User ID of the tenant
   propertyTypeId: string; // ID of the property type
   fullName: string; // Full name of the tenant
   email: string; // Email of the tenant
