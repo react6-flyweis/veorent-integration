@@ -29,6 +29,21 @@ export const useUpdateCardMutation = (id: string) => {
   });
 };
 
+export const useUpdateCardAutoPayMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: { cardId: string; autoPayEnabled: boolean }) =>
+      axiosTenant.put<IResponse<ICard>>(`/card-details/${data.cardId}`, {
+        autoPayEnabled: data.autoPayEnabled,
+      }),
+    onSuccess: () => {
+      // Invalidate and refetch cards data
+      queryClient.invalidateQueries({ queryKey: ["cards"] });
+    },
+  });
+};
+
 export const useDeleteCardMutation = () => {
   const queryClient = useQueryClient();
 

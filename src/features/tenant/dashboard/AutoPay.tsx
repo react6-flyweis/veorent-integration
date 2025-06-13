@@ -1,33 +1,84 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { DownloadIcon, EuroIcon } from "lucide-react";
 
 import rentIconImg from "@/assets/icons/rent.png";
 import paymentMethodImg from "@/assets/images/payment-method.png";
+import { CurrencyIcon } from "@/components/CurrencyIcon";
 import { PageTitle } from "@/components/PageTitle";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
+import { useToast } from "@/hooks/useAlertToast";
 import { useGoBack } from "@/hooks/useGoBack";
 
-import { useGetCardsQuery } from "./api/queries";
+import { useUpdateCardAutoPayMutation } from "./api/mutations";
+import { useGetCardsQuery, useGetPendingRentQuery } from "./api/queries";
 
 export default function AutoPay() {
   const goBack = useGoBack();
   const navigate = useNavigate();
-  const { data: cards, isLoading, error } = useGetCardsQuery();
+  const { showToast } = useToast();
+  const {
+    data: cards,
+    isLoading: cardsLoading,
+    error: cardsError,
+  } = useGetCardsQuery();
+  const { data: pendingRent, isLoading: rentLoading } =
+    useGetPendingRentQuery();
+  const { mutateAsync: updateAutoPayAsync, isPending: isUpdating } =
+    useUpdateCardAutoPayMutation();
+
+  const [localAutoPayState, setLocalAutoPayState] = useState<boolean>(false);
 
   // Redirect to add card page if no cards exist
   useEffect(() => {
-    if (!isLoading && cards && cards.length === 0) {
+    if (!cardsLoading && cards && cards.length === 0) {
       navigate("/tenant/add-card");
     }
-  }, [cards, isLoading, navigate]);
+  }, [cards, cardsLoading, navigate]);
 
   // Get the default card or first card
   const defaultCard = cards?.find((card) => card.isDefault) || cards?.[0];
+
+  // Get the latest pending rent (sorted by due date, most recent first)
+  const latestPendingRent = pendingRent?.sort(
+    (a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime(),
+  )?.[0];
+
+  const handleAutoPayToggle = async (
+    enabled: boolean,
+    isAutoUpdate = false,
+  ) => {
+    if (!defaultCard) return;
+
+    // If trying to enable autopay but no pending rent, prevent it
+    if (enabled && !latestPendingRent) {
+      showToast("Cannot enable Auto Pay: No pending rent found", "error");
+      return;
+    }
+
+    try {
+      setLocalAutoPayState(enabled);
+      await updateAutoPayAsync({
+        cardId: defaultCard._id,
+        autoPayEnabled: enabled,
+      });
+
+      if (!isAutoUpdate) {
+        showToast(
+          `Auto Pay ${enabled ? "enabled" : "disabled"} successfully`,
+          "success",
+        );
+      }
+    } catch {
+      setLocalAutoPayState(!enabled); // Revert on error
+      showToast("Failed to update Auto Pay setting", "error");
+    }
+  };
+
+  const isLoading = cardsLoading || rentLoading;
 
   if (isLoading) {
     return (
@@ -50,7 +101,7 @@ export default function AutoPay() {
     );
   }
 
-  if (error || !cards || cards.length === 0) {
+  if (cardsError || !cards || cards.length === 0) {
     return (
       <div className="space-y-5">
         <PageTitle title="Rent Payment Method" withBack />
@@ -93,38 +144,85 @@ export default function AutoPay() {
         <Label htmlFor="auto-pay" className="checked:text-muted">
           Off
         </Label>
-        <Switch id="auto-pay" />
+        <Switch
+          id="auto-pay"
+          checked={localAutoPayState}
+          onCheckedChange={handleAutoPayToggle}
+          disabled={isUpdating}
+        />
         <Label htmlFor="auto-pay">On</Label>
       </div>
+
+      {/* Status message */}
+      {!latestPendingRent && (
+        <div className="rounded-md border border-yellow-200 bg-yellow-50 p-3">
+          <p className="text-sm text-yellow-800">
+            No pending rent found. Auto Pay is automatically disabled.
+          </p>
+        </div>
+      )}
+
+      {/* {latestPendingRent && !localAutoPayState && (
+        <div className="rounded-md border border-blue-200 bg-blue-50 p-3">
+          <p className="text-sm text-blue-800">
+            You have pending rent. Enable Auto Pay for automatic payments.
+          </p>
+        </div>
+      )} */}
       <Card className="gap-2 py-2">
         <CardHeader className="flex gap-2 px-2">
           <img className="size-8" src={rentIconImg} alt="" />
-          <p className="text-primary text-2xl font-semibold">Rent</p>
+          <p className="text-primary text-2xl font-semibold">
+            {latestPendingRent ? "Latest Pending Rent" : "No Pending Rent"}
+          </p>
         </CardHeader>
         <CardContent className="px-2">
-          <div className="flex justify-between">
-            <div className="">
+          {latestPendingRent ? (
+            <div className="flex justify-between">
               <div className="">
-                <span>Date: </span>
-                <span>August 1,2004</span>
+                <div className="">
+                  <span>Due Date: </span>
+                  <span>
+                    {new Date(latestPendingRent.dueDate).toLocaleDateString()}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span>Amount: </span>
+                  <CurrencyIcon size="sm" />
+                  <span>{latestPendingRent.amount.toLocaleString()}</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1">
-                <span>Rent: </span>
-                <EuroIcon className="size-3" />
-                <span>2,000</span>
+              <div className="">
+                <div className="">
+                  <span>Status: </span>
+                  <span
+                    className={`${
+                      latestPendingRent.amountStatus === "Paid"
+                        ? "text-green-600"
+                        : latestPendingRent.amountStatus === "Overdue"
+                          ? "text-red-600"
+                          : "text-yellow-600"
+                    }`}
+                  >
+                    {latestPendingRent.amountStatus}
+                  </span>
+                </div>
+                {latestPendingRent.lateFee > 0 && (
+                  <div className="flex items-center gap-1">
+                    <span>Late Fee: </span>
+                    <CurrencyIcon size="sm" />
+                    <span>{latestPendingRent.lateFee.toLocaleString()}</span>
+                  </div>
+                )}
               </div>
             </div>
-            <div className="">
-              <div className="">
-                <span>Status: </span>
-                <span>paid</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <span>Receipt: </span>
-                <DownloadIcon className="size-4" />
-              </div>
+          ) : (
+            <div className="py-4 text-center">
+              <p className="text-muted-foreground">
+                You have no pending rent payments at this time.
+              </p>
             </div>
-          </div>
+          )}
         </CardContent>
       </Card>
       <div className="flex w-full justify-center">

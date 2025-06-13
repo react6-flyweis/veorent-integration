@@ -7,6 +7,7 @@ interface ICard {
   country: string;
   isDefault: boolean;
   isCarSaved: boolean;
+  autoPayEnabled: boolean;
   user: string;
   createdAt: string;
   updatedAt: string;
@@ -21,6 +22,7 @@ interface ICardCreateData {
   country: string;
   isDefault: boolean;
   isCarSaved: boolean;
+  autoPayEnabled?: boolean;
 }
 
 interface ICardUpdateData extends Partial<ICardCreateData> {
