@@ -14,7 +14,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { useToast } from "@/hooks/useAlertToast";
-import { getFullName } from "@/utils/name";
 
 import { useEditProfileMutation } from "../api/mutations";
 
@@ -35,13 +34,11 @@ export function ProfileForm({ profile }: ProfileFormProps) {
   const { mutateAsync } = useEditProfileMutation();
   const { showToast } = useToast();
 
-  const [firstName, lastName] = profile?.fullName?.split(" ") || [];
-
   const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      firstName: firstName || "",
-      lastName: lastName || "",
+      firstName: profile?.firstname || "",
+      lastName: profile?.lastname || "",
       mobileNumber: profile?.mobileNumber || "",
       email: profile?.email || "",
     },
@@ -50,10 +47,9 @@ export function ProfileForm({ profile }: ProfileFormProps) {
   // Update form values when profile changes
   useEffect(() => {
     if (profile) {
-      const [firstName, lastName] = profile.fullName?.split(" ") || [];
       form.reset({
-        firstName: firstName || "",
-        lastName: lastName || "",
+        firstName: profile.firstname || "",
+        lastName: profile.lastname || "",
         mobileNumber: profile.mobileNumber || "",
         email: profile.email || "",
       });
@@ -64,7 +60,8 @@ export function ProfileForm({ profile }: ProfileFormProps) {
     try {
       // Combine first and last name for the API
       const apiData = {
-        fullName: getFullName(data.firstName, data.lastName),
+        firstname: data.firstName,
+        lastname: data.lastName,
         mobileNumber: data.mobileNumber,
         email: data.email,
       };

@@ -3,7 +3,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosTenant } from "../../api/axios";
 
 interface IEditProfileData {
-  fullName: string;
+  firstname: string;
+  lastname: string;
   mobileNumber: string;
   email: string;
 }
