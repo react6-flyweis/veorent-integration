@@ -1,10 +1,26 @@
 "use client";
 
-import { z } from "zod";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
+import { SwissFrancIcon } from "lucide-react";
+
+import { z } from "zod";
+import amexImg from "@/assets/images/amex.png";
+import mtnIcon from "@/assets/images/mtn.png";
+import orangePayIcon from "@/assets/images/orange-money.png";
+
+import discoverImg from "@/assets/images/discover.png";
+import visaImg from "@/assets/images/visa.png";
+import masterImg from "@/assets/images/master.png";
+
+import { CurrencyIcon } from "@/components/CurrencyIcon";
 import { Button } from "@/components/ui/button";
+import {
+  CardCvcInput,
+  CardExpiryInput,
+  CardNumberInput,
+} from "@/components/ui/card-input";
 import {
   Form,
   FormControl,
@@ -13,17 +29,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { SwissFrancIcon } from "lucide-react";
-
-import orangePayIcon from "@/assets/images/orange-money.png";
-import mtnIcon from "@/assets/images/mtn.png";
-
-import amexImg from "@/assets/images/amex.png";
-import discoverImg from "@/assets/images/discover.png";
-import visaImg from "@/assets/images/visa.png";
-import masterImg from "@/assets/images/master.png";
-import { useNavigate } from "react-router";
-import { CurrencyIcon } from "@/components/CurrencyIcon";
+import { Input } from "@/components/ui/input";
 
 const PaymentSchema = z.object({
   cardHolderName: z.string().min(1, "Cardholder name is required"),
@@ -34,6 +40,8 @@ const PaymentSchema = z.object({
 });
 
 type PaymentFormType = z.infer<typeof PaymentSchema>;
+
+const SCREENING_AMOUNT = 55.0; // Example amount, can be dynamic
 
 export function PaymentFee() {
   const navigate = useNavigate();
@@ -65,7 +73,10 @@ export function PaymentFee() {
             <p className="text-muted-foreground font-semibold uppercase">
               Payment Amount
             </p>
-            <p className="text-lg font-bold">₣55.00</p>
+            <div className="flex items-center gap-1">
+              <CurrencyIcon />
+              <p className="text-2xl font-bold">{SCREENING_AMOUNT}</p>
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -123,11 +134,7 @@ export function PaymentFee() {
               <FormItem>
                 <FormLabel>Card Number</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="1234 1234 1234 1234"
-                    maxLength={16}
-                    {...field}
-                  />
+                  <CardNumberInput {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -142,7 +149,7 @@ export function PaymentFee() {
                 <FormItem>
                   <FormLabel>Expiration</FormLabel>
                   <FormControl>
-                    <Input placeholder="MM/YY" maxLength={5} {...field} />
+                    <CardExpiryInput {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -156,7 +163,7 @@ export function PaymentFee() {
                 <FormItem>
                   <FormLabel>CVC</FormLabel>
                   <FormControl>
-                    <Input placeholder="CVC" maxLength={4} {...field} />
+                    <CardCvcInput {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -181,7 +188,7 @@ export function PaymentFee() {
           <Button type="submit" className="w-full">
             <span>Pay</span>
             <CurrencyIcon size="sm" />
-            <span>55.00</span>
+            <span>{SCREENING_AMOUNT}</span>
           </Button>
         </form>
       </Form>
