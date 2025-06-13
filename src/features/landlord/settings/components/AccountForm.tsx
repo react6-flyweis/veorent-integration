@@ -1,8 +1,11 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { PlusIcon } from "lucide-react";
 import * as z from "zod";
+
+import FormErrors from "@/components/FormErrors";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -11,9 +14,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useMemo, useState } from "react";
-import { PlusIcon } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/useAlertToast";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+
 import { ChangePasswordDialog } from "./ChangePasswordDialog";
+import { useUpdateProfileMutation } from "../api/mutation";
 
 const accountFormSchema = z.object({
   firstName: z.string().min(2, {
@@ -32,7 +38,9 @@ const accountFormSchema = z.object({
   streetAddress: z.string().min(3, {
     message: "Street address must be at least 3 characters.",
   }),
-  unit: z.string().optional(),
+  unit: z.string().min(1, {
+    message: "Unit is required.",
+  }),
   city: z.string().min(1, {
     message: "City is required.",
   }),
@@ -48,6 +56,8 @@ type AccountFormValues = z.infer<typeof accountFormSchema>;
 
 export function AccountForm({ data }: { data: IUserFullDetails }) {
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
+  const { mutateAsync } = useUpdateProfileMutation();
+  const { showToast } = useToast();
 
   const [firstName, lastName] = useMemo(() => {
     // if data has fullName split it into firstName and lastName
@@ -77,10 +87,29 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
     },
   });
 
-  function onSubmit(values: AccountFormValues) {
-    // Handle form submission logic here
-    console.log("Form submitted with values:", values);
-    // You can also send the data to your API or perform any other actions
+  async function onSubmit(values: AccountFormValues) {
+    try {
+      const updateData = {
+        fullName: `${values.firstName} ${values.lastName}`,
+        mobileNumber: values.phone,
+        email: values.email,
+        addressDetails: {
+          houseNumber: values.unit || "",
+          streetAddress: values.streetAddress || "",
+          city: values.city || "",
+          region: values.region || "",
+          zipCode: values.zipCode || "",
+        },
+      };
+
+      await mutateAsync(updateData);
+      showToast("Profile updated successfully!", "success");
+    } catch (error) {
+      console.error("Failed to update profile:", error);
+      form.setError("root", {
+        message: getErrorMessage(error),
+      });
+    }
   }
 
   return (
@@ -277,11 +306,11 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
               </div>
             </div>
           </div>
+          <FormErrors errors={form.formState.errors} />
         </form>
       </Form>
 
       <ChangePasswordDialog
-        user={data}
         open={showPasswordDialog}
         onOpenChange={setShowPasswordDialog}
       />
