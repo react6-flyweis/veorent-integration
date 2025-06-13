@@ -122,8 +122,8 @@ export default function SetupListing() {
       <MultiStepperStep>
         <PhotosVideosForm
           defaultValues={{
-            photos: data?.image?.map((img) => img.img) || [],
-            videoUrl: data?.video?.[0]?.img,
+            photos: data?.image,
+            videos: data?.video,
           }}
           propertyName={data?.name}
           onSuccess={handleSuccess}

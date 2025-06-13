@@ -175,8 +175,8 @@ interface IPropertyUpdateData {
   isRoomRental?: boolean;
   amenities?: IAmenities;
   currentLocation?: ILocation;
-  image?: IPropertyImage[];
-  video?: IPropertyImage[];
+  image?: Omit<IServerImage, "_id">[];
+  video?: Omit<IServerImage, "_id">[];
   status?: string; // enum: ['Available', 'Rented', 'Under Maintenance']
   formCompletionStatus?: Partial<IFormCompletionStatus>;
 }

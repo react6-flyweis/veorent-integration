@@ -1,9 +1,11 @@
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+
+import FormErrors from "@/components/FormErrors";
 import { IconRound } from "@/components/IconRound";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -13,14 +15,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { ImageInput } from "@/components/ui/image-input";
-import { useUpdatePropertyMutation } from "../api/mutation";
-import { useParams } from "react-router";
+import { Input } from "@/components/ui/input";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import FormErrors from "@/components/FormErrors";
 
+import { useUploadImageMutation } from "../../api/mutations";
+import { useUpdatePropertyMutation } from "../api/mutation";
 import listingTitleIcon from "../assets/listing-title.png";
-import propertyDescriptionIcon from "../assets/property-description.png";
 import mediaIcon from "../assets/media.png";
+import propertyDescriptionIcon from "../assets/property-description.png";
 
 // Define our form schema with Zod
 const formSchema = z.object({
@@ -36,8 +38,8 @@ type FormValues = z.infer<typeof formSchema>;
 
 interface PhotosVideosFormProps {
   defaultValues?: {
-    photos?: (File | string)[];
-    videoUrl?: string;
+    photos?: IServerImage[];
+    videos?: IServerImage[];
   };
   onSuccess: () => void;
   propertyName?: string;
@@ -50,24 +52,71 @@ export function PhotosVideosForm({
 }: PhotosVideosFormProps) {
   const { id } = useParams<{ id: string }>();
   const { mutateAsync } = useUpdatePropertyMutation(id || "");
+  const { mutateAsync: uploadImage } = useUploadImageMutation();
+
+  const uuid = crypto.randomUUID();
 
   // Initialize form with React Hook Form and Zod validation
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      photos: defaultValues?.photos || [],
-      videoUrl: defaultValues?.videoUrl || "",
+      photos: defaultValues?.photos
+        ? defaultValues?.photos?.map(({ img }) => img)
+        : [],
+      videoUrl: defaultValues?.videos
+        ? defaultValues?.videos?.[0]?.img || ""
+        : "",
     },
   });
 
   const onSubmit = async () => {
     try {
-      const valuesToSubmit: IPropertyUpdateData = {
-        // Note: You might need to handle file uploads separately
-        // This is a simplified example - commenting out until proper handling is implemented
-        // video: values.videoUrl ? [{ url: values.videoUrl }] : [],
-      };
-      await mutateAsync(valuesToSubmit);
+      const valuesToSubmit: IPropertyUpdateData = {};
+      const currentPhotos = form.getValues("photos");
+
+      if (form.formState.dirtyFields.photos) {
+        // Separate files and existing URLs
+        const filesToUpload = currentPhotos.filter(
+          (photo): photo is File => photo instanceof File,
+        );
+        const existingUrls = currentPhotos.filter(
+          (photo): photo is string => typeof photo === "string",
+        );
+
+        // Upload new files
+        const uploadedImages: IServerImage[] = [];
+        for (const file of filesToUpload) {
+          const formData = new FormData();
+          formData.append("image", file);
+
+          const uploadResponse = await uploadImage(formData);
+          // The API returns an array, so take the first item
+          if (uploadResponse.data.data && uploadResponse.data.data.length > 0) {
+            uploadedImages.push(uploadResponse.data.data[0]);
+          }
+        }
+
+        // Combine existing URLs (as IServerImage format) with newly uploaded images
+        const existingImages: IServerImage[] = existingUrls.map((url) => ({
+          _id: uuid,
+          img: url,
+        }));
+
+        valuesToSubmit.image = [...existingImages, ...uploadedImages];
+      }
+
+      if (form.formState.dirtyFields.videoUrl) {
+        valuesToSubmit.video = [
+          {
+            img: form.getValues("videoUrl") || "",
+          },
+        ];
+      }
+
+      // Only proceed if there's something to submit
+      if (Object.keys(valuesToSubmit).length > 0) {
+        await mutateAsync(valuesToSubmit);
+      }
       onSuccess();
     } catch (error) {
       form.setError("root", {
