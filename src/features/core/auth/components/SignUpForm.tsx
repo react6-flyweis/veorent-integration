@@ -48,7 +48,7 @@ export function SignUpForm() {
       });
     }
     try {
-      console.debug("SignUp Data:", data);
+      // console.debug("SignUp Data:", data);
       navigate("/tenant/search");
     } catch (error) {
       form.setError("root", {
