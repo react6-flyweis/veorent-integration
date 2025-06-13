@@ -117,13 +117,17 @@ export function ApplicationInfo({
                 <FormControl>
                   <RadioGroup
                     className="flex"
-                    {...field}
                     value={field.value ? "yes" : "no"}
+                    onValueChange={(value) => field.onChange(value === "yes")}
                   >
-                    <RadioGroupItem value="yes" />
-                    <Label>Yes</Label>
-                    <RadioGroupItem value="no" />
-                    <Label>No</Label>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="yes" id="coSigners-yes" />
+                      <Label htmlFor="coSigners-yes">Yes</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="no" id="coSigners-no" />
+                      <Label htmlFor="coSigners-no">No</Label>
+                    </div>
                   </RadioGroup>
                 </FormControl>
                 <FormMessage />
@@ -147,13 +151,17 @@ export function ApplicationInfo({
                 <FormControl>
                   <RadioGroup
                     className="flex"
-                    {...field}
                     value={field.value ? "yes" : "no"}
+                    onValueChange={(value) => field.onChange(value === "yes")}
                   >
-                    <RadioGroupItem value="yes" />
-                    <Label>Yes</Label>
-                    <RadioGroupItem value="no" />
-                    <Label>No</Label>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="yes" id="isShortPeriod-yes" />
+                      <Label htmlFor="isShortPeriod-yes">Yes</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="no" id="isShortPeriod-no" />
+                      <Label htmlFor="isShortPeriod-no">No</Label>
+                    </div>
                   </RadioGroup>
                 </FormControl>
                 <FormMessage />
