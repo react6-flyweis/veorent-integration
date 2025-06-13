@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -224,11 +225,11 @@ export const FilterDialog = ({
           <span className="ml-1 text-lg">Filter</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="p-0 sm:max-w-[425px]">
+      <DialogContent className="max-h-[90vh] overflow-hidden p-0 sm:max-w-[425px]">
         <DialogHeader className="border-b p-3">
           <DialogTitle>Filters</DialogTitle>
         </DialogHeader>
-        <ScrollArea className="h-[80vh] pr-3">
+        <ScrollArea className="h-[66vh] pr-3">
           <div className="space-y-6 p-3">
             {/* Type of place */}
             <div className="space-y-3">
@@ -341,7 +342,7 @@ export const FilterDialog = ({
         </ScrollArea>
 
         {/* Footer with action buttons */}
-        <div className="flex gap-3 border-t p-3">
+        <DialogFooter className="flex gap-3 border-t p-3">
           <Button
             variant="outline"
             onClick={handleClearFilters}
@@ -352,7 +353,7 @@ export const FilterDialog = ({
           <Button onClick={handleApplyFilters} className="flex-1">
             Apply filters
           </Button>
-        </div>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

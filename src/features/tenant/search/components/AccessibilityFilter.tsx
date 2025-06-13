@@ -12,33 +12,47 @@ const accessibilityData: AccessibilityCategory[] = [
   {
     title: "Guest entrance and parking",
     features: [
-      { id: "step-free-entrance", label: "Step-free guest entrance" },
-      { id: "wide-entrance", label: "Guest entrance wider than 32 inches" },
-      { id: "step-free-path", label: "Step-free path to the guest entrance" },
-      { id: "accessible-parking", label: "Accessible parking spot" },
+      { id: "Step-free guest entrance", label: "Step-free guest entrance" },
+      {
+        id: "Guest entrance wider than 32 inches",
+        label: "Guest entrance wider than 32 inches",
+      },
+      {
+        id: "Step-free path to guest entrance",
+        label: "Step-free path to the guest entrance",
+      },
+      { id: "Accessible parking spot", label: "Accessible parking spot" },
     ],
   },
   {
     title: "Bedroom",
     features: [
-      { id: "step-free-bedroom", label: "Step-free bedroom access" },
-      { id: "wide-bedroom", label: "Bedroom entrance wider than 32 inches" },
+      { id: "Step-free bedroom access", label: "Step-free bedroom access" },
+      {
+        id: "Bedroom entrance wider than 32 inches",
+        label: "Bedroom entrance wider than 32 inches",
+      },
     ],
   },
   {
     title: "Bathroom",
     features: [
-      { id: "step-free-bathroom", label: "Step-free bathroom access" },
-      { id: "wide-bathroom", label: "Bathroom entrance wider than 32 inches" },
-      { id: "grab-bar-toilet", label: "Toilet grab bar" },
-      { id: "grab-bar-shower", label: "Shower grab bar" },
-      { id: "step-free-shower", label: "Step-free shower" },
-      { id: "shower-chair", label: "Shower or bath chair" },
+      { id: "Step-free bathroom access", label: "Step-free bathroom access" },
+      {
+        id: "Bathroom entrance wider than 32 inches",
+        label: "Bathroom entrance wider than 32 inches",
+      },
+      { id: "Toilet grab bar", label: "Toilet grab bar" },
+      { id: "Shower grab bar", label: "Shower grab bar" },
+      { id: "Step-free shower", label: "Step-free shower" },
+      { id: "Shower or bath chair", label: "Shower or bath chair" },
     ],
   },
   {
     title: "Adaptive equipment",
-    features: [{ id: "ceiling-hoist", label: "Ceiling or mobile hoist" }],
+    features: [
+      { id: "Ceiling or mobile hoist", label: "Ceiling or mobile hoist" },
+    ],
   },
 ];
 
@@ -51,14 +65,6 @@ export const AccessibilityFilter = ({
   selectedFeatures,
   setSelectedFeatures,
 }: AccessibilityFilterProps) => {
-  const toggleFeature = (featureId: string) => {
-    if (selectedFeatures.includes(featureId)) {
-      setSelectedFeatures(selectedFeatures.filter((id) => id !== featureId));
-    } else {
-      setSelectedFeatures([...selectedFeatures, featureId]);
-    }
-  };
-
   return (
     <div className="space-y-6">
       {accessibilityData.map((category) => (
@@ -76,7 +82,15 @@ export const AccessibilityFilter = ({
                 <Checkbox
                   id={feature.id}
                   checked={selectedFeatures.includes(feature.id)}
-                  onCheckedChange={() => toggleFeature(feature.id)}
+                  onCheckedChange={(checked) => {
+                    if (checked) {
+                      setSelectedFeatures([...selectedFeatures, feature.id]);
+                    } else {
+                      setSelectedFeatures(
+                        selectedFeatures.filter((id) => id !== feature.id),
+                      );
+                    }
+                  }}
                 />
               </div>
             ))}
