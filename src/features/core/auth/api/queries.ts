@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { axiosClient } from "@/api/axios";
@@ -7,13 +8,22 @@ import type { IGoals } from "@/types/goal";
 import { getProfile } from "./authApi";
 
 export const useGetProfileQuery = () => {
-  return useQuery({
+  const updateUser = useAuthStore((state) => state.updateUser);
+
+  const query = useQuery({
     queryFn: getProfile,
     queryKey: ["user", "profile"],
-    select: (data) => data,
-    // Only run this query if user is authenticated
+    // select: (data) => data.data.data.user,
     enabled: !!useAuthStore.getState().token,
   });
+
+  useEffect(() => {
+    if (query.data) {
+      updateUser(query.data);
+    }
+  }, [query.data, updateUser]);
+
+  return query;
 };
 
 export const useInvalidateProfile = () => {

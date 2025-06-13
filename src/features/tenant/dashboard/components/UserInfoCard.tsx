@@ -12,10 +12,10 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useGetProfileQuery } from "@/features/core/auth/api/queries";
 import { useGetWalletQuery } from "@/features/tenant/payments/api/queries";
 import { getInitial } from "@/utils/name";
 
-import { useGetProfileQuery } from "../../settings/api/queries";
 import { useGetBookingsQuery } from "../api/queries";
 
 export function UserInfoCard() {

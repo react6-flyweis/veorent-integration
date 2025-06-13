@@ -2,8 +2,8 @@ import { useState } from "react";
 
 import { PageTitle } from "@/components/PageTitle";
 import { Button } from "@/components/ui/button";
+import { useGetProfileQuery } from "@/features/core/auth/api/queries";
 
-import { useGetProfileQuery } from "./api/queries";
 import { ChangePasswordForm } from "./components/ChangePasswordForm";
 import { NotificationToggle } from "./components/NotificationToggle";
 import { ProfileForm } from "./components/ProfileForm";
