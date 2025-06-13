@@ -1,3 +1,5 @@
+import { Navigate } from "react-router";
+
 import { PageTitle } from "@/components/PageTitle";
 import {
   Tabs,
@@ -5,10 +7,10 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/ghost-tabs";
+import { useGetProfileQuery } from "@/features/core/auth/api/queries";
+
 import { AccountForm } from "./components/AccountForm";
 import { NotificationPreferences } from "./components/NotificationPreferences";
-import { Navigate } from "react-router";
-import { useGetProfileQuery } from "./api/queries";
 
 export default function Setting() {
   const { data, isLoading } = useGetProfileQuery();
@@ -32,7 +34,7 @@ export default function Setting() {
               <p className="text-gray-500">Loading account information...</p>
             </div>
           ) : data ? (
-            <AccountForm data={data} />
+            <AccountForm data={data as IUserFullDetails} />
           ) : (
             <div className="flex h-96 items-center justify-center">
               <p className="text-gray-500">Loading account information...</p>
