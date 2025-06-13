@@ -1,4 +1,29 @@
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SwissFrancIcon } from "lucide-react";
+import { z } from "zod";
+
+import FormErrors from "@/components/FormErrors";
+import {
+  MultiStepper,
+  MultiStepperBackButton,
+  MultiStepperButton,
+  MultiStepperHeader,
+  MultiStepperStep,
+} from "@/components/MultiStepper";
+import { PageTitle } from "@/components/PageTitle";
 import { Button } from "@/components/ui/button";
+import { DateInput } from "@/components/ui/date-input";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -9,38 +34,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { PageTitle } from "@/components/PageTitle";
-import { DateInput } from "@/components/ui/date-input";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { SwissFrancIcon } from "lucide-react";
-import {
-  MultiStepper,
-  MultiStepperBackButton,
-  MultiStepperButton,
-  MultiStepperHeader,
-  MultiStepperStep,
-} from "@/components/MultiStepper";
-import { useGoBack } from "@/hooks/useGoBack";
+
 import { useToast } from "@/hooks/useAlertToast";
-import { useNavigate } from "react-router";
-import { useCreateChargeMutation } from "./api/mutation";
+import { useGoBack } from "@/hooks/useGoBack";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import FormErrors from "@/components/FormErrors";
+
+import { useCreateChargeMutation } from "./api/mutation";
 
 // Form schema
 const formSchema = z.object({
-  category: z.string({
+  category: z.enum(["Rent", "Utilities", "Other"], {
     required_error: "Please select a category",
   }),
   description: z.string().max(50),
@@ -127,13 +130,11 @@ export default function OneTimeCharge() {
                             </FormControl>
                             <SelectContent>
                               <SelectGroup>
-                                <SelectItem value="rent">Rent</SelectItem>
-                                <SelectItem value="utilities">
+                                <SelectItem value="Rent">Rent</SelectItem>
+                                <SelectItem value="Utilities">
                                   Utilities
                                 </SelectItem>
-                                <SelectItem value="maintenance">
-                                  Maintenance
-                                </SelectItem>
+                                <SelectItem value="Other">Other</SelectItem>
                               </SelectGroup>
                             </SelectContent>
                           </Select>

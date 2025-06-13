@@ -1,15 +1,17 @@
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { Link } from "react-router";
 import { X } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription } from "@/components/ui/card";
 import { useGoBack } from "@/hooks/useGoBack";
+import { cn } from "@/lib/utils";
 
 import monthlyChargeIcon from "./assets/monthly-charge.png";
 import paydayIcon from "./assets/payday.png";
-import dailyChargeIcon from "./assets/daily-charge.png";
-import { Link } from "react-router";
-import { useState } from "react";
+// import dailyChargeIcon from "./assets/daily-charge.png";
+
 import { LeaseSelector } from "./components/LeaseSelector";
-import { cn } from "@/lib/utils";
 
 const CreateCharge: React.FC = () => {
   const goBack = useGoBack();
@@ -48,14 +50,14 @@ const CreateCharge: React.FC = () => {
                 icon: monthlyChargeIcon,
                 path: "/landlord/payments/monthly-charge",
               },
-              {
-                type: "daily",
-                title: "Daily Charge",
-                description:
-                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's",
-                icon: dailyChargeIcon,
-                path: "/landlord/payments/daily-charge",
-              },
+              // {
+              //   type: "daily",
+              //   title: "Daily Charge",
+              //   description:
+              //     "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's",
+              //   icon: dailyChargeIcon,
+              //   path: "/landlord/payments/daily-charge",
+              // },
               {
                 type: "one-time",
                 title: "One-Time Charge",

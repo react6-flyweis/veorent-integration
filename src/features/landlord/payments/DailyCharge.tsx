@@ -1,6 +1,19 @@
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SwissFrancIcon } from "lucide-react";
+import { z } from "zod";
+
+import FormErrors from "@/components/FormErrors";
+import {
+  MultiStepper,
+  MultiStepperBackButton,
+  MultiStepperButton,
+  MultiStepperHeader,
+  MultiStepperStep,
+} from "@/components/MultiStepper";
+import { PageTitle } from "@/components/PageTitle";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
@@ -10,11 +23,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { PageTitle } from "@/components/PageTitle";
 import { DateInput } from "@/components/ui/date-input";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+
 import {
   Form,
   FormControl,
@@ -24,24 +34,18 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { SwissFrancIcon } from "lucide-react";
-import {
-  MultiStepper,
-  MultiStepperBackButton,
-  MultiStepperButton,
-  MultiStepperHeader,
-  MultiStepperStep,
-} from "@/components/MultiStepper";
-import { useGoBack } from "@/hooks/useGoBack";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+
 import { useToast } from "@/hooks/useAlertToast";
-import { useNavigate } from "react-router";
+import { useGoBack } from "@/hooks/useGoBack";
 import { getErrorMessage } from "@/utils/getErrorMessage";
+
 import { useCreateChargeMutation } from "./api/mutation";
-import FormErrors from "@/components/FormErrors";
 
 // Form schema
 const formSchema = z.object({
-  category: z.string({
+  category: z.enum(["Rent", "Utilities", "Other"], {
     required_error: "Please select a category",
   }),
   description: z.string().max(50),
@@ -131,15 +135,11 @@ const DailyCharge: React.FC = () => {
                             </FormControl>
                             <SelectContent>
                               <SelectGroup>
-                                <SelectItem value="rent">Rent</SelectItem>
-                                <SelectItem value="utilities">
+                                <SelectItem value="Rent">Rent</SelectItem>
+                                <SelectItem value="Utilities">
                                   Utilities
                                 </SelectItem>
-                                <SelectItem value="maintenance">
-                                  Maintenance
-                                </SelectItem>
-                                <SelectItem value="parking">Parking</SelectItem>
-                                <SelectItem value="storage">Storage</SelectItem>
+                                <SelectItem value="Other">Other</SelectItem>
                               </SelectGroup>
                             </SelectContent>
                           </Select>

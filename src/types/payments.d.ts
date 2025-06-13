@@ -1,6 +1,8 @@
+type ChargeCategory = "Rent" | "Utilities" | "Other";
+
 interface ICharge {
   _id: string;
-  category: string;
+  category: ChargeCategory;
   description: string;
   amount: number;
   dueDate: string; // ISO date string
@@ -22,7 +24,7 @@ interface ICharge {
 }
 
 interface IOneTimeChargeCreate {
-  category: string; // enum: ['Rent', 'Utilities', 'Other']
+  category: ChargeCategory;
   description: string;
   amount: number;
   dueDate: string; // ISO date string
@@ -33,7 +35,7 @@ interface IOneTimeChargeCreate {
 }
 
 interface IMonthlyChargeCreate {
-  category: string; // enum: ['Rent', 'Utilities', 'Other']
+  category: ChargeCategory; // enum: ['Rent', 'Utilities', 'Other']
   description: string;
   amount: number;
   dueDate: string; // ISO date string
@@ -50,7 +52,7 @@ interface IMonthlyChargeCreate {
 }
 
 interface IDailyChargeCreate {
-  category: string; // enum: ['Rent', 'Utilities', 'Other']
+  category: ChargeCategory;
   description: string;
   amount: number;
   startDate: string; // ISO date string - when daily charges begin

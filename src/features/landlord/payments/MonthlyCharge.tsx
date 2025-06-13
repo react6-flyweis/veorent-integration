@@ -1,5 +1,20 @@
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SwissFrancIcon } from "lucide-react";
+import { z } from "zod";
+
+import { CurrencyInput } from "@/components/CurrencyInput";
+import FormErrors from "@/components/FormErrors";
+import {
+  MultiStepper,
+  MultiStepperBackButton,
+  MultiStepperButton,
+  MultiStepperHeader,
+  MultiStepperStep,
+} from "@/components/MultiStepper";
+import { PageTitle } from "@/components/PageTitle";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -12,11 +27,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { PageTitle } from "@/components/PageTitle";
 import { DateInput } from "@/components/ui/date-input";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+
 import {
   Form,
   FormControl,
@@ -26,25 +38,18 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { SwissFrancIcon } from "lucide-react";
-import {
-  MultiStepper,
-  MultiStepperBackButton,
-  MultiStepperButton,
-  MultiStepperHeader,
-  MultiStepperStep,
-} from "@/components/MultiStepper";
-import { useGoBack } from "@/hooks/useGoBack";
-import { CurrencyInput } from "@/components/CurrencyInput";
+import { Input } from "@/components/ui/input";
+
 import { useToast } from "@/hooks/useAlertToast";
-import { useNavigate } from "react-router";
-import { useCreateChargeMutation } from "./api/mutation";
+import { useGoBack } from "@/hooks/useGoBack";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import FormErrors from "@/components/FormErrors";
+
+import { useCreateChargeMutation } from "./api/mutation";
+import { BankSelector } from "../dashboard/components/BankSelector";
 
 // Form schema
 const formSchema = z.object({
-  category: z.string({
+  category: z.enum(["Rent", "Utilities", "Other"], {
     required_error: "Please select a category",
   }),
   description: z.string().max(50),
@@ -59,7 +64,7 @@ const formSchema = z.object({
     required_error: "Please select a year",
   }),
   hasEndDate: z.boolean(),
-  doesRepeat: z.enum(["yes", "no"]),
+  hasLateFee: z.enum(["yes", "no"]),
   lateFeeType: z.enum(["flat", "percentage"]).optional(),
   lateFeeAmount: z.coerce.number().optional(),
   lateFeeFor: z.enum(["sameDay", "oneDay", "oneWeek"]).optional(),
@@ -79,14 +84,14 @@ const MonthlyCharge: React.FC = () => {
     defaultValues: {
       description: "",
       hasEndDate: false,
-      doesRepeat: "no",
+      hasLateFee: "no",
       lateFeeType: "flat",
     },
   });
 
   // Watch values to conditionally render UI elements
   const lateFeeType = form.watch("lateFeeType");
-  const doesRepeat = form.watch("doesRepeat");
+  const hasLateFee = form.watch("hasLateFee");
 
   const onSubmit = async (values: FormValues) => {
     try {
@@ -147,13 +152,11 @@ const MonthlyCharge: React.FC = () => {
                             </FormControl>
                             <SelectContent>
                               <SelectGroup>
-                                <SelectItem value="rent">Rent</SelectItem>
-                                <SelectItem value="utilities">
+                                <SelectItem value="Rent">Rent</SelectItem>
+                                <SelectItem value="Utilities">
                                   Utilities
                                 </SelectItem>
-                                <SelectItem value="maintenance">
-                                  Maintenance
-                                </SelectItem>
+                                <SelectItem value="Other">Other</SelectItem>
                               </SelectGroup>
                             </SelectContent>
                           </Select>
@@ -338,9 +341,10 @@ const MonthlyCharge: React.FC = () => {
                   <div className="mt-4">
                     <FormField
                       control={form.control}
-                      name="doesRepeat"
+                      name="hasLateFee"
                       render={({ field }) => (
                         <FormItem>
+                          <FormLabel>Does it include late fee?</FormLabel>
                           <FormControl>
                             <RadioGroup
                               onValueChange={field.onChange}
@@ -363,7 +367,7 @@ const MonthlyCharge: React.FC = () => {
                     />
                   </div>
 
-                  {doesRepeat === "yes" && (
+                  {hasLateFee === "yes" && (
                     <div className="mt-6 space-y-6">
                       <div className="flex items-center justify-between">
                         <FormField
@@ -463,38 +467,22 @@ const MonthlyCharge: React.FC = () => {
                           </FormItem>
                         )}
                       />
-
-                      <FormField
-                        control={form.control}
-                        name="bankAccount"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Bank Account</FormLabel>
-                            <Select
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Choose your bank account..." />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="standard">
-                                  Standard Bank Group
-                                </SelectItem>
-                                <SelectItem value="firstrand">
-                                  FirstRand
-                                </SelectItem>
-                                <SelectItem value="absa">Absa Group</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
                     </div>
                   )}
+
+                  <FormField
+                    control={form.control}
+                    name="bankAccount"
+                    render={({ field }) => (
+                      <FormItem className="mt-3">
+                        <FormLabel>Bank Account</FormLabel>
+                        <FormControl>
+                          <BankSelector {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
                   <div className="text-primary mt-5 rounded-sm bg-blue-200 p-4 text-sm">
                     <p>
