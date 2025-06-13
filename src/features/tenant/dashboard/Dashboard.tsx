@@ -6,18 +6,17 @@ import truckImgIcon from "@/assets/icons/truck.png";
 import { IconCard } from "@/components/IconCard";
 import { RentalApplicationCard } from "@/components/RentalApplicationCard";
 import { Input } from "@/components/ui/input";
-import { useAuthStore } from "@/store/useAuthStore";
 
+import { GreetUser } from "./components/GreetUser";
 import { LandlordCard } from "./components/LandlordCard";
 import { UserInfoCard } from "./components/UserInfoCard";
 
 export default function Dashboard() {
-  const user = useAuthStore((state) => state.user);
   return (
     <div className="flex flex-col gap-5">
       {/* Header and Search */}
       <header className="flex flex-col items-center justify-between @md:flex-row">
-        <h1 className="text-xl font-semibold">Hello, {user?.firstname}</h1>
+        <GreetUser />
         <Link to="/tenant/search">
           <div className="relative w-full max-w-sm">
             <Input placeholder="Search property" className="pr-10" />
