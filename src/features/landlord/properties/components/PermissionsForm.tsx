@@ -47,12 +47,14 @@ interface PermissionsFormProps {
   defaultValues?: IPermission;
   onSuccess: (data: PermissionsFormValues) => void;
   propertyName?: string;
+  completionStatus?: IFormCompletionStatus;
 }
 
 export const PermissionsForm = ({
   defaultValues,
   onSuccess,
   propertyName,
+  completionStatus,
 }: PermissionsFormProps) => {
   const { id } = useParams<{ id: string }>();
   const { mutateAsync } = useUpdatePropertyMutation(id || "");
@@ -81,8 +83,7 @@ export const PermissionsForm = ({
             : undefined,
         },
         formCompletionStatus: {
-          propertySize: true,
-          leasingBasics: true,
+          ...completionStatus,
           permission: true,
         },
       };

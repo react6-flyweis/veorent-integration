@@ -85,6 +85,7 @@ interface AmenitiesFormProps {
   defaultValues?: IAmenities;
   onSuccess: (data: AmenitiesFormValues) => void;
   propertyName?: string;
+  completionStatus?: IFormCompletionStatus;
 }
 
 const amenitiesFields = [
@@ -138,6 +139,7 @@ export const AmenitiesForm = ({
   defaultValues,
   onSuccess,
   propertyName,
+  completionStatus,
 }: AmenitiesFormProps) => {
   const { id } = useParams<{ id: string }>();
   const { mutateAsync } = useUpdatePropertyMutation(id || "");
@@ -258,9 +260,7 @@ export const AmenitiesForm = ({
       const valuesToSubmit: IPropertyUpdateData = {
         amenities: amenitiesData as IAmenities,
         formCompletionStatus: {
-          propertySize: true,
-          leasingBasics: true,
-          permission: true,
+          ...completionStatus,
           amenities: true,
         },
       };

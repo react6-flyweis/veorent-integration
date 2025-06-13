@@ -37,12 +37,14 @@ interface UtilitiesFormProps {
   defaultValues?: IAmenities;
   onSuccess: (data: UtilitiesFormValues) => void;
   propertyName?: string;
+  completionStatus?: IFormCompletionStatus;
 }
 
 export const UtilitiesForm = ({
   defaultValues,
   onSuccess,
   propertyName,
+  completionStatus,
 }: UtilitiesFormProps) => {
   const { id } = useParams<{ id: string }>();
   const { mutateAsync } = useUpdatePropertyMutation(id || "");
@@ -74,6 +76,10 @@ export const UtilitiesForm = ({
           gas: data.gas,
           water: data.water,
         } as IAmenities,
+        formCompletionStatus: {
+          ...completionStatus,
+          amenities: true,
+        },
       };
       await mutateAsync(valuesToSubmit);
       onSuccess(data);

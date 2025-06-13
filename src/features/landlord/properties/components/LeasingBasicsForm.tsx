@@ -24,7 +24,6 @@ import { useUpdatePropertyMutation } from "../api/mutation";
 import rentLeaseIcon from "../assets/rent-lease.png";
 import rentIcon from "../assets/rent.png";
 
-
 const leasingBasicsSchema = z.object({
   dateAvailable: z.date({
     required_error: "Please select a date",
@@ -47,12 +46,14 @@ interface LeasingBasicsFormProps {
   defaultValues?: ILeasingBasics;
   onSuccess: (data: LeasingBasicsFormValues) => void;
   propertyName?: string;
+  completionStatus?: IFormCompletionStatus;
 }
 
 export const LeasingBasicsForm = ({
   defaultValues,
   onSuccess,
   propertyName,
+  completionStatus,
 }: LeasingBasicsFormProps) => {
   const { id } = useParams<{ id: string }>();
   const { mutateAsync } = useUpdatePropertyMutation(id || "");
@@ -79,7 +80,7 @@ export const LeasingBasicsForm = ({
           targetDeposit: data.targetDeposit || 0,
         },
         formCompletionStatus: {
-          propertySize: true,
+          ...completionStatus,
           leasingBasics: true,
         },
       };

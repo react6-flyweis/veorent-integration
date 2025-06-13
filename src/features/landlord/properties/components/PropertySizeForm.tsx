@@ -33,12 +33,14 @@ interface PropertySizeFormProps {
   defaultValues?: IPropertySize;
   onSuccess: (data: PropertySizeFormValues) => void;
   propertyName?: string;
+  completionStatus?: IFormCompletionStatus;
 }
 
 export const PropertySizeForm = ({
   defaultValues,
   onSuccess,
   propertyName,
+  completionStatus,
 }: PropertySizeFormProps) => {
   const { id } = useParams<{ id: string }>();
   const { mutateAsync } = useUpdatePropertyMutation(id || "");
@@ -62,6 +64,7 @@ export const PropertySizeForm = ({
           yearBuilt: data.yearBuilt || 0,
         },
         formCompletionStatus: {
+          ...completionStatus,
           propertySize: true,
         },
       };

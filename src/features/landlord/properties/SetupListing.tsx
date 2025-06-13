@@ -72,6 +72,7 @@ export default function SetupListing() {
         <PropertySizeForm
           defaultValues={data?.propertySize}
           propertyName={data?.name}
+          completionStatus={data?.formCompletionStatus}
           onSuccess={handleSuccess}
         />
       </MultiStepperStep>
@@ -80,6 +81,7 @@ export default function SetupListing() {
         <LeasingBasicsForm
           defaultValues={data?.leasingBasics}
           propertyName={data?.name}
+          completionStatus={data?.formCompletionStatus}
           onSuccess={handleSuccess}
         />
       </MultiStepperStep>
@@ -88,6 +90,7 @@ export default function SetupListing() {
         <PermissionsForm
           defaultValues={data?.permission}
           propertyName={data?.name}
+          completionStatus={data?.formCompletionStatus}
           onSuccess={handleSuccess}
         />
       </MultiStepperStep>
@@ -96,6 +99,7 @@ export default function SetupListing() {
         <UtilitiesForm
           defaultValues={data?.amenities}
           propertyName={data?.name}
+          completionStatus={data?.formCompletionStatus}
           onSuccess={handleSuccess}
         />
       </MultiStepperStep>
@@ -104,6 +108,7 @@ export default function SetupListing() {
         <AmenitiesForm
           defaultValues={data?.amenities}
           propertyName={data?.name}
+          completionStatus={data?.formCompletionStatus}
           onSuccess={handleSuccess}
         />
       </MultiStepperStep>
