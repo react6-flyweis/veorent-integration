@@ -1,5 +1,9 @@
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+import FormErrors from "@/components/FormErrors";
 import { Button } from "@/components/ui/button";
-import { PasswordInput } from "@/components/ui/password-input";
 import {
   Dialog,
   DialogContent,
@@ -7,9 +11,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
@@ -18,11 +19,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useChangePasswordMutation } from "../api/mutation";
-import { getErrorMessage } from "@/utils/getErrorMessage";
-import { useToast } from "@/hooks/useAlertToast";
 import { LoadingButton } from "@/components/ui/loading-button";
-import FormErrors from "@/components/FormErrors";
+import { PasswordInput } from "@/components/ui/password-input";
+import { useToast } from "@/hooks/useAlertToast";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+
+import { useUpdateProfileMutation } from "../api/mutation";
 
 // Schema for password change validation
 const passwordChangeSchema = z
@@ -41,15 +43,13 @@ type PasswordChangeValues = z.infer<typeof passwordChangeSchema>;
 interface ChangePasswordDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  user: IUser;
 }
 
 export function ChangePasswordDialog({
   open,
   onOpenChange,
-  user,
 }: ChangePasswordDialogProps) {
-  const { mutateAsync } = useChangePasswordMutation();
+  const { mutateAsync } = useUpdateProfileMutation();
   const { showToast } = useToast();
   const form = useForm<PasswordChangeValues>({
     resolver: zodResolver(passwordChangeSchema),
@@ -62,12 +62,9 @@ export function ChangePasswordDialog({
 
   const onSubmit = async (values: PasswordChangeValues) => {
     try {
-      const valuesToSubmit = {
-        otp: user.otp,
-        newPassword: values.newPassword,
-        confirmPassword: values.confirmPassword,
-      };
-      await mutateAsync(valuesToSubmit);
+      await mutateAsync({
+        password: values.newPassword,
+      });
       // show success message
       showToast("Password changed successfully", "success");
       form.reset();
