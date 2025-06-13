@@ -4,11 +4,11 @@ import { SearchIcon } from "lucide-react";
 import insuranceImgIcon from "@/assets/icons/home-insurance.png";
 import truckImgIcon from "@/assets/icons/truck.png";
 import { IconCard } from "@/components/IconCard";
-import { RentalApplicationCard } from "@/components/RentalApplicationCard";
 import { Input } from "@/components/ui/input";
 
 import { GreetUser } from "./components/GreetUser";
 import { LandlordCard } from "./components/LandlordCard";
+import { RentalApplicationCard } from "./components/RentalApplicationCard";
 import { UserInfoCard } from "./components/UserInfoCard";
 
 export default function Dashboard() {
