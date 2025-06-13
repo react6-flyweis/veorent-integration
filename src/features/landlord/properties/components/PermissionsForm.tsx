@@ -80,6 +80,11 @@ export const PermissionsForm = ({
             ? values.occupancyCount.toString()
             : undefined,
         },
+        formCompletionStatus: {
+          propertySize: true,
+          leasingBasics: true,
+          permission: true,
+        },
       };
       await mutateAsync(valuesToSubmit);
       onSuccess(values);

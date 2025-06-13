@@ -102,7 +102,7 @@ interface ILocation {
   coordinates: [number, number];
 }
 
-interface IPropertyImage {
+interface IServerImage {
   img: string;
   _id: string;
 }
@@ -178,4 +178,5 @@ interface IPropertyUpdateData {
   image?: IPropertyImage[];
   video?: IPropertyImage[];
   status?: string; // enum: ['Available', 'Rented', 'Under Maintenance']
+  formCompletionStatus?: Partial<IFormCompletionStatus>;
 }

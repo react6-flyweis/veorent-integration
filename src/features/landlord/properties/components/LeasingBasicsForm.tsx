@@ -1,11 +1,12 @@
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Input } from "@/components/ui/input";
-import { IconRound } from "@/components/IconRound";
+
 import { CurrencyIcon } from "@/components/CurrencyIcon";
+import FormErrors from "@/components/FormErrors";
+import { IconRound } from "@/components/IconRound";
 import { DateInput } from "@/components/ui/date-input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Form,
   FormControl,
@@ -14,13 +15,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import rentIcon from "../assets/rent.png";
-import rentLeaseIcon from "../assets/rent-lease.png";
+import { Input } from "@/components/ui/input";
 import { LoadingButton } from "@/components/ui/loading-button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import { useParams } from "react-router";
+
 import { useUpdatePropertyMutation } from "../api/mutation";
-import FormErrors from "@/components/FormErrors";
+import rentLeaseIcon from "../assets/rent-lease.png";
+import rentIcon from "../assets/rent.png";
+
 
 const leasingBasicsSchema = z.object({
   dateAvailable: z.date({
@@ -74,6 +77,10 @@ export const LeasingBasicsForm = ({
           Date: data.dateAvailable.toISOString(),
           desiredLeaseTerm: data.leaseTerm,
           targetDeposit: data.targetDeposit || 0,
+        },
+        formCompletionStatus: {
+          propertySize: true,
+          leasingBasics: true,
         },
       };
       await mutateAsync(valuesToSubmit);

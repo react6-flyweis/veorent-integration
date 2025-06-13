@@ -61,6 +61,9 @@ export const PropertySizeForm = ({
           squareFeet: data.squareFeet || 0,
           yearBuilt: data.yearBuilt || 0,
         },
+        formCompletionStatus: {
+          propertySize: true,
+        },
       };
       await mutateAsync(valuesToSubmit);
       onSuccess(data);

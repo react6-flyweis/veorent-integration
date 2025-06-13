@@ -210,6 +210,12 @@ export const AmenitiesForm = ({
 
       const valuesToSubmit: IPropertyUpdateData = {
         amenities: amenitiesData as IAmenities,
+        formCompletionStatus: {
+          propertySize: true,
+          leasingBasics: true,
+          permission: true,
+          amenities: true,
+        },
       };
       await mutateAsync(valuesToSubmit);
       onSuccess(data);
