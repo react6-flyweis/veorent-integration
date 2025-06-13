@@ -1,11 +1,9 @@
-import { useMemo } from "react";
 import { Link } from "react-router";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import { useAuthStore } from "@/store/useAuthStore";
 
 import { useGetDashboardCounts } from "./api/queries";
 import addendumIcon from "./assets/addendum.png";
@@ -19,28 +17,15 @@ import recruitIcon from "./assets/recruitment.png";
 import screenIcon from "./assets/screen.png";
 import signIcon from "./assets/sign.png";
 import { ActionButton } from "./components/ActionButton";
+import { Greeting } from "./components/Greeting";
 import { ScreenMethodDialog } from "./components/ScreenMethodDialog";
 
 export default function Dashboard() {
-  const user = useAuthStore((state) => state.user);
   const { data } = useGetDashboardCounts();
-
-  const userFirstName = useMemo(() => {
-    if (user?.firstname) {
-      return user.firstname;
-    } else if (user?.fullName) {
-      const firstName = user.fullName.split(" ")[0];
-      return firstName || "User";
-    } else if (user?.email) {
-      const firstName = user.email.split("@")[0];
-      return firstName.charAt(0).toUpperCase() + firstName.slice(1) || "User";
-    }
-    return "User";
-  }, [user]);
 
   return (
     <div className="">
-      <h2 className="mb-2 text-3xl font-semibold">Hello, {userFirstName}</h2>
+      <Greeting />
       <div className="grid grid-cols-1 gap-4 @lg:grid-cols-2 @xl:grid-cols-3">
         {/* Top Summary Cards */}
         <div className="flex flex-col gap-2 @xl:col-span-2">
@@ -77,7 +62,7 @@ export default function Dashboard() {
           {/* Landlord Tools */}
           <div className="mt-4 grid grid-cols-1 gap-3">
             <Dialog>
-              <DialogTrigger>
+              <DialogTrigger asChild>
                 <ActionButton icon={screenIcon} label="Screen a Tenant" />
               </DialogTrigger>
               <ScreenMethodDialog />
