@@ -13,13 +13,13 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetWalletQuery } from "@/features/tenant/payments/api/queries";
-import { useAuthStore } from "@/store/useAuthStore";
 import { getInitial } from "@/utils/name";
 
+import { useGetProfileQuery } from "../../settings/api/queries";
 import { useGetBookingsQuery } from "../api/queries";
 
 export function UserInfoCard() {
-  const user = useAuthStore((state) => state.user);
+  const { data: user } = useGetProfileQuery();
   const { data: balance, isLoading: walletLoading } = useGetWalletQuery();
   const { data: bookings, isLoading: bookingsLoading } = useGetBookingsQuery();
 
