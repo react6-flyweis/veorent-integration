@@ -79,6 +79,13 @@ export default function AddProperty() {
         description: values.description,
         propertyTypeId: values.propertyType,
         isRoomRental: values.hasRoomRentals === "yes",
+        addressDetails: {
+          houseNumber: "",
+          streetAddress: values.streetAddress,
+          city: values.city,
+          region: values.region,
+          zipCode: values.zipCode,
+        },
         propertyDetails: {
           streetAddress: values.streetAddress,
           unitNumber: values.unit,
@@ -94,6 +101,11 @@ export default function AddProperty() {
           apartmentUnit: values.apartmentUnit || 0,
           studioUnit: values.studioUnit || 0,
           roomsUnit: values.roomsUnit || 0,
+        },
+        formCompletionStatus: {
+          addressDetails: true,
+          propertyDetails: true,
+          rentalDetails: true,
         },
       };
       const result = await mutateAsync(valuesToSubmit);

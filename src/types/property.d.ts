@@ -157,8 +157,10 @@ interface IPropertyCreateData {
   description: string;
   propertyTypeId: string;
   isRoomRental: boolean;
+  addressDetails: IAddressDetails;
   propertyDetails: IPropertyDetails;
   rentalDetails: IRentalDetails;
+  formCompletionStatus?: Partial<IFormCompletionStatus>;
 }
 
 interface IPropertyUpdateData {
