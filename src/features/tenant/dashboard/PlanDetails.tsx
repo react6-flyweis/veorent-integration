@@ -1,16 +1,20 @@
+import { useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 
 import { BackButton } from "@/components/BackButton";
 import { CurrencyIcon } from "@/components/CurrencyIcon";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
+import { PaymentModeDialog } from "@/features/shared/payments/components/PaymentModeDialog";
 
 import { useBuyInsuranceMutation } from "./api/mutations";
 import { useGetInsurancePlanQuery } from "./api/queries";
 import homeInsuranceIcon from "./assets/home-insurance.png";
 
 export default function PlanDetails() {
+  const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
   const { state } = useLocation();
   const { id } = useParams();
   const { mutateAsync } = useBuyInsuranceMutation();
@@ -44,6 +48,7 @@ export default function PlanDetails() {
     };
     console.log("Submitting data:", dataToSubmit);
     await mutateAsync(dataToSubmit);
+    setIsPaymentDialogOpen(true);
   };
 
   if (isLoading) {
@@ -187,6 +192,12 @@ export default function PlanDetails() {
         industry. Lorem Ipsum has been the industry's standard dummy text ever
         since the 1500s.
       </p>
+
+      <Dialog open={isPaymentDialogOpen} onOpenChange={setIsPaymentDialogOpen}>
+        <DialogContent>
+          <PaymentModeDialog amount={plan.premium.annualPremium} />
+        </DialogContent>
+      </Dialog>
 
       <div className="mt-6 flex items-center justify-center">
         <Button
