@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { formatDate } from "@/utils/formatDate";
 
 const iconMap: Record<string, LucideIcon> = {
@@ -41,3 +42,22 @@ export const NotificationCard: FC<INotification> = ({
     </Card>
   );
 };
+
+export function NotificationCardSkeleton() {
+  return (
+    <Card className="border-primary relative gap-0">
+      <CardHeader>
+        <div className="bg-primary absolute -top-2 -left-2 flex size-7 items-center justify-center rounded-full p-2">
+          <Skeleton className="size-4 rounded-full bg-white/30" />
+        </div>
+        <div className="flex items-center justify-between">
+          <Skeleton className="h-7 w-48" />
+          <Skeleton className="h-3 w-20" />
+        </div>
+      </CardHeader>
+      <CardContent className="">
+        <Skeleton className="h-4 w-full" />
+      </CardContent>
+    </Card>
+  );
+}
