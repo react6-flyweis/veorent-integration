@@ -1,8 +1,16 @@
-import { Outlet } from "react-router";
+import { Navigate, Outlet } from "react-router";
 
 import { Toaster } from "@/components/ui/sonner";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export function AuthLayout() {
+  const user = useAuthStore((state) => state.user);
+  if (user) {
+    // If user is already authenticated, redirect to the dashboard
+    const url = user?.userType === "PARTNER" ? "/landlord" : "/tenant";
+    return <Navigate to={url} replace />;
+  }
+
   return (
     <div className="flex h-screen w-full">
       {/* Left Form Panel */}
