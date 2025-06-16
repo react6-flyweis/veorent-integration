@@ -1,8 +1,10 @@
-import { z } from "zod";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Navigate, useLocation, useNavigate } from "react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+import { z } from "zod";
 
+import personImgIcon from "@/assets/icons/person.png";
 import { IconRound } from "@/components/IconRound";
 import {
   MultiStepper,
@@ -11,7 +13,8 @@ import {
   MultiStepperIndicator,
   MultiStepperStep,
 } from "@/components/MultiStepper";
-import personImgIcon from "@/assets/icons/person.png";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -21,6 +24,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Form,
   FormControl,
   FormDescription,
@@ -29,42 +40,18 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { LoadingButton } from "@/components/ui/loading-button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/useAlertToast";
-import { getFullName, getInitial } from "@/utils/name";
 import { formatDate } from "@/utils/formatDate";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import { getFullName, getInitial } from "@/utils/name";
 
-// const units = [
-//   {
-//     id: 1,
-//     propertyName: "Property Name",
-//     address: "Address line 1 region",
-//     unitName: "Unit Name",
-//     type: "Type Of Unit",
-//     totalUnits: 1,
-//     availableUnits: 20,
-//   },
-//   {
-//     id: 2,
-//     propertyName: "Property Name",
-//     address: "Address line 1 region",
-//     unitName: "Unit Name",
-//     type: "Type Of Unit",
-//     totalUnits: 1,
-//     availableUnits: 20,
-//   },
-// ];
+import {
+  useUpdateMoveRequestMutation,
+  type IUpdateMoveRequestData,
+} from "./api/mutations";
 
 const formSchema = z.object({
   action: z.enum(["deny", "active"], {
@@ -78,20 +65,40 @@ export default function MoveInRenter() {
   const navigate = useNavigate();
   const { showToast } = useToast();
   const { state } = useLocation();
+  const { mutateAsync, isPending } = useUpdateMoveRequestMutation();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
   });
 
-  function onSubmit(values: FormValues) {
+  const onSubmit = async (values: FormValues) => {
     try {
-      console.log(values);
+      // Prepare the data for the API
+      const updateData: IUpdateMoveRequestData = {
+        currentProperty: applicant.currentProperty,
+        currentPropertyLeaseTerm: applicant.currentPropertyLeaseTerm,
+        destinationProperty: applicant.destinationProperty,
+        destinationPropertyLeaseTerm: applicant.destinationPropertyLeaseTerm,
+        moveDate: applicant.moveDate,
+        moveTime: applicant.moveTime,
+        flexibleTimings: applicant.flexibleTimings,
+        availableUnit: applicant.avalibleUnit,
+        allocateUnit: applicant.allocateUnit,
+        otherApplicants:
+          values.action === "deny"
+            ? "Deny-And-Send-A-Notification"
+            : ("Keep-As-An-Active-Applicant" as const),
+        status: "Completed" as const,
+        lease: applicant.lease?._id,
+      };
+      await mutateAsync({ id: applicant._id, data: updateData });
       showToast("Renter moved successfully", "success");
       navigate("/landlord/renters/applicants");
     } catch (error) {
       console.error("Error submitting form:", error);
+      toast.error(getErrorMessage(error));
     }
-  }
+  };
 
   if (!state || !state.applicant) {
     return <Navigate to="/landlord/renters/applicants" replace />;
@@ -209,9 +216,9 @@ export default function MoveInRenter() {
                   />
                   <AvatarFallback>
                     {getInitial(
-                      applicant.userId?.firstname +
-                        " " +
-                        applicant.userId.lastname,
+                      `${applicant.userId?.firstname 
+                        } ${ 
+                        applicant.userId.lastname}`,
                     )}
                   </AvatarFallback>
                 </Avatar>
@@ -240,9 +247,9 @@ export default function MoveInRenter() {
                     leaseName: applicant.lease?.leaseNickname,
                     propertyName: "Property Name, Unit Name",
                     term:
-                      formatDate(applicant.lease?.startDate) +
-                      " - " +
-                      formatDate(applicant.lease?.endDate || ""),
+                      `${formatDate(applicant.lease?.startDate) 
+                      } - ${ 
+                      formatDate(applicant.lease?.endDate || "")}`,
                     rent: "2000 F.CFA/Month",
                   },
                   {
@@ -250,15 +257,15 @@ export default function MoveInRenter() {
                     status: "Ending Soon",
                     leaseName: "Lease Name",
                     propertyName:
-                      applicant.currentProperty.streetAddress +
-                      ", " +
-                      applicant.currentProperty.unitNumber,
+                      `${applicant.currentProperty.streetAddress 
+                      }, ${ 
+                      applicant.currentProperty.unitNumber}`,
                     term:
-                      formatDate(applicant.currentPropertyLeaseTerm.startDate) +
-                      " - " +
+                      `${formatDate(applicant.currentPropertyLeaseTerm.startDate) 
+                      } - ${ 
                       formatDate(
                         applicant.currentPropertyLeaseTerm.endDate || "",
-                      ),
+                      )}`,
                     rent: "2000 F.CFA/Month",
                   },
                 ].map((lease) => (
@@ -318,9 +325,9 @@ export default function MoveInRenter() {
                       />
                       <AvatarFallback>
                         {getInitial(
-                          applicant.userId?.firstname +
-                            " " +
-                            applicant.userId.lastname,
+                          `${applicant.userId?.firstname 
+                            } ${ 
+                            applicant.userId.lastname}`,
                         )}
                       </AvatarFallback>
                     </Avatar>
@@ -399,13 +406,14 @@ export default function MoveInRenter() {
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button
+                  <LoadingButton
                     type="button"
                     className="w-full"
                     onClick={form.handleSubmit(onSubmit)}
+                    isLoading={isPending}
                   >
-                    Move IN
-                  </Button>
+                    Move In
+                  </LoadingButton>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
