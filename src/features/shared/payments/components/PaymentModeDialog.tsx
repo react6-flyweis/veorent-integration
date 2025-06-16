@@ -7,8 +7,11 @@ import orangeMoneyImg from "@/assets/images/orange-money.png";
 import { Button } from "@/components/ui/button";
 import { DialogTitle } from "@/components/ui/dialog";
 import { LoadingButton } from "@/components/ui/loading-button";
+import { useToast } from "@/hooks/useAlertToast";
 import { cn } from "@/lib/utils";
-import { useUserPreferenceStore } from "@/store/useUserPreferenceStore";
+import { useAuthStore } from "@/store/useAuthStore";
+
+import { MTNMoMoPayment } from "./MTNMoMoPayment";
 
 const paymentOptions = [
   {
@@ -18,7 +21,7 @@ const paymentOptions = [
   },
   {
     id: "mtn",
-    label: "MTN money",
+    label: "MTN momo",
     icon: mtnImg,
   },
   {
@@ -31,34 +34,73 @@ const paymentOptions = [
 export function PaymentModeDialog({ amount }: { amount: number | string }) {
   const [selected, setSelected] = useState("orange");
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
+  const [showMTNMoMoPayment, setShowMTNMoMoPayment] = useState(false);
   const navigate = useNavigate();
-  const { userType } = useUserPreferenceStore();
+  const user = useAuthStore((store) => store.user);
+  const { showToast } = useToast();
 
   // Format payment URL with user type prefix
-  const paymentSuccessUrl = userType
-    ? `/${userType}/payment/success`
-    : `/payment/success`;
+  const paymentSuccessUrl =
+    user?.userType === "PARTNER"
+      ? `/landlord/payment/success`
+      : `/tenant/payment/success`;
 
   const handlePayment = async () => {
+    if (selected === "mtn") {
+      setShowMTNMoMoPayment(true);
+      return;
+    }
+
     setIsPaymentProcessing(true);
     try {
-      // Simulate payment processing
+      // Simulate payment processing for other methods
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       navigate(paymentSuccessUrl, {
         state: {
           amount,
           paymentMethod: paymentOptions.find((p) => p.id === selected)?.label,
-          redirectUrl: userType ? `/${userType}` : "/",
+          // redirectUrl:
         },
       });
     } catch (error) {
       console.error("Payment failed:", error);
-      // Handle payment failure (e.g., show error message)
+      showToast("Payment failed. Please try again.", "error");
     } finally {
       setIsPaymentProcessing(false);
     }
   };
+
+  const handleMTNMoMoSuccess = (transactionId: string) => {
+    navigate(paymentSuccessUrl, {
+      state: {
+        amount,
+        paymentMethod: "MTN MoMo",
+        transactionId,
+      },
+    });
+  };
+
+  const handleMTNMoMoError = (error: string) => {
+    showToast(error, "error");
+    setShowMTNMoMoPayment(false);
+  };
+
+  const handleMTNMoMoCancel = () => {
+    setShowMTNMoMoPayment(false);
+  };
+
+  // Show MTN MoMo payment component
+  if (showMTNMoMoPayment) {
+    return (
+      <MTNMoMoPayment
+        amount={amount}
+        onPaymentSuccess={handleMTNMoMoSuccess}
+        onPaymentError={handleMTNMoMoError}
+        onCancel={handleMTNMoMoCancel}
+      />
+    );
+  }
 
   return (
     <div className="flex h-full max-h-[90vh] flex-col overflow-hidden">
