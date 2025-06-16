@@ -1,6 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router";
-import { AlertDialogTrigger } from "@radix-ui/react-alert-dialog";
 
 import {
   MultiStepper,
@@ -10,7 +9,7 @@ import {
   MultiStepperStep,
   type MultiStepperRef,
 } from "@/components/MultiStepper";
-import { AlertDialog } from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGoBack } from "@/hooks/useGoBack";
@@ -42,7 +41,7 @@ export default function ApplicationProcess() {
     // Check each step in order and return the first incomplete step
     if (!bookingData.applicationInfo) return 1; // ApplicationInfo
     if (!bookingData.currentAddress) return 2; // ResidentialHistory
-    if (!bookingData.employment) return 3; // EmploymentDetails
+    // if (!bookingData.employment) return 3; // EmploymentDetails
     if (!bookingData.otherIncome) return 4; // OtherIncome
     if (!bookingData.generalInformation) return 5; // GeneralInfo
     if (!bookingData.background) return 6; // BackgroundInfo
@@ -129,7 +128,7 @@ export default function ApplicationProcess() {
 
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="ghost" asChild>
+              <Button variant="ghost">
                 <span>Save & Finish Later</span>
               </Button>
             </AlertDialogTrigger>
