@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/useAuthStore";
 
 import { MTNMoMoPayment } from "./MTNMoMoPayment";
+import { OrangeMoneyPayment } from "./OrangeMoneyPayment";
 
 const paymentOptions = [
   {
@@ -35,6 +36,7 @@ export function PaymentModeDialog({ amount }: { amount: number | string }) {
   const [selected, setSelected] = useState("orange");
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
   const [showMTNMoMoPayment, setShowMTNMoMoPayment] = useState(false);
+  const [showOrangeMoneyPayment, setShowOrangeMoneyPayment] = useState(false);
   const navigate = useNavigate();
   const user = useAuthStore((store) => store.user);
   const { showToast } = useToast();
@@ -48,6 +50,11 @@ export function PaymentModeDialog({ amount }: { amount: number | string }) {
   const handlePayment = async () => {
     if (selected === "mtn") {
       setShowMTNMoMoPayment(true);
+      return;
+    }
+
+    if (selected === "orange") {
+      setShowOrangeMoneyPayment(true);
       return;
     }
 
@@ -90,6 +97,25 @@ export function PaymentModeDialog({ amount }: { amount: number | string }) {
     setShowMTNMoMoPayment(false);
   };
 
+  const handleOrangeMoneySuccess = (transactionId: string) => {
+    navigate(paymentSuccessUrl, {
+      state: {
+        amount,
+        paymentMethod: "Orange Money",
+        transactionId,
+      },
+    });
+  };
+
+  const handleOrangeMoneyError = (error: string) => {
+    showToast(error, "error");
+    setShowOrangeMoneyPayment(false);
+  };
+
+  const handleOrangeMoneyCancel = () => {
+    setShowOrangeMoneyPayment(false);
+  };
+
   // Show MTN MoMo payment component
   if (showMTNMoMoPayment) {
     return (
@@ -98,6 +124,18 @@ export function PaymentModeDialog({ amount }: { amount: number | string }) {
         onPaymentSuccess={handleMTNMoMoSuccess}
         onPaymentError={handleMTNMoMoError}
         onCancel={handleMTNMoMoCancel}
+      />
+    );
+  }
+
+  // Show Orange Money payment component
+  if (showOrangeMoneyPayment) {
+    return (
+      <OrangeMoneyPayment
+        amount={amount}
+        onPaymentSuccess={handleOrangeMoneySuccess}
+        onPaymentError={handleOrangeMoneyError}
+        onCancel={handleOrangeMoneyCancel}
       />
     );
   }
