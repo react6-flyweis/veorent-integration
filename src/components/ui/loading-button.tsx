@@ -1,6 +1,7 @@
 import { Loader2Icon } from "lucide-react";
+import { Slottable } from "radix-ui";
+
 import { Button, type ButtonProps } from "./button";
-import { Slottable } from "@radix-ui/react-slot";
 
 function LoadingButton({
   isLoading,

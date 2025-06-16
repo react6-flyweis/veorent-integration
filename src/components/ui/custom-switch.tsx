@@ -1,5 +1,6 @@
 import * as React from "react";
-import * as SwitchPrimitives from "@radix-ui/react-switch";
+import { Switch as SwitchPrimitives } from "radix-ui";
+
 import { cn } from "@/lib/utils";
 
 type CustomSwitchProps = React.ComponentPropsWithoutRef<
@@ -14,7 +15,7 @@ const CustomSwitch = React.forwardRef<
 >(({ className, variant = "default", ...props }, ref) => (
   <SwitchPrimitives.Root
     className={cn(
-      "peer focus-visible:ring-ring focus-visible:ring-offset-background inline-flex h-[24px] w-[48px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 relative",
+      "peer focus-visible:ring-ring focus-visible:ring-offset-background relative inline-flex h-[24px] w-[48px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
       variant === "colored"
         ? props.checked
           ? "bg-green-500"
@@ -35,7 +36,7 @@ const CustomSwitch = React.forwardRef<
     </span>
     <SwitchPrimitives.Thumb
       className={cn(
-        "pointer-events-none block h-[20px] w-[20px] rounded-full bg-white shadow-lg ring-0 transition-transform z-10",
+        "pointer-events-none z-10 block h-[20px] w-[20px] rounded-full bg-white shadow-lg ring-0 transition-transform",
         props.checked ? "translate-x-[24px]" : "translate-x-0",
       )}
     />
