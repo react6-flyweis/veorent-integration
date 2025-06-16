@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusIcon } from "lucide-react";
@@ -59,23 +59,11 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
   const { mutateAsync } = useUpdateProfileMutation();
   const { showToast } = useToast();
 
-  const [firstName, lastName] = useMemo(() => {
-    // if data has fullName split it into firstName and lastName
-    if (data.firstname && data.lastname) {
-      return [data.firstname, data.lastname];
-    }
-    if (data.fullName) {
-      const [first, last] = data.fullName.split(" ");
-      return [first, last];
-    }
-    return ["", ""];
-  }, [data]);
-
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
     defaultValues: {
-      firstName: firstName || "",
-      lastName: lastName || "",
+      firstName: data.firstname || "",
+      lastName: data.lastname || "",
       company: "",
       email: data.email || "",
       phone: data.mobileNumber || "",
@@ -90,7 +78,8 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
   async function onSubmit(values: AccountFormValues) {
     try {
       const updateData = {
-        fullName: `${values.firstName} ${values.lastName}`,
+        firstname: values.firstName,
+        lastname: values.lastName,
         mobileNumber: values.phone,
         email: values.email,
         addressDetails: {
