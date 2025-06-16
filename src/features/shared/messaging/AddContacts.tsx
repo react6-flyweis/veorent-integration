@@ -1,109 +1,183 @@
+import { useMemo } from "react";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
+
+import { Loader } from "@/components/Loader";
+import { PageTitle } from "@/components/PageTitle";
+import { useGetTenantsQuery } from "@/features/landlord/renters/api/queries";
+import { useGetLandlordsForUserQuery } from "@/features/tenant/api/queries";
+import { useMessaging } from "@/hooks/useMessaging";
+import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/store/useAuthStore";
+
+import { ChatAvatarImage } from "./components/ChatAvatarImage";
 import {
   ChatLayout,
   ChatLayoutSidebar,
   ChatLayoutMain,
   ChatLayoutHeader,
 } from "./components/ChatLayout";
-import { ChatAvatarImage } from "./components/ChatAvatarImage";
-import { PageTitle } from "@/components/PageTitle";
-import { cn } from "@/lib/utils";
-import { useUserPreferenceStore } from "@/store/useUserPreferenceStore";
 
 interface Contact {
+  id: string;
   name: string;
   description: string;
   avatar: string;
+  email: string;
+  originalData: IUser;
 }
 
-// Mock data for contacts organized by first letter
-const contactsByLetter: Record<string, Contact[]> = {
-  A: [
-    {
-      name: "Aheyenne Dias",
-      description: "Lorem Ipsum is simply dummy text",
-      avatar: "/avatars/ellen.jpg",
-    },
-    {
-      name: "Aincoln Geidt",
-      description: "Lorem Ipsum is simply dummy text",
-      avatar: "/avatars/talan.jpg",
-    },
-    {
-      name: "Aayna Torff",
-      description: "Lorem Ipsum is simply dummy text",
-      avatar: "/avatars/ashlynn.jpg",
-    },
-  ],
-  B: [
-    {
-      name: "Baylon Korsgaard",
-      description: "Lorem Ipsum is simply dummy text",
-      avatar: "/avatars/connor.jpg",
-    },
-  ],
-  C: [
-    {
-      name: "Cspen Siphron",
-      description: "Lorem Ipsum is simply dummy text",
-      avatar: "/avatars/josephine.jpg",
-    },
-    {
-      name: "Cianna Schleifer",
-      description: "Lorem Ipsum is simply dummy text",
-      avatar: "/avatars/dulce.jpg",
-    },
-    {
-      name: "Cheyenne Vetrovs",
-      description: "Lorem Ipsum is simply dummy text",
-      avatar: "/avatars/ellen.jpg",
-    },
-  ],
-  D: [
-    {
-      name: "Dandy Botosh",
-      description: "Lorem Ipsum is simply dummy text",
-      avatar: "/avatars/connor.jpg",
-    },
-    {
-      name: "Dheyenne Rosser",
-      description: "Lorem Ipsum is simply dummy text",
-      avatar: "/avatars/ashlynn.jpg",
-    },
-  ],
-};
-
 export default function AddContacts() {
-  const userPref = useUserPreferenceStore((state) => state.userType);
-  const handleContactSelect = (contact: Contact) => {
-    // Handle contact selection logic here
-    console.log("Selected contact:", contact);
+  const user = useAuthStore((store) => store.user);
+  const userPref = user?.userType;
+  const navigate = useNavigate();
+  const { createConversation } = useMessaging();
+
+  // Get tenants for landlord users
+  const { data: tenants = [], isLoading: tenantsLoading } = useGetTenantsQuery(
+    1,
+    100,
+  );
+
+  // Get landlords for tenant users
+  const { data: landlords = [], isLoading: landlordsLoading } =
+    useGetLandlordsForUserQuery();
+
+  const handleContactSelect = async (contact: Contact) => {
+    try {
+      // Create or get existing Firebase conversation
+      const conversationId = await createConversation(contact.id, {
+        name: contact.name,
+        avatar: contact.avatar,
+        email: contact.email,
+      });
+
+      // Navigate to messages with the conversation ID
+      navigate("/landlord/messages", {
+        state: {
+          conversationId,
+          selectedContact: contact,
+        },
+      });
+    } catch (error) {
+      console.error("Error creating conversation:", error);
+      toast.error("Failed to start conversation. Please try again.");
+    }
   };
+
+  // Transform data based on user type
+  const contacts: Contact[] = useMemo(() => {
+    if (userPref === "PARTNER") {
+      return tenants.map((tenant) => ({
+        id: tenant._id,
+        name:
+          tenant.fullName ||
+          `${tenant.userId?.firstname || ""} ${tenant.userId?.lastname || ""}`.trim(),
+        description:
+          `${tenant.propertyDetails?.streetAddress || ""}, ${tenant.propertyDetails?.unitNumber || ""}`.replace(
+            ", ",
+            "",
+          ),
+        avatar: tenant.userId?.image || "/assets/user.jpg",
+        email: tenant.userId?.email || "",
+        originalData: tenant.user, // Include original tenant data
+      }));
+    } else {
+      return landlords.map((landlord) => ({
+        id: landlord._id,
+        name:
+          `${landlord.firstname || ""} ${landlord.lastname || ""}`.trim() ||
+          landlord.fullName ||
+          "Landlord",
+        description: landlord.email || "",
+        avatar: landlord.image || "/assets/user.jpg",
+        email: landlord.email || "",
+        originalData: landlord, // Include original landlord data
+      }));
+    }
+  }, [userPref, tenants, landlords]);
+
+  // Group contacts by first letter
+  const contactsByLetter = useMemo(() => {
+    const grouped: Record<string, Contact[]> = {};
+
+    contacts.forEach((contact) => {
+      const firstLetter = contact.name.charAt(0).toUpperCase();
+      if (!grouped[firstLetter]) {
+        grouped[firstLetter] = [];
+      }
+      grouped[firstLetter].push(contact);
+    });
+
+    // Sort each group alphabetically
+    Object.keys(grouped).forEach((letter) => {
+      grouped[letter].sort((a, b) => a.name.localeCompare(b.name));
+    });
+
+    return grouped;
+  }, [contacts]);
+
+  const isLoading = userPref === "PARTNER" ? tenantsLoading : landlordsLoading;
+
+  if (isLoading) {
+    return (
+      <ChatLayout>
+        <ChatLayoutHeader className="mb-4">
+          <PageTitle
+            title={userPref === "PARTNER" ? "Renters" : "Landlords"}
+            className="mb-0"
+            withBack
+          />
+        </ChatLayoutHeader>
+        <ChatLayoutSidebar>
+          <div className="flex items-center justify-center py-8">
+            <Loader />
+          </div>
+        </ChatLayoutSidebar>
+        <ChatLayoutMain showOnMobile={false}>
+          <div className="flex h-full items-center justify-center bg-blue-50">
+            <div className="text-center text-gray-500"></div>
+          </div>
+        </ChatLayoutMain>
+      </ChatLayout>
+    );
+  }
 
   return (
     <ChatLayout>
       <ChatLayoutHeader className="mb-4">
         <PageTitle
-          title={userPref === "landlord" ? "Renters" : "Contacts"}
+          title={userPref === "PARTNER" ? "Renters" : "Landlords"}
           className="mb-0"
           withBack
         />
       </ChatLayoutHeader>
       <ChatLayoutSidebar>
         <div className="pr-4">
-          {Object.entries(contactsByLetter).map(([letter, contacts]) => (
-            <div key={letter} className="mb-2">
-              <div className="sticky top-0 bg-white">
-                <h2 className="text-lg font-bold text-gray-500">{letter}</h2>
-              </div>
-              {contacts.map((contact, idx) => (
-                <ContactItem
-                  key={idx}
-                  contact={contact}
-                  onClick={() => handleContactSelect(contact)}
-                />
-              ))}
+          {Object.keys(contactsByLetter).length === 0 ? (
+            <div className="flex items-center justify-center py-8 text-gray-500">
+              No {userPref === "PARTNER" ? "tenants" : "landlords"} found
             </div>
-          ))}
+          ) : (
+            Object.entries(contactsByLetter)
+              .sort(([a], [b]) => a.localeCompare(b))
+              .map(([letter, contacts]) => (
+                <div key={letter} className="mb-2">
+                  <div className="sticky top-0 bg-white">
+                    <h2 className="text-lg font-bold text-gray-500">
+                      {letter}
+                    </h2>
+                  </div>
+                  {contacts.map((contact) => (
+                    <ContactItem
+                      key={contact.id}
+                      contact={contact}
+                      onClick={() => handleContactSelect(contact)}
+                    />
+                  ))}
+                </div>
+              ))
+          )}
         </div>
       </ChatLayoutSidebar>
 
@@ -118,14 +192,14 @@ export default function AddContacts() {
 
 interface ContactItemProps {
   contact: Contact;
-  onClick?: () => void;
+  onClick?: (contact: Contact) => void;
   className?: string;
 }
 
 function ContactItem({ contact, onClick, className }: ContactItemProps) {
   return (
     <div
-      onClick={onClick}
+      onClick={() => onClick?.(contact)}
       className={cn(
         "flex cursor-pointer items-center space-x-3 rounded-lg border-b px-2 py-2 transition-colors hover:bg-blue-50",
         className,

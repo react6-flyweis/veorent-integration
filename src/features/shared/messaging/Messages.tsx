@@ -1,144 +1,79 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router";
+
+import { CreateButton } from "@/components/CreateButton";
+import { PageTitle } from "@/components/PageTitle";
+import { useMessaging } from "@/hooks/useMessaging";
+import { useAuthStore } from "@/store/useAuthStore";
+
 import {
   ChatLayout,
   ChatLayoutSidebar,
   ChatLayoutMain,
   ChatLayoutHeader,
 } from "./components/ChatLayout";
+import { ChatMain } from "./components/ChatMain";
 import { ChatSidebar, ChatSidebarContent } from "./components/ChatSidebar";
 import { ChatSidebarItem } from "./components/ChatSidebarItem";
-import { ChatMain } from "./components/ChatMain";
-import { PageTitle } from "@/components/PageTitle";
-import { CreateButton } from "@/components/CreateButton";
-import { Link } from "react-router";
-import { useUserPreferenceStore } from "@/store/useUserPreferenceStore";
-
-const conversations: IConversation[] = [
-  {
-    name: "Ellen Lambert",
-    message: "Hey! How's it going?",
-    time: "04:04AM",
-    avatar: "/avatars/ellen.jpg",
-    messages: [
-      {
-        sender: "them",
-        time: "01:15 PM",
-        content: "Hey! How's it going?",
-      },
-      {
-        sender: "me",
-        time: "01:16 PM",
-        content: "I'm doing great! How about you?",
-      },
-    ],
-  },
-  {
-    name: "Connor Frazier",
-    message: "What kind of music do you like?",
-    time: "08:56PM",
-    avatar: "/avatars/connor.jpg",
-    messages: [
-      {
-        sender: "them",
-        time: "01:15 PM",
-        content: "What kind of music do you like?",
-      },
-      {
-        sender: "me",
-        time: "01:16 PM",
-        content: "I enjoy a variety of music genres!",
-      },
-    ],
-  },
-  {
-    name: "Ashlynn Donin",
-    message: "Sounds good to me!",
-    time: "11:35PM",
-    avatar: "/avatars/ashlynn.jpg",
-    messages: [
-      {
-        sender: "them",
-        time: "01:15 PM",
-        content: "Sounds good to me!",
-      },
-      {
-        sender: "me",
-        time: "01:16 PM",
-        content: "Great! Let's do it.",
-      },
-    ],
-  },
-  {
-    name: "Dulce Botosh",
-    message: "Sounds good to me!",
-    time: "11:35PM",
-    avatar: "/avatars/dulce.jpg",
-    messages: [
-      {
-        sender: "them",
-        time: "01:15 PM",
-        content: "Sounds good to me!",
-      },
-      {
-        sender: "me",
-        time: "01:16 PM",
-        content: "Awesome! Looking forward to it.",
-      },
-    ],
-  },
-  {
-    name: "Talan Geidt",
-    message: "Sounds good to me!",
-    time: "11:35PM",
-    avatar: "/avatars/talan.jpg",
-    messages: [
-      {
-        sender: "them",
-        time: "01:15 PM",
-        content: "Sounds good to me!",
-      },
-      {
-        sender: "me",
-        time: "01:16 PM",
-        content: "Sure thing! Let's make it happen.",
-      },
-    ],
-  },
-  {
-    name: "Josephine Gordon",
-    message: "Sounds good to me!",
-    time: "11:35PM",
-    avatar: "/avatars/josephine.jpg",
-    messages: [
-      {
-        sender: "them",
-        time: "01:15 PM",
-        content: "Sounds good to me!",
-      },
-      {
-        sender: "me",
-        time: "01:16 PM",
-        content: "Definitely! Can't wait.",
-      },
-    ],
-  },
-];
 
 export default function Messages() {
-  const userPref = useUserPreferenceStore((state) => state.userType);
+  const user = useAuthStore((state) => state.user);
+  const location = useLocation();
+  const { conversations, loading } = useMessaging();
 
-  const [selectedChatIndex, setSelectedChatIndex] = useState(0);
+  const [selectedConversationId, setSelectedConversationId] = useState<
+    string | null
+  >(null);
   const [showMainChat, setShowMainChat] = useState(false);
-  const selectedChat = conversations[selectedChatIndex];
 
-  const handleChatSelect = (idx: number) => {
-    setSelectedChatIndex(idx);
-    // Show main chat in mobile/small container view
+  // Handle navigation from AddContacts
+  useEffect(() => {
+    if (location.state?.conversationId) {
+      setSelectedConversationId(location.state.conversationId);
+      setShowMainChat(true);
+    }
+  }, [location.state]);
+
+  const selectedConversation = conversations.find(
+    (conv) => conv.id === selectedConversationId,
+  );
+
+  const handleChatSelect = (conversationId: string) => {
+    setSelectedConversationId(conversationId);
     setShowMainChat(true);
   };
 
   const handleBackToSidebar = () => {
     setShowMainChat(false);
+  };
+
+  // Convert Firebase conversation to display format
+  const getConversationDisplayData = (
+    conversation: IConversation,
+  ): IChatDisplay | null => {
+    if (!user) return null;
+
+    const otherParticipantId = conversation.participants.find(
+      (id) => id !== user._id,
+    );
+
+    if (!otherParticipantId) return null;
+
+    const otherParticipant =
+      conversation.participantDetails[otherParticipantId];
+
+    return {
+      id: conversation.id,
+      name: otherParticipant?.name || "Unknown",
+      message: conversation.lastMessage?.content || "No messages yet",
+      time: conversation.lastMessage
+        ? new Date(conversation.lastMessage.timestamp).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+        : "",
+      avatar: otherParticipant?.avatar || "/assets/user.jpg",
+    };
   };
 
   return (
@@ -148,7 +83,7 @@ export default function Messages() {
           <PageTitle title="Message" className="mb-0 hidden @md:flex" />
           <Link to="add">
             <CreateButton
-              label={`Add ${userPref === "landlord" ? "Renters" : "Contacts"}`}
+              label={`Add ${user?.userType === "PARTNER" ? "Renters" : "Contacts"}`}
             />
           </Link>
         </div>
@@ -156,23 +91,46 @@ export default function Messages() {
       <ChatLayoutSidebar showOnMobile={!showMainChat}>
         <ChatSidebar>
           <ChatSidebarContent>
-            {conversations.map((chat, idx) => (
-              <ChatSidebarItem
-                key={idx}
-                chat={chat}
-                isSelected={selectedChatIndex === idx}
-                onClick={() => handleChatSelect(idx)}
-              />
-            ))}
+            {loading ? (
+              <div className="flex items-center justify-center py-8">
+                <div className="text-gray-500">Loading conversations...</div>
+              </div>
+            ) : conversations.length === 0 ? (
+              <div className="flex items-center justify-center py-8">
+                <div className="text-gray-500">No conversations yet</div>
+              </div>
+            ) : (
+              conversations.map((conversation) => {
+                const displayData = getConversationDisplayData(conversation);
+                if (!displayData) return null;
+
+                return (
+                  <ChatSidebarItem
+                    key={conversation.id}
+                    chat={displayData}
+                    isSelected={selectedConversationId === conversation.id}
+                    onClick={() => handleChatSelect(conversation.id)}
+                  />
+                );
+              })
+            )}
           </ChatSidebarContent>
         </ChatSidebar>
       </ChatLayoutSidebar>
 
       <ChatLayoutMain showOnMobile={showMainChat}>
-        <ChatMain
-          selectedChat={selectedChat}
-          onBackClick={handleBackToSidebar}
-        />
+        {selectedConversation ? (
+          <ChatMain
+            selectedChat={selectedConversation}
+            onBackClick={handleBackToSidebar}
+          />
+        ) : (
+          <div className="flex h-full items-center justify-center bg-gray-50">
+            <div className="text-center text-gray-500">
+              Select a conversation to start messaging
+            </div>
+          </div>
+        )}
       </ChatLayoutMain>
     </ChatLayout>
   );

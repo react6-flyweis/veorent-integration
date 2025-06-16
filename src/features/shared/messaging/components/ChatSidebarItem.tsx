@@ -1,8 +1,9 @@
 import { cn } from "@/lib/utils";
+
 import { ChatAvatarImage } from "./ChatAvatarImage";
 
 interface ChatSidebarItemProps {
-  chat: IConversation;
+  chat: IChatDisplay;
   isSelected?: boolean;
   onClick?: () => void;
   className?: string;

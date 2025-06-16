@@ -1,9 +1,11 @@
-import { ChatAvatarImage } from "./ChatAvatarImage";
-import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
+
+import { ChatAvatarImage } from "./ChatAvatarImage";
+
 interface ChatHeaderProps {
-  chat: IConversation;
+  chat: IChatDisplay;
   onBackClick?: () => void;
 }
 

@@ -1,17 +1,34 @@
+import { useState, useRef } from "react";
+import { Paperclip, Mic, Send } from "lucide-react";
+import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Paperclip, Mic, Send } from "lucide-react";
-import { useState, useRef } from "react";
+import { useMessaging } from "@/hooks/useMessaging";
 
-export function ChatToolbar() {
+interface ChatToolbarProps {
+  conversationId: string;
+}
+
+export function ChatToolbar({ conversationId }: ChatToolbarProps) {
   const [message, setMessage] = useState("");
+  const [sending, setSending] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { sendMessage } = useMessaging();
 
-  const handleSendMessage = () => {
-    if (!message.trim()) return;
-    // TODO: Implement message sending logic
-    console.log("Sending message:", message);
-    setMessage("");
+  const handleSendMessage = async () => {
+    if (!message.trim() || sending) return;
+
+    setSending(true);
+    try {
+      await sendMessage(conversationId, message.trim());
+      setMessage("");
+    } catch (error) {
+      console.error("Error sending message:", error);
+      toast.error("Failed to send message. Please try again.");
+    } finally {
+      setSending(false);
+    }
   };
 
   const handleFileSelect = () => {
@@ -34,7 +51,7 @@ export function ChatToolbar() {
   };
 
   return (
-    <div className="border-t p-3 flex items-center space-x-2">
+    <div className="flex items-center space-x-2 border-t p-3">
       <input
         type="file"
         ref={fileInputRef}
@@ -43,7 +60,7 @@ export function ChatToolbar() {
         multiple
       />
       <Button variant="ghost" size="icon" onClick={handleFileSelect}>
-        <Paperclip className="w-5 h-5" />
+        <Paperclip className="h-5 w-5" />
       </Button>
       <Input
         value={message}
@@ -53,15 +70,15 @@ export function ChatToolbar() {
         className="flex-1 rounded-full"
       />
       <Button variant="ghost" size="icon">
-        <Mic className="w-5 h-5" />
+        <Mic className="h-5 w-5" />
       </Button>
       <Button
         variant="ghost"
         size="icon"
         onClick={handleSendMessage}
-        disabled={!message.trim()}
+        disabled={!message.trim() || sending}
       >
-        <Send className="w-5 h-5" />
+        <Send className="h-5 w-5" />
       </Button>
     </div>
   );
