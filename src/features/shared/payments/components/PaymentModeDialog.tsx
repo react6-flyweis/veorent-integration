@@ -19,6 +19,7 @@ const paymentOptions = [
     id: "card",
     label: "Card",
     icon: cardImg,
+    disabled: true, // Card payment is disabled for now
   },
   {
     id: "mtn",
@@ -163,6 +164,7 @@ export function PaymentModeDialog({ amount }: { amount: number | string }) {
             <Button
               size="sm"
               variant={selected === method.id ? "default" : "outline"}
+              disabled={method.disabled}
               className={cn(
                 "rounded-full text-xs",
                 selected === method.id && "bg-green-500",
