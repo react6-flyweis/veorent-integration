@@ -36,10 +36,7 @@ const permissionsSchema = z.object({
   occupancyLimit: z.boolean({
     required_error: "Please specify if there is an occupancy limit",
   }),
-  occupancyCount: z
-    .number()
-    .min(1, "Occupancy count must be at least 1")
-    .optional(),
+  occupancyCount: z.number().optional(),
 });
 
 type PermissionsFormValues = z.infer<typeof permissionsSchema>;
