@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Loader2, Phone, AlertCircle, CheckCircle } from "lucide-react";
+import { toast } from "sonner";
 
 import mtnImg from "@/assets/images/mtn.png";
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/useAlertToast";
 import {
   validateMTNMoMoPhoneNumber,
   formatMTNMoMoAmount,
@@ -54,8 +54,6 @@ export function MTNMoMoPayment({
   const [selectedCountry, setSelectedCountry] = useState("UG");
   const [selectedCurrency, setSelectedCurrency] = useState("UGX");
   const [phoneNumber, setPhoneNumber] = useState("");
-
-  const { showToast } = useToast();
 
   // Validate phone number in real-time
   const phoneValidation = phoneNumber
@@ -145,7 +143,7 @@ export function MTNMoMoPayment({
           if (status === "successful") {
             setPaymentStatus("success");
             setStatusMessage("Payment completed successfully!");
-            showToast("Payment successful!", "success");
+            toast.success("Payment successful!");
             onPaymentSuccess(txnId);
             return;
           } else if (status === "failed") {

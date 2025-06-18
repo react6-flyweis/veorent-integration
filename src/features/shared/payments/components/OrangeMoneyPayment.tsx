@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Loader2, Phone, AlertCircle, CheckCircle, Shield } from "lucide-react";
+import { toast } from "sonner";
 
 import orangeMoneyImg from "@/assets/images/orange-money.png";
 import { Button } from "@/components/ui/button";
@@ -19,7 +20,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useToast } from "@/hooks/useAlertToast";
 import {
   validateOrangeMoneyPhoneNumber,
   formatOrangeMoneyAmount,
@@ -56,7 +56,6 @@ export function OrangeMoneyPayment({
   const [currentTransaction, setCurrentTransaction] = useState<string | null>(
     null,
   );
-  const { showToast } = useToast();
 
   const selectedCountry = ORANGE_MONEY_COUNTRIES.find(
     (country) => country.code === formData.countryCode,
@@ -120,7 +119,7 @@ export function OrangeMoneyPayment({
       // If payment is immediately successful
       if (transactionData.status === "SUCCESS") {
         setPaymentStatus("success");
-        showToast("Payment completed successfully!", "success");
+        toast.success("Payment completed successfully!");
         onPaymentSuccess(transactionData.txnid);
         return;
       }
@@ -132,17 +131,16 @@ export function OrangeMoneyPayment({
           transactionData.confirmtxnmessage ||
           transactionData.inittxnmessage ||
           "Payment failed";
-        showToast(errorMessage, "error");
+        toast.error(errorMessage);
         onPaymentError(errorMessage);
         return;
       }
 
       // If payment is pending, start polling for status
       if (transactionData.status === "PENDING") {
-        showToast(
+        toast.info(
           transactionData.inittxnmessage ||
             "Please confirm the payment on your phone",
-          "info",
         );
         await pollPaymentStatus(transactionData.payToken);
       }
@@ -151,7 +149,7 @@ export function OrangeMoneyPayment({
       setPaymentStatus("error");
       const errorMessage =
         error instanceof Error ? error.message : "Payment failed";
-      showToast(errorMessage, "error");
+      toast.error(errorMessage);
       onPaymentError(errorMessage);
     } finally {
       setIsProcessing(false);
@@ -176,7 +174,7 @@ export function OrangeMoneyPayment({
 
       if (statusData.status === "SUCCESS") {
         setPaymentStatus("success");
-        showToast("Payment completed successfully!", "success");
+        toast.success("Payment completed successfully!");
         onPaymentSuccess(statusData.txnid);
       } else if (statusData.status === "FAILED") {
         setPaymentStatus("error");
@@ -184,18 +182,18 @@ export function OrangeMoneyPayment({
           statusData.confirmtxnmessage ||
           statusData.inittxnmessage ||
           "Payment failed";
-        showToast(errorMessage, "error");
+        toast.error(errorMessage);
         onPaymentError(errorMessage);
       } else {
         // Still pending after polling timeout
         setPaymentStatus("error");
-        showToast("Payment confirmation timeout. Please try again.", "error");
+        toast.error("Payment confirmation timeout. Please try again.");
         onPaymentError("Payment confirmation timeout");
       }
     } catch (error) {
       console.error("Payment status polling error:", error);
       setPaymentStatus("error");
-      showToast("Failed to check payment status", "error");
+      toast.error("Failed to check payment status");
       onPaymentError("Failed to check payment status");
     }
   };
