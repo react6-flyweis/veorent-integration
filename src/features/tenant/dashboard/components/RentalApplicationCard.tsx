@@ -23,7 +23,7 @@ export function RentalApplicationCard({
   // Determine title and action text based on payment status
   const isPaid = latestBooking?.paymentStatus === "Paid";
   const title = isPaid ? "Rental Booked" : "Rental Application";
-  const actionText = isPaid ? "View Booking" : "Finish My Application";
+  const actionText = isPaid ? "Booked" : "Finish My Application";
   const actionUrl = isPaid ? "#" : `/tenant/applying/${latestBooking?._id}`;
 
   return (
