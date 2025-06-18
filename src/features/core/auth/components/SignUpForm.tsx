@@ -16,9 +16,11 @@ import { LoadingButton } from "@/components/ui/loading-button";
 import { useUserPreferenceStore } from "@/store/useUserPreferenceStore";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 
+import { useRegisterTenantMutation } from "../api/mutation";
+
 const signUpSchema = z.object({
   fName: z.string().min(2, "First name is required."),
-  lName: z.string().optional(),
+  lName: z.string().min(2, "Last name is required."),
   email: z.string().email("Enter a valid email"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
@@ -29,6 +31,7 @@ export function SignUpForm() {
   const { userType } = useUserPreferenceStore();
   const navigate = useNavigate();
   const { state } = useLocation();
+  const { mutateAsync } = useRegisterTenantMutation();
 
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
@@ -38,18 +41,25 @@ export function SignUpForm() {
     },
   });
 
-  const onSubmit = (data: SignUpFormValues) => {
-    if (userType === "landlord") {
-      return navigate("/signup-landlord", {
-        state: {
-          ...data,
-          ...state,
-        },
-      });
-    }
+  const onSubmit = async (data: SignUpFormValues) => {
     try {
-      // console.debug("SignUp Data:", data);
-      navigate("/tenant/search");
+      if (userType === "landlord") {
+        return navigate("/signup-landlord", {
+          state: {
+            ...data,
+            ...state,
+          },
+        });
+      } else {
+        await mutateAsync({
+          firstname: data.fName,
+          lastname: data.lName,
+          email: data.email,
+          password: data.password,
+          confirmPassword: data.password,
+        });
+        navigate("/tenant/search");
+      }
     } catch (error) {
       form.setError("root", {
         message: getErrorMessage(error),

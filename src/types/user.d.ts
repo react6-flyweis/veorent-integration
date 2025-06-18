@@ -82,3 +82,17 @@ interface INewLandlordUser {
   rentalProcessId: string;
   referralCode?: string; // Optional, if not provided, will be handled in the backend
 }
+
+interface INewTenantUser {
+  firstname: string;
+  lastname: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+interface IRegisterResponse {
+  status: number;
+  data: string; // jwt token
+  savedUser: IUser;
+}
