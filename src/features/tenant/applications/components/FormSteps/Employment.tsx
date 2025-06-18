@@ -39,9 +39,9 @@ import { EmployerSummaryCard } from "../EmploymentSummaryCard";
 const employerDetailsSchema = z
   .object({
     currentEmployer: employerSchema.optional(),
-    noCurrent: z.boolean().optional(),
+    noCurrent: z.boolean(),
     pastEmployer: employerSchema.optional(),
-    noPast: z.boolean().optional(),
+    noPast: z.boolean(),
   })
   .superRefine((data, ctx) => {
     if (!data.noCurrent && !data.currentEmployer) {
@@ -134,8 +134,8 @@ export function EmploymentDetails({
               bookingData.pastEmployment.employemntReferenceNumber,
           }
         : undefined,
-      noCurrent: !bookingData?.employment,
-      noPast: bookingData?.employment?.pastemployemntNotApplicable ?? false,
+      noCurrent: !bookingData?.employment || false,
+      noPast: bookingData?.employment?.pastemployemntNotApplicable || false,
     },
   });
 
@@ -155,21 +155,18 @@ export function EmploymentDetails({
   const submitHandler = async (data: FormSchemaType) => {
     try {
       await mutateAsync({
-        employment: data.noCurrent
-          ? undefined
-          : {
-              currentEmployer: false,
-              employer: data.currentEmployer?.employerName || "",
-              occuption: data.currentEmployer?.position || "",
-              month: data.currentEmployer?.monthStarted || "",
-              year: data.currentEmployer?.yearStarted || "",
-              income: data.currentEmployer?.monthlyIncome || "",
-              employemntReferenceName:
-                data.currentEmployer?.referenceName || "",
-              employemntReferenceNumber:
-                data.currentEmployer?.referenceNumber || "",
-              pastemployemntNotApplicable: data.noPast || false,
-            },
+        employment: {
+          currentEmployer: data.noCurrent,
+          employer: data.currentEmployer?.employerName || "",
+          occuption: data.currentEmployer?.position || "",
+          month: data.currentEmployer?.monthStarted || "",
+          year: data.currentEmployer?.yearStarted || "",
+          income: data.currentEmployer?.monthlyIncome || "",
+          employemntReferenceName: data.currentEmployer?.referenceName || "",
+          employemntReferenceNumber:
+            data.currentEmployer?.referenceNumber || "",
+          pastemployemntNotApplicable: data.noPast || false,
+        },
         pastEmployment: data.noPast
           ? undefined
           : {

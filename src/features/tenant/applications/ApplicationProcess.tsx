@@ -41,7 +41,7 @@ export default function ApplicationProcess() {
     // Check each step in order and return the first incomplete step
     if (!bookingData.applicationInfo) return 1; // ApplicationInfo
     if (!bookingData.currentAddress) return 2; // ResidentialHistory
-    // if (!bookingData.employment) return 3; // EmploymentDetails
+    if (!bookingData.employment) return 3; // EmploymentDetails
     if (!bookingData.otherIncome) return 4; // OtherIncome
     if (!bookingData.generalInformation) return 5; // GeneralInfo
     if (!bookingData.background) return 6; // BackgroundInfo
