@@ -4,6 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 // Social media icons
+import {
+  FacebookShareButton,
+  LinkedinShareButton,
+  TwitterShareButton,
+} from "react-share";
 import { Twitter, Facebook, Linkedin } from "lucide-react";
 
 import referralCycleImage from "./assets/referral-cycle.png";
@@ -60,34 +65,38 @@ export default function Referral() {
         <div className="mb-6 flex flex-col items-center gap-2 @lg:flex-row">
           <p className="text-sm">SHARE YOUR LINK ON:</p>
           <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="icon"
-              className="rounded-full bg-black text-white hover:bg-gray-800"
+            <TwitterShareButton url={referralLink} title="Check out VeoRent!">
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-full bg-black text-white hover:bg-gray-800"
+              >
+                <Twitter className="h-4 w-4" />
+              </Button>
+            </TwitterShareButton>
+            <FacebookShareButton url={referralLink}>
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-full bg-blue-600 text-white hover:bg-blue-700"
+              >
+                <Facebook className="h-4 w-4" />
+              </Button>
+            </FacebookShareButton>
+            <LinkedinShareButton
+              url={referralLink}
+              title="VeoRent"
+              summary="Your go-to rental solution."
+              source="VeoRent"
             >
-              <Twitter className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              className="rounded-full bg-blue-600 text-white hover:bg-blue-700"
-            >
-              <Facebook className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              className="rounded-full bg-sky-500 text-white hover:bg-sky-600"
-            >
-              <Twitter className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              className="rounded-full bg-blue-700 text-white hover:bg-blue-800"
-            >
-              <Linkedin className="h-4 w-4" />
-            </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-full bg-blue-700 text-white hover:bg-blue-800"
+              >
+                <Linkedin className="h-4 w-4" />
+              </Button>
+            </LinkedinShareButton>
           </div>
         </div>
 
