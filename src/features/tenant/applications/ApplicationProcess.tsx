@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from "react";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 
 import {
   MultiStepper,
@@ -33,6 +33,14 @@ export default function ApplicationProcess() {
   const goBack = useGoBack();
   const stepperRef = useRef<MultiStepperRef>(null);
   const [isApplicationSavedOpen, setIsApplicationSavedOpen] = useState(false);
+  const navigate = useNavigate();
+
+  // Redirect if payment is already completed
+  useEffect(() => {
+    if (bookingData?.paymentStatus === "Paid") {
+      navigate("/tenant/dashboard", { replace: true });
+    }
+  }, [bookingData, navigate]);
 
   // Function to determine the current step based on form completion status
   const getCurrentStep = useCallback(() => {
