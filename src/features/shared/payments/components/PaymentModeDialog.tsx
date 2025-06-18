@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
 import cardImg from "@/assets/images/card.png";
 import mtnImg from "@/assets/images/mtn.png";
@@ -7,7 +8,6 @@ import orangeMoneyImg from "@/assets/images/orange-money.png";
 import { Button } from "@/components/ui/button";
 import { DialogTitle } from "@/components/ui/dialog";
 import { LoadingButton } from "@/components/ui/loading-button";
-import { useToast } from "@/hooks/useAlertToast";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/useAuthStore";
 
@@ -35,20 +35,23 @@ const paymentOptions = [
 
 export function PaymentModeDialog({
   amount,
-  defaultPaymentMethod = "orange",
+  defaultPaymentMethod,
   onSuccess,
 }: {
   amount: number | string;
   defaultPaymentMethod?: "card" | "mtn" | "orange";
   onSuccess?: (transactionId?: string) => void;
 }) {
-  const [selected, setSelected] = useState(defaultPaymentMethod);
+  const [selected, setSelected] = useState(defaultPaymentMethod || "orange");
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
-  const [showMTNMoMoPayment, setShowMTNMoMoPayment] = useState(false);
-  const [showOrangeMoneyPayment, setShowOrangeMoneyPayment] = useState(false);
+  const [showMTNMoMoPayment, setShowMTNMoMoPayment] = useState(
+    defaultPaymentMethod === "mtn",
+  );
+  const [showOrangeMoneyPayment, setShowOrangeMoneyPayment] = useState(
+    defaultPaymentMethod === "orange",
+  );
   const navigate = useNavigate();
   const user = useAuthStore((store) => store.user);
-  const { showToast } = useToast();
 
   // Format payment URL with user type prefix
   const paymentSuccessUrl =
@@ -85,7 +88,7 @@ export function PaymentModeDialog({
       }
     } catch (error) {
       console.error("Payment failed:", error);
-      showToast("Payment failed. Please try again.", "error");
+      toast.error("Payment failed. Please try again.");
     } finally {
       setIsPaymentProcessing(false);
     }
@@ -106,7 +109,7 @@ export function PaymentModeDialog({
   };
 
   const handleMTNMoMoError = (error: string) => {
-    showToast(error, "error");
+    toast.error(error);
     setShowMTNMoMoPayment(false);
   };
 
@@ -129,7 +132,7 @@ export function PaymentModeDialog({
   };
 
   const handleOrangeMoneyError = (error: string) => {
-    showToast(error, "error");
+    toast.error(error);
     setShowOrangeMoneyPayment(false);
   };
 

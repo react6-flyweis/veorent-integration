@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router";
+import { useParams, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SwissFrancIcon } from "lucide-react";
 import { z } from "zod";
@@ -20,6 +20,7 @@ import {
   CardExpiryInput,
   CardNumberInput,
 } from "@/components/ui/card-input";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -29,7 +30,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { LoadingButton } from "@/components/ui/loading-button";
+import { PaymentModeDialog } from "@/features/shared/payments/components/PaymentModeDialog";
 
 import { useUpdateBookingMutation } from "../../api/mutation";
 
@@ -46,40 +47,43 @@ type PaymentFormType = z.infer<typeof PaymentSchema>;
 const SCREENING_AMOUNT = 55.0; // Example amount, can be dynamic
 
 export function PaymentFee() {
-  const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
-  const navigate = useNavigate();
+  const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<
+    "card" | "mtn" | "orange"
+  >("orange");
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { mutateAsync: updateBooking } = useUpdateBookingMutation(id || "");
 
   const form = useForm<PaymentFormType>({
     resolver: zodResolver(PaymentSchema),
   });
 
-  const onSubmit = (data: PaymentFormType) => {
+  const onSubmit = () => {
     // Form submission for card payment if needed
     // This would handle the card payment flow
-    console.log("Form submitted with data:", data);
+    // Process card payment data
   };
 
-  const handlePayment = async () => {
-    setIsPaymentProcessing(true);
-    try {
-      // Simulate a successful payment
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+  const handlePaymentMethodSelect = (method: "card" | "mtn" | "orange") => {
+    setSelectedPaymentMethod(method);
+    setIsPaymentDialogOpen(true);
+  };
 
-      // Update the booking status and payment status
+  const handlePaymentSuccess = async () => {
+    try {
       await updateBooking({
         paymentStatus: "Paid",
       });
-
       navigate("/tenant/payment/success", {
-        state: { amount: SCREENING_AMOUNT, redirectUrl: "/tenant" },
+        state: {
+          amount: SCREENING_AMOUNT,
+          redirectUrl: "/tenant/dashboard",
+        },
       });
     } catch (error) {
-      console.error("Payment failed:", error);
-      // Handle payment failure (e.g., show error message)
-    } finally {
-      setIsPaymentProcessing(false);
+      // Handle error, maybe show a toast
+      console.error("Failed to update payment status:", error);
     }
   };
 
@@ -106,32 +110,46 @@ export function PaymentFee() {
           </div>
 
           <div className="space-y-2">
-            <LoadingButton
-              type="button"
-              onClick={handlePayment}
-              className="w-full"
-              isLoading={isPaymentProcessing}
+            <Dialog
+              open={isPaymentDialogOpen}
+              onOpenChange={setIsPaymentDialogOpen}
             >
-              <img
-                src={orangePayIcon}
-                alt="orange pay"
-                className="size-5 rounded-full"
-              />
-              Orange money pay
-            </LoadingButton>
-            <LoadingButton
-              type="button"
-              onClick={handlePayment}
-              className="w-full"
-              isLoading={isPaymentProcessing}
-            >
-              <img
-                src={mtnIcon}
-                alt="mtn money"
-                className="size-5 rounded-full"
-              />
-              MTN money pay
-            </LoadingButton>
+              <DialogTrigger asChild>
+                <Button
+                  type="button"
+                  onClick={() => handlePaymentMethodSelect("orange")}
+                  className="w-full"
+                >
+                  <img
+                    src={orangePayIcon}
+                    alt="orange pay"
+                    className="size-5 rounded-full"
+                  />
+                  Orange money pay
+                </Button>
+              </DialogTrigger>
+              <DialogTrigger asChild>
+                <Button
+                  type="button"
+                  onClick={() => handlePaymentMethodSelect("mtn")}
+                  className="w-full"
+                >
+                  <img
+                    src={mtnIcon}
+                    alt="mtn money"
+                    className="size-5 rounded-full"
+                  />
+                  MTN money pay
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-md">
+                <PaymentModeDialog
+                  amount={SCREENING_AMOUNT}
+                  defaultPaymentMethod={selectedPaymentMethod}
+                  onSuccess={handlePaymentSuccess}
+                />
+              </DialogContent>
+            </Dialog>
           </div>
 
           <div className="relative flex items-center justify-center py-5">
