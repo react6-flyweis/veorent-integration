@@ -21,10 +21,10 @@ export interface IUpdateMoveRequestData {
 
 // Function to fetch user by email
 export const fetchUserByEmail = async (email: string): Promise<IUser> => {
-  const response = await axiosLandlord.get<IResponse<IUser>>(
+  const response = await axiosLandlord.get<IResponse<IUser[]>>(
     `/profile/filter?email=${email}`,
   );
-  return response.data.data;
+  return response.data.data[0];
 };
 
 export const useCreateLeadMutation = () => {

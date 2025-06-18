@@ -94,4 +94,5 @@ interface ITenantCreateData {
     incomeProof: string; // URL to the income proof document
     otherDoc?: string; // Optional URL to any other document
   };
+  propertyId: string; // ID of the property
 }

@@ -29,28 +29,43 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useToast } from "@/hooks/useAlertToast";
+import { useGoBack } from "@/hooks/useGoBack";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
+import { useCreateTenantMutation, fetchUserByEmail } from "./api/mutations";
+import uploadDocIcon from "./assets/documents.png";
 import leaseIcon from "./assets/lease.png";
 import personalInfoIcon from "./assets/personal-info.png";
 import villaIcon from "./assets/villa.png";
-import uploadDocIcon from "./assets/documents.png";
-import { useGoBack } from "@/hooks/useGoBack";
-
-
 import { PropertyTypeSelector } from "../components/PropertyTypeSelector";
-import { useCreateTenantMutation, fetchUserByEmail } from "./api/mutations";
-import { getErrorMessage } from "@/utils/getErrorMessage";
-import { useToast } from "@/hooks/useAlertToast";
+import { PropertiesSelector } from "../dashboard/components/PropertiesSelector";
 
 const formSchema = z
   .object({
     fullName: z.string().min(1, "Full name is required"),
-    email: z.string().email("Invalid email address"),
+    email: z
+      .string()
+      .email("Invalid email address")
+      .refine(
+        async (email) => {
+          try {
+            await fetchUserByEmail(email);
+            return true;
+          } catch {
+            return false;
+          }
+        },
+        {
+          message: "User not found. Please check the email address.",
+        },
+      ),
     phone: z
       .string()
       .min(10, "Phone number must be at least 10 digits")
       .max(15, "Phone number is too long"),
     rentAmount: z.string().min(1, "Rent amount is required"),
+    propertyId: z.string().min(1, "Please select a property"),
     propertyType: z.string().min(1, "Please select a property type"),
     // Property Address fields
     streetAddress: z.string().min(1, "Street address is required"),
@@ -119,16 +134,8 @@ export default function AddTenant() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      // First, fetch the user ID by email
-      let user: IUser;
-      try {
-        user = await fetchUserByEmail(values.email);
-      } catch {
-        form.setError("root", {
-          message: "User not found. Please check the email address.",
-        });
-        return;
-      }
+      // Fetch the user ID by email (validation already ensures user exists)
+      const user = await fetchUserByEmail(values.email);
 
       const valuesTOSubmit: ITenantCreateData = {
         ...values,
@@ -308,6 +315,7 @@ export default function AddTenant() {
                   "leaseTerm",
                   "leaseStartDate",
                   "leaseEndDate",
+                  "propertyId",
                 ])
               }
             >
@@ -323,6 +331,23 @@ export default function AddTenant() {
                     <h2 className="text-xl font-medium">Property Address</h2>
                   </div>
 
+                  <FormField
+                    control={form.control}
+                    name="propertyId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Select Property</FormLabel>
+                        <FormControl>
+                          <PropertiesSelector
+                            value={field.value || ""}
+                            onChange={field.onChange}
+                            placeholder="Choose a property"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <FormField
                     control={form.control}
                     name="streetAddress"
