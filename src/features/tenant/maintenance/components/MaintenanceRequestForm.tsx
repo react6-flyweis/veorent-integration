@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MicIcon } from "lucide-react";
 import * as z from "zod";
@@ -60,6 +61,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 export function MaintenanceRequestForm() {
   const { showToast } = useToast();
+  const navigate = useNavigate();
 
   const { mutateAsync: createMaintenanceRequest } =
     useCreateMaintenanceRequestMutation();
@@ -125,7 +127,7 @@ export function MaintenanceRequestForm() {
 
       await createMaintenanceRequest(requestData);
       showToast("Your Request created successfully", "success");
-      form.reset();
+      navigate("/tenant/maintenance");
     } catch (error) {
       form.setError("root", {
         message: getErrorMessage(error) || "Failed to create request",
