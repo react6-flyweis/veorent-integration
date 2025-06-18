@@ -35,7 +35,7 @@ const schema = z.object({
   currentRegion: z.string().min(1),
   currentZip: z.string().min(4),
 
-  leaseType: z.enum(["fixed", "month"]),
+  leaseType: z.enum(["Fixed Term", "Month-to-Month"]),
   leaseStart: z.date().optional(),
   leaseEnd: z.date().optional(),
 
@@ -45,7 +45,7 @@ const schema = z.object({
   newRegion: z.string().min(1),
   newZip: z.string().min(4),
 
-  newLeaseType: z.enum(["fixed", "month"]),
+  newLeaseType: z.enum(["Fixed Term", "Month-to-Month"]),
   newLeaseStart: z.date().optional(),
   newLeaseEnd: z.date().optional(),
 
@@ -67,8 +67,8 @@ export function BookMyMoveForm({
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
-      leaseType: "fixed",
-      newLeaseType: "fixed",
+      leaseType: "Fixed Term",
+      newLeaseType: "Fixed Term",
       isFlexible: "no",
       flexibilityDuration: "30m",
     },
@@ -173,11 +173,11 @@ export function BookMyMoveForm({
                   className="flex gap-4"
                 >
                   <FormItem className="flex items-center space-x-2">
-                    <RadioGroupItem value="fixed" />
+                    <RadioGroupItem value="Fixed Term" />
                     <FormLabel>Fixed Term</FormLabel>
                   </FormItem>
                   <FormItem className="flex items-center space-x-2">
-                    <RadioGroupItem value="month" />
+                    <RadioGroupItem value="Month-to-Month" />
                     <FormLabel>Month-to-Month</FormLabel>
                   </FormItem>
                 </RadioGroup>
@@ -193,7 +193,7 @@ export function BookMyMoveForm({
               <FormItem>
                 <FormLabel>Start Date</FormLabel>
                 <FormControl>
-                  <DateInput {...field} />
+                  <DateInput allowPastDates={false} {...field} />
                 </FormControl>
               </FormItem>
             )}
@@ -205,7 +205,7 @@ export function BookMyMoveForm({
               <FormItem>
                 <FormLabel>End Date</FormLabel>
                 <FormControl>
-                  <DateInput {...field} />
+                  <DateInput allowPastDates={false} {...field} />
                 </FormControl>
               </FormItem>
             )}
@@ -309,11 +309,11 @@ export function BookMyMoveForm({
                     className="flex gap-4"
                   >
                     <FormItem className="flex items-center space-x-2">
-                      <RadioGroupItem value="fixed" />
+                      <RadioGroupItem value="Fixed Term" />
                       <FormLabel>Fixed Term</FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-x-2">
-                      <RadioGroupItem value="month" />
+                      <RadioGroupItem value="Month-to-Month" />
                       <FormLabel>Month-to-Month</FormLabel>
                     </FormItem>
                   </RadioGroup>
@@ -328,7 +328,7 @@ export function BookMyMoveForm({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Start Date</FormLabel>
-                  <DateInput {...field} />
+                  <DateInput allowPastDates={false} {...field} />
                 </FormItem>
               )}
             />
@@ -338,7 +338,7 @@ export function BookMyMoveForm({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>End Date</FormLabel>
-                  <DateInput {...field} />
+                  <DateInput allowPastDates={false} {...field} />
                 </FormItem>
               )}
             />
@@ -351,14 +351,14 @@ export function BookMyMoveForm({
             <img src={fastIcon} alt="Fast Icon" className="max-h-8 max-w-8" />
             <h3 className="text-lg font-semibold">Move In Date & Time</h3>
           </div>
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid gap-4 @md:grid-cols-2 @lg:grid-cols-4">
             <FormField
               name="moveStart"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Start Date</FormLabel>
-                  <DateInput {...field} />
+                  <DateInput allowPastDates={false} {...field} />
                 </FormItem>
               )}
             />
@@ -380,7 +380,7 @@ export function BookMyMoveForm({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>End Date</FormLabel>
-                  <DateInput {...field} />
+                  <DateInput allowPastDates={false} {...field} />
                 </FormItem>
               )}
             />
