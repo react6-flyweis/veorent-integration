@@ -1,6 +1,13 @@
-import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { MicIcon } from "lucide-react";
+import * as z from "zod";
+
+import accessIcon from "@/assets/icons/access.png";
+import infoIcon from "@/assets/icons/info.png";
+import FormErrors from "@/components/FormErrors";
+import { IconRound } from "@/components/IconRound";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormField,
@@ -10,8 +17,8 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
+import { ImageInput } from "@/components/ui/image-input";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
@@ -20,42 +27,110 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
-import { Card } from "@/components/ui/card";
-import { MicIcon } from "lucide-react";
-import { IconRound } from "@/components/IconRound";
-
-import accessIcon from "@/assets/icons/access.png";
-import infoIcon from "@/assets/icons/info.png";
-import { LoadingButton } from "@/components/ui/loading-button";
-import { cn } from "@/lib/utils";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/useAlertToast";
+import { cn } from "@/lib/utils";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+
+import { useUploadImageMutation } from "../../api/mutations";
+import { useCreateMaintenanceRequestMutation } from "../api/mutations";
+
+import type { IMaintenanceRequestCreateData } from "../api/mutations";
 
 const formSchema = z.object({
-  priority: z.string().min(1, "Select a priority"),
-  category: z.string().min(1, "Select a category"),
-  description: z.string().min(100).max(500),
+  priority: z.enum(["Emergency", "High", "Medium", "Low"], {
+    required_error: "Please select a priority",
+  }),
+  category: z.enum(["Appliances", "Electrical", "Pest Control", "Plumbing"], {
+    required_error: "Please select a category",
+  }),
+  description: z
+    .string()
+    .min(100, "Description must be at least 100 characters")
+    .max(500, "Description cannot exceed 500 characters"),
+  photos: z.array(z.instanceof(File)).optional(),
+  voiceMemo: z.instanceof(File).optional(),
   accessPermission: z.enum(["yes", "no"]),
   accessInstructions: z.string().max(1000).optional(),
   animals: z.enum(["yes", "no"]),
+  animalInstructions: z.string().max(1000).optional(),
 });
+
+type FormValues = z.infer<typeof formSchema>;
 
 export function MaintenanceRequestForm() {
   const { showToast } = useToast();
-  const form = useForm<z.infer<typeof formSchema>>({
+
+  const { mutateAsync: createMaintenanceRequest } =
+    useCreateMaintenanceRequestMutation();
+  const { mutateAsync: uploadImage } = useUploadImageMutation();
+
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      priority: "",
-      category: "",
+      priority: "Medium",
+      category: "Plumbing",
       description: "",
       accessPermission: "no",
       accessInstructions: "",
       animals: "no",
+      animalInstructions: "",
+      photos: [],
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data);
-    showToast("Your Request created successfully", "success");
+  async function onSubmit(data: FormValues) {
+    try {
+      // Handle photo uploads
+      let imageUrls: string[] = [];
+      if (data.photos && data.photos.length > 0) {
+        const filesToUpload: File[] = [];
+        const existingUrls: string[] = [];
+
+        // Separate files from existing URLs
+        data.photos.forEach((photo) => {
+          if (photo instanceof File) {
+            filesToUpload.push(photo);
+          } else if (typeof photo === "string") {
+            existingUrls.push(photo);
+          }
+        });
+
+        // Upload new files
+        if (filesToUpload.length > 0) {
+          const uploadPromises = filesToUpload.map(async (file) => {
+            const formData = new FormData();
+            formData.append("image", file);
+            const response = await uploadImage(formData);
+            return response.data.data[0].img;
+          });
+          const uploadedImageUrls = await Promise.all(uploadPromises);
+          imageUrls = [...existingUrls, ...uploadedImageUrls];
+        } else {
+          imageUrls = existingUrls;
+        }
+      }
+
+      const requestData: IMaintenanceRequestCreateData = {
+        priority: data.priority,
+        category: data.category,
+        desc: data.description,
+        image: imageUrls,
+        voiceMemo: undefined, // TODO: Implement voice memo upload
+        permissionToEnter: data.accessPermission === "yes",
+        permissionToEnterExplain: data.accessInstructions || "",
+        areThereAnimal: data.animals === "yes",
+        areThereAnimalExplain: data.animalInstructions || "",
+      };
+
+      await createMaintenanceRequest(requestData);
+      showToast("Your Request created successfully", "success");
+      form.reset();
+    } catch (error) {
+      form.setError("root", {
+        message: getErrorMessage(error) || "Failed to create request",
+      });
+    }
   }
 
   return (
@@ -75,9 +150,10 @@ export function MaintenanceRequestForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="low">Low</SelectItem>
-                  <SelectItem value="medium">Medium</SelectItem>
-                  <SelectItem value="high">High</SelectItem>
+                  <SelectItem value="Emergency">Emergency</SelectItem>
+                  <SelectItem value="High">High</SelectItem>
+                  <SelectItem value="Medium">Medium</SelectItem>
+                  <SelectItem value="Low">Low</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -99,10 +175,10 @@ export function MaintenanceRequestForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="plumbing">Plumbing</SelectItem>
-                  <SelectItem value="electrical">Electrical</SelectItem>
-                  <SelectItem value="pest">Pest Control</SelectItem>
-                  <SelectItem value="misc">Miscellaneous</SelectItem>
+                  <SelectItem value="Appliances">Appliances</SelectItem>
+                  <SelectItem value="Electrical">Electrical</SelectItem>
+                  <SelectItem value="Pest Control">Pest Control</SelectItem>
+                  <SelectItem value="Plumbing">Plumbing</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -134,10 +210,20 @@ export function MaintenanceRequestForm() {
           )}
         />
 
-        {/* Add Photo */}
-        <Card className="flex h-20 items-center justify-center border-2 border-dashed border-gray-300 p-4">
-          <p className="text-sm text-gray-500">CLICK OR DRAG TO UPLOAD</p>
-        </Card>
+        {/* Photos */}
+        <FormField
+          control={form.control}
+          name="photos"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Photos</FormLabel>
+              <FormControl>
+                <ImageInput multiple maxFiles={5} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         {/* Voice Memo */}
         <Button className="w-40" type="button">
@@ -179,28 +265,33 @@ export function MaintenanceRequestForm() {
                     <FormLabel className="text-sm">No</FormLabel>
                   </FormItem>
                 </RadioGroup>
+                <FormMessage />
               </FormItem>
             )}
           />
 
           {/* Access Instructions */}
-          <FormField
-            control={form.control}
-            name="accessInstructions"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Access Instructions (Optional)</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Provide access instructions..."
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>0/1000 characters</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {form.watch("accessPermission") === "yes" && (
+            <FormField
+              control={form.control}
+              name="accessInstructions"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Access Instructions</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Provide access instructions..."
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    0/{field.value?.length || 0}/1000 characters
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
         </div>
 
         {/* Additional Info */}
@@ -235,13 +326,44 @@ export function MaintenanceRequestForm() {
                     <FormLabel className="text-sm">No</FormLabel>
                   </FormItem>
                 </RadioGroup>
+                <FormMessage />
               </FormItem>
             )}
           />
+
+          {/* Animal Instructions */}
+          {form.watch("animals") === "yes" && (
+            <FormField
+              control={form.control}
+              name="animalInstructions"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Animal Details</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Please provide details about the animals..."
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    0/{field.value?.length || 0}/1000 characters
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+
+          <FormErrors errors={form.formState.errors} />
         </div>
 
         <div className="flex justify-center">
-          <LoadingButton type="submit" size="lg" className="w-4/5 @lg:w-3/5">
+          <LoadingButton
+            type="submit"
+            size="lg"
+            className="w-4/5 @lg:w-3/5"
+            isLoading={form.formState.isSubmitting}
+          >
             Submit
           </LoadingButton>
         </div>
