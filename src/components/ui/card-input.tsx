@@ -1,21 +1,22 @@
-import { useId, type ComponentProps, forwardRef } from "react";
+import { useId, type ComponentProps } from "react";
 import { usePaymentInputs } from "react-payment-inputs";
 import { CreditCardIcon, LockIcon, CalendarIcon } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-export const CardNumberInput = forwardRef<
-  HTMLInputElement,
-  ComponentProps<typeof Input>
->(({ className, onChange, onBlur, ...props }, ref) => {
+export const CardNumberInput = ({
+  className,
+  onChange,
+  onBlur,
+  ...props
+}: ComponentProps<typeof Input>) => {
   const id = useId();
   const { getCardNumberProps } = usePaymentInputs();
 
   return (
     <div className="relative">
       <Input
-        ref={ref}
         {...props}
         {...getCardNumberProps({ onChange, onBlur })}
         id={`card-number-${id}`}
@@ -27,14 +28,14 @@ export const CardNumberInput = forwardRef<
       </div>
     </div>
   );
-});
+};
 
-CardNumberInput.displayName = "CardNumberInput";
-
-export const CardCvcInput = forwardRef<
-  HTMLInputElement,
-  ComponentProps<typeof Input>
->(({ className, onChange, onBlur, ...props }) => {
+export const CardCvcInput = ({
+  className,
+  onChange,
+  onBlur,
+  ...props
+}: ComponentProps<typeof Input>) => {
   const id = useId();
   const { getCVCProps } = usePaymentInputs();
   const cvcProps = getCVCProps({ onChange, onBlur });
@@ -42,7 +43,6 @@ export const CardCvcInput = forwardRef<
   return (
     <div className="relative">
       <Input
-        //   ref={ref}
         {...props}
         {...cvcProps}
         id={`card-cvc-${id}`}
@@ -54,14 +54,14 @@ export const CardCvcInput = forwardRef<
       </div>
     </div>
   );
-});
+};
 
-CardCvcInput.displayName = "CardCvcInput";
-
-export const CardExpiryInput = forwardRef<
-  HTMLInputElement,
-  ComponentProps<typeof Input>
->(({ className, onChange, onBlur, ...props }) => {
+export const CardExpiryInput = ({
+  className,
+  onChange,
+  onBlur,
+  ...props
+}: ComponentProps<typeof Input>) => {
   const id = useId();
   const { getExpiryDateProps } = usePaymentInputs();
   const expiryProps = getExpiryDateProps({ onChange, onBlur });
@@ -69,7 +69,6 @@ export const CardExpiryInput = forwardRef<
   return (
     <div className="relative">
       <Input
-        //   ref={ref}
         {...props}
         {...expiryProps}
         id={`card-expiry-${id}`}
@@ -81,6 +80,4 @@ export const CardExpiryInput = forwardRef<
       </div>
     </div>
   );
-});
-
-CardExpiryInput.displayName = "CardExpiryInput";
+};
