@@ -77,3 +77,20 @@ export const useBuyInsuranceMutation = () => {
       axiosTenant.post<IResponse<IInsurancePurchase>>("/buy-insurance", data),
   });
 };
+
+// update-insurance
+export const useUpdateInsuranceMutation = () => {
+  return useMutation({
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: Partial<IInsurancePurchase>;
+    }) =>
+      axiosTenant.put<IResponse<IInsurancePurchase>>(
+        `/buy-insurance/${id}`,
+        data,
+      ),
+  });
+};

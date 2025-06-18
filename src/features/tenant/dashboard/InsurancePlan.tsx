@@ -18,12 +18,13 @@ export const InsurancePlan: React.FC<{ plan: IInsurancePlan }> = ({ plan }) => {
   const { state } = useLocation();
 
   const { _id, planName, coverAmount, premium, logo, additionalPlans } = plan;
+  const formData = state?.formData || {};
 
   const handleViewPlanDetails = () => {
     navigate(`/tenant/insurance-plans/${_id}`, {
       state: {
         plan,
-        formData: state?.formData,
+        formData,
       },
     });
   };
@@ -72,10 +73,10 @@ export const InsurancePlan: React.FC<{ plan: IInsurancePlan }> = ({ plan }) => {
             View Features <ChevronRight className="h-4 w-4" />
           </Button>
 
-          <div className="bg-primary flex items-center gap-2 rounded-lg px-3 py-1 text-white">
+          <Button onClick={handleViewPlanDetails}>
             <CurrencyIcon className="text-white" size="sm" />
             <span className="font-medium">{premium.monthlyPremium}/month</span>
-          </div>
+          </Button>
         </div>
       </div>
     </Card>

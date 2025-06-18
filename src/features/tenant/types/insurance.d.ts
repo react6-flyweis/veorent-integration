@@ -38,9 +38,9 @@ interface IInsurancePurchase {
     yearBuilt: number;
   };
   startDate: string;
-  endDate: string;
+  // endDate: string;
   premiumPaymentMode: string;
-  totalPremiumPaid: number;
+  // totalPremiumPaid: number;
   policyNumber: string;
   status: string;
   paymentStatus: string;

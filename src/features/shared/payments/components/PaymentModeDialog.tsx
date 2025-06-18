@@ -33,8 +33,16 @@ const paymentOptions = [
   },
 ];
 
-export function PaymentModeDialog({ amount }: { amount: number | string }) {
-  const [selected, setSelected] = useState("orange");
+export function PaymentModeDialog({
+  amount,
+  defaultPaymentMethod = "orange",
+  onSuccess,
+}: {
+  amount: number | string;
+  defaultPaymentMethod?: "card" | "mtn" | "orange";
+  onSuccess?: (transactionId?: string) => void;
+}) {
+  const [selected, setSelected] = useState(defaultPaymentMethod);
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
   const [showMTNMoMoPayment, setShowMTNMoMoPayment] = useState(false);
   const [showOrangeMoneyPayment, setShowOrangeMoneyPayment] = useState(false);
@@ -64,13 +72,17 @@ export function PaymentModeDialog({ amount }: { amount: number | string }) {
       // Simulate payment processing for other methods
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      navigate(paymentSuccessUrl, {
-        state: {
-          amount,
-          paymentMethod: paymentOptions.find((p) => p.id === selected)?.label,
-          // redirectUrl:
-        },
-      });
+      if (onSuccess) {
+        onSuccess("card_transaction_id");
+      } else {
+        navigate(paymentSuccessUrl, {
+          state: {
+            amount,
+            paymentMethod: paymentOptions.find((p) => p.id === selected)?.label,
+            // redirectUrl:
+          },
+        });
+      }
     } catch (error) {
       console.error("Payment failed:", error);
       showToast("Payment failed. Please try again.", "error");
@@ -80,13 +92,17 @@ export function PaymentModeDialog({ amount }: { amount: number | string }) {
   };
 
   const handleMTNMoMoSuccess = (transactionId: string) => {
-    navigate(paymentSuccessUrl, {
-      state: {
-        amount,
-        paymentMethod: "MTN MoMo",
-        transactionId,
-      },
-    });
+    if (onSuccess) {
+      onSuccess(transactionId);
+    } else {
+      navigate(paymentSuccessUrl, {
+        state: {
+          amount,
+          paymentMethod: "MTN MoMo",
+          transactionId,
+        },
+      });
+    }
   };
 
   const handleMTNMoMoError = (error: string) => {
@@ -99,13 +115,17 @@ export function PaymentModeDialog({ amount }: { amount: number | string }) {
   };
 
   const handleOrangeMoneySuccess = (transactionId: string) => {
-    navigate(paymentSuccessUrl, {
-      state: {
-        amount,
-        paymentMethod: "Orange Money",
-        transactionId,
-      },
-    });
+    if (onSuccess) {
+      onSuccess(transactionId);
+    } else {
+      navigate(paymentSuccessUrl, {
+        state: {
+          amount,
+          paymentMethod: "Orange Money",
+          transactionId,
+        },
+      });
+    }
   };
 
   const handleOrangeMoneyError = (error: string) => {
@@ -169,7 +189,9 @@ export function PaymentModeDialog({ amount }: { amount: number | string }) {
                 "rounded-full text-xs",
                 selected === method.id && "bg-green-500",
               )}
-              onClick={() => setSelected(method.id)}
+              onClick={() =>
+                setSelected(method.id as "card" | "mtn" | "orange")
+              }
             >
               {selected === method.id ? "Selected" : "Select"}
             </Button>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 
 import { BackButton } from "@/components/BackButton";
 import { CurrencyIcon } from "@/components/CurrencyIcon";
@@ -9,15 +9,21 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PaymentModeDialog } from "@/features/shared/payments/components/PaymentModeDialog";
 
-import { useBuyInsuranceMutation } from "./api/mutations";
+import {
+  useBuyInsuranceMutation,
+  useUpdateInsuranceMutation,
+} from "./api/mutations";
 import { useGetInsurancePlanQuery } from "./api/queries";
 import homeInsuranceIcon from "./assets/home-insurance.png";
 
 export default function PlanDetails() {
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
+  const [purchaseId, setPurchaseId] = useState<string | null>(null);
   const { state } = useLocation();
   const { id } = useParams();
+  const navigate = useNavigate();
   const { mutateAsync } = useBuyInsuranceMutation();
+  const { mutateAsync: updateInsurance } = useUpdateInsuranceMutation();
 
   // Try to get plan from state first, fallback to API call
   const planFromState = state?.plan;
@@ -36,19 +42,46 @@ export default function PlanDetails() {
       lastName: state?.formData?.lastName || "",
       email: state?.formData?.email || "",
       phone: state?.formData?.phone || "",
-      propertyTypeId: state?.formData?.propertyTypeId || "",
+      propertyTypeId: state?.formData?.propertyType || "",
       propertyDetails: state?.formData?.propertyDetails,
-      startDate: state.formData?.startDate || "new Date().toISOString()",
-      endDate: state.formData?.endDate || "",
-      premiumPaymentMode: "Monthly",
-      totalPremiumPaid: plan.premium.monthlyPremium,
+      startDate: state.formData?.startDate || new Date().toISOString(),
+      // endDate: state.formData?.endDate || new Date().toISOString(),
+      premiumPaymentMode: "Annual",
+      // totalPremiumPaid: plan.premium.monthlyPremium,
       policyNumber: `POL${Math.floor(Math.random() * 1000000)}`,
       status: "Active",
       paymentStatus: "Pending",
     };
-    console.log("Submitting data:", dataToSubmit);
-    await mutateAsync(dataToSubmit);
-    setIsPaymentDialogOpen(true);
+
+    try {
+      const response = await mutateAsync(dataToSubmit);
+      const purchaseRecord = response.data.data as IInsurancePurchase & {
+        _id: string;
+      };
+      setPurchaseId(purchaseRecord._id);
+      setIsPaymentDialogOpen(true);
+    } catch (error) {
+      console.error("Failed to create insurance purchase:", error);
+    }
+  };
+  const handlePaymentSuccess = async () => {
+    if (purchaseId) {
+      try {
+        await updateInsurance({
+          id: purchaseId,
+          data: { paymentStatus: "Completed" },
+        });
+        // Redirect to payment successful page
+        navigate("/tenant/payment/success", {
+          state: {
+            amount: plan.premium.annualPremium,
+            redirectUrl: "/tenant/dashboard",
+          },
+        });
+      } catch (error) {
+        console.error("Failed to update payment status:", error);
+      }
+    }
   };
 
   if (isLoading) {
@@ -195,7 +228,10 @@ export default function PlanDetails() {
 
       <Dialog open={isPaymentDialogOpen} onOpenChange={setIsPaymentDialogOpen}>
         <DialogContent>
-          <PaymentModeDialog amount={plan.premium.annualPremium} />
+          <PaymentModeDialog
+            amount={plan.premium.annualPremium}
+            onSuccess={handlePaymentSuccess}
+          />
         </DialogContent>
       </Dialog>
 
