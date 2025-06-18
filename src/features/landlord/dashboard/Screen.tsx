@@ -1,6 +1,9 @@
-import * as z from "zod";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -10,29 +13,19 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
 import { LoadingButton } from "@/components/ui/loading-button";
-import { ApplicationTypeCard } from "./components/ApplicationTypeCard";
-
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useToast } from "@/hooks/useAlertToast";
 import { useGoBack } from "@/hooks/useGoBack";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
+import { useInviteTenantMutation } from "./api/mutation";
 import dealIcon from "./assets/deal.png";
 import penApplicationIcon from "./assets/pen-application.png";
 import rentHouseIcon from "./assets/rent-house.png";
 import screenFeeIcon from "./assets/screen-fee.png";
-import { useInviteTenantMutation } from "./api/mutation";
-import { getErrorMessage } from "@/utils/getErrorMessage";
-import { useToast } from "@/hooks/useAlertToast";
-import { useNavigate } from "react-router";
+import { ApplicationTypeCard } from "./components/ApplicationTypeCard";
+import { PropertiesSelector } from "./components/PropertiesSelector";
 
 const screeningFormSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -59,13 +52,6 @@ const screeningFormSchema = z.object({
 });
 
 type ScreeningFormValues = z.infer<typeof screeningFormSchema>;
-
-// Mock properties data - replace with actual data source
-const properties = [
-  { id: "prop1", name: "123 Main St" },
-  { id: "prop2", name: "456 Oak Ave" },
-  { id: "prop3", name: "789 Pine Blvd" },
-];
 
 export default function Screen() {
   const { mutateAsync } = useInviteTenantMutation();
@@ -241,23 +227,9 @@ export default function Screen() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Property Applying To</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Applying to" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {properties.map((property) => (
-                        <SelectItem key={property.id} value={property.id}>
-                          {property.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <FormControl>
+                    <PropertiesSelector {...field} />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
