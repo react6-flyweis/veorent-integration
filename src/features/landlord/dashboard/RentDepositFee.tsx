@@ -1,6 +1,11 @@
-import * as z from "zod";
 import { useForm } from "react-hook-form";
+import { Navigate, useLocation, useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+import { CurrencyInput } from "@/components/CurrencyInput";
+import FormErrors from "@/components/FormErrors";
+import { Card } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -10,22 +15,18 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { LoadingButton } from "@/components/ui/loading-button";
-import { BuilderLayout } from "./components/BuilderLayout";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Card } from "@/components/ui/card";
-
-import houseIcon from "./assets/house.png";
-import coinBagIcon from "./assets/coin-bag.png";
-import moneyIcon from "./assets/money.png";
-import moneyLeaseIcon from "./assets/money-lease.png";
-import moneyDepositIcon from "./assets/money-deposit.png";
-import exchangeIcon from "./assets/exchange.png";
-import { CurrencyInput } from "@/components/CurrencyInput";
-import { Navigate, useLocation, useNavigate } from "react-router";
-import { useCreateOrUpdateLeaseAgreementMutation } from "./api/mutation";
-import { availableBanks, BankSelector } from "./components/BankSelector";
-import FormErrors from "@/components/FormErrors";
 import { getErrorMessage } from "@/utils/getErrorMessage";
+
+import { useCreateOrUpdateLeaseAgreementMutation } from "./api/mutation";
+import coinBagIcon from "./assets/coin-bag.png";
+import exchangeIcon from "./assets/exchange.png";
+import houseIcon from "./assets/house.png";
+import moneyLeaseIcon from "./assets/money-lease.png";
+import moneyIcon from "./assets/money.png";
+import moneyDepositIcon from "./assets/money-deposit.png";
+import { availableBanks, BankSelector } from "./components/BankSelector";
+import { BuilderLayout } from "./components/BuilderLayout";
 
 const rentDepositFeeSchema = z.object({
   monthlyRent: z.coerce.number().min(1, "Monthly rent is required"),
@@ -91,7 +92,9 @@ export default function RentDepositFee() {
       };
       await mutateAsync(valuesToSave);
       setTimeout(() => {
-        navigate("/landlord/lease-agreement/people-on-lease");
+        navigate("/landlord/lease-agreement/people-on-lease", {
+          state,
+        });
       }, 300);
     } catch (error) {
       form.setError("root", {

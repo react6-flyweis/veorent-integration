@@ -1,6 +1,10 @@
-import * as z from "zod";
 import { useForm } from "react-hook-form";
+import { Navigate, useLocation, useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+import FormErrors from "@/components/FormErrors";
+import { DateInput } from "@/components/ui/date-input";
 import {
   Form,
   FormControl,
@@ -10,17 +14,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { LoadingButton } from "@/components/ui/loading-button";
-
-import houseIcon from "./assets/house.png";
-import leaseIcon from "./assets/deal.png";
-import { BuilderLayout } from "./components/BuilderLayout";
-import { DateInput } from "@/components/ui/date-input";
-import { Navigate, useLocation, useNavigate } from "react-router";
-import { useCreateOrUpdateLeaseAgreementMutation } from "./api/mutation";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import FormErrors from "@/components/FormErrors";
+
+import { useCreateOrUpdateLeaseAgreementMutation } from "./api/mutation";
+import leaseIcon from "./assets/deal.png";
+import houseIcon from "./assets/house.png";
+import { BuilderLayout } from "./components/BuilderLayout";
 
 const leaseSpecificSchema = z.object({
   streetAddress: z.string().min(1, "Street address is required"),
@@ -81,7 +82,9 @@ export default function LeaseSpecific() {
 
       await mutateAsync(valuesToSave);
       setTimeout(() => {
-        navigate("/landlord/lease-agreement/rent-deposit-fee");
+        navigate("/landlord/lease-agreement/rent-deposit-fee", {
+          state,
+        });
       }, 300);
     } catch (error) {
       form.setError("root", {
