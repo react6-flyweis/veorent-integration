@@ -56,3 +56,20 @@ export const useUpdateProfileMutation = () => {
     },
   });
 };
+
+export const useUploadProfilePictureMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: FormData) =>
+      axiosLandlord.put<IResponse<{ imageUrl: string }>>(
+        "/upload-profile-picture",
+        data,
+      ),
+    onSettled: () => {
+      // Invalidate the query to ensure fresh data
+      queryClient.invalidateQueries({
+        queryKey: ["user", "profile"],
+      });
+    },
+  });
+};

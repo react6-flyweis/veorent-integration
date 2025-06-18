@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusIcon } from "lucide-react";
 import * as z from "zod";
 
 import FormErrors from "@/components/FormErrors";
@@ -19,6 +18,7 @@ import { useToast } from "@/hooks/useAlertToast";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 
 import { ChangePasswordDialog } from "./ChangePasswordDialog";
+import { CompanyLogoUpload } from "./CompanyLogoUpload";
 import { useUpdateProfileMutation } from "../api/mutation";
 
 const accountFormSchema = z.object({
@@ -282,17 +282,7 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
               </div>
 
               {/* Company Logo Section */}
-              <div className="flex-1">
-                <FormLabel className="mb-2 block text-lg font-medium">
-                  Company Logo
-                </FormLabel>
-                <div className="flex h-32 flex-col items-center justify-center rounded-md border-2 border-dashed border-gray-300 p-4 sm:p-6">
-                  <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full border border-gray-300">
-                    <PlusIcon className="h-5 w-5 text-gray-500" />
-                  </div>
-                  <span className="text-sm text-gray-500">ADD LOGO</span>
-                </div>
-              </div>
+              <CompanyLogoUpload currentLogo={data.image || undefined} />
             </div>
           </div>
           <FormErrors errors={form.formState.errors} />
