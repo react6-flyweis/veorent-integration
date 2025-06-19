@@ -59,7 +59,7 @@ export function useRegisterLandlordMutation() {
         "/partner/signup",
         data,
       ),
-    onSuccess: async (response, variables) => {
+    onSuccess: async (_response, variables) => {
       try {
         // After successful registration, automatically sign in the user
         const loginData = {
@@ -108,7 +108,7 @@ export function useRegisterTenantMutation() {
         "/user/signup",
         data,
       ),
-    onSuccess: async (response, variables) => {
+    onSuccess: async (_response, variables) => {
       try {
         // After successful registration, automatically sign in the user
         const loginData = {
