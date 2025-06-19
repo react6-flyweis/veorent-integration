@@ -213,7 +213,7 @@ export function LeasingRequestForm() {
           name="photos"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Photos</FormLabel>
+              <FormLabel>Add Photos</FormLabel>
               <FormControl>
                 <ImageInput multiple maxFiles={5} {...field} />
               </FormControl>
