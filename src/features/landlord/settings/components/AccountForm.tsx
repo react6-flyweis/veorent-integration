@@ -64,7 +64,7 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
     defaultValues: {
       firstName: data.firstname || "",
       lastName: data.lastname || "",
-      company: "",
+      company: data.company || "",
       email: data.email || "",
       phone: data.mobileNumber || "",
       streetAddress: data.addressDetails?.streetAddress || "",
@@ -282,7 +282,7 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
               </div>
 
               {/* Company Logo Section */}
-              <CompanyLogoUpload currentLogo={data.image || undefined} />
+              <CompanyLogoUpload currentLogo={data.companyLogo || undefined} />
             </div>
           </div>
           <FormErrors errors={form.formState.errors} />

@@ -34,6 +34,7 @@ interface IUpdateProfileData {
   mobileNumber?: string;
   email?: string;
   password?: string;
+  companyLogo?: string;
   addressDetails?: {
     houseNumber: string;
     streetAddress: string;
