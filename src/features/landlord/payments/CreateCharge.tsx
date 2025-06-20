@@ -7,10 +7,9 @@ import { Card, CardContent, CardDescription } from "@/components/ui/card";
 import { useGoBack } from "@/hooks/useGoBack";
 import { cn } from "@/lib/utils";
 
+import dailyChargeIcon from "./assets/daily-charge.png";
 import monthlyChargeIcon from "./assets/monthly-charge.png";
 import paydayIcon from "./assets/payday.png";
-// import dailyChargeIcon from "./assets/daily-charge.png";
-
 import { LeaseSelector } from "./components/LeaseSelector";
 
 const CreateCharge: React.FC = () => {
@@ -40,7 +39,7 @@ const CreateCharge: React.FC = () => {
 
         <div>
           <h2 className="mb-4 text-lg font-medium">What type of Charge?</h2>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 @lg:grid-cols-2 @2xl:grid-cols-3">
             {[
               {
                 type: "monthly",
@@ -50,14 +49,14 @@ const CreateCharge: React.FC = () => {
                 icon: monthlyChargeIcon,
                 path: "/landlord/payments/monthly-charge",
               },
-              // {
-              //   type: "daily",
-              //   title: "Daily Charge",
-              //   description:
-              //     "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's",
-              //   icon: dailyChargeIcon,
-              //   path: "/landlord/payments/daily-charge",
-              // },
+              {
+                type: "daily",
+                title: "Daily Charge",
+                description:
+                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's",
+                icon: dailyChargeIcon,
+                path: "/landlord/payments/daily-charge",
+              },
               {
                 type: "one-time",
                 title: "One-Time Charge",
