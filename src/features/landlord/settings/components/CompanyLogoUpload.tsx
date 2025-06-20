@@ -6,7 +6,8 @@ import { FormLabel } from "@/components/ui/form";
 import { useToast } from "@/hooks/useAlertToast";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 
-import { useUploadProfilePictureMutation } from "../api/mutation";
+import { useUploadImageMutation } from "../../api/mutations";
+import { useUpdateProfileMutation } from "../api/mutation";
 
 interface CompanyLogoUploadProps {
   currentLogo?: string;
@@ -17,7 +18,8 @@ export function CompanyLogoUpload({ currentLogo }: CompanyLogoUploadProps) {
     currentLogo || null,
   );
   const [isUploading, setIsUploading] = useState(false);
-  const { mutateAsync: uploadLogo } = useUploadProfilePictureMutation();
+  const { mutateAsync: uploadImage } = useUploadImageMutation();
+  const { mutateAsync: updateProfile } = useUpdateProfileMutation();
   const { showToast } = useToast();
 
   const handleFileSelect = async (
@@ -43,8 +45,15 @@ export function CompanyLogoUpload({ currentLogo }: CompanyLogoUploadProps) {
       const formData = new FormData();
       formData.append("image", file);
 
-      const response = await uploadLogo(formData);
-      const imageUrl = response.data.data.imageUrl;
+      // Upload image using ID picture endpoint
+      const uploadResponse = await uploadImage(formData);
+      const imageUrl = uploadResponse.data.data[0].img;
+
+      // Update profile with the new logo URL
+      await updateProfile({
+        // Add company logo field - you may need to adjust this based on your API structure
+        companyLogo: imageUrl,
+      });
 
       setUploadedLogo(imageUrl);
       showToast("Company logo updated successfully!", "success");
@@ -58,7 +67,6 @@ export function CompanyLogoUpload({ currentLogo }: CompanyLogoUploadProps) {
 
   const handleRemoveLogo = () => {
     setUploadedLogo(null);
-    showToast("Company logo removed", "success");
   };
 
   return (

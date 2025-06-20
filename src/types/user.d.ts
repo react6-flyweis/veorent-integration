@@ -57,6 +57,8 @@ interface IUser {
   propertyCount: string;
   propertyTypeId?: string;
   rentalProcessId?: string;
+  company?: string;
+  companyLogo?: string;
 }
 
 interface IUserFullDetails extends IUser {
