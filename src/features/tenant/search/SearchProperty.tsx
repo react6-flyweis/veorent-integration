@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { SearchIcon } from "lucide-react";
+import { Link } from "react-router";
+import { SearchIcon, XIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,6 +43,15 @@ export default function SearchProperty() {
     <div className="space-y-5">
       {/* Header */}
       <div className="flex items-center justify-between gap-4">
+        <Link to="/tenant/">
+          <Button
+            variant="outline"
+            className="size-9 items-center justify-center rounded-full"
+          >
+            <XIcon className="text-primary size-5" />
+          </Button>
+        </Link>
+
         <img src="/logo-dark.png" alt="Veorent Logo" className="h-8" />
         <div className="border-primary flex w-full items-center border">
           <Input
