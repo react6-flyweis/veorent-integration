@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import { SearchIcon, XIcon } from "lucide-react";
+import { SearchIcon, XIcon, FilterIcon } from "lucide-react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -12,13 +13,30 @@ import {
   RentalListingCard,
 } from "./components/ListingCard";
 import { usePropertyFilters } from "./hooks/usePropertyFilters";
+import { getActiveFilters } from "./utils/filterConfig";
 
 export default function SearchProperty() {
   const [searchTerm, setSearchTerm] = useState("");
-  const { filters, updateFilter, updateMultipleFilters, clearFilters } =
-    usePropertyFilters();
+  const {
+    filters,
+    updateFilter,
+    updateMultipleFilters,
+    clearFilters,
+    removeFilter,
+  } = usePropertyFilters();
 
   const { data, isLoading, error } = useGetPropertiesQuery(filters);
+
+  const activeFilters = getActiveFilters(filters);
+
+  const handleRemoveFilter = (key: string) => {
+    removeFilter(key as keyof IPropertyFilters);
+
+    // If removing search filter, also clear the search term
+    if (key === "search") {
+      setSearchTerm("");
+    }
+  };
 
   const handleSearch = () => {
     updateFilter("search", searchTerm);
@@ -76,6 +94,70 @@ export default function SearchProperty() {
         />
       </div>
 
+      <div className="">
+        <div className="flex justify-between">
+          {/* Results Count */}
+          {!isLoading && data && (
+            <div className="text-sm text-gray-600">
+              {data.length > 0 ? (
+                <span>
+                  Found {data.length} propert{data.length === 1 ? "y" : "ies"}
+                  {activeFilters.length > 0 ? " matching your filters" : ""}
+                </span>
+              ) : (
+                <span>
+                  No properties found
+                  {activeFilters.length > 0 ? " matching your filters" : ""}
+                </span>
+              )}
+            </div>
+          )}
+
+          {/* Active Filters Display */}
+          {activeFilters.length > 0 && (
+            <div className="flex items-center gap-2">
+              <FilterIcon className="size-4 text-gray-600" />
+              <span className="text-sm font-medium text-gray-700">
+                Active Filters ({activeFilters.length})
+              </span>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleClearFilters}
+                className="text-primary hover:text-primary-foreground h-6 px-2 py-0 text-xs"
+              >
+                Clear All
+              </Button>
+            </div>
+          )}
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          {activeFilters?.length
+            ? activeFilters.map(({ key, label }) => (
+                <Badge
+                  key={key}
+                  variant="secondary"
+                  className="flex items-center gap-1 px-2 py-1 pr-1"
+                >
+                  <span className="text-xs">{label}</span>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleRemoveFilter(key);
+                    }}
+                    className="ml-1 flex h-4 w-4 items-center justify-center rounded-full hover:bg-gray-300 focus:ring-1 focus:ring-gray-400 focus:outline-none"
+                    aria-label={`Remove ${label} filter`}
+                  >
+                    <XIcon className="h-3 w-3" />
+                  </button>
+                </Badge>
+              ))
+            : ""}
+        </div>
+      </div>
+
       {/* Error state */}
       {error && (
         <div className="flex items-center justify-center py-8">
@@ -104,21 +186,6 @@ export default function SearchProperty() {
           </div>
         )}
       </div>
-
-      {/* Applied filters indicator */}
-      {Object.keys(filters).length > 2 && ( // More than just page and limit
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <span>Filters applied</span>
-          <Button
-            variant="link"
-            size="sm"
-            onClick={handleClearFilters}
-            className="h-auto p-0"
-          >
-            Clear all
-          </Button>
-        </div>
-      )}
     </div>
   );
 }

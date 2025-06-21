@@ -32,6 +32,14 @@ export const usePropertyFilters = () => {
     setFilters({});
   }, []);
 
+  const removeFilter = useCallback((key: keyof IPropertyFilters) => {
+    setFilters((prev) => {
+      const newFilters = { ...prev };
+      delete newFilters[key];
+      return { ...newFilters, page: 1 }; // Reset to page 1 when filters change
+    });
+  }, []);
+
   const resetPagination = useCallback(() => {
     setFilters((prev) => ({
       ...prev,
@@ -44,6 +52,7 @@ export const usePropertyFilters = () => {
     updateFilter,
     updateMultipleFilters,
     clearFilters,
+    removeFilter,
     resetPagination,
   };
 };
