@@ -4,6 +4,7 @@ import { SearchIcon } from "lucide-react";
 import insuranceImgIcon from "@/assets/icons/home-insurance.png";
 import truckImgIcon from "@/assets/icons/truck.png";
 import { IconCard } from "@/components/IconCard";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { GreetUser } from "./components/GreetUser";
@@ -18,9 +19,14 @@ export default function Dashboard() {
       <header className="flex flex-col items-center justify-between @md:flex-row">
         <GreetUser />
         <Link to="/tenant/search">
-          <div className="relative w-full max-w-sm">
-            <Input placeholder="Search property" className="pr-10" />
-            <SearchIcon className="absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 transform text-gray-500" />
+          <div className="border-primary flex max-w-lg items-center border">
+            <Input
+              placeholder="Search rentals..."
+              className="w-full border-0"
+            />
+            <Button size="icon" className="rounded-none border-0">
+              <SearchIcon className="size-4" />
+            </Button>
           </div>
         </Link>
       </header>
