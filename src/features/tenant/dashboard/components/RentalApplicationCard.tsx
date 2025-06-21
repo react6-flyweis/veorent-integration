@@ -1,5 +1,3 @@
-import { Navigate } from "react-router";
-
 import applicationsIcon from "@/assets/icons/applications.png";
 import { IconCard } from "@/components/IconCard";
 import { useGetBookingsQuery } from "@/features/tenant/dashboard/api/queries";
@@ -11,20 +9,24 @@ interface RentalApplicationCardProps {
 export function RentalApplicationCard({
   className,
 }: RentalApplicationCardProps) {
-  const { data: bookings, isLoading } = useGetBookingsQuery();
+  const { data: bookings } = useGetBookingsQuery();
 
   // Get the latest booking
   const latestBooking = bookings?.[0]; // Assuming the API returns bookings sorted by creation date desc
 
-  if (!isLoading && !latestBooking) {
-    return <Navigate to="/tenant/search" replace />;
-  }
+  // if (!isLoading && !latestBooking) {
+  //   return <Navigate to="/tenant/search" replace />;
+  // }
 
   // Determine title and action text based on payment status
   const isPaid = latestBooking?.paymentStatus === "Paid";
   const title = isPaid ? "Rental Booked" : "Rental Application";
   const actionText = isPaid ? "Booked" : "Finish My Application";
-  const actionUrl = isPaid ? "#" : `/tenant/applying/${latestBooking?._id}`;
+  const actionUrl = latestBooking
+    ? isPaid
+      ? "#"
+      : `/tenant/applying/${latestBooking?._id}`
+    : "/tenant/search";
 
   return (
     <IconCard
