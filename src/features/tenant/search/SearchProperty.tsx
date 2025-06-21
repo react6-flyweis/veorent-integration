@@ -3,11 +3,13 @@ import { SearchIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Skeleton } from "@/components/ui/skeleton";
 
 import { useGetPropertiesQuery } from "./api/queries";
 import { FilterDialog } from "./components/FilterDialog";
-import { RentalListingCard } from "./components/ListingCard";
+import {
+  ListingCardSkeleton,
+  RentalListingCard,
+} from "./components/ListingCard";
 import { usePropertyFilters } from "./hooks/usePropertyFilters";
 
 export default function SearchProperty() {
@@ -35,32 +37,6 @@ export default function SearchProperty() {
     clearFilters();
     setSearchTerm("");
   };
-
-  // Skeleton component for listing cards
-  const ListingCardSkeleton = () => (
-    <div className="flex gap-4 rounded-lg border p-3">
-      <Skeleton className="h-24 w-32 rounded-md" />
-      <div className="flex flex-1 justify-between">
-        <div className="flex-1 space-y-2">
-          <Skeleton className="h-5 w-20" />
-          <Skeleton className="h-4 w-48" />
-          <Skeleton className="h-4 w-36" />
-          <div className="flex gap-4">
-            <Skeleton className="h-4 w-16" />
-            <Skeleton className="h-4 w-16" />
-            <Skeleton className="h-4 w-20" />
-          </div>
-          <Skeleton className="h-3 w-32" />
-        </div>
-        <div className="flex flex-col items-end space-y-2">
-          <div className="space-y-1">
-            <Skeleton className="h-6 w-20" />
-          </div>
-          <Skeleton className="h-8 w-24 rounded-full" />
-        </div>
-      </div>
-    </div>
-  );
 
   return (
     <div className="space-y-5">
