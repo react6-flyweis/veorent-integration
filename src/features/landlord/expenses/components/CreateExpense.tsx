@@ -1,4 +1,12 @@
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+import { CurrencyInput } from "@/components/CurrencyInput";
 import { Button } from "@/components/ui/button";
+import { DateInput } from "@/components/ui/date-input";
+import { DialogClose } from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -7,21 +15,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import * as z from "zod";
-import { DateInput } from "@/components/ui/date-input";
-import { DialogClose } from "@/components/ui/dialog";
-import { CurrencyInput } from "@/components/CurrencyInput";
-import { useToast } from "@/hooks/useAlertToast";
-import { LoadingButton } from "@/components/ui/loading-button";
 import { ImageInput } from "@/components/ui/image-input";
+import { Input } from "@/components/ui/input";
+import { LoadingButton } from "@/components/ui/loading-button";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/useAlertToast";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import { useCreateExpenseMutation } from "./api/mutation";
-import { PropertiesSelector } from "../dashboard/components/PropertiesSelector";
+
+import { PropertiesSelector } from "../../dashboard/components/PropertiesSelector";
+import { useCreateExpenseMutation } from "../api/mutation";
 
 const formSchema = z.object({
   date: z.date(),
@@ -36,7 +38,7 @@ const formSchema = z.object({
 
 type ExpenseFormValues = z.infer<typeof formSchema>;
 
-const CreateExpense = () => {
+export const CreateExpense = () => {
   const navigate = useNavigate();
   const { showToast } = useToast();
   const { mutateAsync } = useCreateExpenseMutation();
@@ -187,5 +189,3 @@ const CreateExpense = () => {
     </Form>
   );
 };
-
-export default CreateExpense;

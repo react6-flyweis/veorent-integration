@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { CalendarDaysIcon, LayoutDashboardIcon } from "lucide-react";
+
 import { CreateButton } from "@/components/CreateButton";
 import { CurrencyIcon } from "@/components/CurrencyIcon";
 import { PageTitle } from "@/components/PageTitle";
@@ -22,41 +25,16 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  CalendarDaysIcon,
-  ExternalLinkIcon,
-  LayoutDashboardIcon,
-} from "lucide-react";
-import { useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import CreateExpense from "./CreateExpense";
-import { useGetExpenses } from "./api/queries";
 
-// interface Expense {
-//   id: string;
-//   date: string;
-//   category: string;
-//   description: string;
-//   rental: string;
-//   amount: number;
-// }
+import { useGetExpenses } from "./api/queries";
+import { CreateExpense } from "./components/CreateExpense";
+import { ExportButton } from "./components/ExportButton";
 
 const Expenses = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [timeFilter, setTimeFilter] = useState<string | null>("All Time");
   const isMobile = useIsMobile();
-
-  // const expenses: Expense[] = [
-  //   {
-  //     id: "1",
-  //     date: "Jan 08, 2024",
-  //     category: "Advertising",
-  //     description: "Advertising",
-  //     rental: "123, Main St",
-  //     amount: 100.0,
-  //   },
-  //   // Add more mock expenses here as needed
-  // ];
 
   const { data: expenses = [] } = useGetExpenses();
 
@@ -73,7 +51,7 @@ const Expenses = () => {
           <DialogTrigger asChild>
             <CreateButton label="Add New Expense" />
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="max-h-[90vh] overflow-y-auto">
             <DialogTitle>Record Expense</DialogTitle>
             <CreateExpense />
           </DialogContent>
@@ -118,19 +96,7 @@ const Expenses = () => {
           )}
         </Tooltip>
         <div className="ml-auto">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button className="rounded-md bg-blue-500" size="sm">
-                <ExternalLinkIcon />
-                {!isMobile && <span>EXPORT</span>}
-              </Button>
-            </TooltipTrigger>
-            {isMobile && (
-              <TooltipContent>
-                <p>Export</p>
-              </TooltipContent>
-            )}
-          </Tooltip>
+          <ExportButton expenses={expenses} totalExpenses={totalExpenses} />
         </div>
       </div>
 
