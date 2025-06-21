@@ -23,6 +23,12 @@ import { AmenitiesFilter } from "./AmenitiesFilter";
 import { PriceRangeFilter } from "./PriceRangeFilter";
 import { PropertyTypeFilter } from "./PropertyTypeFilter";
 import { RoomsAndBedsFilter } from "./RoomsAndBedsFilter";
+import {
+  getSelectedAmenities,
+  getSelectedAccessibilityFeatures,
+  mapAmenitiesToFilters,
+  mapAccessibilityToFilters,
+} from "../utils/filterConfig";
 
 type PlaceType = "any" | "room" | "entire";
 
@@ -67,38 +73,8 @@ export const FilterDialog = ({
   };
 
   const handleAmenitiesChange = (amenities: string[]) => {
-    const amenityMap: Record<string, keyof IPropertyFilters> = {
-      WiFi: "wifi",
-      Kitchen: "kitchen",
-      Dryer: "dryer",
-      "Washing machine": "washingMachine",
-      "Air conditioning": "airConditioning",
-      TV: "tv",
-      Heating: "heating",
-      Pool: "pool",
-      "Hot tub": "hotTub",
-      Gym: "gym",
-      "Free parking": "freeParking",
-      "BBQ grill": "bbqGrill",
-      "Indoor fireplace": "indoorFireplace",
-      Breakfast: "breakfast",
-      "King bed": "kingBed",
-      "Smoking allowed": "smokingAllowed",
-      Beachfront: "beachfront",
-      Waterfall: "waterfall",
-      "Ski-in/Ski-out": "skiInSkiOut",
-      Hillfront: "hillfront",
-      "Allow pets": "allowPets",
-      "Instant book": "instantBook",
-      "Self check-in": "selfCheckIn",
-    };
-
-    const updatedAmenities: Record<string, boolean> = {};
-    Object.entries(amenityMap).forEach(([displayName, filterKey]) => {
-      updatedAmenities[filterKey] = amenities.includes(displayName);
-    });
-
-    setLocalFilters((prev) => ({ ...prev, ...updatedAmenities }));
+    const amenityFilters = mapAmenitiesToFilters(amenities);
+    setLocalFilters((prev) => ({ ...prev, ...amenityFilters }));
   };
 
   const handlePropertyTypesChange = (types: string[]) => {
@@ -109,31 +85,8 @@ export const FilterDialog = ({
   };
 
   const handleAccessibilityChange = (features: string[]) => {
-    const accessibilityMap: Record<string, keyof IPropertyFilters> = {
-      "Step-free guest entrance": "stepFreeGuestEntrance",
-      "Guest entrance wider than 32 inches": "guestEntranceWiderThan32Inches",
-      "Step-free path to guest entrance": "stepFreePathToGuestEntrance",
-      "Accessible parking spot": "accessibleParkingSpot",
-      "Step-free bedroom access": "stepFreeBedroomAccess",
-      "Bedroom entrance wider than 32 inches":
-        "bedroomEntranceWiderThan32Inches",
-      "Step-free bathroom access": "stepFreeBathroomAccess",
-      "Bathroom entrance wider than 32 inches":
-        "bathroomEntranceWiderThan32Inches",
-      "Toilet grab bar": "toiletGrabBar",
-      "Shower grab bar": "showerGrabBar",
-      "Step-free shower": "stepFreeShower",
-      "Shower or bath chair": "showerOrBathChair",
-      "Adaptive equipment": "adaptiveEquipment",
-      "Ceiling or mobile hoist": "CeilingOrMobileHoist",
-    };
-
-    const updatedAccessibility: Record<string, boolean> = {};
-    Object.entries(accessibilityMap).forEach(([displayName, filterKey]) => {
-      updatedAccessibility[filterKey] = features.includes(displayName);
-    });
-
-    setLocalFilters((prev) => ({ ...prev, ...updatedAccessibility }));
+    const accessibilityFilters = mapAccessibilityToFilters(features);
+    setLocalFilters((prev) => ({ ...prev, ...accessibilityFilters }));
   };
 
   const handleApplyFilters = () => {
@@ -156,31 +109,7 @@ export const FilterDialog = ({
   };
 
   const getCurrentSelectedAmenities = (): string[] => {
-    const amenities: string[] = [];
-    if (localFilters.wifi) amenities.push("WiFi");
-    if (localFilters.kitchen) amenities.push("Kitchen");
-    if (localFilters.dryer) amenities.push("Dryer");
-    if (localFilters.washingMachine) amenities.push("Washing machine");
-    if (localFilters.airConditioning) amenities.push("Air conditioning");
-    if (localFilters.tv) amenities.push("TV");
-    if (localFilters.heating) amenities.push("Heating");
-    if (localFilters.pool) amenities.push("Pool");
-    if (localFilters.hotTub) amenities.push("Hot tub");
-    if (localFilters.gym) amenities.push("Gym");
-    if (localFilters.freeParking) amenities.push("Free parking");
-    if (localFilters.bbqGrill) amenities.push("BBQ grill");
-    if (localFilters.indoorFireplace) amenities.push("Indoor fireplace");
-    if (localFilters.breakfast) amenities.push("Breakfast");
-    if (localFilters.kingBed) amenities.push("King bed");
-    if (localFilters.smokingAllowed) amenities.push("Smoking allowed");
-    if (localFilters.beachfront) amenities.push("Beachfront");
-    if (localFilters.waterfall) amenities.push("Waterfall");
-    if (localFilters.skiInSkiOut) amenities.push("Ski-in/Ski-out");
-    if (localFilters.hillfront) amenities.push("Hillfront");
-    if (localFilters.allowPets) amenities.push("Allow pets");
-    if (localFilters.instantBook) amenities.push("Instant book");
-    if (localFilters.selfCheckIn) amenities.push("Self check-in");
-    return amenities;
+    return getSelectedAmenities(localFilters);
   };
 
   const getCurrentSelectedPropertyTypes = (): string[] => {
@@ -190,31 +119,7 @@ export const FilterDialog = ({
   };
 
   const getCurrentSelectedAccessibilityFeatures = (): string[] => {
-    const features: string[] = [];
-    if (localFilters.stepFreeGuestEntrance)
-      features.push("Step-free guest entrance");
-    if (localFilters.guestEntranceWiderThan32Inches)
-      features.push("Guest entrance wider than 32 inches");
-    if (localFilters.stepFreePathToGuestEntrance)
-      features.push("Step-free path to guest entrance");
-    if (localFilters.accessibleParkingSpot)
-      features.push("Accessible parking spot");
-    if (localFilters.stepFreeBedroomAccess)
-      features.push("Step-free bedroom access");
-    if (localFilters.bedroomEntranceWiderThan32Inches)
-      features.push("Bedroom entrance wider than 32 inches");
-    if (localFilters.stepFreeBathroomAccess)
-      features.push("Step-free bathroom access");
-    if (localFilters.bathroomEntranceWiderThan32Inches)
-      features.push("Bathroom entrance wider than 32 inches");
-    if (localFilters.toiletGrabBar) features.push("Toilet grab bar");
-    if (localFilters.showerGrabBar) features.push("Shower grab bar");
-    if (localFilters.stepFreeShower) features.push("Step-free shower");
-    if (localFilters.showerOrBathChair) features.push("Shower or bath chair");
-    if (localFilters.adaptiveEquipment) features.push("Adaptive equipment");
-    if (localFilters.CeilingOrMobileHoist)
-      features.push("Ceiling or mobile hoist");
-    return features;
+    return getSelectedAccessibilityFeatures(localFilters);
   };
 
   return (
