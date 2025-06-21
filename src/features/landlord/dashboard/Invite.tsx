@@ -1,6 +1,11 @@
-import * as z from "zod";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+import { CurrencyInput } from "@/components/CurrencyInput";
+import { PageTitle } from "@/components/PageTitle";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -10,20 +15,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useToast } from "@/hooks/useAlertToast";
+import { useGoBack } from "@/hooks/useGoBack";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
+import { useInviteRenterMutation } from "./api/mutation";
 import dealIcon from "./assets/deal.png";
 import penApplicationIcon from "./assets/pen-application.png";
 import rentHouseIcon from "./assets/rent-house.png";
-import { LoadingButton } from "@/components/ui/loading-button";
 import { ApplicationTypeCard } from "./components/ApplicationTypeCard";
-import { useGoBack } from "@/hooks/useGoBack";
-import { getErrorMessage } from "@/utils/getErrorMessage";
-import { useInviteRenterMutation } from "./api/mutation";
-import { CurrencyInput } from "@/components/CurrencyInput";
-import { useToast } from "@/hooks/useAlertToast";
-import { useNavigate } from "react-router";
 import { PropertiesSelector } from "./components/PropertiesSelector";
 
 const inviteFormSchema = z.object({
@@ -97,9 +99,7 @@ export default function Invite() {
 
   return (
     <div className="space-y-5">
-      <h2 className="text-3xl font-semibold">
-        <span>Invite Renter to Apply</span>
-      </h2>
+      <PageTitle title="Invite Renter to Apply" withBack />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {/* Renter Info Section */}
