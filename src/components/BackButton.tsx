@@ -1,6 +1,8 @@
 import { ArrowLeftIcon } from "lucide-react";
-import { Button } from "./ui/button";
+
 import { useGoBack } from "@/hooks/useGoBack";
+
+import { Button } from "./ui/button";
 
 export function BackButton() {
   const goBack = useGoBack();
@@ -8,10 +10,11 @@ export function BackButton() {
   return (
     <Button
       onClick={goBack}
+      type="button"
       variant="outline"
-      className="rounded-full size-9 justify-center items-center"
+      className="size-9 items-center justify-center rounded-full"
     >
-      <ArrowLeftIcon className="size-5 text-primary" />
+      <ArrowLeftIcon className="text-primary size-5" />
     </Button>
   );
 }
