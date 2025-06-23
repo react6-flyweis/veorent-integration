@@ -9,20 +9,6 @@ import { AddLeadDialog } from "./components/AddLeadDialog";
 import RentersTablist from "./components/RentersTablist";
 import { RenterItem } from "./RenterItem";
 
-
-
-// Sample renter data - in a real app, this would come from a database or API
-// const leads = [
-//   { name: "Wendy Thompson", address: "46 Bryant Way", invited: true },
-//   { name: "Aaron Remirez", address: "36 Bryant Way", invited: false },
-//   {
-//     name: "Sara Capra",
-//     address: "123 Main St.",
-//     invited: false,
-//     selected: true,
-//   },
-// ];
-
 export default function RentersLeads() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -44,21 +30,19 @@ export default function RentersLeads() {
         {isLoading ? (
           <div className="text-center text-gray-500">Loading leads...</div>
         ) : leads?.length ? (
-          leads
-            .filter((r) => r.propertyInterested) // Filter out renters for dev
-            .map((renter, index) => (
-              <Link to={`/landlord/renters/leads/${renter._id}`} key={index}>
-                <RenterItem
-                  key={index}
-                  name={renter.fullName}
-                  address={
-                    renter.propertyInterested?.addressDetails?.streetAddress
-                  }
-                  invited={renter.status === "invited"}
-                  selected={renter.status === "selected"}
-                />
-              </Link>
-            ))
+          leads.map((renter, index) => (
+            <Link to={`/landlord/renters/leads/${renter._id}`} key={index}>
+              <RenterItem
+                key={index}
+                name={renter.fullName}
+                address={
+                  renter.propertyInterested?.addressDetails?.streetAddress
+                }
+                invited={renter.status === "invited"}
+                selected={renter.status === "selected"}
+              />
+            </Link>
+          ))
         ) : (
           <div className="text-center text-gray-500">
             No leads found. Click "Add New Lead" to create one.
