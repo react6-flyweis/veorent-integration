@@ -8,7 +8,6 @@ import { Card, CardContent } from "@/components/ui/card";
 
 // import verifiedIcon from "./assets/verified.png";
 
-
 import { formatDate } from "@/utils/formatDate";
 import { getFullName, getInitial } from "@/utils/name";
 
@@ -42,9 +41,9 @@ export default function Applicants() {
                     />
                     <AvatarFallback>
                       {getInitial(
-                        `${applicant.userId?.firstname 
-                          } ${ 
-                          applicant.userId.lastname}`,
+                        `${applicant.userId?.firstname} ${
+                          applicant.userId?.lastname
+                        }`,
                       )}
                     </AvatarFallback>
                   </Avatar>
