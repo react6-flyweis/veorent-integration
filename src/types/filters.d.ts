@@ -7,6 +7,11 @@ interface IPropertyFilters {
   beds?: number;
   bathrooms?: number;
 
+  // Location filters
+  city?: string;
+  region?: string;
+  country?: string;
+
   // Amenities
   wifi?: boolean;
   kitchen?: boolean;

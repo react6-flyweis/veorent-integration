@@ -155,6 +155,24 @@ export const ALL_FILTERS_CONFIG: FilterConfig[] = [
     },
   },
   {
+    key: "city",
+    displayName: "City",
+    type: "string",
+    formatValue: (value) => String(value),
+  },
+  {
+    key: "region",
+    displayName: "Region",
+    type: "string",
+    formatValue: (value) => String(value),
+  },
+  {
+    key: "country",
+    displayName: "Country",
+    type: "string",
+    formatValue: (value) => String(value),
+  },
+  {
     key: "propertyType",
     displayName: "Property Type",
     type: "string",

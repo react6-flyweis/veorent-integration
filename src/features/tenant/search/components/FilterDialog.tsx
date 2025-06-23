@@ -20,6 +20,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { AccessibilityFilter } from "./AccessibilityFilter";
 import { AmenitiesFilter } from "./AmenitiesFilter";
+import { LocationFilter } from "./LocationFilter";
 import { PriceRangeFilter } from "./PriceRangeFilter";
 import { PropertyTypeFilter } from "./PropertyTypeFilter";
 import { RoomsAndBedsFilter } from "./RoomsAndBedsFilter";
@@ -87,6 +88,14 @@ export const FilterDialog = ({
   const handleAccessibilityChange = (features: string[]) => {
     const accessibilityFilters = mapAccessibilityToFilters(features);
     setLocalFilters((prev) => ({ ...prev, ...accessibilityFilters }));
+  };
+
+  const handleLocationChange = (location: {
+    city?: string;
+    region?: string;
+    country?: string;
+  }) => {
+    setLocalFilters((prev) => ({ ...prev, ...location }));
   };
 
   const handleApplyFilters = () => {
@@ -213,6 +222,17 @@ export const FilterDialog = ({
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
+
+            {/* Location */}
+            <div className="space-y-3">
+              <h3 className="text-base font-medium">Location</h3>
+              <LocationFilter
+                city={localFilters.city}
+                region={localFilters.region}
+                country={localFilters.country}
+                onLocationChange={handleLocationChange}
+              />
+            </div>
 
             {/* Property type */}
             <Accordion type="single" collapsible defaultValue="property-type">
