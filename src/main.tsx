@@ -3,6 +3,7 @@ import { scan } from "react-scan"; // must be imported before React and React
 import { createRoot } from "react-dom/client";
 
 import "./index.css";
+import "./lib/i18n"; // Initialize i18n
 import App from "./App.tsx";
 import { BrowserRouter } from "react-router";
 import { QueryClientProvider } from "@tanstack/react-query";

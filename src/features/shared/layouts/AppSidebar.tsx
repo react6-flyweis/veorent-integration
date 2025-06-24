@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { NavLink, useNavigate, type To } from "react-router-dom";
-import { ChevronRight, CircleIcon } from "lucide-react";
+import { ChevronRight, CircleIcon, Languages } from "lucide-react";
 import { motion } from "motion/react";
 
 import { LogoutConfirmDialog } from "@/components/LogoutConfirmDialog";
@@ -10,11 +11,15 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   Sidebar,
-  SidebarContent,
   SidebarHeader,
   SidebarMenuItem,
-  SidebarMenuSubButton,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuSub,
@@ -22,6 +27,8 @@ import {
   useSidebar,
   SidebarRail,
   SidebarTrigger,
+  SidebarContent,
+  SidebarMenuSubButton,
 } from "@/components/ui/sidebar";
 import {
   Tooltip,
@@ -60,14 +67,34 @@ export function AppSidebar({ navigationItems, ...props }: AppSidebarProps) {
   const navigate = useNavigate();
   const { state } = useSidebar();
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const [isTranslating, setIsTranslating] = useState(false);
   const logout = useAuthStore((store) => store.logout);
   const clearUserType = useUserPreferenceStore((store) => store.clearUserType);
+  const { t, i18n } = useTranslation();
+  const currentLanguage = i18n.language;
 
   const logoutHandler = () => {
     setShowLogoutDialog(false);
     logout();
     clearUserType();
     navigate("/login", { replace: true });
+  };
+
+  const changeLanguage = async (lang: string) => {
+    if (currentLanguage === lang || isTranslating) {
+      return;
+    }
+
+    setIsTranslating(true);
+
+    try {
+      await i18n.changeLanguage(lang);
+      console.log(`Language changed to: ${lang}`);
+    } catch (error) {
+      console.error("Language change error:", error);
+    } finally {
+      setIsTranslating(false);
+    }
   };
 
   // Component to handle individual text animations
@@ -177,14 +204,14 @@ export function AppSidebar({ navigationItems, ...props }: AppSidebarProps) {
                             )}
                           >
                             <img
-                              src={`/icons/${  item.icon}`}
+                              src={`/icons/${item.icon}`}
                               alt={item.title}
                               className="max-h-4 max-w-4 flex-shrink-0 transition-all duration-300"
                             />
                           </SidebarMenuButton>
                         </TooltipTrigger>
                         <TooltipContent side="right">
-                          <p>{item.title}</p>
+                          <p>{t(item.title.toLowerCase())}</p>
                         </TooltipContent>
                       </Tooltip>
                     ) : (
@@ -195,7 +222,7 @@ export function AppSidebar({ navigationItems, ...props }: AppSidebarProps) {
                         )}
                       >
                         <img
-                          src={`/icons/${  item.icon}`}
+                          src={`/icons/${item.icon}`}
                           alt={item.title}
                           className="max-h-4 max-w-4 flex-shrink-0 transition-all duration-300"
                         />
@@ -259,14 +286,14 @@ export function AppSidebar({ navigationItems, ...props }: AppSidebarProps) {
                               isActive={isActive}
                             >
                               <img
-                                src={`/icons/${  item.icon}`}
+                                src={`/icons/${item.icon}`}
                                 alt={item.title}
                                 className="max-h-4 max-w-4 flex-shrink-0 transition-all duration-300"
                               />
                             </SidebarMenuButton>
                           </TooltipTrigger>
                           <TooltipContent side="right">
-                            <p>{item.title}</p>
+                            <p>{t(item.title.toLowerCase())}</p>
                           </TooltipContent>
                         </Tooltip>
                       ) : (
@@ -279,12 +306,12 @@ export function AppSidebar({ navigationItems, ...props }: AppSidebarProps) {
                           isActive={isActive}
                         >
                           <img
-                            src={`/icons/${  item.icon}`}
+                            src={`/icons/${item.icon}`}
                             alt={item.title}
                             className="max-h-4 max-w-4 flex-shrink-0 transition-all duration-300"
                           />
                           <AnimatedText className="text-white">
-                            {item.title}
+                            {t(item.title.toLowerCase())}
                           </AnimatedText>
                         </SidebarMenuButton>
                       )}
@@ -314,7 +341,7 @@ export function AppSidebar({ navigationItems, ...props }: AppSidebarProps) {
                   </SidebarMenuButton>
                 </TooltipTrigger>
                 <TooltipContent side="right">
-                  <p>Logout</p>
+                  <p>{t("logout")}</p>
                 </TooltipContent>
               </Tooltip>
             ) : (
@@ -332,9 +359,77 @@ export function AppSidebar({ navigationItems, ...props }: AppSidebarProps) {
                   className="max-h-4 max-w-4 flex-shrink-0 transition-all duration-300"
                 />
                 <AnimatedText className="text-base text-white">
-                  logout
+                  {t("logout")}
                 </AnimatedText>
               </SidebarMenuButton>
+            )}
+          </SidebarMenuItem>
+
+          <SidebarMenuItem className="flex justify-center">
+            {state === "collapsed" ? (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <SidebarMenuButton
+                        size="lg"
+                        className={cn(
+                          "transition-all duration-300 ease-in-out",
+                          "justify-center",
+                        )}
+                        disabled={isTranslating}
+                      >
+                        {isTranslating ? (
+                          <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                        ) : (
+                          <Languages className="h-4 w-4 text-white" />
+                        )}
+                      </SidebarMenuButton>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent side="right" className="w-32">
+                      <DropdownMenuItem onClick={() => changeLanguage("en")}>
+                        🇺🇸 {t("english")}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => changeLanguage("es")}>
+                        🇪🇸 {t("spanish")}
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p>{t("language")}</p>
+                </TooltipContent>
+              </Tooltip>
+            ) : (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuButton
+                    size="lg"
+                    className={cn(
+                      "transition-all duration-300 ease-in-out",
+                      "pl-5",
+                    )}
+                    disabled={isTranslating}
+                  >
+                    {isTranslating ? (
+                      <div className="h-4 w-4 flex-shrink-0 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    ) : (
+                      <Languages className="h-4 w-4 flex-shrink-0 text-white" />
+                    )}
+                    <AnimatedText className="text-base text-white">
+                      {isTranslating ? t("translating") : t("language")}
+                    </AnimatedText>
+                  </SidebarMenuButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent side="right" className="w-32">
+                  <DropdownMenuItem onClick={() => changeLanguage("en")}>
+                    🇺🇸 {t("english")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => changeLanguage("es")}>
+                    🇪🇸 {t("spanish")}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
           </SidebarMenuItem>
         </SidebarMenu>
