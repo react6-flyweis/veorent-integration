@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -38,6 +39,8 @@ export function BackgroundInfo({
 }) {
   const { id } = useParams<{ id: string }>();
   const { mutateAsync, isPending } = useUpdateBookingMutation(id || "");
+
+  const { t } = useTranslation();
 
   const form = useForm<BgFormValues>({
     resolver: zodResolver(bgInfoFormSchema),
@@ -90,11 +93,11 @@ export function BackgroundInfo({
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="yes" id="evicted-yes" />
-                      <Label htmlFor="evicted-yes">Yes</Label>
+                      <Label htmlFor="evicted-yes">{t("yes")}</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="no" id="evicted-no" />
-                      <Label htmlFor="evicted-no">No</Label>
+                      <Label htmlFor="evicted-no">{t("no")}</Label>
                     </div>
                   </RadioGroup>
                 </FormControl>
@@ -121,11 +124,11 @@ export function BackgroundInfo({
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="yes" id="criminalOffense-yes" />
-                      <Label htmlFor="criminalOffense-yes">Yes</Label>
+                      <Label htmlFor="criminalOffense-yes">{t("yes")}</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="no" id="criminalOffense-no" />
-                      <Label htmlFor="criminalOffense-no">No</Label>
+                      <Label htmlFor="criminalOffense-no">{t("no")}</Label>
                     </div>
                   </RadioGroup>
                 </FormControl>
@@ -151,11 +154,11 @@ export function BackgroundInfo({
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="yes" id="bankrupted-yes" />
-                      <Label htmlFor="bankrupted-yes">Yes</Label>
+                      <Label htmlFor="bankrupted-yes">{t("yes")}</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="no" id="bankrupted-no" />
-                      <Label htmlFor="bankrupted-no">No</Label>
+                      <Label htmlFor="bankrupted-no">{t("no")}</Label>
                     </div>
                   </RadioGroup>
                 </FormControl>

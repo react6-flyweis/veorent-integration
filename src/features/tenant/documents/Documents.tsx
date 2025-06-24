@@ -1,4 +1,7 @@
+import { useTranslation } from "react-i18next";
+
 import { PageTitle } from "@/components/PageTitle";
+
 import { DocumentCard } from "./components/DocumentCard";
 
 const documents = [
@@ -25,9 +28,11 @@ const documents = [
 ];
 
 export default function Documents() {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-4">
-      <PageTitle title="Documents" />
+      <PageTitle title={t("documents")} />
       <div className="space-y-4">
         {documents.map((doc) => (
           <DocumentCard

@@ -13,8 +13,10 @@ import {
   useCallback,
   useMemo,
 } from "react";
-import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 import { ArrowLeft } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 // Stepper Context
@@ -84,11 +86,14 @@ export const MultiStepper = forwardRef<
     if (step > 1) setStep((s) => s - 1);
   }, [step]);
 
-  const goToStep = useCallback((stepNumber: number) => {
-    if (stepNumber >= 1 && stepNumber <= totalSteps) {
-      setStep(stepNumber);
-    }
-  }, [totalSteps]);
+  const goToStep = useCallback(
+    (stepNumber: number) => {
+      if (stepNumber >= 1 && stepNumber <= totalSteps) {
+        setStep(stepNumber);
+      }
+    },
+    [totalSteps],
+  );
 
   const validateAndGoNext = useCallback(
     async (validator: () => boolean | Promise<boolean>) => {
@@ -232,6 +237,8 @@ export function MultiStepperButton({ children }: PropsWithChildren) {
   const { currentStep, totalSteps, nextStep, currentStepValidator } =
     useContext(StepperContext);
 
+  const { t } = useTranslation();
+
   const isLastStep = useMemo(
     () => currentStep === totalSteps,
     [currentStep, totalSteps],
@@ -284,7 +291,7 @@ export function MultiStepperButton({ children }: PropsWithChildren) {
         className="w-4/5 @lg:w-3/5"
         onClick={handleNextClick}
       >
-        {isLastStep ? "Submit" : "Next"}
+        {isLastStep ? t("submit") : t("next")}
       </Button>
     </div>
   );

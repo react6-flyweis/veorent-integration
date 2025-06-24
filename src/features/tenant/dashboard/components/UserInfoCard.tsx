@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
 import { CurrencyIcon } from "@/components/CurrencyIcon";
@@ -19,6 +20,7 @@ import { getInitial } from "@/utils/name";
 import { useGetBookingsQuery } from "../api/queries";
 
 export function UserInfoCard() {
+  const { t } = useTranslation();
   const { data: user } = useGetProfileQuery();
   const { data: balance, isLoading: walletLoading } = useGetWalletQuery();
   const { data: bookings, isLoading: bookingsLoading } = useGetBookingsQuery();
@@ -53,7 +55,7 @@ export function UserInfoCard() {
       </CardHeader>
       <CardContent className="flex flex-col">
         <div className="flex justify-between">
-          <h3 className="text-2xl font-bold">Account Balance</h3>
+          <h3 className="text-2xl font-bold">{t("accountBalance")}</h3>
           <div className="text-primary flex items-center gap-2 text-2xl font-bold">
             <CurrencyIcon />
             {walletLoading ? (
@@ -67,12 +69,12 @@ export function UserInfoCard() {
       <CardFooter className="flex-col gap-2 @xl:flex-row">
         <Link to="/tenant/make-payment" className="w-full flex-1">
           <Button size="lg" className="w-full">
-            Make Payment
+            {t("makePayment")}
           </Button>
         </Link>
         <Link to="/tenant/auto-pay" className="w-full flex-1">
           <Button variant="outline" size="lg" className="w-full">
-            Auto Pay
+            {t("autoPay")}
           </Button>
         </Link>
       </CardFooter>

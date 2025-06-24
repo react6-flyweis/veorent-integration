@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MicIcon } from "lucide-react";
@@ -60,6 +61,8 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export function MaintenanceRequestForm() {
+  const { t } = useTranslation();
+
   const { showToast } = useToast();
   const navigate = useNavigate();
 
@@ -194,7 +197,7 @@ export function MaintenanceRequestForm() {
           name="description"
           render={({ field, formState: { errors } }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>{t("description")}</FormLabel>
               <FormControl>
                 <Textarea
                   rows={5}
@@ -258,13 +261,13 @@ export function MaintenanceRequestForm() {
                     <FormControl>
                       <RadioGroupItem value="yes" />
                     </FormControl>
-                    <FormLabel className="text-sm">Yes</FormLabel>
+                    <FormLabel className="text-sm">{t("yes")}</FormLabel>
                   </FormItem>
                   <FormItem className="flex items-center space-x-2">
                     <FormControl>
                       <RadioGroupItem value="no" />
                     </FormControl>
-                    <FormLabel className="text-sm">No</FormLabel>
+                    <FormLabel className="text-sm">{t("no")}</FormLabel>
                   </FormItem>
                 </RadioGroup>
                 <FormMessage />
@@ -319,13 +322,13 @@ export function MaintenanceRequestForm() {
                     <FormControl>
                       <RadioGroupItem value="yes" />
                     </FormControl>
-                    <FormLabel className="text-sm">Yes</FormLabel>
+                    <FormLabel className="text-sm">{t("yes")}</FormLabel>
                   </FormItem>
                   <FormItem className="flex items-center space-x-2">
                     <FormControl>
                       <RadioGroupItem value="no" />
                     </FormControl>
-                    <FormLabel className="text-sm">No</FormLabel>
+                    <FormLabel className="text-sm">{t("no")}</FormLabel>
                   </FormItem>
                 </RadioGroup>
                 <FormMessage />
@@ -366,7 +369,7 @@ export function MaintenanceRequestForm() {
             className="w-4/5 @lg:w-3/5"
             isLoading={form.formState.isSubmitting}
           >
-            Submit
+            {t("submit")}
           </LoadingButton>
         </div>
       </form>

@@ -1,3 +1,12 @@
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+import { CurrencyIcon } from "@/components/CurrencyIcon";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -6,16 +15,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
-import { useEffect } from "react";
-import { CurrencyIcon } from "@/components/CurrencyIcon";
 
 export const addressSchema = z
   .object({
@@ -56,6 +58,7 @@ export function AddressEditor({
   data: IAddress | undefined;
   onSubmit: (data: IAddress) => void;
 }) {
+  const { t } = useTranslation();
   const form = useForm<IAddress>({
     resolver: zodResolver(addressSchema),
     defaultValues: data
@@ -96,7 +99,7 @@ export function AddressEditor({
                     <FormMessage />
                   </FormItem>
                   <FormItem className="flex items-center gap-2">
-                    <RadioGroupItem value="other" /> Other
+                    <RadioGroupItem value="other" /> {t("other")}
                     <FormMessage />
                   </FormItem>
                 </RadioGroup>
@@ -140,7 +143,7 @@ export function AddressEditor({
           name="streetAddress"
           render={({ field }) => (
             <FormItem className="gap-1">
-              <FormLabel className="text-base">Street Address</FormLabel>
+              <FormLabel className="text-base">{t("streetAddress")}</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -155,7 +158,7 @@ export function AddressEditor({
             name="unit"
             render={({ field }) => (
               <FormItem className="gap-1">
-                <FormLabel className="text-base">Unit</FormLabel>
+                <FormLabel className="text-base">{t("unit")}</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -168,7 +171,7 @@ export function AddressEditor({
             name="city"
             render={({ field }) => (
               <FormItem className="gap-1">
-                <FormLabel className="text-base">City</FormLabel>
+                <FormLabel className="text-base">{t("city")}</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -184,7 +187,7 @@ export function AddressEditor({
             name="region"
             render={({ field }) => (
               <FormItem className="gap-1">
-                <FormLabel className="text-base">Region</FormLabel>
+                <FormLabel className="text-base">{t("region")}</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -197,7 +200,7 @@ export function AddressEditor({
             name="zipCode"
             render={({ field }) => (
               <FormItem className="gap-1">
-                <FormLabel className="text-base">Zip Code</FormLabel>
+                <FormLabel className="text-base">{t("zipCode")}</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -218,7 +221,11 @@ export function AddressEditor({
                   <CurrencyIcon />
                 </div>
                 <FormControl>
-                  <Input className="pl-8" placeholder="Amount" {...field} />
+                  <Input
+                    className="pl-8"
+                    placeholder="{t('amount')}"
+                    {...field}
+                  />
                 </FormControl>
               </div>
               <FormMessage />
@@ -254,7 +261,7 @@ export function AddressEditor({
           name="landlordName"
           render={({ field }) => (
             <FormItem className="gap-1">
-              <FormLabel className="text-base">Full Name</FormLabel>
+              <FormLabel className="text-base">{t("fullName")}</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -303,7 +310,7 @@ export function AddressEditor({
           name="landlordPhone"
           render={({ field }) => (
             <FormItem className="gap-1">
-              <FormLabel className="text-base">Phone Number</FormLabel>
+              <FormLabel className="text-base">{t("phoneNumber")}</FormLabel>
               <FormControl>
                 <Input type="tel" {...field} />
               </FormControl>

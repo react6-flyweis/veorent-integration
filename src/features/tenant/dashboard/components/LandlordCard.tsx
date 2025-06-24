@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
 import { Loader } from "@/components/Loader";
@@ -28,6 +29,8 @@ interface LandlordCardProps {
 }
 
 export function LandlordCard({ className }: LandlordCardProps) {
+  const { t } = useTranslation();
+
   const { data: landlords, isLoading, error } = useGetLandlordsForUserQuery();
 
   if (isLoading) {
@@ -46,11 +49,9 @@ export function LandlordCard({ className }: LandlordCardProps) {
         <CardContent className="flex flex-col items-center justify-center p-8 text-center">
           <div className="space-y-2">
             <CardTitle className="text-muted-foreground">
-              No Landlord Found
+              {t("noLandlordFound")}
             </CardTitle>
-            <CardDescription>
-              You don't have any landlords assigned to your account yet.
-            </CardDescription>
+            <CardDescription>{t("noLandlordsAssigned")}</CardDescription>
           </div>
         </CardContent>
       </Card>
@@ -72,7 +73,7 @@ export function LandlordCard({ className }: LandlordCardProps) {
         </Avatar>
         <div className="space-y-1">
           <CardDescription className="font-bold uppercase">
-            Landlord
+            {t("landlord")}
           </CardDescription>
           <CardTitle className="text-primary">
             {landlord.firstname} {landlord.lastname}
@@ -83,26 +84,25 @@ export function LandlordCard({ className }: LandlordCardProps) {
       <CardFooter className="px-0">
         <div className="grid w-full grid-cols-3">
           <Button variant="outline" asChild>
-            <Link to={`mailto:${landlord.email}`}>Email</Link>
+            <Link to={`mailto:${landlord.email}`}>{t("email")}</Link>
           </Button>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="outline">Call</Button>
+              <Button variant="outline">{t("call")}</Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle className="text-center">
-                  This feature is only accessible through our mobile app. Please
-                  download the app by clicking this link.
+                  {t("mobileAppFeature")}
                 </AlertDialogTitle>
               </AlertDialogHeader>
               <AlertDialogFooter className="w-full justify-center!">
-                <AlertDialogAction>Click here</AlertDialogAction>
+                <AlertDialogAction>{t("clickHere")}</AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
           <Button variant="outline" asChild>
-            <Link to="/tenant/messages">Message</Link>
+            <Link to="/tenant/messages">{t("message")}</Link>
           </Button>
         </div>
       </CardFooter>

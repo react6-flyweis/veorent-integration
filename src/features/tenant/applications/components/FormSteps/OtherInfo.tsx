@@ -1,6 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -50,6 +51,7 @@ export default function EmergencyContactForm({
 }) {
   const { id } = useParams<{ id: string }>();
   const { mutateAsync, isPending } = useUpdateBookingMutation(id || "");
+  const { t } = useTranslation();
 
   const form = useForm<EmergencyFormType>({
     resolver: zodResolver(EmergencySchema),
@@ -99,7 +101,7 @@ export default function EmergencyContactForm({
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>First Name</FormLabel>
+                  <FormLabel>{t("firstName")}</FormLabel>
                   <FormControl>
                     <Input placeholder="John" {...field} />
                   </FormControl>
@@ -126,7 +128,7 @@ export default function EmergencyContactForm({
                 name="phoneNumber"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Phone Number</FormLabel>
+                    <FormLabel>{t("phoneNumber")}</FormLabel>
                     <FormControl>
                       <Input placeholder="+1 123 456 7890" {...field} />
                     </FormControl>
@@ -178,7 +180,7 @@ export default function EmergencyContactForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="website">Website</SelectItem>
+                    <SelectItem value="website">{t("website")}</SelectItem>
                     <SelectItem value="agent">Agent</SelectItem>
                     <SelectItem value="social">Social Media</SelectItem>
                     <SelectItem value="friend">Friend / Referral</SelectItem>

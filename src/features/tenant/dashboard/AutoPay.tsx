@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 
 import rentIconImg from "@/assets/icons/rent.png";
@@ -17,6 +18,8 @@ import { useUpdateCardAutoPayMutation } from "./api/mutations";
 import { useGetCardsQuery, useGetPendingRentQuery } from "./api/queries";
 
 export default function AutoPay() {
+  const { t } = useTranslation();
+
   const goBack = useGoBack();
   const navigate = useNavigate();
   const { showToast } = useToast();
@@ -142,7 +145,7 @@ export default function AutoPay() {
       </div>
       <div className="flex gap-1">
         <Label htmlFor="auto-pay" className="checked:text-muted">
-          Off
+          {t("off")}
         </Label>
         <Switch
           id="auto-pay"
@@ -150,7 +153,7 @@ export default function AutoPay() {
           onCheckedChange={handleAutoPayToggle}
           disabled={isUpdating}
         />
-        <Label htmlFor="auto-pay">On</Label>
+        <Label htmlFor="auto-pay">{t("on")}</Label>
       </div>
 
       {/* Status message */}
@@ -227,7 +230,7 @@ export default function AutoPay() {
       </Card>
       <div className="flex w-full justify-center">
         <Button onClick={goBack} size="lg" className="w-3/5">
-          Back
+          {t("back")}
         </Button>
       </div>
     </div>

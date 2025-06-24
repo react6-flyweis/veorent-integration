@@ -1,3 +1,6 @@
+import { useTranslation } from "react-i18next";
+
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -5,7 +8,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 
 interface LogoutConfirmDialogProps {
   open: boolean;
@@ -18,6 +20,8 @@ export function LogoutConfirmDialog({
   onOpenChange,
   onConfirm,
 }: LogoutConfirmDialogProps) {
+  const { t } = useTranslation();
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
@@ -33,7 +37,7 @@ export function LogoutConfirmDialog({
             className="bg-primary hover:bg-primary/90 w-32 text-white"
             onClick={onConfirm}
           >
-            Yes
+            {t("yes")}
           </Button>
           <Button
             type="button"
@@ -41,7 +45,7 @@ export function LogoutConfirmDialog({
             className="w-32"
             onClick={() => onOpenChange(false)}
           >
-            No
+            {t("no")}
           </Button>
         </DialogFooter>
       </DialogContent>

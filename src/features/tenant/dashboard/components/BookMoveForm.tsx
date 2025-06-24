@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
@@ -64,6 +65,7 @@ export function BookMyMoveForm({
 }: {
   onNext?: (data: FormData) => void;
 }) {
+  const { t } = useTranslation();
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -93,7 +95,7 @@ export function BookMyMoveForm({
               control={form.control}
               render={({ field }) => (
                 <FormItem className="col-span-2">
-                  <FormLabel>Street Address</FormLabel>
+                  <FormLabel>{t("streetAddress")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -106,7 +108,7 @@ export function BookMyMoveForm({
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Unit</FormLabel>
+                  <FormLabel>{t("unit")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -118,7 +120,7 @@ export function BookMyMoveForm({
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>City</FormLabel>
+                  <FormLabel>{t("city")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -131,7 +133,7 @@ export function BookMyMoveForm({
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Region</FormLabel>
+                  <FormLabel>{t("region")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -144,7 +146,7 @@ export function BookMyMoveForm({
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Zip Code</FormLabel>
+                  <FormLabel>{t("zipCode")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -191,7 +193,7 @@ export function BookMyMoveForm({
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Start Date</FormLabel>
+                <FormLabel>{t("startDate")}</FormLabel>
                 <FormControl>
                   <DateInput allowPastDates={false} {...field} />
                 </FormControl>
@@ -203,7 +205,7 @@ export function BookMyMoveForm({
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>End Date</FormLabel>
+                <FormLabel>{t("endDate")}</FormLabel>
                 <FormControl>
                   <DateInput allowPastDates={false} {...field} />
                 </FormControl>
@@ -228,7 +230,7 @@ export function BookMyMoveForm({
               control={form.control}
               render={({ field }) => (
                 <FormItem className="col-span-2">
-                  <FormLabel>Street Address</FormLabel>
+                  <FormLabel>{t("streetAddress")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -241,7 +243,7 @@ export function BookMyMoveForm({
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Unit</FormLabel>
+                  <FormLabel>{t("unit")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -253,7 +255,7 @@ export function BookMyMoveForm({
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>City</FormLabel>
+                  <FormLabel>{t("city")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -266,7 +268,7 @@ export function BookMyMoveForm({
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Region</FormLabel>
+                  <FormLabel>{t("region")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -279,7 +281,7 @@ export function BookMyMoveForm({
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Zip Code</FormLabel>
+                  <FormLabel>{t("zipCode")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -327,7 +329,7 @@ export function BookMyMoveForm({
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Start Date</FormLabel>
+                  <FormLabel>{t("startDate")}</FormLabel>
                   <DateInput allowPastDates={false} {...field} />
                 </FormItem>
               )}
@@ -337,7 +339,7 @@ export function BookMyMoveForm({
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>End Date</FormLabel>
+                  <FormLabel>{t("endDate")}</FormLabel>
                   <DateInput allowPastDates={false} {...field} />
                 </FormItem>
               )}
@@ -357,7 +359,7 @@ export function BookMyMoveForm({
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Start Date</FormLabel>
+                  <FormLabel>{t("startDate")}</FormLabel>
                   <DateInput allowPastDates={false} {...field} />
                 </FormItem>
               )}
@@ -379,7 +381,7 @@ export function BookMyMoveForm({
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>End Date</FormLabel>
+                  <FormLabel>{t("endDate")}</FormLabel>
                   <DateInput allowPastDates={false} {...field} />
                 </FormItem>
               )}
@@ -413,11 +415,11 @@ export function BookMyMoveForm({
                   >
                     <FormItem className="flex items-center space-x-2">
                       <RadioGroupItem value="yes" />
-                      <FormLabel>Yes</FormLabel>
+                      <FormLabel>{t("yes")}</FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-x-2">
                       <RadioGroupItem value="no" />
-                      <FormLabel>No</FormLabel>
+                      <FormLabel>{t("no")}</FormLabel>
                     </FormItem>
                   </RadioGroup>
                 </FormControl>

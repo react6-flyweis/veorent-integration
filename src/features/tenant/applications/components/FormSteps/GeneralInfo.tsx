@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -39,6 +40,8 @@ export function GeneralInfo({
 }) {
   const { id } = useParams<{ id: string }>();
   const { mutateAsync, isPending } = useUpdateBookingMutation(id || "");
+
+  const { t } = useTranslation();
 
   const form = useForm<GeneralFormValues>({
     resolver: zodResolver(generalInfoFormSchema),
@@ -103,11 +106,11 @@ export function GeneralInfo({
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="yes" id="haveAnimal-yes" />
-                      <Label htmlFor="haveAnimal-yes">Yes</Label>
+                      <Label htmlFor="haveAnimal-yes">{t("yes")}</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="no" id="haveAnimal-no" />
-                      <Label htmlFor="haveAnimal-no">No</Label>
+                      <Label htmlFor="haveAnimal-no">{t("no")}</Label>
                     </div>
                   </RadioGroup>
                 </FormControl>
@@ -131,11 +134,11 @@ export function GeneralInfo({
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="yes" id="haveVehicle-yes" />
-                      <Label htmlFor="haveVehicle-yes">Yes</Label>
+                      <Label htmlFor="haveVehicle-yes">{t("yes")}</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="no" id="haveVehicle-no" />
-                      <Label htmlFor="haveVehicle-no">No</Label>
+                      <Label htmlFor="haveVehicle-no">{t("no")}</Label>
                     </div>
                   </RadioGroup>
                 </FormControl>
@@ -157,11 +160,11 @@ export function GeneralInfo({
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="yes" id="smoke-yes" />
-                      <Label htmlFor="smoke-yes">Yes</Label>
+                      <Label htmlFor="smoke-yes">{t("yes")}</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="no" id="smoke-no" />
-                      <Label htmlFor="smoke-no">No</Label>
+                      <Label htmlFor="smoke-no">{t("no")}</Label>
                     </div>
                   </RadioGroup>
                 </FormControl>
@@ -186,11 +189,11 @@ export function GeneralInfo({
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="yes" id="requirement-yes" />
-                      <Label htmlFor="requirement-yes">Yes</Label>
+                      <Label htmlFor="requirement-yes">{t("yes")}</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="no" id="requirement-no" />
-                      <Label htmlFor="requirement-no">No</Label>
+                      <Label htmlFor="requirement-no">{t("no")}</Label>
                     </div>
                   </RadioGroup>
                 </FormControl>

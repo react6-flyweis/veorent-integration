@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
@@ -31,6 +32,8 @@ interface ProfileFormProps {
 }
 
 export function ProfileForm({ profile }: ProfileFormProps) {
+  const { t } = useTranslation();
+
   const { mutateAsync } = useEditProfileMutation();
   const { showToast } = useToast();
 
@@ -66,9 +69,9 @@ export function ProfileForm({ profile }: ProfileFormProps) {
         email: data.email,
       };
       await mutateAsync(apiData);
-      showToast("Profile updated successfully", "success");
+      showToast(t("profileUpdated"), "success");
     } catch {
-      showToast("Failed to update profile", "error");
+      showToast(t("errorMessage"), "error");
     }
   };
 
@@ -81,7 +84,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
           name="firstName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>First Name</FormLabel>
+              <FormLabel>{t("firstName")}</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -96,7 +99,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
           name="lastName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Last Name</FormLabel>
+              <FormLabel>{t("lastName")}</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -111,7 +114,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
           name="mobileNumber"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Mobile Number</FormLabel>
+              <FormLabel>{t("mobileNumber")}</FormLabel>
               <FormControl>
                 <Input type="tel" {...field} />
               </FormControl>
@@ -126,7 +129,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>{t("email")}</FormLabel>
               <FormControl>
                 <Input type="email" {...field} />
               </FormControl>
@@ -141,7 +144,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
           className="w-full"
           isLoading={form.formState.isSubmitting}
         >
-          Save Changes
+          {t("saveChanges")}
         </LoadingButton>
       </form>
     </Form>

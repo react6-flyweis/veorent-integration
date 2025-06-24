@@ -1,6 +1,9 @@
-import { z } from "zod";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormField,
@@ -11,7 +14,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
 
 const contactFormSchema = z.object({
   firstName: z.string().min(2, "First name is required"),
@@ -24,6 +26,8 @@ const contactFormSchema = z.object({
 type ContactFormValues = z.infer<typeof contactFormSchema>;
 
 export function ContactForm() {
+  const { t } = useTranslation();
+
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
@@ -48,7 +52,7 @@ export function ContactForm() {
           name="firstName"
           render={({ field }) => (
             <FormItem className="gap-1">
-              <FormLabel className="text-base">First Name</FormLabel>
+              <FormLabel className="text-base">{t("firstName")}</FormLabel>
               <FormControl>
                 <Input className="bg-white" {...field} />
               </FormControl>
@@ -61,7 +65,7 @@ export function ContactForm() {
           name="lastName"
           render={({ field }) => (
             <FormItem className="gap-1">
-              <FormLabel className="text-base">Last Name</FormLabel>
+              <FormLabel className="text-base">{t("lastName")}</FormLabel>
               <FormControl>
                 <Input className="bg-white" {...field} />
               </FormControl>
@@ -74,7 +78,7 @@ export function ContactForm() {
           name="phone"
           render={({ field }) => (
             <FormItem className="gap-1">
-              <FormLabel className="text-base">Phone Number</FormLabel>
+              <FormLabel className="text-base">{t("phoneNumber")}</FormLabel>
               <FormControl>
                 <Input className="bg-white" type="tel" {...field} />
               </FormControl>
@@ -87,7 +91,7 @@ export function ContactForm() {
           name="email"
           render={({ field }) => (
             <FormItem className="gap-1">
-              <FormLabel className="text-base">Email</FormLabel>
+              <FormLabel className="text-base">{t("email")}</FormLabel>
               <FormControl>
                 <Input className="bg-white" type="email" {...field} />
               </FormControl>

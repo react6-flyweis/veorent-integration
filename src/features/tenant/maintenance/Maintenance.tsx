@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import { PlusIcon } from "lucide-react";
 
@@ -16,6 +17,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useGetMaintenanceRequests } from "./api/queries";
 
 export default function Maintenance() {
+  const { t } = useTranslation();
+
   const { data, isLoading } = useGetMaintenanceRequests();
   const [activeTab, setActiveTab] = useState("open");
 
@@ -66,13 +69,13 @@ export default function Maintenance() {
 
   return (
     <div className="flex flex-1 flex-col">
-      <PageTitle title="Maintenance" />
+      <PageTitle title={t("maintenance")} />
       <Tabs defaultValue="open" className="flex-1" onValueChange={setActiveTab}>
         <TabsList className="px-0">
           <TabsTrigger className="pl-0" value="open">
-            Open Requests
+            {t("openRequests")}
           </TabsTrigger>
-          <TabsTrigger value="all">All Requests</TabsTrigger>
+          <TabsTrigger value="all">{t("allRequests")}</TabsTrigger>
         </TabsList>
         <TabsContent value={activeTab} className="">
           {isLoading ? (
@@ -107,7 +110,7 @@ export default function Maintenance() {
                       <CardContent className="flex items-center justify-between p-3!">
                         <div>
                           <p className="text-lg font-bold text-[#001D6E]">
-                            REQUEST #{req._id}
+                            {t("request")} #{req._id}
                           </p>
                           <p className="text-muted-foreground">
                             {req.issueTitle} - {req.category}
@@ -122,11 +125,10 @@ export default function Maintenance() {
             </div>
           ) : (
             <div className="relative flex h-full items-center justify-center">
-              You don&apos;t have any{" "}
+              {t("youDontHaveAny")}{" "}
               {activeTab === "open"
-                ? `open maintenance request at this time. Add one by clicking on the "+"
-              button!`
-                : "completed maintenance requests at this time."}
+                ? t("noOpenMaintenanceRequests")
+                : t("noCompletedMaintenanceRequests")}
             </div>
           )}
           {activeTab === "open" && (

@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import { PlusIcon } from "lucide-react";
 
@@ -16,6 +17,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useGetLeasesQuery } from "./api/queries";
 
 function Leases() {
+  const { t } = useTranslation();
+
   const { data, isLoading } = useGetLeasesQuery();
   const [activeTab, setActiveTab] = useState("open");
 
@@ -66,13 +69,13 @@ function Leases() {
 
   return (
     <div className="flex flex-1 flex-col">
-      <PageTitle title="Leases" />
+      <PageTitle title={t("leases")} />
       <Tabs defaultValue="open" className="flex-1" onValueChange={setActiveTab}>
         <TabsList className="px-0">
           <TabsTrigger className="pl-0" value="open">
-            New leasing Requests
+            {t("newLeasingRequests")}
           </TabsTrigger>
-          <TabsTrigger value="all">Requests History</TabsTrigger>
+          <TabsTrigger value="all">{t("requestsHistory")}</TabsTrigger>
         </TabsList>
         <TabsContent value={activeTab} className="">
           {isLoading ? (
@@ -107,7 +110,7 @@ function Leases() {
                       <CardContent className="flex items-center justify-between p-3!">
                         <div>
                           <p className="text-lg font-bold text-[#001D6E]">
-                            REQUEST #{req._id}
+                            {t("request")} #{req._id}
                           </p>
                           <p className="text-muted-foreground">
                             {req.desc} - {req.category}
@@ -122,11 +125,10 @@ function Leases() {
             </div>
           ) : (
             <div className="relative flex h-full items-center justify-center">
-              You don&apos;t have any{" "}
+              {t("youDontHaveAny")}{" "}
               {activeTab === "open"
-                ? `open leasing request at this time. Add one by clicking on the "+"
-              button!`
-                : "completed leasing requests at this time."}
+                ? t("noOpenLeasingRequests")
+                : t("noCompletedLeasingRequests")}
             </div>
           )}
           {activeTab === "open" && (

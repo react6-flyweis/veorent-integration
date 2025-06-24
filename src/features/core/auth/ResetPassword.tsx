@@ -1,6 +1,9 @@
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormField,
@@ -10,7 +13,6 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
 import { PasswordInput } from "@/components/ui/password-input";
 
 const passwordSchema = z
@@ -26,6 +28,8 @@ const passwordSchema = z
 type PasswordFormValues = z.infer<typeof passwordSchema>;
 
 export function ResetPasswordPage() {
+  const { t } = useTranslation();
+
   const form = useForm<PasswordFormValues>({
     resolver: zodResolver(passwordSchema),
     defaultValues: {
@@ -41,8 +45,8 @@ export function ResetPasswordPage() {
 
   return (
     <div className="">
-      <img src="/logo-dark.png" alt="Veorent Logo" className="h-8 mb-6" />
-      <h2 className="text-2xl font-semibold mb-6">Reset Password</h2>
+      <img src="/logo-dark.png" alt="Veorent Logo" className="mb-6 h-8" />
+      <h2 className="mb-6 text-2xl font-semibold">{t("resetPassword")}</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {/* Password */}
@@ -51,7 +55,7 @@ export function ResetPasswordPage() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>{t("password")}</FormLabel>
                 <FormControl>
                   <PasswordInput {...field} />
                 </FormControl>
@@ -87,7 +91,7 @@ export function ResetPasswordPage() {
           />
 
           <Button type="submit" className="w-full">
-            Save
+            {t("save")}
           </Button>
         </form>
       </Form>

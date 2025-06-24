@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SwissFrancIcon } from "lucide-react";
@@ -47,6 +48,8 @@ type PaymentFormType = z.infer<typeof PaymentSchema>;
 const SCREENING_AMOUNT = 55.0; // Example amount, can be dynamic
 
 export function PaymentFee() {
+  const { t } = useTranslation();
+
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<
     "card" | "mtn" | "orange"
@@ -172,7 +175,7 @@ export function PaymentFee() {
             name="cardHolderName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Card Holder Name</FormLabel>
+                <FormLabel>{t("cardHolderName")}</FormLabel>
                 <FormControl>
                   <Input placeholder="Full name on card" {...field} />
                 </FormControl>
@@ -186,7 +189,7 @@ export function PaymentFee() {
             name="cardNumber"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Card Number</FormLabel>
+                <FormLabel>{t("cardNumber")}</FormLabel>
                 <FormControl>
                   <CardNumberInput {...field} />
                 </FormControl>
@@ -229,9 +232,9 @@ export function PaymentFee() {
               name="zipCode"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Zip Code</FormLabel>
+                  <FormLabel>{t("zipCode")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Zip Code" {...field} />
+                    <Input placeholder="{t('zipCode')}" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

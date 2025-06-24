@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { PageTitle } from "@/components/PageTitle";
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,8 @@ import { ProfileForm } from "./components/ProfileForm";
 import { ProfilePicture } from "./components/ProfilePicture";
 
 export default function Settings() {
+  const { t } = useTranslation();
+
   const [showPasswordForm, setShowPasswordForm] = useState(false);
 
   // Fetch profile data once at the top level
@@ -18,9 +21,9 @@ export default function Settings() {
   if (error) {
     return (
       <div className="space-y-5">
-        <PageTitle title="Account Settings" />
+        <PageTitle title={t("accountSettings")} />
         <div className="text-center text-red-500">
-          Failed to load profile data. Please try again.
+          {t("failedToLoadProfile")}
         </div>
       </div>
     );
@@ -28,19 +31,23 @@ export default function Settings() {
 
   return (
     <div className="space-y-5">
-      <PageTitle title="Account Settings" />
+      <PageTitle title={t("accountSettings")} />
       <div className="space-y-4">
         <ProfilePicture profile={profile} />
-        <h2 className="text-primary text-lg font-semibold">My Information</h2>
+        <h2 className="text-primary text-lg font-semibold">
+          {t("myInformation")}
+        </h2>
         <ProfileForm profile={profile} />
         <div>
-          <h2 className="text-primary mb-1 text-xl font-semibold">Password</h2>
+          <h2 className="text-primary mb-1 text-xl font-semibold">
+            {t("password")}
+          </h2>
           <Button
             variant="outlinePrimary"
             className="mb-5 w-42"
             onClick={() => setShowPasswordForm(!showPasswordForm)}
           >
-            Change Password
+            {t("changePassword")}
           </Button>
           {showPasswordForm && (
             <ChangePasswordForm

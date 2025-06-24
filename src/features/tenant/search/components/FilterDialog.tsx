@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { ListFilterIcon } from "lucide-react";
 
 import {
@@ -44,6 +45,8 @@ export const FilterDialog = ({
   onFiltersChange,
   onClearFilters,
 }: FilterDialogProps) => {
+  const { t } = useTranslation();
+
   const [open, setOpen] = useState(false);
   const [localFilters, setLocalFilters] = useState<IPropertyFilters>(filters);
 
@@ -136,7 +139,7 @@ export const FilterDialog = ({
       <DialogTrigger asChild>
         <Button variant="ghost" className="shrink-0">
           <ListFilterIcon className="size-5" />
-          <span className="ml-1 text-lg">Filter</span>
+          <span className="ml-1 text-lg">{t("filter")}</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[90vh] overflow-hidden p-0 sm:max-w-[425px]">
@@ -212,7 +215,7 @@ export const FilterDialog = ({
             <Accordion type="single" collapsible defaultValue="amenities">
               <AccordionItem value="amenities">
                 <AccordionTrigger className="text-base font-medium">
-                  Amenities
+                  {t("amenities")}
                 </AccordionTrigger>
                 <AccordionContent>
                   <AmenitiesFilter
@@ -225,7 +228,7 @@ export const FilterDialog = ({
 
             {/* Location */}
             <div className="space-y-3">
-              <h3 className="text-base font-medium">Location</h3>
+              <h3 className="text-base font-medium">{t("location")}</h3>
               <LocationFilter
                 city={localFilters.city}
                 region={localFilters.region}

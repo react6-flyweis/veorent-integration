@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import applicationsIcon from "@/assets/icons/applications.png";
 import { IconCard } from "@/components/IconCard";
 import { useGetBookingsQuery } from "@/features/tenant/dashboard/api/queries";
@@ -9,6 +11,7 @@ interface RentalApplicationCardProps {
 export function RentalApplicationCard({
   className,
 }: RentalApplicationCardProps) {
+  const { t } = useTranslation();
   const { data: bookings } = useGetBookingsQuery();
 
   // Get the latest booking
@@ -20,8 +23,8 @@ export function RentalApplicationCard({
 
   // Determine title and action text based on payment status
   const isPaid = latestBooking?.paymentStatus === "Paid";
-  const title = isPaid ? "Rental Booked" : "Rental Application";
-  const actionText = isPaid ? "Booked" : "Finish My Application";
+  const title = isPaid ? t("rentalBooked") : t("rentalApplication");
+  const actionText = isPaid ? t("booked") : t("finishMyApplication");
   const actionUrl = latestBooking
     ? isPaid
       ? "#"
@@ -32,7 +35,7 @@ export function RentalApplicationCard({
     <IconCard
       className={className}
       title={title}
-      description="Lorem Ipsum is simply dummy text"
+      description={t("rentalApplicationDescription")}
       icon={applicationsIcon}
       actionText={actionText}
       url={actionUrl}

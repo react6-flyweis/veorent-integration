@@ -1,3 +1,6 @@
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,7 +13,6 @@ import {
 import { Button } from "@/components/ui/button";
 
 import checkIcon from "../assets/check.gif";
-import { Link } from "react-router";
 
 interface ApplicationSavedDialogProps {
   open: boolean;
@@ -21,6 +23,8 @@ export function ApplicationSavedDialog({
   open,
   onOpenChange,
 }: ApplicationSavedDialogProps) {
+  const { t } = useTranslation();
+
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent className="max-w-xs overflow-hidden rounded-lg p-6">
@@ -40,7 +44,7 @@ export function ApplicationSavedDialog({
           <AlertDialogFooter className="mt-4 flex w-full flex-col gap-2 p-0">
             <AlertDialogAction asChild>
               <Button variant="outlinePrimary" className="w-full" asChild>
-                <Link to="/tenant">Done</Link>
+                <Link to="/tenant">{t("done")}</Link>
               </Button>
             </AlertDialogAction>
           </AlertDialogFooter>

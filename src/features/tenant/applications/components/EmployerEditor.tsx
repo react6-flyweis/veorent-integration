@@ -1,3 +1,10 @@
+import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SwissFrancIcon } from "lucide-react";
+import { z } from "zod";
+
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -6,12 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { SwissFrancIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { z } from "zod";
 
 export const employerSchema = z.object({
   employerName: z.string().min(1),
@@ -32,6 +34,7 @@ export function EmployerEditor({
   data: IEmployer | undefined;
   onSubmit: (data: IEmployer) => void;
 }) {
+  const { t } = useTranslation();
   const form = useForm<IEmployer>({
     resolver: zodResolver(employerSchema),
     defaultValues: data ? { ...data } : {},
@@ -103,13 +106,19 @@ export function EmployerEditor({
             name="monthlyIncome"
             render={({ field }) => (
               <FormItem className="gap-1">
-                <FormLabel className="text-base">Monthly Income</FormLabel>
+                <FormLabel className="text-base">
+                  {t("monthlyIncome")}
+                </FormLabel>
                 <div className="relative">
-                  <div className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground">
-                    <SwissFrancIcon className="w-4 h-4" />
+                  <div className="text-muted-foreground absolute top-1/2 left-2 -translate-y-1/2">
+                    <SwissFrancIcon className="h-4 w-4" />
                   </div>
                   <FormControl>
-                    <Input className="pl-8" placeholder="Amount" {...field} />
+                    <Input
+                      className="pl-8"
+                      placeholder="{t('amount')}"
+                      {...field}
+                    />
                   </FormControl>
                 </div>
                 <FormMessage />
@@ -127,7 +136,7 @@ export function EmployerEditor({
           name="referenceName"
           render={({ field }) => (
             <FormItem className="gap-1">
-              <FormLabel className="text-base">Full Name</FormLabel>
+              <FormLabel className="text-base">{t("fullName")}</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -141,7 +150,7 @@ export function EmployerEditor({
           name="referenceNumber"
           render={({ field }) => (
             <FormItem className="gap-1">
-              <FormLabel className="text-base">Phone Number</FormLabel>
+              <FormLabel className="text-base">{t("phoneNumber")}</FormLabel>
               <FormControl>
                 <Input type="tel" {...field} />
               </FormControl>

@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -18,6 +20,8 @@ export const LocationFilter = ({
   country = "",
   onLocationChange,
 }: LocationFilterProps) => {
+  const { t } = useTranslation();
+
   const handleInputChange = (
     field: "city" | "region" | "country",
     value: string,
@@ -33,7 +37,7 @@ export const LocationFilter = ({
     <div className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="city" className="text-sm font-medium">
-          City
+          {t("city")}
         </Label>
         <Input
           id="city"
@@ -59,7 +63,7 @@ export const LocationFilter = ({
 
       <div className="space-y-2">
         <Label htmlFor="country" className="text-sm font-medium">
-          Country
+          {t("country")}
         </Label>
         <Input
           id="country"

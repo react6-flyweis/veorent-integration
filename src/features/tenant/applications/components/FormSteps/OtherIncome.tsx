@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -41,6 +42,7 @@ export function OtherIncome({
 }) {
   const { id } = useParams<{ id: string }>();
   const { mutateAsync, isPending } = useUpdateBookingMutation(id || "");
+  const { t } = useTranslation();
 
   const form = useForm<OtherIncomeFormValues>({
     resolver: zodResolver(incomeFormSchema),
@@ -100,11 +102,11 @@ export function OtherIncome({
                   >
                     <div className="flex items-center gap-2">
                       <RadioGroupItem value="yes" id="yes" />
-                      <Label htmlFor="yes">Yes</Label>
+                      <Label htmlFor="yes">{t("yes")}</Label>
                     </div>
                     <div className="flex items-center gap-2">
                       <RadioGroupItem value="no" id="no" />
-                      <Label htmlFor="no">No</Label>
+                      <Label htmlFor="no">{t("no")}</Label>
                     </div>
                   </RadioGroup>
                 </FormControl>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 import landlordIcon from "@/assets/icons/landlord.png";
@@ -13,6 +14,8 @@ import {
 } from "./components/LandlordPersonalizeForm";
 
 export default function Personalize() {
+  const { t } = useTranslation();
+
   const { setUserType } = useUserPreferenceStore();
   const [selectedType, setSelectedType] = useState<"tenant" | "landlord">(
     "tenant",
@@ -123,7 +126,7 @@ export default function Personalize() {
 
       <div className="flex justify-center py-10">
         <Button className="w-4/5 @lg:w-3/5" size="lg" onClick={handleContinue}>
-          Continue
+          {t("continue")}
         </Button>
       </div>
     </div>

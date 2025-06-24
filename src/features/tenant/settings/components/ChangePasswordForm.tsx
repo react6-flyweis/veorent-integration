@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
@@ -44,6 +45,8 @@ export function ChangePasswordForm({
   profile,
   onClose,
 }: ChangePasswordFormProps) {
+  const { t } = useTranslation();
+
   const [step, setStep] = useState<"email" | "otp" | "password">("email");
 
   const user = useAuthStore((state) => state.user);
@@ -143,7 +146,7 @@ export function ChangePasswordForm({
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>{t("email")}</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Enter your email"
@@ -211,7 +214,7 @@ export function ChangePasswordForm({
                 name="newPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>New Password</FormLabel>
+                    <FormLabel>{t("newPassword")}</FormLabel>
                     <FormControl>
                       <Input
                         type="password"
@@ -255,13 +258,11 @@ export function ChangePasswordForm({
                 className="bg-primary text-white"
                 disabled={changePasswordMutation.isPending}
               >
-                {changePasswordMutation.isPending
-                  ? "Changing..."
-                  : "Change Password"}
+                {t("changePassword")}
               </Button>
             )}
             <Button type="button" size="lg" variant="outline" onClick={onClose}>
-              Cancel
+              {t("cancel")}
             </Button>
           </div>
         </form>

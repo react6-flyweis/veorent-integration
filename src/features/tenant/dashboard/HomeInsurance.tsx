@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -56,6 +57,8 @@ const formSchema = z.object({
 });
 
 export default function HomeInsuranceForm() {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -133,7 +136,7 @@ export default function HomeInsuranceForm() {
                   name="firstName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>First Name</FormLabel>
+                      <FormLabel>{t("firstName")}</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -146,7 +149,7 @@ export default function HomeInsuranceForm() {
                   name="lastName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Last Name</FormLabel>
+                      <FormLabel>{t("lastName")}</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -159,7 +162,7 @@ export default function HomeInsuranceForm() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>{t("email")}</FormLabel>
                       <FormControl>
                         <Input type="email" {...field} />
                       </FormControl>
@@ -172,7 +175,7 @@ export default function HomeInsuranceForm() {
                   name="phone"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Phone Number</FormLabel>
+                      <FormLabel>{t("phoneNumber")}</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -189,7 +192,7 @@ export default function HomeInsuranceForm() {
                 name="propertyType"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Property Type</FormLabel>
+                    <FormLabel>{t("propertyType")}</FormLabel>
                     <PropertyTypeSelector {...field} />
                     <FormMessage />
                   </FormItem>
@@ -217,7 +220,7 @@ export default function HomeInsuranceForm() {
                   name="unit"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Unit</FormLabel>
+                      <FormLabel>{t("unit")}</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -230,7 +233,7 @@ export default function HomeInsuranceForm() {
                   name="city"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>City</FormLabel>
+                      <FormLabel>{t("city")}</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -243,7 +246,7 @@ export default function HomeInsuranceForm() {
                   name="region"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Region</FormLabel>
+                      <FormLabel>{t("region")}</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -256,7 +259,7 @@ export default function HomeInsuranceForm() {
                   name="zipCode"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Zip Code</FormLabel>
+                      <FormLabel>{t("zipCode")}</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -269,7 +272,7 @@ export default function HomeInsuranceForm() {
                   name="beds"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Beds</FormLabel>
+                      <FormLabel>{t("beds")}</FormLabel>
                       <FormControl>
                         <Input type="number" {...field} />
                       </FormControl>

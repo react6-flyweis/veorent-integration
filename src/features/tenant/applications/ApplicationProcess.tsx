@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router";
 
 import {
@@ -28,6 +29,8 @@ import UploadDocumentsForm from "./components/FormSteps/UploadDocuments";
 import { SaveAndFinishDialog } from "./components/SaveAndFinishDialog";
 
 export default function ApplicationProcess() {
+  const { t } = useTranslation();
+
   const { id } = useParams<{ id: string }>();
   const { data: bookingData, isLoading, error } = useGetBookingQuery(id || "");
   const goBack = useGoBack();
@@ -108,7 +111,7 @@ export default function ApplicationProcess() {
         <p className="mb-4 text-gray-600">
           Unable to load your application data. Please try again.
         </p>
-        <Button onClick={() => window.location.reload()}>Retry</Button>
+        <Button onClick={() => window.location.reload()}>{t("retry")}</Button>
       </div>
     );
   }

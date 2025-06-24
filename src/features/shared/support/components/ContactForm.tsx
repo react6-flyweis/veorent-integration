@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
@@ -30,6 +31,8 @@ const formSchema = z.object({
 type ContactFormData = z.infer<typeof formSchema>;
 
 export function ContactForm() {
+  const { t } = useTranslation();
+
   const { showToast } = useToast();
   const user = useAuthStore((state) => state.user);
 
@@ -72,7 +75,7 @@ export function ContactForm() {
           name="fullName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Full Name</FormLabel>
+              <FormLabel>{t("fullName")}</FormLabel>
               <FormControl>
                 <Input
                   placeholder="Enter your full name"
@@ -110,7 +113,7 @@ export function ContactForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>{t("email")}</FormLabel>
               <FormControl>
                 <Input
                   placeholder="support@gmail.com"
@@ -129,10 +132,10 @@ export function ContactForm() {
           name="message"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Write your message</FormLabel>
+              <FormLabel>{t("writeYourMessage")}</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Write here"
+                  placeholder="{t('writeHere')}"
                   {...field}
                   className="bg-muted border-0"
                 />
@@ -149,16 +152,16 @@ export function ContactForm() {
             className="w-full @lg:w-44"
             isLoading={form.formState.isSubmitting}
           >
-            Send
+            {t("send")}
           </LoadingButton>
           <Button
             type="button"
             className="w-full bg-green-600 @lg:w-44"
             onClick={() => {
-              alert("Calling...");
+              alert(t("calling"));
             }}
           >
-            Call
+            {t("call")}
           </Button>
         </div>
       </form>

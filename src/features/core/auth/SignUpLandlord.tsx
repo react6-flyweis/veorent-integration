@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -37,6 +38,8 @@ const formSchema = z.object({
 type SignUpFormValues = z.infer<typeof formSchema>;
 
 export default function SignUpLandlord() {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const { state } = useLocation();
 
@@ -184,7 +187,9 @@ export default function SignUpLandlord() {
                   name="propertyType"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="sr-only">Property Type</FormLabel>
+                      <FormLabel className="sr-only">
+                        {t("propertyType")}
+                      </FormLabel>
                       <FormControl>
                         <PropertyTypeSelector {...field} />
                       </FormControl>
@@ -265,7 +270,7 @@ export default function SignUpLandlord() {
                 className="@lg:3/5 w-4/5"
                 type="submit"
               >
-                Continue
+                {t("continue")}
               </LoadingButton>
             </MultiStepperButton>
           </MultiStepper>

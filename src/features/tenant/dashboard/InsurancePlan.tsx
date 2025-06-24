@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router";
 import { useNavigate } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
@@ -84,6 +85,8 @@ export const InsurancePlan: React.FC<{ plan: IInsurancePlan }> = ({ plan }) => {
 };
 
 export default function InsurancePlans() {
+  const { t } = useTranslation();
+
   const { state } = useLocation();
   const navigate = useNavigate();
   const { data: plans, isLoading } = useGetInsurancePlansQuery();
@@ -145,7 +148,7 @@ export default function InsurancePlans() {
       </div>
       <div className="mt-4 flex items-center justify-center">
         <Link to="/tenant" className="w-4/5 @lg:w-3/5">
-          <Button className="w-full">Skip</Button>
+          <Button className="w-full">{t("skip")}</Button>
         </Link>
       </div>
     </div>

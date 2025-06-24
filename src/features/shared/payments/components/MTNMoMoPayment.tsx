@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Loader2, Phone, AlertCircle, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 
@@ -45,6 +46,8 @@ export function MTNMoMoPayment({
   onPaymentError,
   onCancel,
 }: MTNMoMoPaymentProps) {
+  const { t } = useTranslation();
+
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState<
     "idle" | "processing" | "success" | "error"
@@ -203,7 +206,7 @@ export function MTNMoMoPayment({
             onClick={() => onPaymentSuccess(transactionId)}
             className="w-full"
           >
-            Continue
+            {t("continue")}
           </Button>
         </CardContent>
       </Card>
@@ -227,7 +230,7 @@ export function MTNMoMoPayment({
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Country Selection */}
           <div className="space-y-2">
-            <Label htmlFor="country">Country</Label>
+            <Label htmlFor="country">{t("country")}</Label>
             <select
               id="country"
               value={selectedCountry}
@@ -327,7 +330,7 @@ export function MTNMoMoPayment({
               disabled={isProcessing}
               className="flex-1"
             >
-              Cancel
+              {t("cancel")}
             </Button>
             <Button
               type="submit"
@@ -344,7 +347,7 @@ export function MTNMoMoPayment({
                   Processing...
                 </>
               ) : (
-                "Pay Now"
+                t("payNow")
               )}
             </Button>
           </div>

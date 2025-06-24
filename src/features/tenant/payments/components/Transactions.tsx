@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -6,6 +7,8 @@ import { TransactionCard } from "./TransactionCard";
 import { useGetTransactionsQuery } from "../api/queries";
 
 export function Transactions() {
+  const { t } = useTranslation();
+
   const { data, isLoading } = useGetTransactionsQuery();
 
   const groupedTransactions = useMemo(() => {
@@ -97,7 +100,7 @@ export function Transactions() {
         <div key={date}>
           <div className="bg-accent text-primary flex justify-between px-4 py-2 text-lg font-semibold">
             <span>{date}</span>
-            <span>Amount</span>
+            <span>{t("amount")}</span>
           </div>
           {transactions.map((transaction) => (
             <TransactionCard key={transaction._id} data={transaction} />

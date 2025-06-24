@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -54,6 +55,7 @@ const applicationSchema = z.object({
 type ApplicationFormValues = z.infer<typeof applicationSchema>;
 
 export default function ApplyListing() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams();
   const { data, isLoading } = useGetPropertyByIdQuery(id || "");
@@ -289,7 +291,7 @@ export default function ApplyListing() {
                       name="firstName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>First Name</FormLabel>
+                          <FormLabel>{t("firstName")}</FormLabel>
                           <FormControl>
                             <Input placeholder="John" {...field} />
                           </FormControl>
@@ -303,7 +305,7 @@ export default function ApplyListing() {
                       name="lastName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Last Name</FormLabel>
+                          <FormLabel>{t("lastName")}</FormLabel>
                           <FormControl>
                             <Input placeholder="Doe" {...field} />
                           </FormControl>
@@ -320,7 +322,7 @@ export default function ApplyListing() {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Email</FormLabel>
+                          <FormLabel>{t("email")}</FormLabel>
                           <FormControl>
                             <Input
                               type="email"
@@ -338,7 +340,7 @@ export default function ApplyListing() {
                       name="phone"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Phone Number</FormLabel>
+                          <FormLabel>{t("phoneNumber")}</FormLabel>
                           <FormControl>
                             <Input
                               type="tel"
@@ -358,7 +360,7 @@ export default function ApplyListing() {
                     name="dob"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel>Date of Birth</FormLabel>
+                        <FormLabel>{t("dateOfBirth")}</FormLabel>
                         <DateInput isDob {...field} />
                         <FormMessage />
                       </FormItem>
@@ -376,7 +378,7 @@ export default function ApplyListing() {
                 className="w-3/5"
                 isLoading={form.formState.isSubmitting}
               >
-                Next
+                {t("next")}
               </LoadingButton>
             </div>
           </form>

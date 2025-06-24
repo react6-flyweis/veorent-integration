@@ -1,7 +1,8 @@
 import { useRef, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { z } from "zod";
+import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 import {
   Form,
@@ -26,6 +27,8 @@ type EmailFormValues = z.infer<typeof emailSchema>;
 type OtpFormValues = z.infer<typeof otpSchema>;
 
 export function ForgotPasswordPage() {
+  const { t } = useTranslation();
+
   const [showOtp, setShowOtp] = useState(false);
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -62,9 +65,9 @@ export function ForgotPasswordPage() {
   };
   return (
     <div className="">
-      <img src="/logo-dark.png" alt="Veorent Logo" className="h-8 mb-6" />
+      <img src="/logo-dark.png" alt="Veorent Logo" className="mb-6 h-8" />
 
-      <h2 className="text-2xl font-semibold mb-6">Forgot Password</h2>
+      <h2 className="mb-6 text-2xl font-semibold">{t("forgotPassword")}</h2>
 
       <div className="space-y-6">
         {/* Step 1: Email */}
@@ -78,11 +81,11 @@ export function ForgotPasswordPage() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t("email")}</FormLabel>
                   <FormControl>
                     <Input placeholder="you@example.com" {...field} />
                   </FormControl>
-                  <p className="text-center text-muted-foreground text-sm mt-1">
+                  <p className="text-muted-foreground mt-1 text-center text-sm">
                     Lorem Ipsum is simply dummy text of the printing and
                     typesetting industry.
                   </p>
@@ -137,7 +140,7 @@ export function ForgotPasswordPage() {
                   </FormItem>
                 )}
               />
-              <LoadingButton type="submit" className="w-full ">
+              <LoadingButton type="submit" className="w-full">
                 Verify
               </LoadingButton>
             </form>

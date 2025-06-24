@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router";
 import {
   BathIcon,
@@ -86,6 +87,8 @@ const applianceMap = {
 };
 
 export default function PropertyListingDetail() {
+  const { t } = useTranslation();
+
   const { id } = useParams();
   const { data, isLoading } = useGetPropertyByIdQuery(id || "");
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
@@ -310,7 +313,7 @@ export default function PropertyListingDetail() {
 
           {/* Description */}
           <div>
-            <h3 className="text-xl font-semibold">Description</h3>
+            <h3 className="text-xl font-semibold">{t("description")}</h3>
             <p className="text-muted-foreground mt-2">{data?.description}</p>
           </div>
 
@@ -374,7 +377,9 @@ export default function PropertyListingDetail() {
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Available</span>
+                  <span className="text-muted-foreground">
+                    {t("available")}
+                  </span>
                   <span className="">
                     {formatDate(data?.leasingBasics?.Date || "")}
                   </span>

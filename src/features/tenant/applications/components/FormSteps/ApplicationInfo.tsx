@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -43,6 +44,7 @@ export function ApplicationInfo({
   onSuccess: () => void;
 }) {
   const { id } = useParams<{ id: string }>();
+  const { t } = useTranslation();
   const { mutateAsync, isPending } = useUpdateBookingMutation(id || "");
 
   const form = useForm<ContactFormValues>({
@@ -122,11 +124,11 @@ export function ApplicationInfo({
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="yes" id="coSigners-yes" />
-                      <Label htmlFor="coSigners-yes">Yes</Label>
+                      <Label htmlFor="coSigners-yes">{t("yes")}</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="no" id="coSigners-no" />
-                      <Label htmlFor="coSigners-no">No</Label>
+                      <Label htmlFor="coSigners-no">{t("no")}</Label>
                     </div>
                   </RadioGroup>
                 </FormControl>
@@ -156,11 +158,11 @@ export function ApplicationInfo({
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="yes" id="isShortPeriod-yes" />
-                      <Label htmlFor="isShortPeriod-yes">Yes</Label>
+                      <Label htmlFor="isShortPeriod-yes">{t("yes")}</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="no" id="isShortPeriod-no" />
-                      <Label htmlFor="isShortPeriod-no">No</Label>
+                      <Label htmlFor="isShortPeriod-no">{t("no")}</Label>
                     </div>
                   </RadioGroup>
                 </FormControl>

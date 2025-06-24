@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import { SearchIcon } from "lucide-react";
 
@@ -13,6 +14,8 @@ import { RentalApplicationCard } from "./components/RentalApplicationCard";
 import { UserInfoCard } from "./components/UserInfoCard";
 
 export default function Dashboard() {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col gap-5">
       {/* Header and Search */}
@@ -21,7 +24,7 @@ export default function Dashboard() {
         <Link to="/tenant/search">
           <div className="border-primary flex max-w-lg items-center border">
             <Input
-              placeholder="Search rentals..."
+              placeholder={t("searchRentals")}
               className="w-full border-0"
             />
             <Button size="icon" className="rounded-none border-0">
@@ -44,19 +47,17 @@ export default function Dashboard() {
       <LandlordCard />
       <div className="grid gap-5 @md:grid-cols-2">
         <IconCard
-          title="Ready to move? We got you covered."
-          description="
-            Lorem Ipsum is simply dummy text"
+          title={t("readyToMove")}
+          description={t("readyToMoveDescription")}
           icon={truckImgIcon}
-          actionText="Book My Move"
+          actionText={t("bookMyMove")}
           url="/tenant/book-move"
         />
         <IconCard
-          title="Know You’re Covered!"
-          description="
-            Lorem Ipsum is simply dummy text"
+          title={t("knowYoureCovered")}
+          description={t("knowYoureCoveredDescription")}
           icon={insuranceImgIcon}
-          actionText="Purchase Insurance"
+          actionText={t("purchaseInsurance")}
           url="/tenant/home-insurance"
         />
       </div>

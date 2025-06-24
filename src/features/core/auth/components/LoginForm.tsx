@@ -1,6 +1,9 @@
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { InfoIcon } from "lucide-react";
+import { z } from "zod";
 
 import {
   Form,
@@ -12,10 +15,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { LoadingButton } from "@/components/ui/loading-button";
-import { Link } from "react-router";
-import { useLoginMutation } from "../api/mutation";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import { InfoIcon } from "lucide-react";
+
+import { useLoginMutation } from "../api/mutation";
 
 const loginSchema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -25,6 +27,8 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
+  const { t } = useTranslation();
+
   const { mutateAsync, data } = useLoginMutation();
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -53,7 +57,7 @@ export function LoginForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>{t("email")}</FormLabel>
               <FormControl>
                 <Input placeholder="you@example.com" {...field} />
               </FormControl>
@@ -67,7 +71,7 @@ export function LoginForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>{t("password")}</FormLabel>
               <FormControl>
                 <Input type="password" placeholder="••••••••" {...field} />
               </FormControl>

@@ -1,5 +1,6 @@
 "use client";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -43,6 +44,8 @@ const formSchema = z.object({
 });
 
 export function CardDetailsForm() {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const { showToast } = useToast();
   const { mutateAsync, isPending } = useCreateCardMutation();
@@ -95,7 +98,7 @@ export function CardDetailsForm() {
           name="cardNumber"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Card Number</FormLabel>
+              <FormLabel>{t("cardNumber")}</FormLabel>
               <FormControl>
                 <CardNumberInput {...field} />
               </FormControl>
@@ -143,7 +146,7 @@ export function CardDetailsForm() {
               name="country"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Country</FormLabel>
+                  <FormLabel>{t("country")}</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -214,7 +217,7 @@ export function CardDetailsForm() {
             isLoading={isPending}
             type="submit"
           >
-            Submit
+            {t("submit")}
           </LoadingButton>
         </div>
       </form>

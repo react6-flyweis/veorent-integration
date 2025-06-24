@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router";
 
 import { CreateButton } from "@/components/CreateButton";
@@ -17,6 +18,7 @@ import { ChatSidebar, ChatSidebarContent } from "./components/ChatSidebar";
 import { ChatSidebarItem } from "./components/ChatSidebarItem";
 
 export default function Messages() {
+  const { t } = useTranslation();
   const user = useAuthStore((state) => state.user);
   const location = useLocation();
   const { conversations, loading } = useMessaging();
@@ -65,7 +67,7 @@ export default function Messages() {
     return {
       id: conversation.id,
       name: otherParticipant?.name || "Unknown",
-      message: conversation.lastMessage?.content || "No messages yet",
+      message: conversation.lastMessage?.content || t("noMessagesYet"),
       time: conversation.lastMessage
         ? new Date(conversation.lastMessage.timestamp).toLocaleTimeString([], {
             hour: "2-digit",
@@ -80,10 +82,14 @@ export default function Messages() {
     <ChatLayout>
       <ChatLayoutHeader className="mb-4">
         <div className="flex items-center justify-between">
-          <PageTitle title="Message" className="mb-0 hidden @md:flex" />
+          <PageTitle title={t("message")} className="mb-0 hidden @md:flex" />
           <Link to="add">
             <CreateButton
-              label={`Add ${user?.userType === "PARTNER" ? "Renters" : "Contacts"}`}
+              label={
+                user?.userType === "PARTNER"
+                  ? t("addRenters")
+                  : t("addContacts")
+              }
             />
           </Link>
         </div>
@@ -93,11 +99,11 @@ export default function Messages() {
           <ChatSidebarContent>
             {loading ? (
               <div className="flex items-center justify-center py-8">
-                <div className="text-gray-500">Loading conversations...</div>
+                <div className="text-gray-500">{t("loadingConversations")}</div>
               </div>
             ) : conversations.length === 0 ? (
               <div className="flex items-center justify-center py-8">
-                <div className="text-gray-500">No conversations yet</div>
+                <div className="text-gray-500">{t("noConversationsYet")}</div>
               </div>
             ) : (
               conversations.map((conversation) => {
@@ -127,7 +133,7 @@ export default function Messages() {
         ) : (
           <div className="flex h-full items-center justify-center bg-gray-50">
             <div className="text-center text-gray-500">
-              Select a conversation to start messaging
+              {t("selectConversationToStart")}
             </div>
           </div>
         )}

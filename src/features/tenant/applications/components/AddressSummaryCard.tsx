@@ -1,7 +1,10 @@
+import { useTranslation } from "react-i18next";
+import { PencilIcon, Trash2Icon } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+
 import type { IAddress } from "./AddressEditor";
-import { PencilIcon, Trash2Icon } from "lucide-react";
 
 export function AddressSummaryCard({
   address,
@@ -12,10 +15,11 @@ export function AddressSummaryCard({
   onEdit: () => void;
   onDelete: () => void;
 }) {
+  const { t } = useTranslation();
   return (
-    <Card className="md:w-1/2 max-w-md p-2">
-      <CardContent className="px-2 space-y-1 text-sm">
-        <p className="font-bold text-primary">
+    <Card className="max-w-md p-2 md:w-1/2">
+      <CardContent className="space-y-1 px-2 text-sm">
+        <p className="text-primary font-bold">
           {address.streetAddress}, {address.city}, {address.region},{" "}
           {address.zipCode}
         </p>
@@ -41,7 +45,7 @@ export function AddressSummaryCard({
             onClick={onEdit}
           >
             <PencilIcon />
-            <span> Edit</span>
+            <span> {t("edit")}</span>
           </Button>
           <Button
             type="button"
@@ -51,7 +55,7 @@ export function AddressSummaryCard({
             onClick={onDelete}
           >
             <Trash2Icon />
-            <span>Delete</span>
+            <span>{t("delete")}</span>
           </Button>
         </div>
       </CardContent>

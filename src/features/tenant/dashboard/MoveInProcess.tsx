@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { Navigate, useLocation, useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -58,6 +59,8 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export default function MoveInProcess() {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const { showToast } = useToast();
   const { state } = useLocation();
@@ -134,7 +137,7 @@ export default function MoveInProcess() {
                     <span>No. of Units</span>
                   </div>
                   <div className="text-muted-foreground flex justify-between text-sm">
-                    <span>Type</span>
+                    <span>{t("type")}</span>
                     <span>1</span>
                   </div>
                 </CardContent>
@@ -260,7 +263,7 @@ export default function MoveInProcess() {
             <Dialog>
               <DialogTrigger asChild>
                 <Button size="lg" type="button" className="w-3/5">
-                  Next
+                  {t("next")}
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-h-[90vh] overflow-y-auto">
@@ -286,7 +289,7 @@ export default function MoveInProcess() {
                   </div>
 
                   <div>
-                    <h3 className="mb-1 text-lg font-bold">Unit</h3>
+                    <h3 className="mb-1 text-lg font-bold">{t("unit")}</h3>
                     <Card className="gap-1 p-3">
                       <CardContent className="space-y-2 p-0">
                         <div>

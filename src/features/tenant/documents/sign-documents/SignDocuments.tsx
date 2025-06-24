@@ -1,4 +1,7 @@
+import { useTranslation } from "react-i18next";
+
 import { PageTitle } from "@/components/PageTitle";
+
 import { SignatureCard } from "./components/SignCard";
 
 const signatureDocuments = [
@@ -20,9 +23,11 @@ const signatureDocuments = [
 ];
 
 function SignDocuments() {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-4">
-      <PageTitle title="Documents" />
+      <PageTitle title={t("documents")} />
       <div className="space-y-4">
         {signatureDocuments.map((doc) => (
           <SignatureCard

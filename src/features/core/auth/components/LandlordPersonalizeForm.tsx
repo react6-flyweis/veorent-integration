@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import * as z from "zod";
@@ -42,6 +43,8 @@ export function LandlordPersonalizeForm({
   defaultData,
   submitButtonHidden = false,
 }: LandlordPersonalizeFormProps) {
+  const { t } = useTranslation();
+
   const form = useForm<LandlordFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: defaultData,
@@ -190,7 +193,7 @@ export function LandlordPersonalizeForm({
         {!submitButtonHidden && (
           <div className="pt-4">
             <Button type="submit" className="w-full" size="lg">
-              Continue
+              {t("continue")}
             </Button>
           </div>
         )}
