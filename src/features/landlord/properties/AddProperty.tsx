@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { HouseIcon } from "lucide-react";
@@ -61,6 +62,8 @@ const formSchema = z.object({
 });
 
 export default function AddProperty() {
+  const { t } = useTranslation();
+
   const stepperRef = useRef<MultiStepperRef>(null);
   const { mutateAsync } = useCreatePropertyMutation();
   const navigate = useNavigate();
@@ -143,7 +146,9 @@ export default function AddProperty() {
                   name="propertyType"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="sr-only">Property Type</FormLabel>
+                      <FormLabel className="sr-only">
+                        {t("propertyType")}
+                      </FormLabel>
                       <PropertyTypeSelector {...field} />
                       <FormMessage />
                     </FormItem>
@@ -168,7 +173,7 @@ export default function AddProperty() {
                   name="description"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Description</FormLabel>
+                      <FormLabel>{t("description")}</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -198,14 +203,16 @@ export default function AddProperty() {
                               />
                             </FormControl>
                             <FormLabel htmlFor="room-rentals-yes">
-                              Yes
+                              {t("yes")}
                             </FormLabel>
                           </FormItem>
                           <FormItem className="flex items-center space-x-2">
                             <FormControl>
                               <RadioGroupItem value="no" id="room-rentals-no" />
                             </FormControl>
-                            <FormLabel htmlFor="room-rentals-no">No</FormLabel>
+                            <FormLabel htmlFor="room-rentals-no">
+                              {t("no")}
+                            </FormLabel>
                           </FormItem>
                         </RadioGroup>
                       </FormControl>
@@ -273,7 +280,7 @@ export default function AddProperty() {
                     name="beds"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Beds</FormLabel>
+                        <FormLabel>{t("beds")}</FormLabel>
                         <FormControl>
                           <Input
                             type="number"
@@ -408,7 +415,7 @@ export default function AddProperty() {
                   isLoading={form.formState.isSubmitting}
                   size="lg"
                 >
-                  Next
+                  {t("next")}
                 </LoadingButton>
               </div>
             </MultiStepperButton>

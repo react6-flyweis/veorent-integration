@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -42,6 +43,8 @@ export const PropertySizeForm = ({
   propertyName,
   completionStatus,
 }: PropertySizeFormProps) => {
+  const { t } = useTranslation();
+
   const { id } = useParams<{ id: string }>();
   const { mutateAsync } = useUpdatePropertyMutation(id || "");
 
@@ -98,7 +101,7 @@ export const PropertySizeForm = ({
               name="beds"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Beds</FormLabel>
+                  <FormLabel>{t("beds")}</FormLabel>
                   <FormControl>
                     <Input type="number" {...field} />
                   </FormControl>
@@ -161,7 +164,7 @@ export const PropertySizeForm = ({
               isLoading={form.formState.isSubmitting}
               size="lg"
             >
-              Next
+              {t("next")}
             </LoadingButton>
           </div>
         </div>

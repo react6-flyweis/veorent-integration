@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Minus, Plus } from "lucide-react";
@@ -53,6 +54,8 @@ export const PermissionsForm = ({
   propertyName,
   completionStatus,
 }: PermissionsFormProps) => {
+  const { t } = useTranslation();
+
   const { id } = useParams<{ id: string }>();
   const { mutateAsync } = useUpdatePropertyMutation(id || "");
 
@@ -131,7 +134,7 @@ export const PermissionsForm = ({
                           <RadioGroupItem value="yes" />
                         </FormControl>
                         <FormLabel className="text-base font-normal">
-                          Yes
+                          {t("yes")}
                         </FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-y-0 space-x-3">
@@ -139,7 +142,7 @@ export const PermissionsForm = ({
                           <RadioGroupItem value="no" />
                         </FormControl>
                         <FormLabel className="text-base font-normal">
-                          No
+                          {t("no")}
                         </FormLabel>
                       </FormItem>
                     </RadioGroup>
@@ -176,7 +179,7 @@ export const PermissionsForm = ({
                           <RadioGroupItem value="yes" />
                         </FormControl>
                         <FormLabel className="text-base font-normal">
-                          Yes
+                          {t("yes")}
                         </FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-y-0 space-x-3">
@@ -184,7 +187,7 @@ export const PermissionsForm = ({
                           <RadioGroupItem value="no" />
                         </FormControl>
                         <FormLabel className="text-base font-normal">
-                          No
+                          {t("no")}
                         </FormLabel>
                       </FormItem>
                     </RadioGroup>
@@ -226,7 +229,7 @@ export const PermissionsForm = ({
                           <RadioGroupItem value="yes" />
                         </FormControl>
                         <FormLabel className="text-base font-normal">
-                          Yes
+                          {t("yes")}
                         </FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-y-0 space-x-3">
@@ -234,7 +237,7 @@ export const PermissionsForm = ({
                           <RadioGroupItem value="no" />
                         </FormControl>
                         <FormLabel className="text-base font-normal">
-                          No
+                          {t("no")}
                         </FormLabel>
                       </FormItem>
                     </RadioGroup>
@@ -308,7 +311,7 @@ export const PermissionsForm = ({
               isLoading={form.formState.isSubmitting}
               size="lg"
             >
-              Next
+              {t("next")}
             </LoadingButton>
           </div>
         </div>

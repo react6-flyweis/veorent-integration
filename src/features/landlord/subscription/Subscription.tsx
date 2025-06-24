@@ -1,7 +1,10 @@
-import { PageTitle } from "@/components/PageTitle";
-import { SubscriptionCard } from "./components/SubscriptionCard";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
+
+import { PageTitle } from "@/components/PageTitle";
+
 import { useGetSubscriptionPlansQuery } from "./api/queries";
+import { SubscriptionCard } from "./components/SubscriptionCard";
 
 // const subscriptionPlans = [
 //   {
@@ -43,12 +46,14 @@ import { useGetSubscriptionPlansQuery } from "./api/queries";
 //   },
 // ];
 export default function Subscription() {
+  const { t } = useTranslation();
+
   const { data: subscriptionPlans = [], isLoading } =
     useGetSubscriptionPlansQuery();
 
   return (
     <div className="container">
-      <PageTitle title="Subscription" />
+      <PageTitle title={t("subscription")} />
       <div className="grid grid-cols-1 gap-10 @md:grid-cols-2 @xl:grid-cols-3 @2xl:gap-14 @3xl:gap-20">
         {isLoading ? (
           <div className="col-span-1 @md:col-span-2 @xl:col-span-3">

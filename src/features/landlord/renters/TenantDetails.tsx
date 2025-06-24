@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { ArrowLeft, Calendar, Users2Icon } from "lucide-react";
 
@@ -51,6 +52,8 @@ import penApplicationIcon from "./assets/pen-application.png";
 // };
 
 export function TenantDetails() {
+  const { t } = useTranslation();
+
   const { id } = useParams<{ id: string }>();
   const { data: tenant, isLoading } = useGetTenantDetailsQuery(id || "");
   // console.log("tenant", tenant);
@@ -75,7 +78,7 @@ export function TenantDetails() {
   if (isLoading || !tenant) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <div className="text-gray-500">Loading...</div>
+        <div className="text-gray-500">{t("loading")}</div>
       </div>
     );
   }

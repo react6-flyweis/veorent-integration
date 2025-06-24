@@ -1,44 +1,45 @@
+import { useTranslation } from "react-i18next";
+
 import { PageTitle } from "@/components/PageTitle";
-import { FormCard } from "./components/FormCard";
-import { DownloadableFormCard } from "./components/DownloadableFormCard";
 import { Button } from "@/components/ui/button";
 
+import { DownloadableFormCard } from "./components/DownloadableFormCard";
+import { FormCard } from "./components/FormCard";
+
 export default function Forms() {
+  const { t } = useTranslation();
+
   return (
     <div className="">
-      <PageTitle title="Forms" />
+      <PageTitle title={t("forms")} />
 
       <div className="mt-2 mb-6">
         <span className="text-sm font-medium text-blue-500 uppercase">
-          INTERACTIVE FORMS
+          {t("interactiveForms")}
         </span>
-        <h2 className="mt-1 text-xl font-bold">Build Your Own Forms</h2>
-        <p className="mt-2 max-w-3xl text-gray-700">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-        </p>
+        <h2 className="mt-1 text-xl font-bold">{t("buildYourOwnForms")}</h2>
+        <p className="mt-2 max-w-3xl text-gray-700">{t("formsDescription")}</p>
       </div>
 
       <div className="mt-6 space-y-4">
         <FormCard
-          title="State-Specific Lease Agreement"
-          description="Drafted by a legal professionals to keep you compliant and covered."
-          buttonText="Start Lease"
+          title={t("stateSpecificLeaseAgreement")}
+          description={t("stateSpecificLeaseDescription")}
+          buttonText={t("startLease")}
           url="/landlord/lease-agreement"
         />
 
         <FormCard
-          title="Lease Agreement Addendum"
-          description="Amends your lease agreement to change the lease term, rent amount, deposit amounts or other provisions."
-          buttonText="Start Addendum"
+          title={t("leaseAgreementAddendum")}
+          description={t("leaseAddendumDescription")}
+          buttonText={t("startAddendum")}
           url="/landlord/lease-addendum"
         />
 
         <FormCard
-          title="Customizable Condition Report"
-          description="Set up spaces specific to your rental. Then, send it to your tenants to document the property's condition or complete it yourself."
-          buttonText="Start Report"
+          title={t("customizableConditionReport")}
+          description={t("conditionReportDescription")}
+          buttonText={t("startReport")}
         />
       </div>
 
@@ -47,42 +48,36 @@ export default function Forms() {
         <div className="flex flex-col gap-2">
           <div className="flex flex-col justify-between @md:flex-row">
             <span className="text-lg font-medium text-blue-500 uppercase">
-              DOWNLOADABLE FORMS
+              {t("downloadableForms")}
             </span>
-            <Button>Get The Forms Pack</Button>
+            <Button>{t("getTheFormsPack")}</Button>
           </div>
-          <h2 className="mt-1 text-xl font-bold">Essential Forms You Need</h2>
+          <h2 className="mt-1 text-xl font-bold">
+            {t("essentialFormsYouNeed")}
+          </h2>
           <p className="mt-2 max-w-3xl text-gray-700">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry.
+            {t("formsDescription")}
           </p>
           <ul className="mt-4 space-y-2">
             <li className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-sm bg-orange-400"></div>
-              <span>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
-              </span>
+              <span>{t("formsDescription")}</span>
             </li>
             <li className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-sm bg-orange-400"></div>
-              <span>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
-              </span>
+              <span>{t("formsDescription")}</span>
             </li>
             <li className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-sm bg-orange-400"></div>
-              <span>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
-              </span>
+              <span>{t("formsDescription")}</span>
             </li>
           </ul>
         </div>
 
         <div className="mt-8">
-          <h3 className="mb-4 text-lg font-semibold">Preview the Forms Pack</h3>
+          <h3 className="mb-4 text-lg font-semibold">
+            {t("previewTheFormsPack")}
+          </h3>
           <div className="grid grid-cols-1 gap-5">
             <DownloadableFormCard title="Lease Agreement Addendum" />
             <DownloadableFormCard title="Co-Signer Agreement" />
@@ -108,12 +103,8 @@ export default function Forms() {
 
       {/* Disclaimer */}
       <div className="mt-10 rounded-lg bg-blue-200 p-4">
-        <h4 className="font-semibold">DISCLAIMER:</h4>
-        <p className="text-sm">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-        </p>
+        <h4 className="font-semibold">{t("disclaimer")}</h4>
+        <p className="text-sm">{t("disclaimerText")}</p>
       </div>
     </div>
   );

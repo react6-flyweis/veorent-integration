@@ -1,10 +1,12 @@
 import { useId, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { BellIcon, MailIcon, PhoneIcon, type LucideIcon } from "lucide-react";
+
+import { Loader } from "@/components/Loader";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { BellIcon, MailIcon, PhoneIcon, type LucideIcon } from "lucide-react";
 // import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { Loader } from "@/components/Loader";
 
 const titleMap: Record<keyof INotificationChannel, string> = {
   PushNotification: "Push Notifications",
@@ -29,6 +31,8 @@ export function SingleTogglePreference({
   isEnabled,
   onChange,
 }: NotificationPreference) {
+  const { t } = useTranslation();
+
   const id = useId();
   const [isToggleEnabled, setIsEnabled] = useState(isEnabled ?? false);
   const title = titleMap[type];
@@ -80,11 +84,11 @@ export function SingleTogglePreference({
         >
           <div className="flex items-center space-x-1">
             <RadioGroupItem value="off" id={`${id}-off`} />
-            <Label htmlFor={`${id}-off`}>Off</Label>
+            <Label htmlFor={`${id}-off`}>{t("off")}</Label>
           </div>
           <div className="flex items-center space-x-1">
             <RadioGroupItem value="on" id={`${id}-on`} />
-            <Label htmlFor={`${id}-on`}>On</Label>
+            <Label htmlFor={`${id}-on`}>{t("on")}</Label>
           </div>
         </RadioGroup>
       </div>

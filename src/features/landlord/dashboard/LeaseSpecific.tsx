@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { Navigate, useLocation, useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -40,6 +41,8 @@ const leaseSpecificSchema = z.object({
 type LeaseSpecificFormValues = z.infer<typeof leaseSpecificSchema>;
 
 export default function LeaseSpecific() {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const { state } = useLocation();
 
@@ -117,7 +120,7 @@ export default function LeaseSpecific() {
               name="streetAddress"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Street Address</FormLabel>
+                  <FormLabel>{t("streetAddress")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -132,7 +135,7 @@ export default function LeaseSpecific() {
                 name="unit"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Unit</FormLabel>
+                    <FormLabel>{t("unit")}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -146,7 +149,7 @@ export default function LeaseSpecific() {
                 name="city"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>City</FormLabel>
+                    <FormLabel>{t("city")}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -160,7 +163,7 @@ export default function LeaseSpecific() {
                 name="region"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Region</FormLabel>
+                    <FormLabel>{t("region")}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -174,7 +177,7 @@ export default function LeaseSpecific() {
                 name="zipCode"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Zip Code</FormLabel>
+                    <FormLabel>{t("zipCode")}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -232,7 +235,7 @@ export default function LeaseSpecific() {
               name="startDate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Start Date</FormLabel>
+                  <FormLabel>{t("startDate")}</FormLabel>
                   <FormControl>
                     <DateInput className="w-52" {...field} />
                   </FormControl>

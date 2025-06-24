@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -141,6 +142,8 @@ export const AmenitiesForm = ({
   propertyName,
   completionStatus,
 }: AmenitiesFormProps) => {
+  const { t } = useTranslation();
+
   const { id } = useParams<{ id: string }>();
   const { mutateAsync } = useUpdatePropertyMutation(id || "");
 
@@ -293,7 +296,7 @@ export const AmenitiesForm = ({
             <div>
               <div className="mb-4 flex items-center gap-2">
                 <IconRound icon={amenititesIcon} size="xs" />
-                <h3 className="text-base font-medium">Amenities</h3>
+                <h3 className="text-base font-medium">{t("amenities")}</h3>
               </div>
 
               <div className="grid grid-cols-3 gap-x-4 gap-y-3">
@@ -418,7 +421,7 @@ export const AmenitiesForm = ({
                                 <RadioGroupItem value="true" />
                               </FormControl>
                               <FormLabel className="text-sm font-normal">
-                                Yes
+                                {t("yes")}
                               </FormLabel>
                             </FormItem>
                             <FormItem className="flex items-center space-y-0 space-x-2">
@@ -426,7 +429,7 @@ export const AmenitiesForm = ({
                                 <RadioGroupItem value="false" />
                               </FormControl>
                               <FormLabel className="text-sm font-normal">
-                                No
+                                {t("no")}
                               </FormLabel>
                             </FormItem>
                           </RadioGroup>
@@ -458,7 +461,7 @@ export const AmenitiesForm = ({
                                 <RadioGroupItem value="true" />
                               </FormControl>
                               <FormLabel className="text-sm font-normal">
-                                Yes
+                                {t("yes")}
                               </FormLabel>
                             </FormItem>
                             <FormItem className="flex items-center space-y-0 space-x-2">
@@ -466,7 +469,7 @@ export const AmenitiesForm = ({
                                 <RadioGroupItem value="false" />
                               </FormControl>
                               <FormLabel className="text-sm font-normal">
-                                No
+                                {t("no")}
                               </FormLabel>
                             </FormItem>
                           </RadioGroup>
@@ -487,7 +490,7 @@ export const AmenitiesForm = ({
                 isLoading={form.formState.isSubmitting}
                 size="lg"
               >
-                Next
+                {t("next")}
               </LoadingButton>
             </div>
           </div>

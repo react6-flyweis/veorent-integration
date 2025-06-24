@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate, useParams } from "react-router";
 import {
   BathIcon,
@@ -27,6 +28,7 @@ interface PropertySectionProps {
 }
 
 const PropertySection = ({ title, children, onEdit }: PropertySectionProps) => {
+  const { t } = useTranslation();
   return (
     <Card className="mb-4 gap-0 p-2">
       <div className="mb-1 flex items-center justify-between">
@@ -37,7 +39,7 @@ const PropertySection = ({ title, children, onEdit }: PropertySectionProps) => {
           onClick={onEdit}
         >
           <PencilIcon size={16} />
-          <span>Edit</span>
+          <span>{t("edit")}</span>
         </Button>
       </div>
       {children}
@@ -121,7 +123,7 @@ export default function EditProperty() {
 
       <div className="mt-5">
         <PropertySection
-          title="Address"
+          title="{t('address')}"
           onEdit={() =>
             navigate(`/landlord/properties/${propertyId}/edit-address`)
           }
@@ -231,7 +233,7 @@ export default function EditProperty() {
         </PropertySection>
 
         <PropertySection
-          title="Amenities"
+          title="{t('amenities')}"
           onEdit={() =>
             navigate(`/landlord/properties/${propertyId}/edit-amenities`)
           }

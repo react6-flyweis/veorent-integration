@@ -1,7 +1,11 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { useParams } from "react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
+import FormErrors from "@/components/FormErrors";
+import { IconRound } from "@/components/IconRound";
 import {
   Form,
   FormControl,
@@ -12,14 +16,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { LoadingButton } from "@/components/ui/loading-button";
-import { IconRound } from "@/components/IconRound";
-import { useUpdatePropertyMutation } from "../api/mutation";
-import { useParams } from "react-router";
+import { Textarea } from "@/components/ui/textarea";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import FormErrors from "@/components/FormErrors";
 
+import { useUpdatePropertyMutation } from "../api/mutation";
 import listingDescriptionIcon from "../assets/listing-description.png";
 import listingTitleIcon from "../assets/listing-title.png";
 import propertyDescriptionIcon from "../assets/property-description.png";
@@ -46,6 +47,8 @@ export function ListingDescriptionForm({
   onSuccess,
   propertyName,
 }: ListingDescriptionFormProps) {
+  const { t } = useTranslation();
+
   const { id } = useParams<{ id: string }>();
   const { mutateAsync } = useUpdatePropertyMutation(id || "");
 
@@ -143,7 +146,7 @@ export function ListingDescriptionForm({
               isLoading={form.formState.isSubmitting}
               size="lg"
             >
-              Next
+              {t("next")}
             </LoadingButton>
           </div>
         </form>

@@ -1,9 +1,5 @@
 import { useState } from "react";
-import { PageTitle } from "@/components/PageTitle";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-
-// Social media icons
+import { useTranslation } from "react-i18next";
 import {
   FacebookShareButton,
   LinkedinShareButton,
@@ -11,16 +7,26 @@ import {
 } from "react-share";
 import { Twitter, Facebook, Linkedin } from "lucide-react";
 
-import referralCycleImage from "./assets/referral-cycle.png";
 import { CurrencyIcon } from "@/components/CurrencyIcon";
-import InviteByEmail from "./components/InviteByEmail";
+import { PageTitle } from "@/components/PageTitle";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+// Social media icons
+
 import { useAuthStore } from "@/store/useAuthStore";
 
+import referralCycleImage from "./assets/referral-cycle.png";
+import InviteByEmail from "./components/InviteByEmail";
+
 export default function Referral() {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
 
   const user = useAuthStore((state) => state.user);
-  const referralLink = "https://veorent.com/r/" + user?.refferalCode || "";
+  const referralLink = user?.refferalCode
+    ? `https://veorent.com/r/${user.refferalCode}`
+    : "";
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(referralLink);
@@ -30,7 +36,7 @@ export default function Referral() {
 
   return (
     <div className="">
-      <PageTitle title="Referral" />
+      <PageTitle title={t("referral")} />
 
       <div className="">
         <div className="mb-4 flex items-center gap-3">

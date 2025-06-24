@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   format,
   startOfWeek,
@@ -12,7 +13,6 @@ import {
   isSameMonth,
   isToday,
 } from "date-fns";
-import { Button } from "@/components/ui/button";
 import {
   ChevronLeft,
   ChevronRight,
@@ -20,8 +20,10 @@ import {
   Search,
   MoreHorizontal,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+
 import { PageTitle } from "@/components/PageTitle";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 // Mock events data
 const mockEvents = [
@@ -63,6 +65,8 @@ const mockEvents = [
 ];
 
 export default function BookingCalendar() {
+  const { t } = useTranslation();
+
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedEvent, setSelectedEvent] = useState<
@@ -172,7 +176,7 @@ export default function BookingCalendar() {
 
   return (
     <div className="flex h-full flex-col">
-      <PageTitle title="Booking Calendar" />
+      <PageTitle title="{t('bookingCalendar')}" />
       {/* Header */}
       <div className="flex items-center justify-between border-b border-gray-200 p-4">
         <div className="flex items-center space-x-4">
@@ -202,7 +206,7 @@ export default function BookingCalendar() {
             size="sm"
             onClick={() => setCurrentDate(new Date())}
           >
-            Today
+            {t("today")}
           </Button>
         </div>
 
@@ -217,7 +221,7 @@ export default function BookingCalendar() {
 
           <Button>
             <Plus className="mr-1 h-4 w-4" />
-            Create
+            {t("create")}
           </Button>
         </div>
       </div>
@@ -271,7 +275,7 @@ export default function BookingCalendar() {
 
             <div className="mt-6 flex justify-end space-x-2">
               <Button variant="outline" onClick={() => setSelectedEvent(null)}>
-                Close
+                {t("close")}
               </Button>
               <Button>Edit Event</Button>
             </div>

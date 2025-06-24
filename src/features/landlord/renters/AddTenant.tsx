@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusCircleIcon } from "lucide-react";
@@ -120,6 +121,8 @@ const formSchema = z
   });
 
 export default function AddTenant() {
+  const { t } = useTranslation();
+
   const goBack = useGoBack();
   const navigate = useNavigate();
   const { mutateAsync } = useCreateTenantMutation();
@@ -227,7 +230,7 @@ export default function AddTenant() {
                   name="fullName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Full Name</FormLabel>
+                      <FormLabel>{t("fullName")}</FormLabel>
                       <FormControl>
                         <Input {...field} placeholder="Enter your full name" />
                       </FormControl>
@@ -260,7 +263,7 @@ export default function AddTenant() {
                     name="phone"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Phone Number</FormLabel>
+                        <FormLabel>{t("phoneNumber")}</FormLabel>
                         <FormControl>
                           <Input {...field} placeholder="Enter phone number" />
                         </FormControl>
@@ -274,7 +277,7 @@ export default function AddTenant() {
                     name="rentAmount"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Rent Amount</FormLabel>
+                        <FormLabel>{t("rentAmount")}</FormLabel>
                         <FormControl>
                           <CurrencyInput
                             placeholder="Enter rent amount"
@@ -296,7 +299,7 @@ export default function AddTenant() {
                 name="propertyType"
                 render={({ field }) => (
                   <div className="">
-                    <FormLabel>Property Type</FormLabel>
+                    <FormLabel>{t("propertyType")}</FormLabel>
                     <PropertyTypeSelector {...field} />
                     <FormMessage />
                   </div>
@@ -353,7 +356,7 @@ export default function AddTenant() {
                     name="streetAddress"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Street Address</FormLabel>
+                        <FormLabel>{t("streetAddress")}</FormLabel>
                         <FormControl>
                           <Input
                             {...field}
@@ -371,7 +374,7 @@ export default function AddTenant() {
                       name="unit"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Unit</FormLabel>
+                          <FormLabel>{t("unit")}</FormLabel>
                           <FormControl>
                             <Input
                               {...field}
@@ -388,7 +391,7 @@ export default function AddTenant() {
                       name="city"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>City</FormLabel>
+                          <FormLabel>{t("city")}</FormLabel>
                           <FormControl>
                             <Input {...field} placeholder="Enter city" />
                           </FormControl>
@@ -404,7 +407,7 @@ export default function AddTenant() {
                       name="region"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Region</FormLabel>
+                          <FormLabel>{t("region")}</FormLabel>
                           <FormControl>
                             <Input
                               {...field}
@@ -421,7 +424,7 @@ export default function AddTenant() {
                       name="zipCode"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Zip Code</FormLabel>
+                          <FormLabel>{t("zipCode")}</FormLabel>
                           <FormControl>
                             <Input
                               {...field}
@@ -495,7 +498,7 @@ export default function AddTenant() {
                       name="leaseStartDate"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Lease Start Date</FormLabel>
+                          <FormLabel>{t("leaseStartDate")}</FormLabel>
                           <FormControl>
                             <DateInput {...field} />
                           </FormControl>
@@ -510,7 +513,7 @@ export default function AddTenant() {
                         name="leaseEndDate"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Lease End Date</FormLabel>
+                            <FormLabel>{t("leaseEndDate")}</FormLabel>
                             <FormControl>
                               <DateInput
                                 minDate={form.watch("leaseStartDate")}

@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -46,6 +47,8 @@ export const UtilitiesForm = ({
   propertyName,
   completionStatus,
 }: UtilitiesFormProps) => {
+  const { t } = useTranslation();
+
   const { id } = useParams<{ id: string }>();
   const { mutateAsync } = useUpdatePropertyMutation(id || "");
   const form = useForm<UtilitiesFormValues>({
@@ -268,7 +271,7 @@ export const UtilitiesForm = ({
                 isLoading={form.formState.isSubmitting}
                 size="lg"
               >
-                Next
+                {t("next")}
               </LoadingButton>
             </div>
           </div>

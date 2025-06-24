@@ -1,4 +1,7 @@
+import { useTranslation } from "react-i18next";
+
 import { PageTitle } from "@/components/PageTitle";
+
 import { EducationCard } from "./EducationCard";
 
 const educationalResources = [
@@ -26,9 +29,11 @@ const educationalResources = [
 ];
 
 export default function Education() {
+  const { t } = useTranslation();
+
   return (
     <div>
-      <PageTitle title="Education" />
+      <PageTitle title={t("education")} />
 
       <div className="space-y-4">
         {educationalResources.map((resource) => (

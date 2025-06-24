@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { Navigate, useLocation, useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -22,9 +23,9 @@ import { useCreateOrUpdateLeaseAgreementMutation } from "./api/mutation";
 import coinBagIcon from "./assets/coin-bag.png";
 import exchangeIcon from "./assets/exchange.png";
 import houseIcon from "./assets/house.png";
+import moneyDepositIcon from "./assets/money-deposit.png";
 import moneyLeaseIcon from "./assets/money-lease.png";
 import moneyIcon from "./assets/money.png";
-import moneyDepositIcon from "./assets/money-deposit.png";
 import { availableBanks, BankSelector } from "./components/BankSelector";
 import { BuilderLayout } from "./components/BuilderLayout";
 
@@ -52,6 +53,8 @@ const rentDepositFeeSchema = z.object({
 type RentDepositFeeValues = z.infer<typeof rentDepositFeeSchema>;
 
 export default function RentDepositFee() {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const { state } = useLocation();
   const { mutateAsync, isSuccess } = useCreateOrUpdateLeaseAgreementMutation();
@@ -163,13 +166,15 @@ export default function RentDepositFee() {
                         <FormControl>
                           <RadioGroupItem value="yes" />
                         </FormControl>
-                        <FormLabel className="font-normal">Yes</FormLabel>
+                        <FormLabel className="font-normal">
+                          {t("yes")}
+                        </FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-2">
                         <FormControl>
                           <RadioGroupItem value="no" />
                         </FormControl>
-                        <FormLabel className="font-normal">No</FormLabel>
+                        <FormLabel className="font-normal">{t("no")}</FormLabel>
                       </FormItem>
                     </RadioGroup>
                   </FormControl>
@@ -234,13 +239,15 @@ export default function RentDepositFee() {
                         <FormControl>
                           <RadioGroupItem value="yes" />
                         </FormControl>
-                        <FormLabel className="font-normal">Yes</FormLabel>
+                        <FormLabel className="font-normal">
+                          {t("yes")}
+                        </FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-2">
                         <FormControl>
                           <RadioGroupItem value="no" />
                         </FormControl>
-                        <FormLabel className="font-normal">No</FormLabel>
+                        <FormLabel className="font-normal">{t("no")}</FormLabel>
                       </FormItem>
                     </RadioGroup>
                   </FormControl>
@@ -278,7 +285,7 @@ export default function RentDepositFee() {
                 name="securityDeposit"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Security Deposit</FormLabel>
+                    <FormLabel>{t("securityDeposit")}</FormLabel>
                     <FormControl>
                       <CurrencyInput {...field} />
                     </FormControl>
@@ -320,13 +327,15 @@ export default function RentDepositFee() {
                         <FormControl>
                           <RadioGroupItem value="yes" />
                         </FormControl>
-                        <FormLabel className="font-normal">Yes</FormLabel>
+                        <FormLabel className="font-normal">
+                          {t("yes")}
+                        </FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-2">
                         <FormControl>
                           <RadioGroupItem value="no" />
                         </FormControl>
-                        <FormLabel className="font-normal">No</FormLabel>
+                        <FormLabel className="font-normal">{t("no")}</FormLabel>
                       </FormItem>
                     </RadioGroup>
                   </FormControl>
@@ -392,13 +401,15 @@ export default function RentDepositFee() {
                         <FormControl>
                           <RadioGroupItem value="yes" />
                         </FormControl>
-                        <FormLabel className="font-normal">Yes</FormLabel>
+                        <FormLabel className="font-normal">
+                          {t("yes")}
+                        </FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-2">
                         <FormControl>
                           <RadioGroupItem value="no" />
                         </FormControl>
-                        <FormLabel className="font-normal">No</FormLabel>
+                        <FormLabel className="font-normal">{t("no")}</FormLabel>
                       </FormItem>
                     </RadioGroup>
                   </FormControl>

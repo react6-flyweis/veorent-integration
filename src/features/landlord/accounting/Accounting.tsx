@@ -1,11 +1,15 @@
+import { useTranslation } from "react-i18next";
+
 import { CurrencyIcon } from "@/components/CurrencyIcon";
 import { PageTitle } from "@/components/PageTitle";
 import { Button } from "@/components/ui/button";
 
 export default function Accounting() {
+  const { t } = useTranslation();
+
   return (
     <div>
-      <PageTitle title="Accounting" />
+      <PageTitle title={t("accounting")} />
 
       <div className="flex flex-col items-center justify-center space-y-5 text-center">
         <h3 className="text-3xl font-bold">

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 import { CreateButton } from "@/components/CreateButton";
@@ -10,6 +11,8 @@ import RentersTablist from "./components/RentersTablist";
 import { RenterItem } from "./RenterItem";
 
 export default function RentersLeads() {
+  const { t } = useTranslation();
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { data: leads, isLoading } = useGetLeadsQuery();
@@ -17,9 +20,9 @@ export default function RentersLeads() {
   return (
     <div className="">
       <div className="mb-2 flex items-center justify-between">
-        <PageTitle title="Renters" className="mb-0" />
+        <PageTitle title={t("renters")} className="mb-0" />
         <CreateButton
-          label="Add New Lead"
+          label={t("addNewLead")}
           onClick={() => setIsDialogOpen(true)}
         />
       </div>
@@ -28,7 +31,7 @@ export default function RentersLeads() {
 
       <div className="">
         {isLoading ? (
-          <div className="text-center text-gray-500">Loading leads...</div>
+          <div className="text-center text-gray-500">{t("loadingLeads")}</div>
         ) : leads?.length ? (
           leads.map((renter, index) => (
             <Link to={`/landlord/renters/leads/${renter._id}`} key={index}>
@@ -44,9 +47,7 @@ export default function RentersLeads() {
             </Link>
           ))
         ) : (
-          <div className="text-center text-gray-500">
-            No leads found. Click "Add New Lead" to create one.
-          </div>
+          <div className="text-center text-gray-500">{t("noLeadsFound")}</div>
         )}
       </div>
 

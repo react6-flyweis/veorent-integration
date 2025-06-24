@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SwissFrancIcon } from "lucide-react";
@@ -15,16 +16,7 @@ import {
 import { PageTitle } from "@/components/PageTitle";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { DateInput } from "@/components/ui/date-input";
-
 import {
   Form,
   FormControl,
@@ -35,8 +27,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-
 import { useToast } from "@/hooks/useAlertToast";
 import { useGoBack } from "@/hooks/useGoBack";
 import { getErrorMessage } from "@/utils/getErrorMessage";
@@ -61,6 +60,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 const DailyCharge: React.FC = () => {
+  const { t } = useTranslation();
   const { showToast } = useToast();
   const goBack = useGoBack();
   const navigate = useNavigate();
@@ -206,7 +206,7 @@ const DailyCharge: React.FC = () => {
                       name="startDate"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Start Date</FormLabel>
+                          <FormLabel>{t("startDate")}</FormLabel>
                           <FormControl>
                             <DateInput
                               value={field.value}

@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import {
   Select,
   SelectContent,
@@ -24,16 +26,19 @@ export const availableBanks = [
 export function BankSelector({
   value,
   onChange,
-  placeholder = "Select a Bank",
+  placeholder,
 }: {
   value: (typeof availableBanks)[number]["_id"];
   onChange: (value: (typeof availableBanks)[number]["_id"]) => void;
   placeholder?: string;
 }) {
+  const { t } = useTranslation();
+  const defaultPlaceholder = placeholder || t("selectBank");
+
   return (
     <Select onValueChange={onChange} defaultValue={value} value={value}>
       <SelectTrigger>
-        <SelectValue placeholder={placeholder} />
+        <SelectValue placeholder={defaultPlaceholder} />
       </SelectTrigger>
       <SelectContent>
         {availableBanks.map((bank) => (

@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -48,6 +49,8 @@ const inviteFormSchema = z.object({
 type InviteFormValues = z.infer<typeof inviteFormSchema>;
 
 export default function Invite() {
+  const { t } = useTranslation();
+
   const { mutateAsync } = useInviteRenterMutation();
   const goBack = useGoBack();
   const { showToast } = useToast();
@@ -115,7 +118,7 @@ export default function Invite() {
                 name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>First Name</FormLabel>
+                    <FormLabel>{t("firstName")}</FormLabel>
                     <FormControl>
                       <Input placeholder="" {...field} />
                     </FormControl>
@@ -129,7 +132,7 @@ export default function Invite() {
                 name="lastName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Last Name</FormLabel>
+                    <FormLabel>{t("lastName")}</FormLabel>
                     <FormControl>
                       <Input placeholder="" {...field} />
                     </FormControl>
@@ -154,7 +157,9 @@ export default function Invite() {
                           <FormControl>
                             <RadioGroupItem value="email" />
                           </FormControl>
-                          <FormLabel className="font-normal">Email</FormLabel>
+                          <FormLabel className="font-normal">
+                            {t("email")}
+                          </FormLabel>
                         </FormItem>
                         <FormItem className="flex items-center space-x-2">
                           <FormControl>
@@ -220,7 +225,7 @@ export default function Invite() {
                 name="rentAmount"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Rent Amount</FormLabel>
+                    <FormLabel>{t("rentAmount")}</FormLabel>
                     <FormControl>
                       <CurrencyInput {...field} />
                     </FormControl>
@@ -234,7 +239,7 @@ export default function Invite() {
                 name="securityDeposit"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Security Deposit</FormLabel>
+                    <FormLabel>{t("securityDeposit")}</FormLabel>
                     <FormControl>
                       <CurrencyInput type="text" {...field} />
                     </FormControl>
@@ -304,7 +309,7 @@ export default function Invite() {
               type="button"
               onClick={goBack}
             >
-              Cancel
+              {t("cancel")}
             </Button>
             <LoadingButton
               isLoading={form.formState.isSubmitting}

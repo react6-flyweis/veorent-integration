@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SwissFrancIcon } from "lucide-react";
@@ -25,7 +26,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -34,7 +34,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/useAlertToast";
 import { useGoBack } from "@/hooks/useGoBack";
 import { getErrorMessage } from "@/utils/getErrorMessage";
@@ -59,6 +59,8 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export default function OneTimeCharge() {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const { showToast } = useToast();
   const goBack = useGoBack();
@@ -175,7 +177,7 @@ export default function OneTimeCharge() {
                       name="amount"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Amount</FormLabel>
+                          <FormLabel>{t("amount")}</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
@@ -201,7 +203,7 @@ export default function OneTimeCharge() {
                       name="dueDate"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Due Date</FormLabel>
+                          <FormLabel>{t("dueDate")}</FormLabel>
                           <FormControl>
                             <DateInput
                               value={field.value}

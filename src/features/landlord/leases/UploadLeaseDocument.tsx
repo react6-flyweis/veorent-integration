@@ -1,9 +1,11 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { Navigate, useLocation, useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+
 import { PageTitle } from "@/components/PageTitle";
 import { Button } from "@/components/ui/button";
-
 import {
   Form,
   FormControl,
@@ -11,7 +13,6 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Navigate, useLocation, useNavigate } from "react-router";
 import { ImageInput } from "@/components/ui/image-input";
 
 const formSchema = z.object({
@@ -25,6 +26,8 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export default function UploadLeaseDocument() {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const { state } = useLocation();
   const form = useForm<FormValues>({
@@ -66,7 +69,7 @@ export default function UploadLeaseDocument() {
           />
           <div className="flex justify-center">
             <Button type="submit" size="lg" className="w-full md:w-3/5">
-              Upload
+              {t("upload")}
             </Button>
           </div>
         </form>

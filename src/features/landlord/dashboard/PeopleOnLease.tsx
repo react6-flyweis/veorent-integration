@@ -1,15 +1,6 @@
-import { BuilderLayout } from "./components/BuilderLayout";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { LoadingButton } from "@/components/ui/loading-button";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import { useTranslation } from "react-i18next";
 
-import houseIcon from "./assets/house.png";
-import houseOwnerIcon from "./assets/house-owner.png";
 import {
   Form,
   FormControl,
@@ -19,9 +10,20 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useLocation, useNavigate } from "react-router";
-import { useCreateOrUpdateLeaseAgreementMutation } from "./api/mutation";
-import { getErrorMessage } from "@/utils/getErrorMessage";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
 import FormErrors from "@/components/FormErrors";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { LoadingButton } from "@/components/ui/loading-button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import { useCreateOrUpdateLeaseAgreementMutation } from "./api/mutation";
+import houseOwnerIcon from "./assets/house-owner.png";
+import houseIcon from "./assets/house.png";
+import { BuilderLayout } from "./components/BuilderLayout";
 
 // Define Zod validation schema
 const formSchema = z
@@ -85,6 +87,8 @@ const formSchema = z
 type FormValues = z.infer<typeof formSchema>;
 
 export default function PeopleOnLease() {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const { state } = useLocation();
   const { mutateAsync, isSuccess } = useCreateOrUpdateLeaseAgreementMutation();
@@ -175,7 +179,7 @@ export default function PeopleOnLease() {
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-lg font-medium">
               <img src={houseOwnerIcon} className="size-10" alt="Tenant" />
-              <span>Tenants</span>
+              <span>{t("tenants")}</span>
             </div>
 
             <Card className="gap-2 border-0 bg-blue-200 p-4">
@@ -275,11 +279,11 @@ export default function PeopleOnLease() {
                       >
                         <div className="flex items-center space-x-2">
                           <RadioGroupItem id="additional-yes" value="yes" />
-                          <label htmlFor="additional-yes">Yes</label>
+                          <label htmlFor="additional-yes">{t("yes")}</label>
                         </div>
                         <div className="flex items-center space-x-2">
                           <RadioGroupItem id="additional-no" value="no" />
-                          <label htmlFor="additional-no">No</label>
+                          <label htmlFor="additional-no">{t("no")}</label>
                         </div>
                       </RadioGroup>
                     </FormControl>
@@ -300,7 +304,7 @@ export default function PeopleOnLease() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-sm font-medium">
-                            Full Name
+                            {t("fullName")}
                           </FormLabel>
                           <FormControl>
                             <Input className="mt-1" {...field} />
@@ -368,7 +372,7 @@ export default function PeopleOnLease() {
                         </div>
                         <div className="flex items-center space-x-2">
                           <RadioGroupItem id="company-type" value="company" />
-                          <label htmlFor="company-type">Company</label>
+                          <label htmlFor="company-type">{t("company")}</label>
                         </div>
                       </RadioGroup>
                     </FormControl>
@@ -400,7 +404,7 @@ export default function PeopleOnLease() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm font-medium">
-                          Last Name
+                          {t("lastName")}
                         </FormLabel>
                         <FormControl>
                           <Input className="mt-1" {...field} />
@@ -437,7 +441,7 @@ export default function PeopleOnLease() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-sm font-medium">
-                        Email
+                        {t("email")}
                       </FormLabel>
                       <FormControl>
                         <Input className="mt-1" {...field} />
@@ -453,7 +457,7 @@ export default function PeopleOnLease() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-sm font-medium">
-                        Phone
+                        {t("phone")}
                       </FormLabel>
                       <FormControl>
                         <Input className="mt-1" {...field} />
@@ -491,7 +495,7 @@ export default function PeopleOnLease() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-sm font-medium">
-                            Last Name
+                            {t("lastName")}
                           </FormLabel>
                           <FormControl>
                             <Input className="mt-1" {...field} />
@@ -540,7 +544,7 @@ export default function PeopleOnLease() {
                     render={({ field }) => (
                       <FormItem className="mb-4">
                         <FormLabel className="text-sm font-medium">
-                          Street Address
+                          {t("streetAddress")}
                         </FormLabel>
                         <FormControl>
                           <Input {...field} />
@@ -557,7 +561,7 @@ export default function PeopleOnLease() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-sm font-medium">
-                            Unit
+                            {t("unit")}
                           </FormLabel>
                           <FormControl>
                             <Input {...field} />
@@ -571,7 +575,7 @@ export default function PeopleOnLease() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-sm font-medium">
-                            City
+                            {t("city")}
                           </FormLabel>
                           <FormControl>
                             <Input {...field} />
@@ -588,7 +592,7 @@ export default function PeopleOnLease() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-sm font-medium">
-                            Region
+                            {t("region")}
                           </FormLabel>
                           <FormControl>
                             <Input {...field} />
@@ -602,7 +606,7 @@ export default function PeopleOnLease() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-sm font-medium">
-                            Zip Code
+                            {t("zipCode")}
                           </FormLabel>
                           <FormControl>
                             <Input {...field} />
@@ -647,11 +651,13 @@ export default function PeopleOnLease() {
                           id="different-address-yes"
                           value="yes"
                         />
-                        <label htmlFor="different-address-yes">Yes</label>
+                        <label htmlFor="different-address-yes">
+                          {t("yes")}
+                        </label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem id="different-address-no" value="no" />
-                        <label htmlFor="different-address-no">No</label>
+                        <label htmlFor="different-address-no">{t("no")}</label>
                       </div>
                     </RadioGroup>
                   </FormControl>
@@ -668,7 +674,7 @@ export default function PeopleOnLease() {
                   render={({ field }) => (
                     <FormItem className="mb-4">
                       <FormLabel className="text-sm font-medium">
-                        Street Address
+                        {t("streetAddress")}
                       </FormLabel>
                       <FormControl>
                         <Input {...field} />
@@ -685,7 +691,7 @@ export default function PeopleOnLease() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm font-medium">
-                          Unit
+                          {t("unit")}
                         </FormLabel>
                         <FormControl>
                           <Input {...field} />
@@ -699,7 +705,7 @@ export default function PeopleOnLease() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm font-medium">
-                          City
+                          {t("city")}
                         </FormLabel>
                         <FormControl>
                           <Input {...field} />
@@ -716,7 +722,7 @@ export default function PeopleOnLease() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm font-medium">
-                          Region
+                          {t("region")}
                         </FormLabel>
                         <FormControl>
                           <Input {...field} />
@@ -730,7 +736,7 @@ export default function PeopleOnLease() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm font-medium">
-                          Zip Code
+                          {t("zipCode")}
                         </FormLabel>
                         <FormControl>
                           <Input {...field} />
@@ -761,11 +767,13 @@ export default function PeopleOnLease() {
                           id="additional-signers-yes"
                           value="yes"
                         />
-                        <label htmlFor="additional-signers-yes">Yes</label>
+                        <label htmlFor="additional-signers-yes">
+                          {t("yes")}
+                        </label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem id="additional-signers-no" value="no" />
-                        <label htmlFor="additional-signers-no">No</label>
+                        <label htmlFor="additional-signers-no">{t("no")}</label>
                       </div>
                     </RadioGroup>
                   </FormControl>
@@ -798,7 +806,7 @@ export default function PeopleOnLease() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm font-medium">
-                          Last Name
+                          {t("lastName")}
                         </FormLabel>
                         <FormControl>
                           <Input className="mt-1" {...field} />
@@ -815,7 +823,7 @@ export default function PeopleOnLease() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-sm font-medium">
-                        Email
+                        {t("email")}
                       </FormLabel>
                       <FormControl>
                         <Input className="mt-1" {...field} />

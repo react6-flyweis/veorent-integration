@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { CalendarDaysIcon, LayoutDashboardIcon } from "lucide-react";
 
 import { CreateButton } from "@/components/CreateButton";
@@ -32,6 +33,7 @@ import { CreateExpense } from "./components/CreateExpense";
 import { ExportButton } from "./components/ExportButton";
 
 const Expenses = () => {
+  const { t } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [timeFilter, setTimeFilter] = useState<string | null>("All Time");
   const isMobile = useIsMobile();
@@ -46,7 +48,7 @@ const Expenses = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <PageTitle title="Expenses" className="mb-0" />
+        <PageTitle title={t("expenses")} className="mb-0" />
         <Dialog>
           <DialogTrigger asChild>
             <CreateButton label="Add New Expense" />

@@ -1,7 +1,14 @@
-import { LoadingButton } from "@/components/ui/loading-button";
-import { Button } from "@/components/ui/button";
+import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { useLocation, useNavigate } from "react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
+import { CurrencyInput } from "@/components/CurrencyInput";
+import { PageTitle } from "@/components/PageTitle";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { DateInput } from "@/components/ui/date-input";
 import {
   Form,
   FormControl,
@@ -10,28 +17,23 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { LoadingButton } from "@/components/ui/loading-button";
+
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { DateInput } from "@/components/ui/date-input";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
-import { PageTitle } from "@/components/PageTitle";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useToast } from "@/hooks/useAlertToast";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
-import penApplication from "./assets/pen-application.png";
-import coinBagIcon from "./assets/coin-bag.png";
+import { useCreateLeaseAddendumMutation } from "./api/mutation";
 import amendmentIcon from "./assets/amendment.png";
 import calendarIcon from "./assets/calendar.png";
-import monthIcon from "./assets/month.png";
+import coinBagIcon from "./assets/coin-bag.png";
 import dateIcon from "./assets/date.png";
-import { useLocation, useNavigate } from "react-router";
-import { useCreateLeaseAddendumMutation } from "./api/mutation";
-import { getErrorMessage } from "@/utils/getErrorMessage";
-import { useToast } from "@/hooks/useAlertToast";
-import { CurrencyInput } from "@/components/CurrencyInput";
+import monthIcon from "./assets/month.png";
+import penApplication from "./assets/pen-application.png";
 
 // Define Zod validation schema
 const formSchema = z.object({
@@ -53,6 +55,8 @@ const formSchema = z.object({
 });
 
 export default function CreateLeaseAddendum() {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const { state } = useLocation();
   const { mutateAsync } = useCreateLeaseAddendumMutation();
@@ -147,7 +151,7 @@ export default function CreateLeaseAddendum() {
 
             {/* Tenants Section */}
             <div className="space-y-2">
-              <h3 className="text-lg font-medium text-black">Tenants</h3>
+              <h3 className="text-lg font-medium text-black">{t("tenants")}</h3>
               <div className="rounded-md border p-4 text-center shadow">
                 <p className="text-lg font-bold">You Don't Have Any Tenants!</p>
                 <p className="text-sm">
@@ -208,7 +212,7 @@ export default function CreateLeaseAddendum() {
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <img src={dateIcon} alt="Date Icon" className="size-8" />
-                <h3 className="text-2xl font-semibold">End Date</h3>
+                <h3 className="text-2xl font-semibold">{t("endDate")}</h3>
               </div>
               <FormField
                 control={form.control}
@@ -226,11 +230,11 @@ export default function CreateLeaseAddendum() {
                       >
                         <div className="flex items-center space-x-2">
                           <RadioGroupItem id="end-date-yes" value="yes" />
-                          <label htmlFor="end-date-yes">Yes</label>
+                          <label htmlFor="end-date-yes">{t("yes")}</label>
                         </div>
                         <div className="flex items-center space-x-2">
                           <RadioGroupItem id="end-date-no" value="no" />
-                          <label htmlFor="end-date-no">No</label>
+                          <label htmlFor="end-date-no">{t("no")}</label>
                         </div>
                       </RadioGroup>
                     </FormControl>
@@ -289,11 +293,11 @@ export default function CreateLeaseAddendum() {
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem id="rent-yes" value="yes" />
-                        <label htmlFor="rent-yes">Yes</label>
+                        <label htmlFor="rent-yes">{t("yes")}</label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem id="rent-no" value="no" />
-                        <label htmlFor="rent-no">No</label>
+                        <label htmlFor="rent-no">{t("no")}</label>
                       </div>
                     </RadioGroup>
                   </FormControl>
@@ -357,11 +361,11 @@ export default function CreateLeaseAddendum() {
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem id="deposit-yes" value="yes" />
-                        <label htmlFor="deposit-yes">Yes</label>
+                        <label htmlFor="deposit-yes">{t("yes")}</label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem id="deposit-no" value="no" />
-                        <label htmlFor="deposit-no">No</label>
+                        <label htmlFor="deposit-no">{t("no")}</label>
                       </div>
                     </RadioGroup>
                   </FormControl>
@@ -387,7 +391,7 @@ export default function CreateLeaseAddendum() {
                           />
                         </FormControl>
                         <FormLabel className="text-sm font-normal">
-                          Security Deposit
+                          {t("securityDeposit")}
                         </FormLabel>
                       </FormItem>
                     )}
@@ -517,11 +521,11 @@ export default function CreateLeaseAddendum() {
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem id="amendments-yes" value="yes" />
-                        <label htmlFor="amendments-yes">Yes</label>
+                        <label htmlFor="amendments-yes">{t("yes")}</label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem id="amendments-no" value="no" />
-                        <label htmlFor="amendments-no">No</label>
+                        <label htmlFor="amendments-no">{t("no")}</label>
                       </div>
                     </RadioGroup>
                   </FormControl>

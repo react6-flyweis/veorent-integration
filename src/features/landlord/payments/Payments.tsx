@@ -1,26 +1,31 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router";
+
+import { CreateButton } from "@/components/CreateButton";
+import { PageTitle } from "@/components/PageTitle";
 import {
   Tabs,
   TabsList,
   TabsTrigger,
   TabsContent,
 } from "@/components/ui/ghost-tabs";
-import { CreateButton } from "@/components/CreateButton";
-import { PageTitle } from "@/components/PageTitle";
-import { OverviewTabContent } from "./components/OverviewTabContent";
+
 import { ChargesTabContent } from "./components/ChargesTabContent";
 import { DepositsTabContent } from "./components/DepositsTabContent";
-import { Link } from "react-router";
+import { OverviewTabContent } from "./components/OverviewTabContent";
 
 type TabValue = "overview" | "charges" | "deposits";
 
 export default function Payments() {
+  const { t } = useTranslation();
+
   const [activeTab, setActiveTab] = useState<TabValue>("overview");
 
   return (
     <div className="">
       <div className="mb-5 flex items-center justify-between">
-        <PageTitle title="Payments" className="mb-0" />
+        <PageTitle title={t("payments")} className="mb-0" />
         <Link to="/landlord/payments/create-charge">
           <CreateButton label="Create Charge" />
         </Link>

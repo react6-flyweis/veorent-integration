@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   UserIcon,
@@ -73,6 +74,8 @@ function PropertyDetailSkeleton() {
 }
 
 export default function PropertyDetail() {
+  const { t } = useTranslation();
+
   const { id: propertyId } = useParams();
   const navigate = useNavigate();
   const { data, isLoading } = useGetPropertyByIdQuery(propertyId || "");
@@ -253,7 +256,7 @@ export default function PropertyDetail() {
       {/* Property Description */}
       <Card className="gap-0 rounded-sm py-2">
         <CardHeader className="px-3">
-          <CardTitle className="text-xl">Description</CardTitle>
+          <CardTitle className="text-xl">{t("description")}</CardTitle>
         </CardHeader>
         <CardContent className="px-3">
           <p className="text-muted-foreground">{property.description}</p>
@@ -363,7 +366,7 @@ export default function PropertyDetail() {
             to={`/landlord/properties/${property._id}/setup`}
           >
             <Button size="lg" className="mt-4 w-full">
-              {status ? "Complete" : "Create"} My Listing
+              {status ? "Complete" : t("create")} My Listing
             </Button>
           </Link>
         </div>
@@ -397,7 +400,7 @@ export default function PropertyDetail() {
                   className="text-primary h-6 bg-blue-200 hover:bg-blue-300"
                 >
                   <PenLineIcon className="size-3" />
-                  <span className="ml-2">Edit</span>
+                  <span className="ml-2">{t("edit")}</span>
                 </Button>
               </div>
             </div>

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Navigate } from "react-router";
 
 import { PageTitle } from "@/components/PageTitle";
@@ -13,11 +14,13 @@ import { AccountForm } from "./components/AccountForm";
 import { NotificationPreferences } from "./components/NotificationPreferences";
 
 export default function Setting() {
+  const { t } = useTranslation();
+
   const { data, isLoading } = useGetProfileQuery();
 
   return (
     <div>
-      <PageTitle title="Settings" />
+      <PageTitle title={t("settings")} />
 
       <Tabs defaultValue="account" className="mt-6">
         <TabsList className="mb-5 flex px-0 @lg:max-w-2xl @lg:gap-10">

@@ -1,6 +1,7 @@
-import { z } from "zod";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 import {
   Dialog,
@@ -17,11 +18,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { PropertiesSelector } from "../../dashboard/components/PropertiesSelector";
-import { getErrorMessage } from "@/utils/getErrorMessage";
-import { useCreateLeadMutation } from "../api/mutations";
-import { useToast } from "@/hooks/useAlertToast";
 import { LoadingButton } from "@/components/ui/loading-button";
+import { useToast } from "@/hooks/useAlertToast";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+
+import { PropertiesSelector } from "../../dashboard/components/PropertiesSelector";
+import { useCreateLeadMutation } from "../api/mutations";
 
 const formSchema = z.object({
   property: z.string().min(1, { message: "Property is required" }),
@@ -38,6 +40,8 @@ interface AddLeadDialogProps {
 }
 
 export function AddLeadDialog({ open, onOpenChange }: AddLeadDialogProps) {
+  const { t } = useTranslation();
+
   const { mutateAsync } = useCreateLeadMutation();
   const { showToast } = useToast();
 
@@ -123,7 +127,7 @@ export function AddLeadDialog({ open, onOpenChange }: AddLeadDialogProps) {
               name="fullName"
               render={({ field }) => (
                 <FormItem className="gap-0">
-                  <FormLabel className="text-base">Full Name</FormLabel>
+                  <FormLabel className="text-base">{t("fullName")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -151,7 +155,9 @@ export function AddLeadDialog({ open, onOpenChange }: AddLeadDialogProps) {
               name="phone"
               render={({ field }) => (
                 <FormItem className="gap-0">
-                  <FormLabel className="text-base">Phone Number</FormLabel>
+                  <FormLabel className="text-base">
+                    {t("phoneNumber")}
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -166,7 +172,7 @@ export function AddLeadDialog({ open, onOpenChange }: AddLeadDialogProps) {
                 className="w-4/5"
                 isLoading={form.formState.isSubmitting}
               >
-                Submit
+                {t("submit")}
               </LoadingButton>
             </div>
           </form>

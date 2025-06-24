@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -50,6 +51,8 @@ export function PhotosVideosForm({
   onSuccess,
   propertyName,
 }: PhotosVideosFormProps) {
+  const { t } = useTranslation();
+
   const { id } = useParams<{ id: string }>();
   const { mutateAsync } = useUpdatePropertyMutation(id || "");
   const { mutateAsync: uploadImage } = useUploadImageMutation();
@@ -194,7 +197,7 @@ export function PhotosVideosForm({
             disabled={form.formState.isSubmitting}
             size="lg"
           >
-            {form.formState.isSubmitting ? "Uploading..." : "Next"}
+            {form.formState.isSubmitting ? "Uploading..." : t("next")}
           </Button>
         </form>
       </Form>

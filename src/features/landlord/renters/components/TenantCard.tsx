@@ -1,7 +1,7 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,11 +10,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Link } from "react-router";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { formatDate } from "@/utils/formatDate";
 import { getInitial } from "@/utils/name";
 
 export function TenantCard({ tenant }: { tenant: ITenant }) {
+  const { t } = useTranslation();
+
   const [dialogOpen, setDialogOpen] = useState(false);
   const formattedAddress = useMemo(() => {
     return [
@@ -57,7 +61,7 @@ export function TenantCard({ tenant }: { tenant: ITenant }) {
       </CardContent>
       <CardFooter className="grid grid-cols-3 p-0">
         <Button onClick={(e) => e.preventDefault()} variant="outline" size="sm">
-          Email
+          {t("email")}
         </Button>
 
         <Button
@@ -68,7 +72,7 @@ export function TenantCard({ tenant }: { tenant: ITenant }) {
           variant="outline"
           size="sm"
         >
-          Call
+          {t("call")}
         </Button>
 
         <Button variant="outline" size="sm" asChild>

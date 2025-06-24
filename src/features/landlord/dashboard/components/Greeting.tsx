@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import { useGetProfileQuery } from "@/features/core/auth/api/queries";
 
@@ -8,6 +9,7 @@ interface GreetingProps {
 
 export function Greeting({ className }: GreetingProps) {
   const { data } = useGetProfileQuery();
+  const { t } = useTranslation();
 
   const UserFirstName = useMemo(() => {
     if (data?.firstname) {
@@ -24,7 +26,7 @@ export function Greeting({ className }: GreetingProps) {
 
   return (
     <h2 className={`mb-2 text-3xl font-semibold ${className || ""}`}>
-      Hello, {UserFirstName}
+      {t("hello")}, {UserFirstName}
     </h2>
   );
 }

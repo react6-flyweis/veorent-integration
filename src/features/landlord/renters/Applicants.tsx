@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
 import { PageTitle } from "@/components/PageTitle";
@@ -15,17 +16,19 @@ import { useGetApplicantsQuery } from "./api/queries";
 import RentersTablist from "./components/RentersTablist";
 
 export default function Applicants() {
+  const { t } = useTranslation();
+
   const { data: applicants, isLoading } = useGetApplicantsQuery();
   return (
     <div className="">
       <div className="mb-5">
-        <PageTitle title="Renters" className="mb-0" />
+        <PageTitle title={t("renters")} className="mb-0" />
         <RentersTablist />
       </div>
       <div className="space-y-4">
         {isLoading ? (
           <div className="flex items-center justify-center py-4">
-            <span>Loading...</span>
+            <span>{t("loading")}</span>
           </div>
         ) : applicants?.length ? (
           applicants.slice(0, 3).map((applicant) => (
@@ -55,7 +58,8 @@ export default function Applicants() {
                       )}
                     </div>
                     <div className="text-muted-foreground mb-1 text-xs">
-                      Date Submitted: {formatDate(applicant.createdAt, true)}
+                      {t("dateSubmitted")}{" "}
+                      {formatDate(applicant.createdAt, true)}
                     </div>
                     <div className="mb-2 text-sm font-semibold text-gray-700">
                       {applicant.currentProperty.streetAddress},{" "}
@@ -66,7 +70,9 @@ export default function Applicants() {
 
                 <div className="flex flex-col @md:flex-row @md:items-end">
                   <div className="flex flex-1 flex-col items-center gap-5 @md:flex-row">
-                    <p className="text-muted-foreground text-lg">Applied to</p>
+                    <p className="text-muted-foreground text-lg">
+                      {t("appliedTo")}
+                    </p>
                     <div className="flex w-full flex-col gap-3 @lg:flex-row">
                       {[
                         {
@@ -98,7 +104,7 @@ export default function Applicants() {
                       to={`/landlord/renters/application/${applicant._id}/move-in`}
                       state={{ applicant }}
                     >
-                      Move in Renter
+                      {t("moveInRenter")}
                     </Link>
                   </Button>
                 </div>
@@ -107,7 +113,7 @@ export default function Applicants() {
           ))
         ) : (
           <div className="flex items-center justify-center py-4">
-            <span>No applicants found.</span>
+            <span>{t("noApplicantsFound")}</span>
           </div>
         )}
 

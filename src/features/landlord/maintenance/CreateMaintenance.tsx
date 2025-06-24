@@ -1,6 +1,10 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+
+import { PageTitle } from "@/components/PageTitle";
 import {
   Form,
   FormControl,
@@ -10,17 +14,16 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useNavigate } from "react-router";
-import { PageTitle } from "@/components/PageTitle";
-import { LoadingButton } from "@/components/ui/loading-button";
-import { useToast } from "@/hooks/useAlertToast";
 import { ImageInput } from "@/components/ui/image-input";
-import { PropertiesSelector } from "../dashboard/components/PropertiesSelector";
-import { useCreateMaintenanceRequestMutation } from "./api/mutation";
+import { Input } from "@/components/ui/input";
+import { LoadingButton } from "@/components/ui/loading-button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/useAlertToast";
 import { getErrorMessage } from "@/utils/getErrorMessage";
+
+import { useCreateMaintenanceRequestMutation } from "./api/mutation";
+import { PropertiesSelector } from "../dashboard/components/PropertiesSelector";
 
 // Define the form schema with Zod
 const formSchema = z.object({
@@ -66,6 +69,8 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export function CreateMaintenance() {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const { mutateAsync } = useCreateMaintenanceRequestMutation();
 
@@ -198,7 +203,7 @@ export function CreateMaintenance() {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Description</FormLabel>
+                    <FormLabel>{t("description")}</FormLabel>
                     <FormDescription>
                       Lorem ipsum dolor, sit amet consectetur adipisicing
                     </FormDescription>

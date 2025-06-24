@@ -1,9 +1,11 @@
-import { BuilderLayout } from "./components/BuilderLayout";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { LoadingButton } from "@/components/ui/loading-button";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { Navigate, useLocation, useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+
+import FormErrors from "@/components/FormErrors";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -13,16 +15,18 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
+import { LoadingButton } from "@/components/ui/loading-button";
 
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useCreateOrUpdateLeaseAgreementMutation } from "./api/mutation";
 import parkingIcon from "./assets/parking.png";
 import pawsIcon from "./assets/paw.png";
 import smokingIcon from "./assets/smoking.png";
 import insuranceIcon from "./assets/renter-insurance.png";
-import { Navigate, useLocation, useNavigate } from "react-router";
-import { useCreateOrUpdateLeaseAgreementMutation } from "./api/mutation";
+
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import FormErrors from "@/components/FormErrors";
+
+import { BuilderLayout } from "./components/BuilderLayout";
 
 // Define Zod validation schema
 const formSchema = z.object({
@@ -49,6 +53,8 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export default function PetSmoking() {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const { state } = useLocation();
   const { mutateAsync, isSuccess } = useCreateOrUpdateLeaseAgreementMutation();
@@ -145,13 +151,13 @@ export default function PetSmoking() {
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem id="pets-yes" value="yes" />
                         <FormLabel htmlFor="pets-yes" className="text-base">
-                          Yes
+                          {t("yes")}
                         </FormLabel>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem id="pets-no" value="no" />
                         <FormLabel htmlFor="pets-no" className="text-base">
-                          No
+                          {t("no")}
                         </FormLabel>
                       </div>
                     </RadioGroup>
@@ -245,13 +251,13 @@ export default function PetSmoking() {
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem id="smoking-yes" value="yes" />
                         <FormLabel htmlFor="smoking-yes" className="text-base">
-                          Yes
+                          {t("yes")}
                         </FormLabel>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem id="smoking-no" value="no" />
                         <FormLabel htmlFor="smoking-no" className="text-base">
-                          No
+                          {t("no")}
                         </FormLabel>
                       </div>
                       <div className="flex items-center space-x-2">
@@ -291,13 +297,13 @@ export default function PetSmoking() {
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem id="parking-yes" value="yes" />
                         <FormLabel htmlFor="parking-yes" className="text-base">
-                          Yes
+                          {t("yes")}
                         </FormLabel>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem id="parking-no" value="no" />
                         <FormLabel htmlFor="parking-no" className="text-base">
-                          No
+                          {t("no")}
                         </FormLabel>
                       </div>
                     </RadioGroup>
@@ -397,7 +403,9 @@ export default function PetSmoking() {
                           onCheckedChange={field.onChange}
                         />
                       </FormControl>
-                      <FormLabel className="font-normal">Other</FormLabel>
+                      <FormLabel className="font-normal">
+                        {t("other")}
+                      </FormLabel>
                     </FormItem>
                   )}
                 />
@@ -429,13 +437,13 @@ export default function PetSmoking() {
                           htmlFor="insurance-yes"
                           className="text-base"
                         >
-                          Yes
+                          {t("yes")}
                         </FormLabel>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem id="insurance-no" value="no" />
                         <FormLabel htmlFor="insurance-no" className="text-base">
-                          No
+                          {t("no")}
                         </FormLabel>
                       </div>
                     </RadioGroup>

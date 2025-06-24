@@ -1,37 +1,39 @@
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Link } from "react-router";
 
 export function ScreenMethodDialog() {
+  const { t } = useTranslation();
+
   return (
     <DialogContent className="sm:max-w-2xl">
       <DialogHeader>
         <DialogTitle className="text-center text-2xl font-bold">
-          How do you want to screen the tenant?
+          {t("howToScreenTenant")}
         </DialogTitle>
       </DialogHeader>
 
       <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
         {[
           {
-            title: "Rental Application & Screening Report",
-            description:
-              "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-            buttonText: "INVITE TO APPLY",
+            title: t("rentalApplicationScreening"),
+            description: t("loremIpsumDescription"),
+            buttonText: t("inviteToApply").toUpperCase(),
             path: "/landlord/invite",
             isRecommended: true,
           },
           {
-            title: "Screening Report Only",
-            description:
-              "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-            buttonText: "REQUEST A REPORT",
+            title: t("screeningReportOnly"),
+            description: t("loremIpsumDescription"),
+            buttonText: t("requestReport"),
             path: "/landlord/screen",
           },
         ].map((item, index) => (
@@ -45,7 +47,7 @@ export function ScreenMethodDialog() {
                   variant="secondary"
                   className="bg-orange-500 text-white hover:bg-orange-600"
                 >
-                  RECOMMENDED
+                  {t("recommended")}
                 </Badge>
               </div>
             )}
@@ -67,8 +69,7 @@ export function ScreenMethodDialog() {
       </div>
 
       <p className="text-muted-foreground mt-4 text-center text-sm">
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry.
+        {t("loremIpsumDescription")}
       </p>
     </DialogContent>
   );

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
@@ -55,6 +56,8 @@ const accountFormSchema = z.object({
 type AccountFormValues = z.infer<typeof accountFormSchema>;
 
 export function AccountForm({ data }: { data: IUserFullDetails }) {
+  const { t } = useTranslation();
+
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
   const { mutateAsync } = useUpdateProfileMutation();
   const { showToast } = useToast();
@@ -113,7 +116,9 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-medium">First Name</FormLabel>
+                  <FormLabel className="font-medium">
+                    {t("firstName")}
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} className="w-full" />
                   </FormControl>
@@ -126,7 +131,7 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-medium">Last Name</FormLabel>
+                  <FormLabel className="font-medium">{t("lastName")}</FormLabel>
                   <FormControl>
                     <Input {...field} className="w-full" />
                   </FormControl>
@@ -143,7 +148,8 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="font-medium">
-                  Company <span className="text-gray-500">(Optional)</span>
+                  {t("company")}{" "}
+                  <span className="text-gray-500">(Optional)</span>
                 </FormLabel>
                 <FormControl>
                   <Input {...field} className="w-full" />
@@ -160,7 +166,7 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-medium">Email</FormLabel>
+                  <FormLabel className="font-medium">{t("email")}</FormLabel>
                   <FormControl>
                     <Input {...field} type="email" className="w-full" />
                   </FormControl>
@@ -173,7 +179,7 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
               name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-medium">Phone</FormLabel>
+                  <FormLabel className="font-medium">{t("phone")}</FormLabel>
                   <FormControl>
                     <Input {...field} type="tel" className="w-full" />
                   </FormControl>
@@ -193,7 +199,7 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="font-medium">
-                        Street Address
+                        {t("streetAddress")}
                       </FormLabel>
                       <FormControl>
                         <Input {...field} className="w-full" />
@@ -209,7 +215,7 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
                   name="unit"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-medium">Unit</FormLabel>
+                      <FormLabel className="font-medium">{t("unit")}</FormLabel>
                       <FormControl>
                         <Input {...field} className="w-full" />
                       </FormControl>
@@ -225,7 +231,7 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
                 name="city"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-medium">City</FormLabel>
+                    <FormLabel className="font-medium">{t("city")}</FormLabel>
                     <FormControl>
                       <Input {...field} className="w-full" />
                     </FormControl>
@@ -238,7 +244,7 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
                 name="region"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-medium">Region</FormLabel>
+                    <FormLabel className="font-medium">{t("region")}</FormLabel>
                     <FormControl>
                       <Input {...field} className="w-full" />
                     </FormControl>
@@ -251,7 +257,9 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
                 name="zipCode"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-medium">Zip Code</FormLabel>
+                    <FormLabel className="font-medium">
+                      {t("zipCode")}
+                    </FormLabel>
                     <FormControl>
                       <Input {...field} className="w-full" />
                     </FormControl>
@@ -266,14 +274,14 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
               {/* Password Section */}
               <div className="flex h-full flex-col justify-between space-y-4">
                 <div>
-                  <h3 className="mb-2 text-lg font-medium">Password</h3>
+                  <h3 className="mb-2 text-lg font-medium">{t("password")}</h3>
                   <Button
                     type="button"
                     variant="outlinePrimary"
                     className="w-full uppercase sm:w-auto sm:min-w-[160px]"
                     onClick={() => setShowPasswordDialog(true)}
                   >
-                    Change Password
+                    {t("changePassword")}
                   </Button>
                 </div>
                 <Button type="submit" className="w-full sm:w-auto">

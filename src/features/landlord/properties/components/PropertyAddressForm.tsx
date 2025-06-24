@@ -1,5 +1,6 @@
 import type { PropsWithChildren } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -40,6 +41,7 @@ export function PropertyAddressForm({
   standAlone?: boolean;
   propertyName?: string;
 }) {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const { mutateAsync } = useUpdatePropertyMutation(id || "");
 
@@ -97,7 +99,7 @@ export function PropertyAddressForm({
           name="streetAddress"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Street Address</FormLabel>
+              <FormLabel>{t("streetAddress")}</FormLabel>
               <FormControl>
                 <Input placeholder="Enter street address" {...field} />
               </FormControl>
@@ -112,7 +114,7 @@ export function PropertyAddressForm({
             name="unit"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Unit</FormLabel>
+                <FormLabel>{t("unit")}</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Apartment, suite, etc. (optional)"
@@ -128,7 +130,7 @@ export function PropertyAddressForm({
             name="city"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>City</FormLabel>
+                <FormLabel>{t("city")}</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter city" {...field} />
                 </FormControl>
@@ -144,7 +146,7 @@ export function PropertyAddressForm({
             name="region"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Region</FormLabel>
+                <FormLabel>{t("region")}</FormLabel>
                 <FormControl>
                   <Input placeholder="State/Province/Region" {...field} />
                 </FormControl>
@@ -157,7 +159,7 @@ export function PropertyAddressForm({
             name="zipCode"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Zip Code</FormLabel>
+                <FormLabel>{t("zipCode")}</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter zip code" {...field} />
                 </FormControl>
@@ -184,7 +186,7 @@ export function PropertyAddressForm({
             size="lg"
             className="w-4/5 @lg:w-3/5"
           >
-            Continue
+            {t("continue")}
           </LoadingButton>
         </div>
       </WrapperComponent>

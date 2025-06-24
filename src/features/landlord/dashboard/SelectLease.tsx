@@ -1,10 +1,15 @@
-import { BackButton } from "@/components/BackButton";
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { PropertiesSelector } from "./components/PropertiesSelector";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 
+import { BackButton } from "@/components/BackButton";
+import { Button } from "@/components/ui/button";
+
+import { PropertiesSelector } from "./components/PropertiesSelector";
+
 export default function SelectLease() {
+  const { t } = useTranslation();
+
   const [selectedAddress, setSelectedAddress] = useState<string>("");
 
   const navigate = useNavigate();
@@ -41,7 +46,7 @@ export default function SelectLease() {
           disabled={!selectedAddress}
           onClick={handleContinue}
         >
-          Continue
+          {t("continue")}
         </Button>
       </div>
     </div>

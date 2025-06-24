@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -55,6 +56,8 @@ export const LeasingBasicsForm = ({
   propertyName,
   completionStatus,
 }: LeasingBasicsFormProps) => {
+  const { t } = useTranslation();
+
   const { id } = useParams<{ id: string }>();
   const { mutateAsync } = useUpdatePropertyMutation(id || "");
 
@@ -121,7 +124,9 @@ export const LeasingBasicsForm = ({
               name="dateAvailable"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel className="text-base">Date Available</FormLabel>
+                  <FormLabel className="text-base">
+                    {t("dateAvailable")}
+                  </FormLabel>
                   <DateInput allowPastDates={false} {...field} />
                   <FormMessage />
                 </FormItem>
@@ -251,7 +256,7 @@ export const LeasingBasicsForm = ({
               isLoading={form.formState.isSubmitting}
               size="lg"
             >
-              Next
+              {t("next")}
             </LoadingButton>
           </div>
         </div>

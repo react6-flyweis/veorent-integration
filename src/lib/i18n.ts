@@ -77,6 +77,111 @@ const resources = {
       knowYoureCoveredDescription: "Lorem Ipsum is simply dummy text",
       purchaseInsurance: "Purchase Insurance",
       hello: "Hello",
+
+      // Landlord Dashboard
+      marketing: "MARKETING",
+      leads: "LEADS",
+      applicants: "APPLICANTS",
+      screenTenant: "Screen a Tenant",
+      inviteToApply: "Invite to Apply",
+      getLeaseAgreement: "Get a Lease Agreement",
+      buildLeaseAddendum: "Build a Lease Addendum",
+      eSignDocument: "E-Sign a Document",
+      getLandlordForms: "Get Landlord Forms",
+      recordExpense: "Record an Expense",
+      haveQuestion: "Have a question?",
+      hereForYou: "We're here for you 7 days a week.",
+      getHelp: "Get Help",
+      enjoyingVeorent: "Are you enjoying Voerent?",
+      needsWork: "Needs Work",
+      itsGreat: "It's Great!",
+      steadily: "STEADILY",
+      coveredAsLandlord: "Are you covered as a landlord?",
+      landlordInsurance:
+        "Landlord insurance that is specifically designed for you.",
+      getQuote: "Get a Quote",
+
+      // Screen Tenant Dialog
+      howToScreenTenant: "How do you want to screen the tenant?",
+      rentalApplicationScreening: "Rental Application & Screening Report",
+      screeningReportOnly: "Screening Report Only",
+      loremIpsumDescription:
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      requestReport: "REQUEST A REPORT",
+      recommended: "RECOMMENDED",
+
+      // Properties
+      selectProperty: "Select a property",
+      noCompletedPropertiesFound: "No completed properties found",
+      fee: "fee",
+      addNewProperty: "Add new property",
+      loadingProperties: "Loading properties...",
+      noPropertiesFound:
+        "No properties found. Click the button below to add a new property.",
+      selectBank: "Select a Bank",
+
+      // Maintenance
+      createRequest: "Create Request",
+      keepTrackOfMaintenanceIssues: "Keep Track of Maintenance Issues",
+      allTime: "All Time",
+      rentals: "Rentals",
+      allStatus: "All Status",
+      starred: "Starred",
+      showingResults: "Showing {{start}} to {{end}} of {{total}} results",
+      previous: "Previous",
+
+      // Forms
+      interactiveForms: "INTERACTIVE FORMS",
+      buildYourOwnForms: "Build Your Own Forms",
+      formsDescription:
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and",
+      stateSpecificLeaseAgreement: "State-Specific Lease Agreement",
+      stateSpecificLeaseDescription:
+        "Drafted by a legal professionals to keep you compliant and covered.",
+      startLease: "Start Lease",
+      leaseAgreementAddendum: "Lease Agreement Addendum",
+      leaseAddendumDescription:
+        "Amends your lease agreement to change the lease term, rent amount, deposit amounts or other provisions.",
+      startAddendum: "Start Addendum",
+      customizableConditionReport: "Customizable Condition Report",
+      conditionReportDescription:
+        "Set up spaces specific to your rental. Then, send it to your tenants to document the property's condition or complete it yourself.",
+      startReport: "Start Report",
+      downloadableForms: "DOWNLOADABLE FORMS",
+      essentialFormsYouNeed: "Essential Forms You Need",
+      getTheFormsPack: "Get The Forms Pack",
+      previewTheFormsPack: "Preview the Forms Pack",
+      disclaimer: "DISCLAIMER:",
+      disclaimerText:
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and",
+
+      // Renters/Leads
+      addNewLead: "Add New Lead",
+      loadingLeads: "Loading leads...",
+      noLeadsFound: 'No leads found. Click "Add New Lead" to create one.',
+      addNewTenant: "Add New Tenant",
+      activeTenants: "Active Tenants",
+      noTenantsFound: "No tenants found",
+      dateSubmitted: "Date Submitted:",
+      appliedTo: "Applied to",
+      moveInRenter: "Move in Renter",
+      noApplicantsFound: "No applicants found.",
+
+      // Payments
+      createCharge: "Create Charge",
+      overview: "OVERVIEW",
+      charges: "CHARGES",
+      deposits: "DEPOSITS",
+
+      // Expenses
+      addNewExpense: "Add New Expense",
+      allCategories: "All Categories",
+      date: "DATE",
+      categoryAndDescription: "CATEGORY & DESCRIPTION",
+      rental: "RENTAL",
+      total: "TOTAL",
+      noExpensesRecorded: "No expenses recorded.",
+
       accountBalance: "Account Balance",
       makePayment: "Make Payment",
       autoPay: "Auto Pay",
@@ -205,8 +310,6 @@ const resources = {
       positiveNumberRequired: "Please enter a positive number",
 
       // Tabs and Navigation
-      leads: "LEADS",
-      applicants: "APPLICANTS",
       openRequests: "Open Requests",
       allRequests: "All Requests",
       newLeasingRequests: "New leasing Requests",
@@ -354,7 +457,6 @@ const resources = {
       reportIssue: "Report Issue",
       feedback: "Feedback",
       support: "Support",
-      getHelp: "Get Help",
 
       // Roles and Users
       firstName: "First Name",
@@ -401,10 +503,8 @@ const resources = {
 
       // Currency and Payments
       amount: "Amount",
-      total: "Total",
       subtotal: "Subtotal",
       tax: "Tax",
-      fee: "Fee",
       discount: "Discount",
       paid: "Paid",
       unpaid: "Unpaid",
@@ -440,8 +540,6 @@ const resources = {
       exportToPDF: "Export to PDF",
       exportData: "Export Data",
       importData: "Import Data",
-      rental: "Rental",
-      date: "Date",
 
       // Authentication
       login: "Login",
@@ -541,8 +639,6 @@ const resources = {
       standardReport: "Standard Report",
       backgroundEvictionCredit: "Background, Eviction, Credit",
       incomeInsights: "Income Insights",
-      inviteToApply: "Invite to Apply",
-      requestReport: "Request Report",
 
       // Verification
       verification: "Verification",
@@ -776,7 +872,115 @@ const resources = {
       knowYoureCoveredDescription: "Lorem Ipsum es simplemente texto ficticio",
       purchaseInsurance: "Comprar Seguro",
       hello: "Hola",
+
+      // Landlord Dashboard
+      marketing: "MARKETING",
+      leads: "PROSPECTOS",
+      applicants: "SOLICITANTES",
+      screenTenant: "Evaluar un Inquilino",
+      inviteToApply: "Invitar a Aplicar",
+      getLeaseAgreement: "Obtener Contrato de Arrendamiento",
+      buildLeaseAddendum: "Crear Anexo de Arrendamiento",
+      eSignDocument: "Firmar Documento Electrónicamente",
+      getLandlordForms: "Obtener Formularios de Propietario",
+      recordExpense: "Registrar un Gasto",
+      haveQuestion: "¿Tienes una pregunta?",
+      hereForYou: "Estamos aquí para ti 7 días a la semana.",
+      getHelp: "Obtener Ayuda",
+      enjoyingVeorent: "¿Estás disfrutando Voerent?",
+      needsWork: "Necesita Trabajo",
+      itsGreat: "¡Es Genial!",
+      steadily: "STEADILY",
+      coveredAsLandlord: "¿Estás cubierto como propietario?",
+      landlordInsurance:
+        "Seguro de propietario específicamente diseñado para ti.",
+      getQuote: "Obtener Cotización",
+
+      // Screen Tenant Dialog
+      howToScreenTenant: "¿Cómo quieres evaluar al inquilino?",
+      rentalApplicationScreening:
+        "Solicitud de Alquiler y Reporte de Evaluación",
+      screeningReportOnly: "Solo Reporte de Evaluación",
+      loremIpsumDescription:
+        "Lorem Ipsum es simplemente texto ficticio de la industria de impresión y composición tipográfica.",
+      requestReport: "SOLICITAR REPORTE",
+      recommended: "RECOMENDADO",
       accountBalance: "Saldo de Cuenta",
+
+      // Properties
+      selectProperty: "Seleccionar una propiedad",
+      noCompletedPropertiesFound: "No se encontraron propiedades completadas",
+      fee: "tarifa",
+      addNewProperty: "Agregar nueva propiedad",
+      loadingProperties: "Cargando propiedades...",
+      noPropertiesFound:
+        "No se encontraron propiedades. Haz clic en el botón de abajo para agregar una nueva propiedad.",
+      selectBank: "Seleccionar un Banco",
+
+      // Maintenance
+      createRequest: "Crear Solicitud",
+      keepTrackOfMaintenanceIssues: "Seguimiento de Problemas de Mantenimiento",
+      allTime: "Todo el Tiempo",
+      rentals: "Alquileres",
+      allStatus: "Todos los Estados",
+      starred: "Destacados",
+      showingResults: "Mostrando {{start}} a {{end}} de {{total}} resultados",
+      previous: "Anterior",
+
+      // Forms
+      interactiveForms: "FORMULARIOS INTERACTIVOS",
+      buildYourOwnForms: "Construye Tus Propios Formularios",
+      formsDescription:
+        "Lorem Ipsum es simplemente texto ficticio de la industria de impresión y composición tipográfica. Lorem Ipsum ha sido el texto ficticio estándar de la industria desde el siglo XVI, cuando un impresor desconocido tomó una galera de tipos y",
+      stateSpecificLeaseAgreement:
+        "Contrato de Arrendamiento Específico del Estado",
+      stateSpecificLeaseDescription:
+        "Redactado por profesionales legales para mantenerte conforme y cubierto.",
+      startLease: "Iniciar Contrato",
+      leaseAgreementAddendum: "Anexo del Contrato de Arrendamiento",
+      leaseAddendumDescription:
+        "Modifica tu contrato de arrendamiento para cambiar el plazo del contrato, monto del alquiler, montos de depósito u otras disposiciones.",
+      startAddendum: "Iniciar Anexo",
+      customizableConditionReport: "Reporte de Condición Personalizable",
+      conditionReportDescription:
+        "Configura espacios específicos para tu alquiler. Luego, envíalo a tus inquilinos para documentar la condición de la propiedad o complétalo tú mismo.",
+      startReport: "Iniciar Reporte",
+      downloadableForms: "FORMULARIOS DESCARGABLES",
+      essentialFormsYouNeed: "Formularios Esenciales que Necesitas",
+      getTheFormsPack: "Obtener el Paquete de Formularios",
+      previewTheFormsPack: "Vista Previa del Paquete de Formularios",
+      disclaimer: "DESCARGO DE RESPONSABILIDAD:",
+      disclaimerText:
+        "Lorem Ipsum es simplemente texto ficticio de la industria de impresión y composición tipográfica. Lorem Ipsum ha sido el texto ficticio estándar de la industria desde el siglo XVI, cuando un impresor desconocido tomó una galera de tipos y",
+
+      // Renters/Leads
+      addNewLead: "Agregar Nuevo Prospecto",
+      loadingLeads: "Cargando prospectos...",
+      noLeadsFound:
+        'No se encontraron prospectos. Haz clic en "Agregar Nuevo Prospecto" para crear uno.',
+      addNewTenant: "Agregar Nuevo Inquilino",
+      activeTenants: "Inquilinos Activos",
+      noTenantsFound: "No se encontraron inquilinos",
+      dateSubmitted: "Fecha de Envío:",
+      appliedTo: "Aplicó a",
+      moveInRenter: "Mudanza del Arrendatario",
+      noApplicantsFound: "No se encontraron solicitantes.",
+
+      // Payments
+      createCharge: "Crear Cargo",
+      overview: "RESUMEN",
+      charges: "CARGOS",
+      deposits: "DEPÓSITOS",
+
+      // Expenses
+      addNewExpense: "Agregar Nuevo Gasto",
+      allCategories: "Todas las Categorías",
+      date: "FECHA",
+      categoryAndDescription: "CATEGORÍA Y DESCRIPCIÓN",
+      rental: "ALQUILER",
+      total: "TOTAL",
+      noExpensesRecorded: "No se registraron gastos.",
+
       makePayment: "Realizar Pago",
       autoPay: "Pago Automático",
       rentalBooked: "Alquiler Reservado",
@@ -907,8 +1111,6 @@ const resources = {
       positiveNumberRequired: "Por favor, ingresa un número positivo",
 
       // Tabs and Navigation
-      leads: "PROSPECTOS",
-      applicants: "SOLICITANTES",
       openRequests: "Solicitudes Abiertas",
       allRequests: "Todas las Solicitudes",
       newLeasingRequests: "Nuevas Solicitudes de Arrendamiento",
@@ -1056,7 +1258,6 @@ const resources = {
       reportIssue: "Reportar Problema",
       feedback: "Comentarios",
       support: "Soporte",
-      getHelp: "Obtener Ayuda",
 
       // Roles and Users
       firstName: "Nombre",
@@ -1103,10 +1304,8 @@ const resources = {
 
       // Currency and Payments
       amount: "Cantidad",
-      total: "Total",
       subtotal: "Subtotal",
       tax: "Impuesto",
-      fee: "Tarifa",
       discount: "Descuento",
       paid: "Pagado",
       unpaid: "Sin Pagar",
@@ -1142,8 +1341,6 @@ const resources = {
       exportToPDF: "Exportar a PDF",
       exportData: "Exportar Datos",
       importData: "Importar Datos",
-      rental: "Alquiler",
-      date: "Fecha",
 
       // Authentication
       login: "Iniciar Sesión",
@@ -1243,8 +1440,6 @@ const resources = {
       standardReport: "Reporte Estándar",
       backgroundEvictionCredit: "Antecedentes, Desalojo, Crédito",
       incomeInsights: "Información de Ingresos",
-      inviteToApply: "Invitar a Solicitar",
-      requestReport: "Solicitar Reporte",
 
       // Verification
       verification: "Verificación",

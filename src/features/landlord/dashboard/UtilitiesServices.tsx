@@ -1,6 +1,10 @@
-import * as z from "zod";
 import { useForm, type ControllerRenderProps } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { Navigate, useLocation, useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+import FormErrors from "@/components/FormErrors";
 import {
   Form,
   FormControl,
@@ -9,10 +13,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { LoadingButton } from "@/components/ui/loading-button";
-import { BuilderLayout } from "./components/BuilderLayout";
 import { Input } from "@/components/ui/input";
+import { LoadingButton } from "@/components/ui/loading-button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
   SelectContent,
@@ -22,12 +25,15 @@ import {
 } from "@/components/ui/select";
 
 // Import assets for icons
-import utilitiesIcon from "./assets/utilities.png";
-import keyIcon from "./assets/key.png";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+
+import { useCreateOrUpdateLeaseAgreementMutation } from "./api/mutation";
 import maintenanceIcon from "./assets/cog-wrench.png";
+import electricityIcon from "./assets/icons/light-bulb.png";
+import keyIcon from "./assets/key.png";
+import utilitiesIcon from "./assets/utilities.png";
 
 // Import utility icons
-import electricityIcon from "./assets/icons/light-bulb.png";
 import internetIcon from "./assets/icons/internet.png";
 import waterIcon from "./assets/icons/water.png";
 import cableIcon from "./assets/icons/tv.png";
@@ -37,10 +43,7 @@ import sewerIcon from "./assets/icons/seawage.png";
 import lawnCareIcon from "./assets/icons/lawn.png";
 import snowRemovalIcon from "./assets/icons/snow-removal.png";
 import condoIcon from "./assets/icons/condo-ee.png";
-import { Navigate, useLocation, useNavigate } from "react-router";
-import { useCreateOrUpdateLeaseAgreementMutation } from "./api/mutation";
-import { getErrorMessage } from "@/utils/getErrorMessage";
-import FormErrors from "@/components/FormErrors";
+import { BuilderLayout } from "./components/BuilderLayout";
 
 // Define schema for the form
 const utilitiesServicesSchema = z.object({
@@ -69,6 +72,8 @@ const utilitiesServicesSchema = z.object({
 type UtilitiesServicesValues = z.infer<typeof utilitiesServicesSchema>;
 
 export default function UtilitiesServices() {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const { state } = useLocation();
   const { mutateAsync, isSuccess } = useCreateOrUpdateLeaseAgreementMutation();
@@ -258,7 +263,7 @@ export default function UtilitiesServices() {
                             Garage Door Opener
                           </SelectItem>
                           <SelectItem value="mailbox">Mailbox</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
+                          <SelectItem value="other">{t("other")}</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -290,10 +295,10 @@ export default function UtilitiesServices() {
             <div className="flex items-center gap-2 text-lg font-medium sm:text-xl">
               <img
                 src={maintenanceIcon}
-                alt="Maintenance"
+                alt="{t('maintenance')}"
                 className="size-10"
               />
-              <span>Maintenance</span>
+              <span>{t("maintenance")}</span>
             </div>
 
             <p className="text-sm sm:text-base">
@@ -336,7 +341,9 @@ export default function UtilitiesServices() {
                         <FormControl>
                           <RadioGroupItem value="other" />
                         </FormControl>
-                        <FormLabel className="text-base">Other</FormLabel>
+                        <FormLabel className="text-base">
+                          {t("other")}
+                        </FormLabel>
                       </FormItem>
                     </RadioGroup>
                   </FormControl>

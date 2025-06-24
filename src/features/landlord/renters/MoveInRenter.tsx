@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { Navigate, useLocation, useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -62,6 +63,8 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export default function MoveInRenter() {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const { showToast } = useToast();
   const { state } = useLocation();
@@ -146,7 +149,7 @@ export default function MoveInRenter() {
                     </div>
                     <div className="text-muted-foreground flex justify-between text-sm">
                       {/* <span>{unit.type}</span> */}
-                      <span>Type</span>
+                      <span>{t("type")}</span>
                       {/* <span>{unit.totalUnits}</span> */}
                       <span>{applicant.allocateUnit}</span>
                     </div>
@@ -216,9 +219,9 @@ export default function MoveInRenter() {
                   />
                   <AvatarFallback>
                     {getInitial(
-                      `${applicant.userId?.firstname 
-                        } ${ 
-                        applicant.userId.lastname}`,
+                      `${applicant.userId?.firstname} ${
+                        applicant.userId.lastname
+                      }`,
                     )}
                   </AvatarFallback>
                 </Avatar>
@@ -246,26 +249,23 @@ export default function MoveInRenter() {
                     status: "Draft",
                     leaseName: applicant.lease?.leaseNickname,
                     propertyName: "Property Name, Unit Name",
-                    term:
-                      `${formatDate(applicant.lease?.startDate) 
-                      } - ${ 
-                      formatDate(applicant.lease?.endDate || "")}`,
+                    term: `${formatDate(
+                      applicant.lease?.startDate,
+                    )} - ${formatDate(applicant.lease?.endDate || "")}`,
                     rent: "2000 F.CFA/Month",
                   },
                   {
                     id: "endingSoon",
                     status: "Ending Soon",
                     leaseName: "Lease Name",
-                    propertyName:
-                      `${applicant.currentProperty.streetAddress 
-                      }, ${ 
-                      applicant.currentProperty.unitNumber}`,
-                    term:
-                      `${formatDate(applicant.currentPropertyLeaseTerm.startDate) 
-                      } - ${ 
-                      formatDate(
-                        applicant.currentPropertyLeaseTerm.endDate || "",
-                      )}`,
+                    propertyName: `${
+                      applicant.currentProperty.streetAddress
+                    }, ${applicant.currentProperty.unitNumber}`,
+                    term: `${formatDate(
+                      applicant.currentPropertyLeaseTerm.startDate,
+                    )} - ${formatDate(
+                      applicant.currentPropertyLeaseTerm.endDate || "",
+                    )}`,
                     rent: "2000 F.CFA/Month",
                   },
                 ].map((lease) => (
@@ -308,7 +308,7 @@ export default function MoveInRenter() {
             <Dialog>
               <DialogTrigger asChild>
                 <Button size="lg" type="button" className="w-3/5">
-                  Next
+                  {t("next")}
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-h-[90vh] overflow-y-auto">
@@ -325,9 +325,9 @@ export default function MoveInRenter() {
                       />
                       <AvatarFallback>
                         {getInitial(
-                          `${applicant.userId?.firstname 
-                            } ${ 
-                            applicant.userId.lastname}`,
+                          `${applicant.userId?.firstname} ${
+                            applicant.userId.lastname
+                          }`,
                         )}
                       </AvatarFallback>
                     </Avatar>
@@ -349,7 +349,7 @@ export default function MoveInRenter() {
                   </div>
 
                   <div>
-                    <h3 className="mb-1 text-lg font-bold">Unit</h3>
+                    <h3 className="mb-1 text-lg font-bold">{t("unit")}</h3>
                     <Card className="gap-1 p-3">
                       <CardContent className="space-y-2 p-0">
                         <div>

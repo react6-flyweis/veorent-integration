@@ -1,9 +1,11 @@
-import { IconRound } from "@/components/IconRound";
-import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
-import setupListingImage from "../assets/setup-listing.gif";
+import { IconRound } from "@/components/IconRound";
+import { Button } from "@/components/ui/button";
+
 import listingImage from "../assets/listing.png";
+import setupListingImage from "../assets/setup-listing.gif";
 
 interface ListingSuccessScreenProps {
   propertyName?: string;
@@ -12,6 +14,8 @@ interface ListingSuccessScreenProps {
 export const ListingSuccessScreen = ({
   propertyName,
 }: ListingSuccessScreenProps) => {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
 
   const handleBackClick = () => {
@@ -40,7 +44,7 @@ export const ListingSuccessScreen = ({
       </div>
       <div className="flex items-center justify-center">
         <Button className="w-4/5 @lg:w-3/5" onClick={handleBackClick}>
-          Back
+          {t("back")}
         </Button>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { useTranslation } from "react-i18next";
 
 import {
   Select,
@@ -12,13 +13,16 @@ import { useGetProperties } from "@/features/landlord/api/queries";
 export function PropertiesSelector({
   value,
   onChange,
-  placeholder = "Select a property",
+  placeholder,
 }: {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
 }) {
   const { data } = useGetProperties();
+  const { t } = useTranslation();
+
+  const defaultPlaceholder = placeholder || t("selectProperty");
 
   const isIncomplete = useCallback((property: IProperty) => {
     if (!property.formCompletionStatus) return false;
@@ -34,7 +38,7 @@ export function PropertiesSelector({
   return (
     <Select onValueChange={onChange} defaultValue={value} value={value}>
       <SelectTrigger>
-        <SelectValue placeholder={placeholder} />
+        <SelectValue placeholder={defaultPlaceholder} />
       </SelectTrigger>
       <SelectContent>
         {completedProperties?.length ? (
@@ -45,7 +49,7 @@ export function PropertiesSelector({
           ))
         ) : (
           <SelectItem value="no-properties" disabled>
-            No completed properties found
+            {t("noCompletedPropertiesFound")}
           </SelectItem>
         )}
       </SelectContent>

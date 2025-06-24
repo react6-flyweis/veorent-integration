@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -54,6 +55,8 @@ const screeningFormSchema = z.object({
 type ScreeningFormValues = z.infer<typeof screeningFormSchema>;
 
 export default function Screen() {
+  const { t } = useTranslation();
+
   const { mutateAsync } = useInviteTenantMutation();
   const { showToast } = useToast();
   const navigate = useNavigate();
@@ -136,7 +139,7 @@ export default function Screen() {
                 name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>First Name</FormLabel>
+                    <FormLabel>{t("firstName")}</FormLabel>
                     <FormControl>
                       <Input placeholder="" {...field} />
                     </FormControl>
@@ -150,7 +153,7 @@ export default function Screen() {
                 name="lastName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Last Name</FormLabel>
+                    <FormLabel>{t("lastName")}</FormLabel>
                     <FormControl>
                       <Input placeholder="" {...field} />
                     </FormControl>
@@ -175,7 +178,9 @@ export default function Screen() {
                           <FormControl>
                             <RadioGroupItem value="email" />
                           </FormControl>
-                          <FormLabel className="font-normal">Email</FormLabel>
+                          <FormLabel className="font-normal">
+                            {t("email")}
+                          </FormLabel>
                         </FormItem>
                         <FormItem className="flex items-center space-x-2">
                           <FormControl>
@@ -248,7 +253,7 @@ export default function Screen() {
               name="streetAddress"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Street Address</FormLabel>
+                  <FormLabel>{t("streetAddress")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -263,7 +268,7 @@ export default function Screen() {
                 name="unit"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Unit</FormLabel>
+                    <FormLabel>{t("unit")}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -277,7 +282,7 @@ export default function Screen() {
                 name="city"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>City</FormLabel>
+                    <FormLabel>{t("city")}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -291,7 +296,7 @@ export default function Screen() {
                 name="region"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Region</FormLabel>
+                    <FormLabel>{t("region")}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -305,7 +310,7 @@ export default function Screen() {
                 name="zipCode"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Zip Code</FormLabel>
+                    <FormLabel>{t("zipCode")}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -430,7 +435,7 @@ export default function Screen() {
               type="button"
               onClick={goBack}
             >
-              Cancel
+              {t("cancel")}
             </Button>
             <LoadingButton
               isLoading={form.formState.isSubmitting}

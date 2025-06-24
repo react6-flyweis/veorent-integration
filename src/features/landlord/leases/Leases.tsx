@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
 import { CreateButton } from "@/components/CreateButton";
@@ -7,7 +8,6 @@ import { PageTitle } from "@/components/PageTitle";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { TabsContent } from "@/components/ui/ghost-tabs";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
 
 import { useGetLeases } from "../api/queries";
 
@@ -37,6 +37,8 @@ import { useGetLeases } from "../api/queries";
 // ];
 
 export default function Leases() {
+  const { t } = useTranslation();
+
   const { data: leases, isLoading } = useGetLeases();
   const [activeTab, setActiveTab] = useState("active");
   const handleTabChange = (value: string) => {
@@ -72,7 +74,7 @@ export default function Leases() {
       <Tabs defaultValue="active" onValueChange={handleTabChange}>
         <TabsList className="grid h-14 w-48 grid-cols-2">
           <TabsTrigger value="active" className="text-lg font-semibold">
-            Active
+            {t("active")}
           </TabsTrigger>
           <TabsTrigger value="past" className="text-lg font-semibold">
             Past
@@ -83,7 +85,7 @@ export default function Leases() {
           <div className="space-y-4">
             {isLoading ? (
               <div className="flex items-center justify-center py-20">
-                <p className="text-gray-500">Loading...</p>
+                <p className="text-gray-500">{t("loading")}</p>
               </div>
             ) : currentLeases.length ? (
               currentLeases.map((lease) => (

@@ -1,22 +1,25 @@
+import { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router";
+
 import {
   MultiStepper,
   MultiStepperBackButton,
   MultiStepperStep,
   type MultiStepperRef,
 } from "@/components/MultiStepper";
-import { Button } from "@/components/ui/button";
-
-import { useRef, useState } from "react";
-
-import fingerSnapIcon from "./assets/finger-snap.png";
-import balanceIcon from "./assets/balance.png";
-import smoothPenIcon from "./assets/smooth-pen.png";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageTitle } from "@/components/PageTitle";
-import { Link } from "react-router";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+import balanceIcon from "./assets/balance.png";
+import fingerSnapIcon from "./assets/finger-snap.png";
+import smoothPenIcon from "./assets/smooth-pen.png";
 import { PropertiesSelector } from "./components/PropertiesSelector";
 
 export default function SelectLeaseAddendum() {
+  const { t } = useTranslation();
+
   const [selectedAddress, setSelectedAddress] = useState<string>("");
   const stepperRef = useRef<MultiStepperRef>(null);
   const handleContinue = () => {
@@ -47,7 +50,7 @@ export default function SelectLeaseAddendum() {
                 disabled={!selectedAddress}
                 onClick={handleContinue}
               >
-                Continue
+                {t("continue")}
               </Button>
             </div>
           </div>

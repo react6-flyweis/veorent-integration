@@ -1,13 +1,14 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router";
 import {
   Calendar1,
-  Home,
   Search,
   Star,
   ClipboardList,
   ChevronLeft,
   ChevronRight,
+  HomeIcon,
 } from "lucide-react";
 
 import { CreateButton } from "@/components/CreateButton";
@@ -37,7 +38,7 @@ import { useGetMaintenanceRequests } from "./api/queries";
 //     link: string;
 //   };
 //   lastActivity: string;
-//   status: "Open" | "In Progress" | "Completed";
+//   status: "{t('open')}956 | "{t('inProgress')}965 | "{t('completed')}989;
 // }
 
 // const demoData: MaintenanceIssue[] = [
@@ -50,19 +51,21 @@ import { useGetMaintenanceRequests } from "./api/queries";
 //       link: "/rentals/123",
 //     },
 //     lastActivity: "Jan 08, 2024 3:04pm",
-//     status: "Open",
+//     status: "{t('open')}1289,
 //   },
 // ];
 
 // Define maintenance categories with their corresponding icons
 const maintenanceCategories = [
-  { value: "all-time", label: "All Time", icon: Calendar1 },
-  { value: "rentals", label: "Rentals", icon: Home },
-  { value: "all-status", label: "All Status", icon: ClipboardList },
-  { value: "starred", label: "Starred", icon: Star },
+  { value: "all-time", label: "allTime", icon: Calendar1 },
+  { value: "rentals", label: "rentals", icon: HomeIcon },
+  { value: "all-status", label: "allStatus", icon: ClipboardList },
+  { value: "starred", label: "starred", icon: Star },
 ];
 
 export default function Maintenance() {
+  const { t } = useTranslation();
+
   const { data: maintenanceRequests, isLoading } = useGetMaintenanceRequests();
   const [activeTab, setActiveTab] = useState("all-time");
   const [searchTerm, setSearchTerm] = useState("");
@@ -151,9 +154,9 @@ export default function Maintenance() {
   return (
     <div className="w-full space-y-8">
       <div className="flex items-center justify-between">
-        <PageTitle title="Maintenance" className="mb-0" />
+        <PageTitle title={t("maintenance")} className="mb-0" />
         <Link to="create">
-          <CreateButton label="Create Request" />
+          <CreateButton label={t("createRequest")} />
         </Link>
       </div>
 
@@ -185,7 +188,7 @@ export default function Maintenance() {
               <Search className="size-5 text-gray-500" />
               <Input
                 type="search"
-                placeholder="Search"
+                placeholder={t("search")}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="h-5 border-0 shadow-none ring-0 focus-visible:ring-0 focus-visible:outline-none"
@@ -197,7 +200,7 @@ export default function Maintenance() {
 
       <div>
         <h2 className="mb-4 text-xl font-semibold">
-          Keep Track of Maintenance Issues
+          {t("keepTrackOfMaintenanceIssues")}
         </h2>
         <div className="rounded-xl border shadow-md">
           <Table>
@@ -280,12 +283,14 @@ export default function Maintenance() {
         {activeTab === "all-time" && totalPages > 1 && (
           <div className="mt-4 flex items-center justify-between">
             <div className="text-sm text-gray-500">
-              Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
-              {Math.min(
-                currentPage * itemsPerPage,
-                filteredMaintenanceRequests.length,
-              )}{" "}
-              of {filteredMaintenanceRequests.length} results
+              {t("showingResults", {
+                start: (currentPage - 1) * itemsPerPage + 1,
+                end: Math.min(
+                  currentPage * itemsPerPage,
+                  filteredMaintenanceRequests.length,
+                ),
+                total: filteredMaintenanceRequests.length,
+              })}
             </div>
             <div className="flex items-center space-x-2">
               <Button
@@ -295,7 +300,7 @@ export default function Maintenance() {
                 disabled={currentPage === 1}
               >
                 <ChevronLeft className="h-4 w-4" />
-                Previous
+                {t("previous")}
               </Button>
               <div className="flex items-center space-x-1">
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(
@@ -320,7 +325,7 @@ export default function Maintenance() {
                 }
                 disabled={currentPage === totalPages}
               >
-                Next
+                {t("next")}
                 <ChevronRight className="h-4 w-4" />
               </Button>
             </div>

@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SwissFrancIcon } from "lucide-react";
@@ -15,20 +16,8 @@ import {
 } from "@/components/MultiStepper";
 import { PageTitle } from "@/components/PageTitle";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
 import { DateInput } from "@/components/ui/date-input";
-
 import {
   Form,
   FormControl,
@@ -39,7 +28,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/useAlertToast";
 import { useGoBack } from "@/hooks/useGoBack";
 import { getErrorMessage } from "@/utils/getErrorMessage";
@@ -74,6 +73,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 const MonthlyCharge: React.FC = () => {
+  const { t } = useTranslation();
   const { showToast } = useToast();
   const goBack = useGoBack();
   const navigate = useNavigate();
@@ -197,7 +197,7 @@ const MonthlyCharge: React.FC = () => {
                       name="amount"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Amount</FormLabel>
+                          <FormLabel>{t("amount")}</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
@@ -223,7 +223,7 @@ const MonthlyCharge: React.FC = () => {
                       name="dueDate"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Due Date</FormLabel>
+                          <FormLabel>{t("dueDate")}</FormLabel>
                           <FormControl>
                             <DateInput
                               value={field.value}
@@ -353,11 +353,11 @@ const MonthlyCharge: React.FC = () => {
                             >
                               <div className="flex items-center space-x-2">
                                 <RadioGroupItem value="yes" id="yes" />
-                                <Label htmlFor="yes">Yes</Label>
+                                <Label htmlFor="yes">{t("yes")}</Label>
                               </div>
                               <div className="flex items-center space-x-2">
                                 <RadioGroupItem value="no" id="no" />
-                                <Label htmlFor="no">No</Label>
+                                <Label htmlFor="no">{t("no")}</Label>
                               </div>
                             </RadioGroup>
                           </FormControl>
@@ -413,7 +413,7 @@ const MonthlyCharge: React.FC = () => {
                           name="lateFeeAmount"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Amount</FormLabel>
+                              <FormLabel>{t("amount")}</FormLabel>
                               <FormControl>
                                 {lateFeeType === "percentage" ? (
                                   <div className="relative">

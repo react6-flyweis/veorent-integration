@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
 import { Badge } from "@/components/ui/badge";
@@ -22,6 +23,7 @@ import { ScreenMethodDialog } from "./components/ScreenMethodDialog";
 
 export default function Dashboard() {
   const { data } = useGetDashboardCounts();
+  const { t } = useTranslation();
 
   return (
     <div className="">
@@ -33,7 +35,9 @@ export default function Dashboard() {
             <Card className="bg-blue-100">
               <CardContent className="flex flex-col items-center justify-center">
                 <img src={houseIcon} className="size-10" />
-                <h3 className="text-lg font-medium @lg:text-xl">MARKETING</h3>
+                <h3 className="text-lg font-medium @lg:text-xl">
+                  {t("marketing")}
+                </h3>
                 <div className="text-lg font-bold">{data?.marketing}</div>
               </CardContent>
             </Card>
@@ -41,7 +45,9 @@ export default function Dashboard() {
               <Card className="bg-blue-100">
                 <CardContent className="flex flex-col items-center justify-center">
                   <img src={recruitIcon} className="size-10" />
-                  <h3 className="text-lg font-medium @lg:text-xl">LEADS</h3>
+                  <h3 className="text-lg font-medium @lg:text-xl">
+                    {t("leads")}
+                  </h3>
                   <div className="text-lg font-bold">{data?.leads}</div>
                 </CardContent>
               </Card>
@@ -51,7 +57,7 @@ export default function Dashboard() {
                 <CardContent className="flex flex-col items-center justify-center">
                   <img src={appIcon} className="size-10" />
                   <h3 className="text-lg font-medium @lg:text-xl">
-                    APPLICANTS
+                    {t("applicants")}
                   </h3>
                   <div className="text-lg font-bold">{data?.applicants}</div>
                 </CardContent>
@@ -63,7 +69,7 @@ export default function Dashboard() {
           <div className="mt-4 grid grid-cols-1 gap-3">
             <Dialog>
               <DialogTrigger asChild>
-                <ActionButton icon={screenIcon} label="Screen a Tenant" />
+                <ActionButton icon={screenIcon} label={t("screenTenant")} />
               </DialogTrigger>
               <ScreenMethodDialog />
             </Dialog>
@@ -71,32 +77,32 @@ export default function Dashboard() {
             {[
               {
                 icon: applyIcon,
-                label: "Invite to Apply",
+                label: t("inviteToApply"),
                 path: "/invite",
               },
               {
                 icon: formsIcon,
-                label: "Get a Lease Agreement",
+                label: t("getLeaseAgreement"),
                 path: "/lease-agreement",
               },
               {
                 icon: addendumIcon,
-                label: "Build a Lease Addendum",
+                label: t("buildLeaseAddendum"),
                 path: "/lease-addendum",
               },
               {
                 icon: signIcon,
-                label: "E-Sign a Document",
+                label: t("eSignDocument"),
                 path: "/e-sign",
               },
               {
                 icon: agreementIcon,
-                label: "Get Landlord Forms",
+                label: t("getLandlordForms"),
                 path: "/forms",
               },
               {
                 icon: expenseIcon,
-                label: "Record an Expense",
+                label: t("recordExpense"),
                 path: "/expenses",
               },
             ].map((tool, index) => (
@@ -115,16 +121,16 @@ export default function Dashboard() {
         <div className="@container flex flex-col gap-4">
           <Card className="bg-blue-100 p-3">
             <CardContent className="p-3 text-center">
-              <div className="mb-2 font-medium">Have a question?</div>
+              <div className="mb-2 font-medium">{t("haveQuestion")}</div>
               <div className="text-muted-foreground mb-2 text-sm">
-                We&apos;re here for you 7 days a week.
+                {t("hereForYou")}
               </div>
               <Link to="/landlord/help">
                 <Button
                   variant="outlinePrimary"
                   className="rounded-lg bg-transparent"
                 >
-                  Get Help
+                  {t("getHelp")}
                 </Button>
               </Link>
             </CardContent>
@@ -132,7 +138,7 @@ export default function Dashboard() {
 
           <Card className="bg-blue-100 p-3">
             <CardContent className="p-3 text-center">
-              <div className="mb-2 font-medium">Are you enjoying Voerent?</div>
+              <div className="mb-2 font-medium">{t("enjoyingVeorent")}</div>
               <div className="flex flex-col justify-center gap-2 @sm:flex-row">
                 <Link
                   to="/landlord/needs-work"
@@ -142,10 +148,10 @@ export default function Dashboard() {
                     variant="outlinePrimary"
                     className="w-full rounded-lg bg-transparent"
                   >
-                    Needs Work
+                    {t("needsWork")}
                   </Button>
                 </Link>
-                <Button className="rounded-lg">It's Great!</Button>
+                <Button className="rounded-lg">{t("itsGreat")}</Button>
               </div>
             </CardContent>
           </Card>
@@ -153,19 +159,17 @@ export default function Dashboard() {
           <Card className="bg-blue-100 p-3">
             <CardContent className="p-3 text-center">
               <Badge className="mb-2 size-15 rounded-full bg-purple-600">
-                STEADILY
+                {t("steadily")}
               </Badge>
-              <div className="mb-2 font-medium">
-                Are you covered as a landlord?
-              </div>
+              <div className="mb-2 font-medium">{t("coveredAsLandlord")}</div>
               <div className="text-muted-foreground mb-2 text-sm">
-                Landlord insurance that is specifically designed for you.
+                {t("landlordInsurance")}
               </div>
               <Button
                 variant="outlinePrimary"
                 className="rounded-lg bg-transparent"
               >
-                Get a Quote
+                {t("getQuote")}
               </Button>
             </CardContent>
           </Card>

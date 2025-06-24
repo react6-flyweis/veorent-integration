@@ -1,11 +1,14 @@
-import { PageTitle } from "@/components/PageTitle";
+import { useTranslation } from "react-i18next";
+import { Link, useNavigate } from "react-router-dom";
+
 import { CreateButton } from "@/components/CreateButton";
+import { Loader } from "@/components/Loader";
+import { PageTitle } from "@/components/PageTitle";
+
+import { useGetTenantsQuery } from "./api/queries";
+import RentersTablist from "./components/RentersTablist";
 import { TenantCard } from "./components/TenantCard";
 
-import { Link, useNavigate } from "react-router-dom";
-import RentersTablist from "./components/RentersTablist";
-import { useGetTenantsQuery } from "./api/queries";
-import { Loader } from "@/components/Loader";
 
 // Sample renter data - in a real app, this would come from a database or API
 // const tenants = [
@@ -28,6 +31,8 @@ import { Loader } from "@/components/Loader";
 // ];
 
 export default function Tenants() {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const { data: tenants = [], isLoading } = useGetTenantsQuery(1, 5);
 
@@ -38,12 +43,12 @@ export default function Tenants() {
   return (
     <div className="">
       <div className="mb-2 flex items-center justify-between">
-        <PageTitle title="Renters" className="mb-0" />
-        <CreateButton label="Add New Tenant" onClick={handleAddNew} />
+        <PageTitle title={t("renters")} className="mb-0" />
+        <CreateButton label={t("addNewTenant")} onClick={handleAddNew} />
       </div>
       <RentersTablist />
 
-      <h2 className="mt-5 mb-3 text-2xl font-semibold">Active Tenants</h2>
+      <h2 className="mt-5 mb-3 text-2xl font-semibold">{t("activeTenants")}</h2>
 
       {isLoading ? (
         <div className="flex items-center justify-center py-14">
@@ -53,7 +58,7 @@ export default function Tenants() {
         <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-2">
           {tenants.length ? (
             tenants.map((tenant, index) => (
-              <Link to={"/landlord/renters/tenants/" + tenant._id} key={index}>
+              <Link to={`/landlord/renters/tenants/${  tenant._id}`} key={index}>
                 <TenantCard tenant={tenant} />
               </Link>
             ))

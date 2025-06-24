@@ -1,13 +1,16 @@
 import { useState, type FC } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 import { Pencil } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
+
 import { SingleTogglePreference } from "./ToggleNotificationPreference";
 import { useUpdateNotificationPreferencesMutation } from "../api/mutation";
 
@@ -24,6 +27,7 @@ export const NotificationItem: FC<NotificationItemProps> = ({
   channels,
   itemKey,
 }) => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const { mutateAsync } = useUpdateNotificationPreferencesMutation();
 
@@ -64,7 +68,7 @@ export const NotificationItem: FC<NotificationItemProps> = ({
             className="h-8 bg-blue-50 px-3 text-blue-600 hover:bg-blue-100"
           >
             <Pencil className="mr-1 h-4 w-4" />
-            <span className="text-xs font-medium">Edit</span>
+            <span className="text-xs font-medium">{t("edit")}</span>
           </Button>
         </div>
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
