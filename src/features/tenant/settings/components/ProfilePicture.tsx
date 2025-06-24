@@ -35,23 +35,28 @@ export function ProfilePicture({ profile }: { profile?: IUser }) {
           <User2Icon />
         </AvatarFallback>
       </Avatar>
-      <label>
+      <div>
         <input
           type="file"
           accept="image/*"
           onChange={handleImageChange}
           className="hidden"
           disabled={uploadProfilePictureMutation.isPending}
+          id="profile-picture-input"
         />
         <Button
           variant="outlinePrimary"
           disabled={uploadProfilePictureMutation.isPending}
+          onClick={() =>
+            document.getElementById("profile-picture-input")?.click()
+          }
+          type="button"
         >
           {uploadProfilePictureMutation.isPending
             ? "Uploading..."
             : "Upload Photo"}
         </Button>
-      </label>
+      </div>
     </div>
   );
 }
