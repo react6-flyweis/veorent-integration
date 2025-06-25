@@ -321,49 +321,6 @@ export function AppSidebar({ navigationItems, ...props }: AppSidebarProps) {
               </SidebarMenuItem>
             );
           })}
-          <SidebarMenuItem className="flex justify-center">
-            {state === "collapsed" ? (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <SidebarMenuButton
-                    size="lg"
-                    className={cn(
-                      "transition-all duration-300 ease-in-out",
-                      "justify-center",
-                    )}
-                    onClick={() => setShowLogoutDialog(true)}
-                  >
-                    <img
-                      src={"/icons/logout.png"}
-                      alt="logout"
-                      className="max-h-4 max-w-4 flex-shrink-0 transition-all duration-300"
-                    />
-                  </SidebarMenuButton>
-                </TooltipTrigger>
-                <TooltipContent side="right">
-                  <p>{t("logout")}</p>
-                </TooltipContent>
-              </Tooltip>
-            ) : (
-              <SidebarMenuButton
-                size="lg"
-                className={cn(
-                  "transition-all duration-300 ease-in-out",
-                  "pl-5",
-                )}
-                onClick={() => setShowLogoutDialog(true)}
-              >
-                <img
-                  src={"/icons/logout.png"}
-                  alt="logout"
-                  className="max-h-4 max-w-4 flex-shrink-0 transition-all duration-300"
-                />
-                <AnimatedText className="text-base text-white">
-                  {t("logout")}
-                </AnimatedText>
-              </SidebarMenuButton>
-            )}
-          </SidebarMenuItem>
 
           <SidebarMenuItem className="flex justify-center">
             {state === "collapsed" ? (
@@ -430,6 +387,49 @@ export function AppSidebar({ navigationItems, ...props }: AppSidebarProps) {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
+            )}
+          </SidebarMenuItem>
+          <SidebarMenuItem className="flex justify-center">
+            {state === "collapsed" ? (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <SidebarMenuButton
+                    size="lg"
+                    className={cn(
+                      "transition-all duration-300 ease-in-out",
+                      "justify-center",
+                    )}
+                    onClick={() => setShowLogoutDialog(true)}
+                  >
+                    <img
+                      src={"/icons/logout.png"}
+                      alt="logout"
+                      className="max-h-4 max-w-4 flex-shrink-0 transition-all duration-300"
+                    />
+                  </SidebarMenuButton>
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p>{t("logout")}</p>
+                </TooltipContent>
+              </Tooltip>
+            ) : (
+              <SidebarMenuButton
+                size="lg"
+                className={cn(
+                  "transition-all duration-300 ease-in-out",
+                  "pl-5",
+                )}
+                onClick={() => setShowLogoutDialog(true)}
+              >
+                <img
+                  src={"/icons/logout.png"}
+                  alt="logout"
+                  className="max-h-4 max-w-4 flex-shrink-0 transition-all duration-300"
+                />
+                <AnimatedText className="text-base text-white">
+                  {t("logout")}
+                </AnimatedText>
+              </SidebarMenuButton>
             )}
           </SidebarMenuItem>
         </SidebarMenu>
