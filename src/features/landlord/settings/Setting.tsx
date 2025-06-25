@@ -24,23 +24,23 @@ export default function Setting() {
 
       <Tabs defaultValue="account" className="mt-6">
         <TabsList className="mb-5 flex px-0 @lg:max-w-2xl @lg:gap-10">
-          <TabsTrigger value="account">ACCOUNT</TabsTrigger>
+          <TabsTrigger value="account">{t("account")}</TabsTrigger>
           <TabsTrigger value="notifications">
-            NOTIFICATION PREFERENCES
+            {t("notificationPreferences")}
           </TabsTrigger>
-          <TabsTrigger value="payment">PAYMENT</TabsTrigger>
+          <TabsTrigger value="payment">{t("payment")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="account" className="space-y-6">
           {isLoading ? (
             <div className="flex h-96 items-center justify-center">
-              <p className="text-gray-500">Loading account information...</p>
+              <p className="text-gray-500">{t("loadingAccountInformation")}</p>
             </div>
           ) : data ? (
             <AccountForm data={data as IUserFullDetails} />
           ) : (
             <div className="flex h-96 items-center justify-center">
-              <p className="text-gray-500">Loading account information...</p>
+              <p className="text-gray-500">{t("loadingAccountInformation")}</p>
             </div>
           )}
         </TabsContent>

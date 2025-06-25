@@ -27,7 +27,7 @@ export default function Payments() {
       <div className="mb-5 flex items-center justify-between">
         <PageTitle title={t("payments")} className="mb-0" />
         <Link to="/landlord/payments/create-charge">
-          <CreateButton label="Create Charge" />
+          <CreateButton label={t("createCharge")} />
         </Link>
       </div>
 
@@ -38,9 +38,9 @@ export default function Payments() {
         className="w-full"
       >
         <TabsList className="px-0">
-          <TabsTrigger value="overview">OVERVIEW</TabsTrigger>
-          <TabsTrigger value="charges">CHARGES</TabsTrigger>
-          <TabsTrigger value="deposits">DEPOSITS</TabsTrigger>
+          <TabsTrigger value="overview">{t("overview")}</TabsTrigger>
+          <TabsTrigger value="charges">{t("charges")}</TabsTrigger>
+          <TabsTrigger value="deposits">{t("deposits")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="mt-0">

@@ -135,7 +135,7 @@ export function ContactForm() {
               <FormLabel>{t("writeYourMessage")}</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="{t('writeHere')}"
+                  placeholder={t("writeHere")}
                   {...field}
                   className="bg-muted border-0"
                 />

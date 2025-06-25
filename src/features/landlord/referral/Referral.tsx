@@ -46,7 +46,7 @@ export default function Referral() {
             className="max-h-7 max-w-7"
           />
           <div className="flex items-center gap-1">
-            <span className="font-bold">Give</span>
+            <span className="font-bold">{t("give")}</span>
             <CurrencyIcon size="sm" />
             <span className="font-bold">100</span>
             <CurrencyIcon size="sm" />
@@ -54,8 +54,8 @@ export default function Referral() {
           </div>
         </div>
 
-        <h2 className="mb-2 text-xl font-bold">Share Your Referral Link</h2>
-        <p className="mb-2 text-sm">Copy Your Link</p>
+        <h2 className="mb-2 text-xl font-bold">{t("shareYourReferralLink")}</h2>
+        <p className="mb-2 text-sm">{t("copyYourLink")}</p>
 
         <div className="mb-6 flex justify-between gap-2">
           <Input
@@ -64,14 +64,14 @@ export default function Referral() {
             className="flex-1 text-blue-500 @md:max-w-1/2"
           />
           <Button onClick={handleCopyLink} className="whitespace-nowrap">
-            {copied ? "Copied!" : "Copy Link"}
+            {copied ? t("copied") : t("copyLink")}
           </Button>
         </div>
 
         <div className="mb-6 flex flex-col items-center gap-2 @lg:flex-row">
-          <p className="text-sm">SHARE YOUR LINK ON:</p>
+          <p className="text-sm">{t("shareYourLinkOn")}</p>
           <div className="flex gap-2">
-            <TwitterShareButton url={referralLink} title="Check out VeoRent!">
+            <TwitterShareButton url={referralLink} title={t("checkOutVeoRent")}>
               <Button
                 variant="outline"
                 size="icon"
@@ -91,9 +91,9 @@ export default function Referral() {
             </FacebookShareButton>
             <LinkedinShareButton
               url={referralLink}
-              title="VeoRent"
-              summary="Your go-to rental solution."
-              source="VeoRent"
+              title={t("veoRent")}
+              summary={t("yourGoToRentalSolution")}
+              source={t("veoRent")}
             >
               <Button
                 variant="outline"
@@ -108,7 +108,7 @@ export default function Referral() {
 
         <div className="my-6 flex items-center">
           <div className="h-px flex-1 bg-gray-200"></div>
-          <span className="px-3 text-sm text-gray-500">OR</span>
+          <span className="px-3 text-sm text-gray-500">{t("or")}</span>
           <div className="h-px flex-1 bg-gray-200"></div>
         </div>
 

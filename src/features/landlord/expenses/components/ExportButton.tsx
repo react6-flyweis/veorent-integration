@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { ExternalLinkIcon, LoaderIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import * as XLSX from "xlsx";
 
-import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/loading-button";
 import {
   Tooltip,
   TooltipContent,
@@ -20,12 +20,13 @@ export const ExportButton = ({
   expenses,
   totalExpenses,
 }: ExportButtonProps) => {
+  const { t } = useTranslation();
   const [isExporting, setIsExporting] = useState(false);
   const isMobile = useIsMobile();
 
   const handleExportToExcel = async () => {
     if (!expenses?.length) {
-      alert("No expenses data to export");
+      alert(t("noExpensesDataToExport"));
       return;
     }
 
@@ -68,7 +69,7 @@ export const ExportButton = ({
       XLSX.writeFile(wb, filename);
     } catch (error) {
       console.error("Error exporting expenses:", error);
-      alert("Failed to export expenses. Please try again.");
+      alert(t("failedToExportExpenses"));
     } finally {
       setIsExporting(false);
     }
@@ -77,27 +78,18 @@ export const ExportButton = ({
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button
+        <LoadingButton
           className="rounded-md bg-blue-500"
           size="sm"
           onClick={handleExportToExcel}
-          disabled={isExporting}
+          isLoading={isExporting}
         >
-          {isExporting ? (
-            <LoaderIcon className="size-4 animate-spin" />
-          ) : (
-            <ExternalLinkIcon className="size-4" />
-          )}
-          {!isMobile && (
-            <span className="ml-2">
-              {isExporting ? "EXPORTING..." : "EXPORT"}
-            </span>
-          )}
-        </Button>
+          {!isMobile && <span className="ml-2">{t("export")}</span>}
+        </LoadingButton>
       </TooltipTrigger>
       {isMobile && (
         <TooltipContent>
-          <p>{isExporting ? "Exporting..." : "Export"}</p>
+          <p>{t("export")}</p>
         </TooltipContent>
       )}
     </Tooltip>

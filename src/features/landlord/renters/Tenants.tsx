@@ -9,7 +9,6 @@ import { useGetTenantsQuery } from "./api/queries";
 import RentersTablist from "./components/RentersTablist";
 import { TenantCard } from "./components/TenantCard";
 
-
 // Sample renter data - in a real app, this would come from a database or API
 // const tenants = [
 //   {
@@ -58,13 +57,13 @@ export default function Tenants() {
         <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-2">
           {tenants.length ? (
             tenants.map((tenant, index) => (
-              <Link to={`/landlord/renters/tenants/${  tenant._id}`} key={index}>
+              <Link to={`/landlord/renters/tenants/${tenant._id}`} key={index}>
                 <TenantCard tenant={tenant} />
               </Link>
             ))
           ) : (
             <div className="py-8 text-center text-gray-500">
-              No tenants found
+              {t("noTenantsFound")}
             </div>
           )}
         </div>

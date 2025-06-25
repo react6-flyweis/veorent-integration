@@ -172,6 +172,61 @@ const resources = {
       overview: "OVERVIEW",
       charges: "CHARGES",
       deposits: "DEPOSITS",
+      month: "Month",
+      year: "Year",
+      thisTimeFilter: "This {{timeFilter}}",
+      loadingDataForTimeFilter: "Loading data for this {{timeFilter}}...",
+      noDataAvailableForTimeFilter:
+        "No data available for this {{timeFilter}}.",
+      pastDue: "PAST DUE",
+      unpaid: "UNPAID",
+      paid: "PAID",
+      deposited: "DEPOSITED",
+      history: "HISTORY",
+      sent: "Sent",
+      upcoming: "Upcoming",
+      upcomingCharges: "Upcoming Charges",
+      lastCharge: "Last Charge",
+      lateFeeEnabled: "Late Fee Enabled",
+      due: "Due",
+      depositEst: "Deposit Est.",
+      noDepositsYet: "No deposits yet!",
+      depositsDescription:
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+      selectLease: "Select a Lease",
+
+      // Settings
+      account: "ACCOUNT",
+      notificationPreferences: "NOTIFICATION PREFERENCES",
+      payment: "PAYMENT",
+      loadingAccountInformation: "Loading account information...",
+
+      // Referral
+      give: "Give",
+      shareYourReferralLink: "Share Your Referral Link",
+      copyYourLink: "Copy Your Link",
+      copied: "Copied!",
+      copyLink: "Copy Link",
+      shareYourLinkOn: "SHARE YOUR LINK ON:",
+      checkOutVeoRent: "Check out VeoRent!",
+      veoRent: "VeoRent",
+      yourGoToRentalSolution: "Your go-to rental solution.",
+      or: "OR",
+
+      // Support
+      support: "Support",
+      inVeorentWeAreHere24x7: "In Veorent we are here for 24x7",
+
+      // Accounting
+      professionalToolBuiltForLandlords:
+        "A professional tool built for landlords like you.",
+      accountingDescription:
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and",
+      accountingDescriptionLong:
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and",
+      getAccounting: "Get Accounting",
+
+      // Expenses
 
       // Expenses
       addNewExpense: "Add New Expense",
@@ -198,6 +253,14 @@ const resources = {
 
       // Maintenance
       request: "REQUEST",
+      title: "TITLE",
+      lastActivity: "LAST ACTIVITY",
+      status: "STATUS",
+      notAvailable: "N/A",
+      loadingMaintenanceRequests: "Loading maintenance requests...",
+      noMaintenanceRequestsFound: "No maintenance requests found.",
+      noMaintenanceRequestsFoundForFilters:
+        "No maintenance requests found for the selected filters.",
       noOpenMaintenanceRequests:
         'open maintenance request at this time. Add one by clicking on the "+" button!',
       noCompletedMaintenanceRequests:
@@ -213,6 +276,13 @@ const resources = {
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
 
       // Leases
+      createLease: "Create Lease",
+      past: "Past",
+      upcomingLease: "Upcoming Lease",
+      activeLease: "Active Lease",
+      rent: "RENT",
+      leaseTerm: "LEASE TERM",
+      noLeasesFound: "No leases found.",
       noOpenLeasingRequests:
         'open leasing request at this time. Add one by clicking on the "+" button!',
       noCompletedLeasingRequests: "completed leasing requests at this time.",
@@ -316,7 +386,7 @@ const resources = {
       requestsHistory: "Requests History",
       myInformation: "My Information",
       accountSettings: "Account Settings",
-      notificationPreferences: "Notification Preferences",
+
       privacySettings: "Privacy Settings",
       securitySettings: "Security Settings",
 
@@ -435,7 +505,6 @@ const resources = {
       // Leases
       leases: "Leases",
       leaseAgreement: "Lease Agreement",
-      leaseTerm: "Lease Term",
       leaseRenewal: "Lease Renewal",
       leaseExpiration: "Lease Expiration",
       monthToMonth: "Month to Month",
@@ -448,7 +517,6 @@ const resources = {
 
       // Support
       contactForm: "Contact Form",
-      supportEmail: "support@gmail.com",
       customerSupport: "Customer Support",
       technicalSupport: "Technical Support",
       helpCenter: "Help Center",
@@ -456,7 +524,6 @@ const resources = {
       contactUs: "Contact Us",
       reportIssue: "Report Issue",
       feedback: "Feedback",
-      support: "Support",
 
       // Roles and Users
       firstName: "First Name",
@@ -465,7 +532,6 @@ const resources = {
       role: "Role",
       userType: "User Type",
       profile: "Profile",
-      account: "Account",
       userProfile: "User Profile",
       personalInfo: "Personal Information",
       contactInfo: "Contact Information",
@@ -506,8 +572,6 @@ const resources = {
       subtotal: "Subtotal",
       tax: "Tax",
       discount: "Discount",
-      paid: "Paid",
-      unpaid: "Unpaid",
       pending: "Pending",
       failed: "Failed",
       refunded: "Refunded",
@@ -797,6 +861,20 @@ const resources = {
       gettingStarted: "Getting Started",
       tips: "Tips",
       bestPractices: "Best Practices",
+
+      // InviteByEmail component
+      pleaseEnterValidEmail: "Please enter a valid email address",
+      messageCannotExceed: "Message cannot exceed {{max}} characters",
+      inviteSentSuccessfully: "Invite sent successfully!",
+      inviteByEmail: "Invite By Email",
+      inviteByEmailDescription:
+        "Send an invitation to join by email. Optionally include a custom message.",
+      enterEmailAddress: "Enter email address",
+      customMessage: "Custom Message",
+      writeYourCustomMessageHere: "Write your custom message here",
+      charactersUsed: "characters used",
+      noExpensesDataToExport: "No expenses data to export",
+      failedToExportExpenses: "Failed to export expenses. Please try again.",
     },
   },
   es: {
@@ -971,6 +1049,59 @@ const resources = {
       overview: "RESUMEN",
       charges: "CARGOS",
       deposits: "DEPÓSITOS",
+      month: "Mes",
+      year: "Año",
+      thisTimeFilter: "Este {{timeFilter}}",
+      loadingDataForTimeFilter: "Cargando datos para este {{timeFilter}}...",
+      noDataAvailableForTimeFilter:
+        "No hay datos disponibles para este {{timeFilter}}.",
+      pastDue: "VENCIDO",
+      unpaid: "NO PAGADO",
+      paid: "PAGADO",
+      deposited: "DEPOSITADO",
+      history: "HISTORIAL",
+      sent: "Enviado",
+      upcoming: "Próximo",
+      upcomingCharges: "Cargos Próximos",
+      lastCharge: "Último Cargo",
+      lateFeeEnabled: "Tarifa por Atraso Habilitada",
+      due: "Vencimiento",
+      depositEst: "Depósito Est.",
+      noDepositsYet: "¡Aún no hay depósitos!",
+      depositsDescription:
+        "Lorem Ipsum es simplemente texto ficticio de la industria de impresión y tipografía. Lorem Ipsum ha sido el texto ficticio estándar de la industria desde el siglo XVI, cuando un impresor desconocido tomó una galera de tipos y la mezcló para hacer un libro de muestras tipográficas.",
+      selectLease: "Seleccionar un Contrato",
+
+      // Settings
+      account: "CUENTA",
+      notificationPreferences: "PREFERENCIAS DE NOTIFICACIONES",
+      payment: "PAGO",
+      loadingAccountInformation: "Cargando información de la cuenta...",
+
+      // Referral
+      give: "Dar",
+      shareYourReferralLink: "Comparte tu Enlace de Referencia",
+      copyYourLink: "Copia tu Enlace",
+      copied: "¡Copiado!",
+      copyLink: "Copiar Enlace",
+      shareYourLinkOn: "COMPARTE TU ENLACE EN:",
+      checkOutVeoRent: "¡Echa un vistazo a VeoRent!",
+      veoRent: "VeoRent",
+      yourGoToRentalSolution: "Tu solución de alquiler de confianza.",
+      or: "O",
+
+      // Support
+      support: "Soporte",
+      inVeorentWeAreHere24x7: "En Veorent estamos aquí 24x7",
+
+      // Accounting
+      professionalToolBuiltForLandlords:
+        "Una herramienta profesional diseñada para propietarios como tú.",
+      accountingDescription:
+        "Lorem Ipsum es simplemente texto ficticio de la industria de impresión y tipografía. Lorem Ipsum ha sido el texto ficticio estándar de la industria desde el siglo XVI, cuando un impresor desconocido tomó una galera de tipos y",
+      accountingDescriptionLong:
+        "Lorem Ipsum es simplemente texto ficticio de la industria de impresión y tipografía. Lorem Ipsum ha sido el texto ficticio estándar de la industria desde el siglo XVI, cuando un impresor desconocido tomó una galera de tipos y",
+      getAccounting: "Obtener Contabilidad",
 
       // Expenses
       addNewExpense: "Agregar Nuevo Gasto",
@@ -995,6 +1126,15 @@ const resources = {
 
       // Maintenance
       request: "SOLICITUD",
+      title: "TÍTULO",
+      lastActivity: "ÚLTIMA ACTIVIDAD",
+      status: "ESTADO",
+      notAvailable: "N/D",
+      loadingMaintenanceRequests: "Cargando solicitudes de mantenimiento...",
+      noMaintenanceRequestsFound:
+        "No se encontraron solicitudes de mantenimiento.",
+      noMaintenanceRequestsFoundForFilters:
+        "No se encontraron solicitudes de mantenimiento para los filtros seleccionados.",
       noOpenMaintenanceRequests:
         'solicitud de mantenimiento abierta en este momento. ¡Agrega una haciendo clic en el botón "+"!',
       noCompletedMaintenanceRequests:
@@ -1010,6 +1150,13 @@ const resources = {
         "Lorem Ipsum es simplemente texto ficticio de la industria de la impresión y composición tipográfica. Lorem Ipsum ha sido el texto ficticio estándar de la industria desde el siglo XVI, cuando un impresor desconocido tomó una galera de tipos y la mezcló para hacer un libro de muestras tipográficas.",
 
       // Leases
+      createLease: "Crear Contrato",
+      past: "Pasado",
+      upcomingLease: "Contrato Próximo",
+      activeLease: "Contrato Activo",
+      rent: "ALQUILER",
+      leaseTerm: "TÉRMINO DEL CONTRATO",
+      noLeasesFound: "No se encontraron contratos.",
       noOpenLeasingRequests:
         'solicitud de arrendamiento abierta en este momento. ¡Agrega una haciendo clic en el botón "+"!',
       noCompletedLeasingRequests:
@@ -1117,7 +1264,6 @@ const resources = {
       requestsHistory: "Historial de Solicitudes",
       myInformation: "Mi Información",
       accountSettings: "Configuración de Cuenta",
-      notificationPreferences: "Preferencias de Notificación",
       privacySettings: "Configuración de Privacidad",
       securitySettings: "Configuración de Seguridad",
 
@@ -1236,7 +1382,6 @@ const resources = {
       // Leases
       leases: "Arrendamientos",
       leaseAgreement: "Contrato de Arrendamiento",
-      leaseTerm: "Término del Contrato",
       leaseRenewal: "Renovación del Contrato",
       leaseExpiration: "Expiración del Contrato",
       monthToMonth: "Mes a Mes",
@@ -1249,7 +1394,6 @@ const resources = {
 
       // Support
       contactForm: "Formulario de Contacto",
-      supportEmail: "soporte@gmail.com",
       customerSupport: "Atención al Cliente",
       technicalSupport: "Soporte Técnico",
       helpCenter: "Centro de Ayuda",
@@ -1257,7 +1401,6 @@ const resources = {
       contactUs: "Contáctanos",
       reportIssue: "Reportar Problema",
       feedback: "Comentarios",
-      support: "Soporte",
 
       // Roles and Users
       firstName: "Nombre",
@@ -1266,7 +1409,6 @@ const resources = {
       role: "Rol",
       userType: "Tipo de Usuario",
       profile: "Perfil",
-      account: "Cuenta",
       userProfile: "Perfil de Usuario",
       personalInfo: "Información Personal",
       contactInfo: "Información de Contacto",
@@ -1307,8 +1449,6 @@ const resources = {
       subtotal: "Subtotal",
       tax: "Impuesto",
       discount: "Descuento",
-      paid: "Pagado",
-      unpaid: "Sin Pagar",
       pending: "Pendiente",
       failed: "Falló",
       refunded: "Reembolsado",
@@ -1517,8 +1657,8 @@ const resources = {
       clearAll: "Limpiar Todo",
       applyFilters: "Aplicar Filtros",
       clearFilters: "Limpiar Filtros",
-      sortBy: "Ordenar por",
-      orderBy: "Ordenar por",
+      sortBy: "Ordenar Por",
+      orderBy: "Ordenar Por",
       ascending: "Ascendente",
       descending: "Descendente",
 
@@ -1598,6 +1738,22 @@ const resources = {
       gettingStarted: "Primeros Pasos",
       tips: "Consejos",
       bestPractices: "Mejores Prácticas",
+
+      // InviteByEmail component
+      pleaseEnterValidEmail:
+        "Por favor, ingresa una dirección de correo válida",
+      messageCannotExceed: "El mensaje no puede exceder {{max}} caracteres",
+      inviteSentSuccessfully: "¡Invitación enviada exitosamente!",
+      inviteByEmail: "Invitar por Correo Electrónico",
+      inviteByEmailDescription:
+        "Envía una invitación para unirse por correo electrónico. Opcionalmente incluye un mensaje personalizado.",
+      enterEmailAddress: "Ingresa dirección de correo electrónico",
+      customMessage: "Mensaje Personalizado",
+      writeYourCustomMessageHere: "Escribe tu mensaje personalizado aquí",
+      charactersUsed: "caracteres utilizados",
+      noExpensesDataToExport: "No hay datos de gastos para exportar",
+      failedToExportExpenses:
+        "Error al exportar gastos. Por favor, inténtalo de nuevo.",
     },
   },
 };

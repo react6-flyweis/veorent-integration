@@ -50,7 +50,7 @@ export default function InviteByEmail() {
         desc: data.customMessage || "",
       };
       await mutateAsync(valuesToSend);
-      showToast("Invite sent successfully!", "success");
+      showToast(t("inviteSentSuccessfully"), "success");
     } catch (error) {
       form.setError("root", {
         message: getErrorMessage(error),
@@ -60,11 +60,9 @@ export default function InviteByEmail() {
 
   return (
     <div>
-      <h2 className="mb-4 text-xl font-bold">Invite By Email</h2>
+      <h2 className="mb-4 text-xl font-bold">{t("inviteByEmail")}</h2>
       <p className="mb-4 text-sm text-gray-500">
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry's standard dummy text ever
-        since the 1500s, when an unknown printer took a galley of type and
+        {t("inviteByEmailDescription")}
       </p>
 
       <Form {...form}>
@@ -78,7 +76,7 @@ export default function InviteByEmail() {
                 <FormControl>
                   <Input
                     type="email"
-                    placeholder="Enter email address"
+                    placeholder={t("enterEmailAddress")}
                     {...field}
                   />
                 </FormControl>
@@ -93,18 +91,18 @@ export default function InviteByEmail() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Custom Message{" "}
-                  <span className="text-gray-500">(Optional)</span>
+                  {t("customMessage")}{" "}
+                  <span className="text-gray-500">({t("optional")})</span>
                 </FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Write your custom message here"
+                    placeholder={t("writeYourCustomMessageHere")}
                     className="min-h-[120px]"
                     {...field}
                   />
                 </FormControl>
                 <p className="text-xs text-gray-500">
-                  {field.value?.length || 0}/500 characters used
+                  {field.value?.length || 0}/500 {t("charactersUsed")}
                 </p>
                 <FormMessage />
               </FormItem>
@@ -119,7 +117,7 @@ export default function InviteByEmail() {
               size="lg"
               className="w-3/5"
             >
-              Send Invite
+              {t("sendInvite")}
             </LoadingButton>
           </div>
         </form>

@@ -1,5 +1,8 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+
 import { Button } from "@/components/ui/button";
+
 import { PaymentSummaryCard } from "./PaymentSummaryCard";
 import { useGetPendingRentReportQuery } from "../api/queries";
 
@@ -27,6 +30,7 @@ type TimeFilter = "Month" | "Year";
 // };
 
 export function OverviewTabContent() {
+  const { t } = useTranslation();
   const [timeFilter, setTimeFilter] = useState<TimeFilter>("Month");
 
   const { data: monthlyPaymentData, isLoading: isMonthlyLoading } =
@@ -47,7 +51,9 @@ export function OverviewTabContent() {
   return (
     <>
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-xl font-semibold">This {timeFilter}</h2>
+        <h2 className="text-xl font-semibold">
+          {t("thisTimeFilter", { timeFilter: t(timeFilter.toLowerCase()) })}
+        </h2>
 
         <div className="border-primary flex rounded-lg border-2 p-2">
           <Button
@@ -55,56 +61,58 @@ export function OverviewTabContent() {
             onClick={() => setTimeFilter("Month")}
             size="sm"
           >
-            Month
+            {t("month")}
           </Button>
           <Button
             variant={timeFilter === "Year" ? "default" : "ghost"}
             onClick={() => setTimeFilter("Year")}
             size="sm"
           >
-            Year
+            {t("year")}
           </Button>
         </div>
       </div>
 
       {isLoading ? (
         <div className="text-center text-gray-500">
-          Loading data for this {timeFilter.toLowerCase()}...
+          {t("loadingDataForTimeFilter", {
+            timeFilter: t(timeFilter.toLowerCase()),
+          })}
         </div>
       ) : currentData ? (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <PaymentSummaryCard
-            title="PAST DUE"
+            title={t("pastDue")}
             amount={currentData.pastDue}
             bgColor="bg-red-400"
             textColor="text-white"
           />
           <PaymentSummaryCard
-            title="UNPAID"
+            title={t("unpaid")}
             amount={currentData.unpaid}
             bgColor="bg-blue-500"
             textColor="text-white"
           />
           <PaymentSummaryCard
-            title="CHARGES"
+            title={t("charges")}
             amount={currentData.charges}
             bgColor="bg-blue-800"
             textColor="text-white"
           />
           <PaymentSummaryCard
-            title="PAID"
+            title={t("paid")}
             amount={currentData.paid}
             bgColor="bg-green-500"
             textColor="text-white"
           />
           <PaymentSummaryCard
-            title="DEPOSITED"
+            title={t("deposited")}
             amount={currentData.deposited}
             bgColor="bg-blue-900"
             textColor="text-white"
           />
           <PaymentSummaryCard
-            title="HISTORY"
+            title={t("history")}
             amount={currentData.history}
             bgColor="bg-blue-400"
             textColor="text-white"
@@ -112,7 +120,9 @@ export function OverviewTabContent() {
         </div>
       ) : (
         <div className="text-center text-gray-500">
-          No data available for this {timeFilter.toLowerCase()}.
+          {t("noDataAvailableForTimeFilter", {
+            timeFilter: t(timeFilter.toLowerCase()),
+          })}
         </div>
       )}
     </>

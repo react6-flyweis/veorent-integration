@@ -65,9 +65,9 @@ export default function Leases() {
   return (
     <div className="space-y-5">
       <div className="flex items-end justify-between">
-        <PageTitle title="Leases" className="mb-0" />
+        <PageTitle title={t("leases")} className="mb-0" />
         <Link to="create">
-          <CreateButton label="Create Lease" />
+          <CreateButton label={t("createLease")} />
         </Link>
       </div>
 
@@ -77,7 +77,7 @@ export default function Leases() {
             {t("active")}
           </TabsTrigger>
           <TabsTrigger value="past" className="text-lg font-semibold">
-            Past
+            {t("past")}
           </TabsTrigger>
         </TabsList>
 
@@ -95,8 +95,8 @@ export default function Leases() {
                       <span>
                         {" "}
                         {new Date(lease.startDate) > new Date()
-                          ? "Upcoming Lease"
-                          : "Active Lease"}
+                          ? t("upcomingLease")
+                          : t("activeLease")}
                       </span>
                       {/* <span className="text-gray-400">
                         {" - since " +
@@ -113,7 +113,9 @@ export default function Leases() {
                   </CardHeader>
                   <CardContent className="px-3">
                     <div className="flex justify-between">
-                      <span className="text-gray-500 uppercase">RENT</span>
+                      <span className="text-gray-500 uppercase">
+                        {t("rent")}
+                      </span>
                       <span className="flex items-center gap-1 font-semibold">
                         <CurrencyIcon size="sm" />
                         {lease.rentalProperty?.rentalDetails?.targetRent.toLocaleString()}
@@ -131,7 +133,7 @@ export default function Leases() {
 
                     <div className="flex justify-between">
                       <span className="text-gray-500 uppercase">
-                        LEASE TERM
+                        {t("leaseTerm")}
                       </span>
                       <span className="font-semibold">
                         {new Date(lease.startDate).toLocaleDateString()} -{" "}
@@ -142,7 +144,9 @@ export default function Leases() {
                 </Card>
               ))
             ) : (
-              <div className="text-center text-gray-500">No leases found.</div>
+              <div className="text-center text-gray-500">
+                {t("noLeasesFound")}
+              </div>
             )}
           </div>
         </TabsContent>

@@ -178,7 +178,7 @@ export default function Maintenance() {
                   >
                     <IconComponent className="size-5 text-gray-700" />
                     <span className="hidden align-bottom @md:block">
-                      {category.label}
+                      {t(category.label)}
                     </span>
                   </TabsTrigger>
                 );
@@ -206,12 +206,14 @@ export default function Maintenance() {
           <Table>
             <TableHeader className="">
               <TableRow className="font-medium">
-                <TableHead className="">DATE</TableHead>
-                <TableHead className="font-medium">TITLE</TableHead>
-                <TableHead className="font-medium">CATEGORY</TableHead>
-                <TableHead className="font-medium">RENTAL</TableHead>
-                <TableHead className="font-medium">LAST ACTIVITY</TableHead>
-                <TableHead className="font-medium">STATUS</TableHead>
+                <TableHead className="">{t("date")}</TableHead>
+                <TableHead className="font-medium">{t("title")}</TableHead>
+                <TableHead className="font-medium">{t("category")}</TableHead>
+                <TableHead className="font-medium">{t("rental")}</TableHead>
+                <TableHead className="font-medium">
+                  {t("lastActivity")}
+                </TableHead>
+                <TableHead className="font-medium">{t("status")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -223,7 +225,7 @@ export default function Maintenance() {
                   >
                     <div className="flex items-center justify-center space-x-2">
                       <div className="h-6 w-6 animate-spin rounded-full border-b-2 border-blue-500"></div>
-                      <span>Loading maintenance requests...</span>
+                      <span>{t("loadingMaintenanceRequests")}</span>
                     </div>
                   </TableCell>
                 </TableRow>
@@ -242,7 +244,7 @@ export default function Maintenance() {
                     </TableCell>
                     <TableCell>
                       <Badge variant="outline" className="capitalize">
-                        {issue.category || "N/A"}
+                        {issue.category || t("notAvailable")}
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -270,8 +272,8 @@ export default function Maintenance() {
                   >
                     {searchTerm ||
                     (activeTab !== "all-time" && activeTab !== "all-status")
-                      ? `No maintenance requests found for the selected filters.`
-                      : "No maintenance requests found."}
+                      ? t("noMaintenanceRequestsFoundForFilters")
+                      : t("noMaintenanceRequestsFound")}
                   </TableCell>
                 </TableRow>
               )}

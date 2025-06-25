@@ -109,7 +109,7 @@ export default function Maintenance() {
                     <Card key={req._id} className="mt-1 border py-0">
                       <CardContent className="flex items-center justify-between p-3!">
                         <div>
-                          <p className="text-lg font-bold text-[#001D6E]">
+                          <p className="text-primary text-lg font-bold">
                             {t("request")} #{req._id}
                           </p>
                           <p className="text-muted-foreground">

@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import {
   Select,
   SelectContent,
@@ -5,23 +7,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
 import { useGetLeases } from "../../api/queries";
 
 export function LeaseSelector({
   value,
   onChange,
-  placeholder = "Select a Lease",
+  placeholder,
 }: {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
 }) {
+  const { t } = useTranslation();
   const { data } = useGetLeases();
 
   return (
     <Select onValueChange={onChange} defaultValue={value} value={value}>
       <SelectTrigger>
-        <SelectValue placeholder={placeholder} />
+        <SelectValue placeholder={placeholder || t("selectLease")} />
       </SelectTrigger>
       <SelectContent>
         {data?.length ? (
@@ -32,7 +36,7 @@ export function LeaseSelector({
           ))
         ) : (
           <SelectItem value="no-lease" disabled>
-            No properties found
+            {t("noPropertiesFound")}
           </SelectItem>
         )}
       </SelectContent>

@@ -51,10 +51,10 @@ const Expenses = () => {
         <PageTitle title={t("expenses")} className="mb-0" />
         <Dialog>
           <DialogTrigger asChild>
-            <CreateButton label="Add New Expense" />
+            <CreateButton label={t("addNewExpense")} />
           </DialogTrigger>
           <DialogContent className="max-h-[90vh] overflow-y-auto">
-            <DialogTitle>Record Expense</DialogTitle>
+            <DialogTitle>{t("recordExpense")}</DialogTitle>
             <CreateExpense />
           </DialogContent>
         </Dialog>
@@ -70,12 +70,12 @@ const Expenses = () => {
               size="sm"
             >
               <LayoutDashboardIcon className="size-4" />
-              {!isMobile && <span>All Categories</span>}
+              {!isMobile && <span>{t("allCategories")}</span>}
             </Button>
           </TooltipTrigger>
           {isMobile && (
             <TooltipContent>
-              <p>All Categories</p>
+              <p>{t("allCategories")}</p>
             </TooltipContent>
           )}
         </Tooltip>
@@ -88,12 +88,12 @@ const Expenses = () => {
               size="sm"
             >
               <CalendarDaysIcon className="size-4" />
-              {!isMobile && <span>All Time</span>}
+              {!isMobile && <span>{t("allTime")}</span>}
             </Button>
           </TooltipTrigger>
           {isMobile && (
             <TooltipContent>
-              <p>All Time</p>
+              <p>{t("allTime")}</p>
             </TooltipContent>
           )}
         </Tooltip>
@@ -106,14 +106,18 @@ const Expenses = () => {
         <Table>
           <TableHeader>
             <TableRow className="bg-background shadow">
-              <TableHead className="p-3 text-sm font-medium">DATE</TableHead>
               <TableHead className="p-3 text-sm font-medium">
-                CATEGORY & DESCRIPTION
+                {t("date")}
               </TableHead>
-              <TableHead className="p-3 text-sm font-medium">RENTAL</TableHead>
+              <TableHead className="p-3 text-sm font-medium">
+                {t("categoryAndDescription")}
+              </TableHead>
+              <TableHead className="p-3 text-sm font-medium">
+                {t("rental")}
+              </TableHead>
               <TableHead className="p-3 text-sm font-medium">
                 <div className="flex items-center gap-1">
-                  TOTAL <CurrencyIcon /> {totalExpenses.toFixed(2)}
+                  {t("total")} <CurrencyIcon /> {totalExpenses.toFixed(2)}
                 </div>
               </TableHead>
             </TableRow>
@@ -147,7 +151,7 @@ const Expenses = () => {
                   colSpan={4}
                   className="p-4 text-center text-gray-500"
                 >
-                  No expenses recorded.
+                  {t("noExpensesRecorded")}
                 </TableCell>
               </TableRow>
             )}
