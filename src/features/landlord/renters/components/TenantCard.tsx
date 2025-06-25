@@ -33,13 +33,13 @@ export function TenantCard({ tenant }: { tenant: ITenant }) {
 
   const statusText = useMemo(() => {
     if (tenant.createdAt) {
-      return `Invited to portal ${formatDate(tenant.createdAt)}`;
+      return `${t("invitedToPortal")} ${formatDate(tenant.createdAt)}`;
     }
     if (tenant.updatedAt) {
-      return `Last active ${formatDate(tenant.updatedAt)}`;
+      return `${t("lastActive")} ${formatDate(tenant.updatedAt)}`;
     }
     return "";
-  }, [tenant]);
+  }, [tenant, t]);
 
   return (
     <Card className="gap-0 p-0">
@@ -77,7 +77,7 @@ export function TenantCard({ tenant }: { tenant: ITenant }) {
 
         <Button variant="outline" size="sm" asChild>
           <Link to="/landlord/messages" state={{ tenant }}>
-            Message
+            {t("message")}
           </Link>
         </Button>
       </CardFooter>
@@ -85,12 +85,11 @@ export function TenantCard({ tenant }: { tenant: ITenant }) {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="text-center">
-              This feature is only accessible through our mobile app. Please
-              download the app by clicking this link.
+              {t("mobileAppFeature")}
             </AlertDialogTitle>
           </AlertDialogHeader>
           <AlertDialogFooter className="w-full justify-center!">
-            <AlertDialogAction>Click here</AlertDialogAction>
+            <AlertDialogAction>{t("clickHere")}</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

@@ -1,63 +1,67 @@
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
+import { ArrowDownIcon, ArrowUp } from "lucide-react";
+
 import { PageTitle } from "@/components/PageTitle";
 import { Button } from "@/components/ui/button";
-import { ArrowDownIcon, ArrowUp } from "lucide-react";
-import { Link } from "react-router-dom";
-
-import formIcon from "./assets/form.png";
-import OverViewSection from "./components/OverViewSection";
-import ResidentialSection from "./components/ResidentialSection";
-import IncomeEmploymentSection from "./components/IncomeEmploymentSection";
-import PetsVehiclesEmergencySection from "./components/PetsVehiclesEmergencySection";
-import SelfReportedBackgroundSection from "./components/SelfReportedBackgroundSection";
-import AttachmentsSection from "./components/AttachmentsSection";
-import OtherInformationSection from "./components/OtherInformationSection";
 import { cn } from "@/lib/utils";
 
-const applicationSections = [
-  {
-    id: "overview",
-    title: "Overview",
-    content: <OverViewSection />,
-  },
-  {
-    id: "residential-history",
-    title: "Residential History",
-    description: "We asked this renter for last 3 years of rental history.",
-    content: <ResidentialSection />,
-  },
-  {
-    id: "income-employment",
-    title: "Income & Employment",
-    description: "Lorem Ipsum is simply dummy text of the printing",
-    content: <IncomeEmploymentSection />,
-  },
-  {
-    id: "pets-vehicles-emergency",
-    title: "Pets, Vehicles, & Emergency",
-    description: "Lorem Ipsum is simply dummy text of the printing.",
-    content: <PetsVehiclesEmergencySection />,
-  },
-  {
-    id: "self-reported-background",
-    title: "Self-Reported Background",
-    description: "Lorem Ipsum is simply dummy text of the printing.",
-    content: <SelfReportedBackgroundSection />,
-  },
-  {
-    id: "attachments",
-    title: "Attachments",
-    description: "Lorem Ipsum is simply dummy text of the printing.",
-    content: <AttachmentsSection />,
-  },
-  {
-    id: "other-information",
-    title: "Other Information",
-    description: "Lorem Ipsum is simply dummy text of the printing.",
-    content: <OtherInformationSection />,
-  },
-];
+import formIcon from "./assets/form.png";
+import AttachmentsSection from "./components/AttachmentsSection";
+import IncomeEmploymentSection from "./components/IncomeEmploymentSection";
+import OtherInformationSection from "./components/OtherInformationSection";
+import OverViewSection from "./components/OverViewSection";
+import PetsVehiclesEmergencySection from "./components/PetsVehiclesEmergencySection";
+import ResidentialSection from "./components/ResidentialSection";
+import SelfReportedBackgroundSection from "./components/SelfReportedBackgroundSection";
 
 export default function Application() {
+  const { t } = useTranslation();
+
+  const applicationSections = [
+    {
+      id: "overview",
+      title: t("overview"),
+      content: <OverViewSection />,
+    },
+    {
+      id: "residential-history",
+      title: t("residentialHistory"),
+      description: t("residentialHistoryDescription"),
+      content: <ResidentialSection />,
+    },
+    {
+      id: "income-employment",
+      title: t("incomeEmployment"),
+      description: t("incomeEmploymentDescription"),
+      content: <IncomeEmploymentSection />,
+    },
+    {
+      id: "pets-vehicles-emergency",
+      title: t("petsVehiclesEmergency"),
+      description: t("petsVehiclesEmergencyDescription"),
+      content: <PetsVehiclesEmergencySection />,
+    },
+    {
+      id: "self-reported-background",
+      title: t("selfReportedBackground"),
+      description: t("selfReportedBackgroundDescription"),
+      content: <SelfReportedBackgroundSection />,
+    },
+    {
+      id: "attachments",
+      title: t("attachments"),
+      description: t("attachmentsDescription"),
+      content: <AttachmentsSection />,
+    },
+    {
+      id: "other-information",
+      title: t("otherInformation"),
+      description: t("otherInformationDescription"),
+      content: <OtherInformationSection />,
+    },
+  ];
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -107,10 +111,10 @@ export default function Application() {
         </div>
         <div>
           <h2 className="text-lg font-bold text-gray-800">
-            Rental Application
+            {t("rentalApplication")}
           </h2>
           <p className="text-muted-foreground text-xs">
-            COMPLETED ON 08/19/2024
+            {t("completedOn")} 08/19/2024
           </p>
         </div>
       </div>

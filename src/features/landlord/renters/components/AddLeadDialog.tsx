@@ -64,7 +64,7 @@ export function AddLeadDialog({ open, onOpenChange }: AddLeadDialogProps) {
         phoneNumber: values.phone,
       };
       await mutateAsync(valuesToSubmit);
-      showToast("Lead created successfully", "success");
+      showToast(t("leadCreatedSuccessfully"), "success");
       setTimeout(() => {
         form.reset();
         onOpenChange(false);
@@ -78,9 +78,7 @@ export function AddLeadDialog({ open, onOpenChange }: AddLeadDialogProps) {
 
   const handleOpenChange = (open: boolean) => {
     if (form.formState.isDirty) {
-      const confirmClose = window.confirm(
-        "You have unsaved changes. Are you sure you want to close the create dialog?",
-      );
+      const confirmClose = window.confirm(t("unsavedChangesConfirm"));
       if (!confirmClose) {
         return;
       }
@@ -94,7 +92,7 @@ export function AddLeadDialog({ open, onOpenChange }: AddLeadDialogProps) {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">
-            Add a new Lead
+            {t("addNewLead")}
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -108,15 +106,14 @@ export function AddLeadDialog({ open, onOpenChange }: AddLeadDialogProps) {
               render={({ field }) => (
                 <FormItem className="gap-0">
                   <FormLabel className="text-base">
-                    Property Interested in
+                    {t("propertyInterestedIn")}
                   </FormLabel>
                   <FormControl>
                     <PropertiesSelector {...field} />
                   </FormControl>
                   <FormMessage />
                   <p className="mt-1 text-sm text-blue-400">
-                    Lorem ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem ipsum has been the industry's
+                    {t("propertyInterestedDescription")}
                   </p>
                 </FormItem>
               )}
@@ -141,7 +138,9 @@ export function AddLeadDialog({ open, onOpenChange }: AddLeadDialogProps) {
               name="email"
               render={({ field }) => (
                 <FormItem className="gap-0">
-                  <FormLabel className="text-base">Renter's Email</FormLabel>
+                  <FormLabel className="text-base">
+                    {t("renterEmail")}
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>

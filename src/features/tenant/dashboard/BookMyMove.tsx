@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 
 import { PageTitle } from "@/components/PageTitle";
@@ -5,11 +6,12 @@ import { PageTitle } from "@/components/PageTitle";
 import { BookMyMoveForm } from "./components/BookMoveForm";
 
 export default function BookMyMove() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   return (
     <div className="space-y-5">
-      <PageTitle title="Book My Move" withBack />
+      <PageTitle title={t("bookMyMove")} withBack />
       <BookMyMoveForm
         onNext={(data) => {
           const dataToSend = {

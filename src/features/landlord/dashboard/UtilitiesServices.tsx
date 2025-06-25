@@ -29,20 +29,20 @@ import { getErrorMessage } from "@/utils/getErrorMessage";
 
 import { useCreateOrUpdateLeaseAgreementMutation } from "./api/mutation";
 import maintenanceIcon from "./assets/cog-wrench.png";
+import condoIcon from "./assets/icons/condo-ee.png";
+import gasIcon from "./assets/icons/fire.png";
+import internetIcon from "./assets/icons/internet.png";
+import lawnCareIcon from "./assets/icons/lawn.png";
 import electricityIcon from "./assets/icons/light-bulb.png";
+import sewerIcon from "./assets/icons/seawage.png";
+import snowRemovalIcon from "./assets/icons/snow-removal.png";
+import trashIcon from "./assets/icons/trash.png";
+import cableIcon from "./assets/icons/tv.png";
+import waterIcon from "./assets/icons/water.png";
 import keyIcon from "./assets/key.png";
 import utilitiesIcon from "./assets/utilities.png";
 
 // Import utility icons
-import internetIcon from "./assets/icons/internet.png";
-import waterIcon from "./assets/icons/water.png";
-import cableIcon from "./assets/icons/tv.png";
-import gasIcon from "./assets/icons/fire.png";
-import trashIcon from "./assets/icons/trash.png";
-import sewerIcon from "./assets/icons/seawage.png";
-import lawnCareIcon from "./assets/icons/lawn.png";
-import snowRemovalIcon from "./assets/icons/snow-removal.png";
-import condoIcon from "./assets/icons/condo-ee.png";
 import { BuilderLayout } from "./components/BuilderLayout";
 
 // Define schema for the form
@@ -70,6 +70,70 @@ const utilitiesServicesSchema = z.object({
 });
 
 type UtilitiesServicesValues = z.infer<typeof utilitiesServicesSchema>;
+
+// Helper component for responsibility radio options
+const ResponsibilityRadios = ({
+  label,
+  icon,
+  field,
+}: {
+  label: string;
+  icon: string;
+  field: ControllerRenderProps<
+    UtilitiesServicesValues,
+    keyof UtilitiesServicesValues
+  >;
+}) => (
+  <FormItem>
+    <FormLabel>
+      <img src={icon} alt={label} className="max-h-7 max-w-7" />
+      <span className="text-sm font-medium sm:text-base sm:font-normal">
+        {label}
+      </span>
+    </FormLabel>
+    <FormControl>
+      <RadioGroup
+        onValueChange={field.onChange}
+        value={field.value as string}
+        className="flex flex-col gap-3 pl-5 sm:flex-row sm:gap-4"
+      >
+        <FormItem className="flex items-center space-x-2">
+          <FormControl>
+            <RadioGroupItem value="tenant" id={`${field.name}-tenant`} />
+          </FormControl>
+          <FormLabel
+            htmlFor={`${field.name}-tenant`}
+            className="cursor-pointer text-sm font-normal sm:text-base"
+          >
+            Tenant
+          </FormLabel>
+        </FormItem>
+        <FormItem className="flex items-center space-x-2">
+          <FormControl>
+            <RadioGroupItem value="landlord" id={`${field.name}-landlord`} />
+          </FormControl>
+          <FormLabel
+            htmlFor={`${field.name}-landlord`}
+            className="cursor-pointer text-sm font-normal sm:text-base"
+          >
+            Landlord
+          </FormLabel>
+        </FormItem>
+        <FormItem className="flex items-center space-x-2">
+          <FormControl>
+            <RadioGroupItem value="n/a" id={`${field.name}-na`} />
+          </FormControl>
+          <FormLabel
+            htmlFor={`${field.name}-na`}
+            className="cursor-pointer text-sm font-normal sm:text-base"
+          >
+            N/A
+          </FormLabel>
+        </FormItem>
+      </RadioGroup>
+    </FormControl>
+  </FormItem>
+);
 
 export default function UtilitiesServices() {
   const { t } = useTranslation();
@@ -135,8 +199,8 @@ export default function UtilitiesServices() {
 
   return (
     <BuilderLayout
-      title="Utilities, Services, & Keys"
-      description="We automatically filled information we had on file. Please double check it since it will go into the legal agreement."
+      title={t("utilitiesServices")}
+      description={t("utilitiesServicesDescription")}
     >
       <Form {...form}>
         <form
@@ -369,67 +433,3 @@ export default function UtilitiesServices() {
     </BuilderLayout>
   );
 }
-
-// Helper component for responsibility radio options
-const ResponsibilityRadios = ({
-  label,
-  icon,
-  field,
-}: {
-  label: string;
-  icon: string;
-  field: ControllerRenderProps<
-    UtilitiesServicesValues,
-    keyof UtilitiesServicesValues
-  >;
-}) => (
-  <FormItem>
-    <FormLabel>
-      <img src={icon} alt={label} className="max-h-7 max-w-7" />
-      <span className="text-sm font-medium sm:text-base sm:font-normal">
-        {label}
-      </span>
-    </FormLabel>
-    <FormControl>
-      <RadioGroup
-        onValueChange={field.onChange}
-        value={field.value as string}
-        className="flex flex-col gap-3 pl-5 sm:flex-row sm:gap-4"
-      >
-        <FormItem className="flex items-center space-x-2">
-          <FormControl>
-            <RadioGroupItem value="tenant" id={`${field.name}-tenant`} />
-          </FormControl>
-          <FormLabel
-            htmlFor={`${field.name}-tenant`}
-            className="cursor-pointer text-sm font-normal sm:text-base"
-          >
-            Tenant
-          </FormLabel>
-        </FormItem>
-        <FormItem className="flex items-center space-x-2">
-          <FormControl>
-            <RadioGroupItem value="landlord" id={`${field.name}-landlord`} />
-          </FormControl>
-          <FormLabel
-            htmlFor={`${field.name}-landlord`}
-            className="cursor-pointer text-sm font-normal sm:text-base"
-          >
-            Landlord
-          </FormLabel>
-        </FormItem>
-        <FormItem className="flex items-center space-x-2">
-          <FormControl>
-            <RadioGroupItem value="n/a" id={`${field.name}-na`} />
-          </FormControl>
-          <FormLabel
-            htmlFor={`${field.name}-na`}
-            className="cursor-pointer text-sm font-normal sm:text-base"
-          >
-            N/A
-          </FormLabel>
-        </FormItem>
-      </RadioGroup>
-    </FormControl>
-  </FormItem>
-);

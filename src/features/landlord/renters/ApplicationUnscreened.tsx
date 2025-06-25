@@ -1,14 +1,18 @@
-import { PageTitle } from "@/components/PageTitle";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-import coinBagIcon from "./assets/coin-bag.png";
+import { PageTitle } from "@/components/PageTitle";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
+
 import calendarIcon from "./assets/calendar.png";
+import coinBagIcon from "./assets/coin-bag.png";
 import formIcon from "./assets/form.png";
 import screeningIcon from "./assets/screening.png";
 
 export default function ApplicationUnscreened() {
+  const { t } = useTranslation();
+
   return (
     <div className="">
       {/* Header */}
@@ -36,10 +40,10 @@ export default function ApplicationUnscreened() {
         </div>
         <div>
           <h2 className="text-lg font-bold text-gray-800">
-            Rental Application
+            {t("rentalApplication")}
           </h2>
           <p className="text-muted-foreground text-xs">
-            COMPLETED ON 08/19/2024
+            {t("completedOn")} 08/19/2024
           </p>
         </div>
       </div>
@@ -51,12 +55,12 @@ export default function ApplicationUnscreened() {
             <div className="flex flex-col gap-4 sm:flex-row">
               {[
                 {
-                  label: "Desired Move-In",
+                  label: t("desiredMoveIn"),
                   value: "08/17/2024",
                   icon: calendarIcon,
                 },
                 {
-                  label: "Monthly Income",
+                  label: t("monthlyIncome"),
                   value: "3,000",
                   icon: coinBagIcon,
                 },
@@ -82,7 +86,7 @@ export default function ApplicationUnscreened() {
             <div className="mt-4 flex-shrink-0">
               <Button className="w-full font-semibold md:w-auto" asChild>
                 <Link to="/landlord/renters/application/_id_">
-                  View Full Application
+                  {t("viewFullApplication")}
                 </Link>
               </Button>
             </div>
@@ -101,20 +105,15 @@ export default function ApplicationUnscreened() {
             />
           </div>
           <h2 className="text-lg font-semibold text-gray-800">
-            Screening Report
+            {t("screeningReport")}
           </h2>
         </CardHeader>
         <CardContent className="">
           <h3 className="mb-1 text-base font-semibold text-gray-900">
-            Waiting on Applicant
+            {t("waitingOnApplicant")}
           </h3>
           <p className="text-muted-foreground text-sm">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularized in the 1960s
+            {t("screeningReportDescription")}
           </p>
         </CardContent>
       </Card>

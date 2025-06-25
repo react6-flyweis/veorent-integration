@@ -78,6 +78,35 @@ const resources = {
       purchaseInsurance: "Purchase Insurance",
       hello: "Hello",
 
+      // Move In Process
+      moveInProcess: "Move in Process",
+      units: "Units",
+      noOfUnits: "No. of Units",
+      availableNoOfUnits: "Available No. of Units",
+      otherApplicants: "Other Applicants",
+      denyAndSendNotification: "Deny and send a Notification",
+      keepAsActiveApplicant: "Keep as an Active Applicant",
+      allDeniedApplicantsArchived:
+        "All Denied applicants will be automatically archived",
+      lease: "Lease",
+      currentTenant: "Current Tenant",
+      moveDate: "Move Date",
+      unit: "Unit",
+      destinationProperty: "Destination Property",
+      unitName: "Unit Name",
+      newLease: "New Lease",
+      rent: "Rent",
+      leaseTerm: "Lease term",
+      confirmMoveIn: "Confirm Move In",
+      moveIN: "Move IN",
+      draft: "Draft",
+      endingSoon: "Ending Soon",
+      currentLease: "Current Lease",
+      tenantAvatar: "Tenant avatar",
+      moveInProcessCompletedSuccessfully:
+        "Move in process completed successfully!",
+      pleaseSelectAction: "Please select an action",
+
       // Landlord Dashboard
       marketing: "MARKETING",
       leads: "LEADS",
@@ -166,6 +195,37 @@ const resources = {
       appliedTo: "Applied to",
       moveInRenter: "Move in Renter",
       noApplicantsFound: "No applicants found.",
+      invitedToApply: "INVITED TO APPLY",
+      invitedToPortal: "Invited to portal",
+      lastActive: "Last active",
+      unsavedChangesConfirm:
+        "You have unsaved changes. Are you sure you want to close the create dialog?",
+      propertyInterestedIn: "Property Interested in",
+      propertyInterestedDescription:
+        "Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem ipsum has been the industry's",
+      renterEmail: "Renter's Email",
+      leadCreatedSuccessfully: "Lead created successfully",
+      completedOn: "COMPLETED ON",
+      rentalApplication: "Rental Application",
+
+      // Application sections
+      residentialHistory: "Residential History",
+      residentialHistoryDescription:
+        "We asked this renter for last 3 years of rental history.",
+      incomeEmployment: "Income & Employment",
+      incomeEmploymentDescription:
+        "Lorem Ipsum is simply dummy text of the printing",
+      petsVehiclesEmergency: "Pets, Vehicles, & Emergency",
+      petsVehiclesEmergencyDescription:
+        "Lorem Ipsum is simply dummy text of the printing.",
+      selfReportedBackground: "Self-Reported Background",
+      selfReportedBackgroundDescription:
+        "Lorem Ipsum is simply dummy text of the printing.",
+      attachmentsDescription:
+        "Lorem Ipsum is simply dummy text of the printing.",
+      otherInformation: "Other Information",
+      otherInformationDescription:
+        "Lorem Ipsum is simply dummy text of the printing.",
 
       // Payments
       createCharge: "Create Charge",
@@ -280,8 +340,6 @@ const resources = {
       past: "Past",
       upcomingLease: "Upcoming Lease",
       activeLease: "Active Lease",
-      rent: "RENT",
-      leaseTerm: "LEASE TERM",
       noLeasesFound: "No leases found.",
       noOpenLeasingRequests:
         'open leasing request at this time. Add one by clicking on the "+" button!',
@@ -352,7 +410,6 @@ const resources = {
       postalCode: "Postal Code",
       country: "Country",
       company: "Company",
-      unit: "Unit",
       apartment: "Apartment",
       phoneNumber: "Phone Number",
       website: "Website",
@@ -453,7 +510,6 @@ const resources = {
       scheduled: "Scheduled",
       cancelled: "Cancelled",
       expired: "Expired",
-      draft: "Draft",
       published: "Published",
       archived: "Archived",
 
@@ -622,7 +678,6 @@ const resources = {
       // Application Process
       application: "Application",
       applicationForm: "Application Form",
-      rentalApplication: "Rental Application",
       applicationStatus: "Application Status",
       applicationHistory: "Application History",
       applicationFee: "Application Fee",
@@ -727,7 +782,6 @@ const resources = {
       // Moving Services
       movingServices: "Moving Services",
       bookMove: "Book Move",
-      moveInProcess: "Move-in Process",
       currentProperty: "Current Property",
       newProperty: "New Property",
       movingDate: "Moving Date",
@@ -875,6 +929,33 @@ const resources = {
       charactersUsed: "characters used",
       noExpensesDataToExport: "No expenses data to export",
       failedToExportExpenses: "Failed to export expenses. Please try again.",
+
+      // Book Move Form
+      currentPropertyAddress: "Current Property Address",
+      street: "Street",
+      newPropertyAddress: "New Property Address",
+      newLeaseStartDate: "New Lease Start Date",
+      newLeaseEndDate: "New Lease End Date",
+      movingDetails: "Moving Details",
+      moveStartDate: "Move Start Date",
+      moveStartTime: "Move Start Time",
+      moveEndDate: "Move End Date",
+      moveEndTime: "Move End Time",
+      flexibleTimings: "Flexible Timings",
+      duration: "Duration",
+      propertyIcon: "Property Icon",
+
+      // Make Payment
+      errorLoadingPendingRent:
+        "Error loading pending rent data. Please try again.",
+      noPendingRent: "No Pending Rent",
+      noPendingRentDescription:
+        "You don't have any pending rent payments at the moment.",
+      selectDuesToPay: "Select dues to pay",
+      addNote: "Add a note (optional)",
+      notePlaceholder: "Enter your note here...",
+      paymentSummary: "Payment Summary",
+      selectedDues: "Selected Dues",
     },
   },
   es: {
@@ -950,6 +1031,35 @@ const resources = {
       knowYoureCoveredDescription: "Lorem Ipsum es simplemente texto ficticio",
       purchaseInsurance: "Comprar Seguro",
       hello: "Hola",
+
+      // Move In Process
+      moveInProcess: "Proceso de Mudanza",
+      units: "Unidades",
+      noOfUnits: "No. de Unidades",
+      availableNoOfUnits: "No. de Unidades Disponibles",
+      otherApplicants: "Otros Solicitantes",
+      denyAndSendNotification: "Rechazar y enviar una Notificación",
+      keepAsActiveApplicant: "Mantener como Solicitante Activo",
+      allDeniedApplicantsArchived:
+        "Todos los solicitantes rechazados serán archivados automáticamente",
+      lease: "Contrato",
+      currentTenant: "Inquilino Actual",
+      moveDate: "Fecha de Mudanza",
+      unit: "Unidad",
+      destinationProperty: "Propiedad de Destino",
+      unitName: "Nombre de la Unidad",
+      newLease: "Nuevo Contrato",
+      rent: "Alquiler",
+      leaseTerm: "Término del Contrato",
+      confirmMoveIn: "Confirmar Mudanza",
+      moveIN: "Mudanza",
+      draft: "Borrador",
+      endingSoon: "Próximo a Terminar",
+      currentLease: "Contrato Actual",
+      tenantAvatar: "Avatar del Inquilino",
+      moveInProcessCompletedSuccessfully:
+        "¡Proceso de mudanza completado exitosamente!",
+      pleaseSelectAction: "Por favor selecciona una acción",
 
       // Landlord Dashboard
       marketing: "MARKETING",
@@ -1043,6 +1153,37 @@ const resources = {
       appliedTo: "Aplicó a",
       moveInRenter: "Mudanza del Arrendatario",
       noApplicantsFound: "No se encontraron solicitantes.",
+      invitedToApply: "INVITADO A APLICAR",
+      invitedToPortal: "Invitado al portal",
+      lastActive: "Última actividad",
+      unsavedChangesConfirm:
+        "Tienes cambios sin guardar. ¿Estás seguro de que quieres cerrar el diálogo de creación?",
+      propertyInterestedIn: "Propiedad de Interés",
+      propertyInterestedDescription:
+        "Lorem ipsum es simplemente texto ficticio de la industria de impresión y tipografía. Lorem ipsum ha sido",
+      renterEmail: "Correo del Arrendatario",
+      leadCreatedSuccessfully: "Prospecto creado exitosamente",
+      completedOn: "COMPLETADO EL",
+      rentalApplication: "Solicitud de Alquiler",
+
+      // Application sections
+      residentialHistory: "Historial Residencial",
+      residentialHistoryDescription:
+        "Le pedimos a este arrendatario los últimos 3 años de historial de alquiler.",
+      incomeEmployment: "Ingresos y Empleo",
+      incomeEmploymentDescription:
+        "Lorem Ipsum es simplemente texto ficticio de la impresión",
+      petsVehiclesEmergency: "Mascotas, Vehículos y Emergencia",
+      petsVehiclesEmergencyDescription:
+        "Lorem Ipsum es simplemente texto ficticio de la impresión.",
+      selfReportedBackground: "Antecedentes Auto-reportados",
+      selfReportedBackgroundDescription:
+        "Lorem Ipsum es simplemente texto ficticio de la impresión.",
+      attachmentsDescription:
+        "Lorem Ipsum es simplemente texto ficticio de la impresión.",
+      otherInformation: "Otra Información",
+      otherInformationDescription:
+        "Lorem Ipsum es simplemente texto ficticio de la impresión.",
 
       // Payments
       createCharge: "Crear Cargo",
@@ -1154,8 +1295,6 @@ const resources = {
       past: "Pasado",
       upcomingLease: "Contrato Próximo",
       activeLease: "Contrato Activo",
-      rent: "ALQUILER",
-      leaseTerm: "TÉRMINO DEL CONTRATO",
       noLeasesFound: "No se encontraron contratos.",
       noOpenLeasingRequests:
         'solicitud de arrendamiento abierta en este momento. ¡Agrega una haciendo clic en el botón "+"!',
@@ -1230,7 +1369,6 @@ const resources = {
       postalCode: "Código Postal",
       country: "País",
       company: "Empresa",
-      unit: "Unidad",
       apartment: "Apartamento",
       phoneNumber: "Número de Teléfono",
       website: "Sitio Web",
@@ -1330,7 +1468,6 @@ const resources = {
       scheduled: "Programado",
       cancelled: "Cancelado",
       expired: "Vencido",
-      draft: "Borrador",
       published: "Publicado",
       archived: "Archivado",
 
@@ -1499,7 +1636,6 @@ const resources = {
       // Application Process
       application: "Solicitud",
       applicationForm: "Formulario de Solicitud",
-      rentalApplication: "Solicitud de Alquiler",
       applicationStatus: "Estado de la Solicitud",
       applicationHistory: "Historial de Solicitudes",
       applicationFee: "Tarifa de Solicitud",
@@ -1604,7 +1740,6 @@ const resources = {
       // Moving Services
       movingServices: "Servicios de Mudanza",
       bookMove: "Reservar Mudanza",
-      moveInProcess: "Proceso de Mudanza",
       currentProperty: "Propiedad Actual",
       newProperty: "Nueva Propiedad",
       movingDate: "Fecha de Mudanza",
@@ -1754,6 +1889,34 @@ const resources = {
       noExpensesDataToExport: "No hay datos de gastos para exportar",
       failedToExportExpenses:
         "Error al exportar gastos. Por favor, inténtalo de nuevo.",
+
+      // Book Move Form
+      currentPropertyAddress: "Dirección de la propiedad actual",
+      street: "Calle",
+      newPropertyAddress: "Nueva dirección de la propiedad",
+      newLeaseStartDate: "Fecha de inicio del nuevo contrato de arrendamiento",
+      newLeaseEndDate:
+        "Fecha de finalización del nuevo contrato de arrendamiento",
+      movingDetails: "Detalles de la mudanza",
+      moveStartDate: "Fecha de inicio de la mudanza",
+      moveStartTime: "Hora de inicio de la mudanza",
+      moveEndDate: "Fecha de finalización de la mudanza",
+      moveEndTime: "Hora de finalización de la mudanza",
+      flexibleTimings: "Horarios flexibles",
+      duration: "Duración",
+      propertyIcon: "Icono de la propiedad",
+
+      // Make Payment
+      errorLoadingPendingRent:
+        "Error al cargar los datos de alquiler pendiente. Por favor, inténtelo de nuevo.",
+      noPendingRent: "No hay alquiler pendiente",
+      noPendingRentDescription:
+        "No tiene pagos de alquiler pendientes en este momento.",
+      selectDuesToPay: "Seleccione las cuotas a pagar",
+      addNote: "Añadir una nota (opcional)",
+      notePlaceholder: "Introduzca su nota aquí...",
+      paymentSummary: "Resumen de pago",
+      selectedDues: "Cuotas seleccionadas",
     },
   },
 };
