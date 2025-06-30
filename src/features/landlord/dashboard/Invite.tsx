@@ -91,7 +91,7 @@ export default function Invite() {
     };
     try {
       await mutateAsync(valueToSend);
-      showToast("Tenant screening request sent successfully!", "success");
+      showToast(t("tenantScreeningRequestSuccess"), "success");
       navigate("/landlord");
     } catch (error) {
       form.setError("root", {
@@ -102,14 +102,14 @@ export default function Invite() {
 
   return (
     <div className="space-y-5">
-      <PageTitle title="Invite Renter to Apply" withBack />
+      <PageTitle title={t("inviteRenterToApply")} withBack />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {/* Renter Info Section */}
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-lg font-medium">
               <img src={dealIcon} className="size-10" />
-              <span>Renter Info</span>
+              <span>{t("renterInfo")}</span>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -146,7 +146,7 @@ export default function Invite() {
                 name="inviteMethod"
                 render={({ field }) => (
                   <FormItem className="col-span-2 space-y-2">
-                    <FormLabel>Send Invite By</FormLabel>
+                    <FormLabel>{t("sendInviteBy")}</FormLabel>
                     <FormControl>
                       <RadioGroup
                         onValueChange={field.onChange}
@@ -165,14 +165,16 @@ export default function Invite() {
                           <FormControl>
                             <RadioGroupItem value="text" />
                           </FormControl>
-                          <FormLabel className="font-normal">Text</FormLabel>
+                          <FormLabel className="font-normal">
+                            {t("text")}
+                          </FormLabel>
                         </FormItem>
                         <FormItem className="flex items-center space-x-2">
                           <FormControl>
                             <RadioGroupItem value="both" />
                           </FormControl>
                           <FormLabel className="font-normal">
-                            Email & Text
+                            {t("emailAndText")}
                           </FormLabel>
                         </FormItem>
                       </RadioGroup>
@@ -187,7 +189,7 @@ export default function Invite() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Renter's Email</FormLabel>
+                    <FormLabel>{t("renterEmail")}</FormLabel>
                     <FormControl>
                       <Input type="email" {...field} />
                     </FormControl>
@@ -202,7 +204,7 @@ export default function Invite() {
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-lg font-medium">
               <img src={rentHouseIcon} className="size-10" />
-              <span>Rental Property</span>
+              <span>{t("rentalProperty")}</span>
             </div>
 
             <FormField
@@ -210,9 +212,12 @@ export default function Invite() {
               name="propertyId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Property Applying To</FormLabel>
+                  <FormLabel>{t("propertyApplyingTo")}</FormLabel>
                   <FormControl>
-                    <PropertiesSelector placeholder="Applying to" {...field} />
+                    <PropertiesSelector
+                      placeholder={t("applyingTo")}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -254,7 +259,7 @@ export default function Invite() {
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-lg font-medium">
               <img src={penApplicationIcon} className="size-10" />
-              <span>Application Type</span>
+              <span>{t("applicationType")}</span>
             </div>
 
             <FormField
@@ -271,8 +276,8 @@ export default function Invite() {
                       <FormItem>
                         <ApplicationTypeCard
                           value="premium"
-                          title="PREMIUM SCREENING REPORT"
-                          description="Background, Eviction, Credit + Income Insights"
+                          title={t("premiumScreeningReport")}
+                          description={t("premiumScreeningReportDesc")}
                           amount={45}
                           isPremium
                         />
@@ -281,8 +286,8 @@ export default function Invite() {
                       <FormItem>
                         <ApplicationTypeCard
                           value="standard"
-                          title="STANDARD SCREENING REPORT"
-                          description="Background, Eviction, Credit Only"
+                          title={t("standardScreeningReport")}
+                          description={t("standardScreeningReportDesc")}
                           amount={35}
                         />
                       </FormItem>
@@ -317,7 +322,7 @@ export default function Invite() {
               className="w-52 rounded-lg"
               type="submit"
             >
-              Send Invite
+              {t("sendInvite")}
             </LoadingButton>
           </div>
         </form>

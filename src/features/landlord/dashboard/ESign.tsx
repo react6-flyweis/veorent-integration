@@ -1,4 +1,16 @@
+import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
 import { PageTitle } from "@/components/PageTitle";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { LoadingButton } from "@/components/ui/loading-button";
 import {
   Select,
@@ -7,16 +19,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 
 // Define schema for form validation
 const formSchema = z.object({
@@ -26,6 +28,8 @@ const formSchema = z.object({
 });
 
 export default function ESign() {
+  const { t } = useTranslation();
+
   // Set up form with validation
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -49,42 +53,35 @@ export default function ESign() {
   return (
     <div className="space-y-6">
       <PageTitle
-        title="Upgrade to Premium now to save time and hassle with e-sign!"
-        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and"
+        title={t("eSign.title")}
+        description={t("eSign.description")}
         withBack
       />
 
       <div className="space-y-6">
-        <h3 className="text-lg font-medium">
-          It takes less than 3 minutes to set up:
-        </h3>
+        <h3 className="text-lg font-medium">{t("eSign.setupStepsTitle")}</h3>
 
         <div className="space-y-4">
-          {[
-            "Upload the document(s) and select where everyone signs and dates.",
-            "We send it off to your tenants",
-            "You sign once they're done, then everyone gets emailed a copy! We'll save it to your account too.",
-          ].map((step, index) => (
-            <div key={index} className="flex items-start gap-4">
-              <div
-                className={`flex h-8 w-8 items-center justify-center rounded-full shadow-md ${index % 2 === 0 ? "bg-blue-500" : "bg-black"} text-white`}
-              >
-                <span className="text-2xl font-extrabold text-shadow-[2px_2px_4px_rgba(0,0,0,0.5)]">
-                  {" "}
-                  {index + 1}
-                </span>
+          {[t("eSign.step1"), t("eSign.step2"), t("eSign.step3")].map(
+            (step, index) => (
+              <div key={index} className="flex items-start gap-4">
+                <div
+                  className={`flex h-8 w-8 items-center justify-center rounded-full shadow-md ${index % 2 === 0 ? "bg-blue-500" : "bg-black"} text-white`}
+                >
+                  <span className="text-2xl font-extrabold text-shadow-[2px_2px_4px_rgba(0,0,0,0.5)]">
+                    {index + 1}
+                  </span>
+                </div>
+                <p className="mt-1">{step}</p>
               </div>
-              <p className="mt-1">{step}</p>
-            </div>
-          ))}
+            ),
+          )}
         </div>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-4">
-              <h3 className="text-lg font-medium">
-                Which lease needs a document signed?
-              </h3>
+              <h3 className="text-lg font-medium">{t("eSign.leasePrompt")}</h3>
               <FormField
                 control={form.control}
                 name="leaseId"
@@ -96,17 +93,19 @@ export default function ESign() {
                         defaultValue={field.value}
                       >
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select a lease" />
+                          <SelectValue
+                            placeholder={t("eSign.leasePlaceholder")}
+                          />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="lease1">
-                            123 Main Street Lease
+                            {t("eSign.leaseOption1")}
                           </SelectItem>
                           <SelectItem value="lease2">
-                            456 Oak Avenue Lease
+                            {t("eSign.leaseOption2")}
                           </SelectItem>
                           <SelectItem value="lease3">
-                            789 Pine Road Lease
+                            {t("eSign.leaseOption3")}
                           </SelectItem>
                         </SelectContent>
                       </Select>
@@ -123,7 +122,7 @@ export default function ESign() {
                   className="w-full py-6 text-lg md:w-2/3"
                   size="lg"
                 >
-                  Get It Signed Fast
+                  {t("eSign.getItSignedFast")}
                 </LoadingButton>
               </div>
             </div>

@@ -32,15 +32,17 @@ export default function SelectLeaseAddendum() {
     <MultiStepper ref={stepperRef}>
       <MultiStepperStep>
         <div className="flex flex-col">
-          <PageTitle title="Select Which Lease Needs an Addendum" withBack />
+          <PageTitle title={t("selectLeaseAddendum.title")} withBack />
 
           <div>
             <div className="mb-4">
-              <label className="mb-1 block text-sm font-medium">Lease</label>
+              <label className="mb-1 block text-sm font-medium">
+                {t("selectLeaseAddendum.leaseLabel")}
+              </label>
               <PropertiesSelector
                 value={selectedAddress}
                 onChange={setSelectedAddress}
-                placeholder="Select a lease"
+                placeholder={t("selectLeaseAddendum.leasePlaceholder")}
               />
             </div>
             <div className="flex justify-center">
@@ -61,18 +63,15 @@ export default function SelectLeaseAddendum() {
           <div className="mb-2 flex items-center gap-5">
             <MultiStepperBackButton />
             <h2 className="text-2xl font-semibold">
-              Select Your Lease Addendum
+              {t("selectLeaseAddendum.selectAddendum")}
             </h2>
           </div>
-          <p className="font-semibold">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard
-          </p>
+          <p className="font-semibold">{t("selectLeaseAddendum.intro")}</p>
           <div className="mt-6 flex flex-col space-y-6">
             <Card className="gap-0 rounded-lg bg-blue-200 py-2">
               <CardHeader>
                 <CardTitle className="text-lg font-bold">
-                  The most common reasons for using an addendum are:
+                  {t("selectLeaseAddendum.commonReasonsTitle")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex flex-col justify-center">
@@ -81,8 +80,7 @@ export default function SelectLeaseAddendum() {
                     <li key={item} className="flex items-center">
                       <div className="mt-1 mr-2 h-4 w-4 rounded-sm bg-orange-400"></div>
                       <p className="text-sm">
-                        Lorem ipsum is simply dummy text of the printing and
-                        typesetting industry.
+                        {t("selectLeaseAddendum.commonReason")}
                       </p>
                     </li>
                   ))}
@@ -91,27 +89,26 @@ export default function SelectLeaseAddendum() {
             </Card>
 
             <div className="space-y-2">
-              <h3 className="text-xl font-bold">Why use our addendum?</h3>
+              <h3 className="text-xl font-bold">
+                {t("selectLeaseAddendum.whyUseTitle")}
+              </h3>
 
               <div className="space-y-6">
                 {[
                   {
                     icon: fingerSnapIcon,
-                    title: "Easy to Fill Out",
-                    description:
-                      "Lorem ipsum is simply dummy text of the printing and typesetting industry.",
+                    title: t("selectLeaseAddendum.easyToFill"),
+                    description: t("selectLeaseAddendum.commonReason"),
                   },
                   {
                     icon: balanceIcon,
-                    title: "Legal Confidence",
-                    description:
-                      "Lorem ipsum is simply dummy text of the printing and typesetting industry.",
+                    title: t("selectLeaseAddendum.legalConfidence"),
+                    description: t("selectLeaseAddendum.commonReason"),
                   },
                   {
                     icon: smoothPenIcon,
-                    title: "Fast to Sign",
-                    description:
-                      "Lorem ipsum is simply dummy text of the printing and typesetting industry.",
+                    title: t("selectLeaseAddendum.fastToSign"),
+                    description: t("selectLeaseAddendum.commonReason"),
                   },
                 ].map((item, index) => (
                   <div key={index} className="flex items-start">
@@ -135,7 +132,7 @@ export default function SelectLeaseAddendum() {
                   state={{ property: selectedAddress }}
                   to="/landlord/lease-addendum/create"
                 >
-                  Sounds Good
+                  {t("selectLeaseAddendum.soundsGood")}
                 </Link>
               </Button>
             </div>

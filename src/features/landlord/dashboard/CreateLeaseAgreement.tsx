@@ -1,4 +1,7 @@
+import { useTranslation } from "react-i18next";
+
 import { IconRound } from "@/components/IconRound";
+import { PageTitle } from "@/components/PageTitle";
 import {
   Card,
   CardContent,
@@ -6,21 +9,28 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import lockIcon from "./assets/lock.png";
 import { AgreementBuilder } from "./components/AgreementBuilder";
-import { PageTitle } from "@/components/PageTitle";
 
 export default function CreateLeaseAgreement() {
+  const { t } = useTranslation();
   return (
     <div className="flex h-full flex-col space-y-6">
-      <PageTitle title=" Create Your Colorado Lease Agreement" withBack />
+      <PageTitle title={t("createLeaseAgreement.title")} withBack />
 
       <Tabs defaultValue="builder" className="h-full">
         <div className="flex flex-col @md:flex-row @md:items-center @md:gap-5">
-          <h2 className="text-2xl">Complete Each Section</h2>
+          <h2 className="text-2xl">
+            {t("createLeaseAgreement.completeEachSection")}
+          </h2>
           <TabsList className="grid grid-cols-2">
-            <TabsTrigger value="builder">Builder</TabsTrigger>
-            <TabsTrigger value="advanced">Advanced Editor</TabsTrigger>
+            <TabsTrigger value="builder">
+              {t("createLeaseAgreement.tabBuilder")}
+            </TabsTrigger>
+            <TabsTrigger value="advanced">
+              {t("createLeaseAgreement.tabAdvanced")}
+            </TabsTrigger>
           </TabsList>
         </div>
         <TabsContent value="builder">
@@ -34,11 +44,10 @@ export default function CreateLeaseAgreement() {
                   <IconRound className="bg-blue-50" icon={lockIcon} />
                 </div>
                 <CardTitle className="text-xl font-bold">
-                  Advanced Editor Locked
+                  {t("createLeaseAgreement.advancedEditorLocked")}
                 </CardTitle>
                 <CardDescription>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry.
+                  {t("createLeaseAgreement.advancedEditorDescription")}
                 </CardDescription>
               </CardContent>
             </Card>
