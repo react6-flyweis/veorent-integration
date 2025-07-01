@@ -350,6 +350,9 @@ export function AppSidebar({ navigationItems, ...props }: AppSidebarProps) {
                       <DropdownMenuItem onClick={() => changeLanguage("es")}>
                         🇪🇸 {t("spanish")}
                       </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => changeLanguage("fr")}>
+                        🇫🇷 {t("french")}
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TooltipTrigger>
@@ -384,6 +387,9 @@ export function AppSidebar({ navigationItems, ...props }: AppSidebarProps) {
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => changeLanguage("es")}>
                     🇪🇸 {t("spanish")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => changeLanguage("fr")}>
+                    🇫🇷 {t("french")}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
