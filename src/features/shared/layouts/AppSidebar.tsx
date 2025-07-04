@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { NavLink, useNavigate, type To } from "react-router-dom";
-import { ChevronRight, CircleIcon, Languages } from "lucide-react";
+import { ChevronRight, CircleIcon } from "lucide-react";
 import { motion } from "motion/react";
 
 import { LogoutConfirmDialog } from "@/components/LogoutConfirmDialog";
@@ -10,12 +10,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { LanguageSelector } from "@/components/ui/LanguageSelector";
 import {
   Sidebar,
   SidebarHeader,
@@ -67,34 +62,15 @@ export function AppSidebar({ navigationItems, ...props }: AppSidebarProps) {
   const navigate = useNavigate();
   const { state } = useSidebar();
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
-  const [isTranslating, setIsTranslating] = useState(false);
   const logout = useAuthStore((store) => store.logout);
   const clearUserType = useUserPreferenceStore((store) => store.clearUserType);
-  const { t, i18n } = useTranslation();
-  const currentLanguage = i18n.language;
+  const { t } = useTranslation();
 
   const logoutHandler = () => {
     setShowLogoutDialog(false);
     logout();
     clearUserType();
     navigate("/login", { replace: true });
-  };
-
-  const changeLanguage = async (lang: string) => {
-    if (currentLanguage === lang || isTranslating) {
-      return;
-    }
-
-    setIsTranslating(true);
-
-    try {
-      await i18n.changeLanguage(lang);
-      console.log(`Language changed to: ${lang}`);
-    } catch (error) {
-      console.error("Language change error:", error);
-    } finally {
-      setIsTranslating(false);
-    }
   };
 
   // Component to handle individual text animations
@@ -323,77 +299,7 @@ export function AppSidebar({ navigationItems, ...props }: AppSidebarProps) {
           })}
 
           <SidebarMenuItem className="flex justify-center">
-            {state === "collapsed" ? (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <SidebarMenuButton
-                        size="lg"
-                        className={cn(
-                          "transition-all duration-300 ease-in-out",
-                          "justify-center",
-                        )}
-                        disabled={isTranslating}
-                      >
-                        {isTranslating ? (
-                          <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                        ) : (
-                          <Languages className="h-4 w-4 text-white" />
-                        )}
-                      </SidebarMenuButton>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent side="right" className="w-32">
-                      <DropdownMenuItem onClick={() => changeLanguage("en")}>
-                        🇺🇸 {t("english")}
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => changeLanguage("es")}>
-                        🇪🇸 {t("spanish")}
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => changeLanguage("fr")}>
-                        🇫🇷 {t("french")}
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TooltipTrigger>
-                <TooltipContent side="right">
-                  <p>{t("language")}</p>
-                </TooltipContent>
-              </Tooltip>
-            ) : (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <SidebarMenuButton
-                    size="lg"
-                    className={cn(
-                      "transition-all duration-300 ease-in-out",
-                      "pl-5",
-                    )}
-                    disabled={isTranslating}
-                  >
-                    {isTranslating ? (
-                      <div className="h-4 w-4 flex-shrink-0 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                    ) : (
-                      <Languages className="h-4 w-4 flex-shrink-0 text-white" />
-                    )}
-                    <AnimatedText className="text-base text-white">
-                      {isTranslating ? t("translating") : t("language")}
-                    </AnimatedText>
-                  </SidebarMenuButton>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent side="right" className="w-32">
-                  <DropdownMenuItem onClick={() => changeLanguage("en")}>
-                    🇺🇸 {t("english")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => changeLanguage("es")}>
-                    🇪🇸 {t("spanish")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => changeLanguage("fr")}>
-                    🇫🇷 {t("french")}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
+            <LanguageSelector collapsed={state === "collapsed"} />
           </SidebarMenuItem>
           <SidebarMenuItem className="flex justify-center">
             {state === "collapsed" ? (
