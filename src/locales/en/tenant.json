@@ -204,7 +204,10 @@
         "send": "Send",
         "call": "Call",
         "calling": "Calling...",
-        "success": "Your message has been sent successfully!"
+        "success": "Your message has been sent successfully!",
+        "validation": {
+            "messageMinLength": "Message should be at least 10 characters"
+        }
     },
     "searchProperty": {
         "searchRentals": "Search rentals...",
@@ -264,9 +267,16 @@
         "emailInvalid": "Enter a valid email",
         "phoneRequired": "Phone number is required",
         "dobRequired": "Date of birth is required",
+        "dobLabel": "Date of Birth",
         "roleLabel": "What are you applying as?",
         "tenant": "Tenant",
-        "cosigner": "Co-Signer"
+        "cosigner": "Co-Signer",
+        "placeholders": {
+            "firstName": "John",
+            "lastName": "Doe",
+            "email": "you@example.com",
+            "phone": "123-456-7890"
+        }
     },
     "filterDialog": {
         "filters": "Filters",
@@ -359,5 +369,37 @@
         "landlord": "Landlord:",
         "perMonth": "/MO",
         "viewListing": "View Listing"
-    }
+    },
+    "listing": {
+        "photos": "photos",
+        "beds": "Beds",
+        "baths": "Baths",
+        "builtIn": "Built in",
+        "description": "Description",
+        "features": "Features",
+        "petsAllowed": "Pets Allowed",
+        "noPetsAllowed": "No Pets Allowed",
+        "smokingAllowed": "Smoking Allowed",
+        "smokingOutsideOnly": "Smoking Outside Only",
+        "utilitiesIncluded": "Utilities Included",
+        "amenities": "Amenities",
+        "appliances": "Appliances",
+        "rent": "Rent",
+        "perMonth": "/MO",
+        "deposit": "Deposit",
+        "available": "Available",
+        "leaseTerms": "Lease Terms",
+        "applyNow": "Apply Now",
+        "contactLandlord": "Contact the Landlord",
+        "contactLandlordDesc": "Send a message to the landlord if you are interested in or have any questions about this property.",
+        "propertyNamePlaceholder": "Property Name",
+        "streetAddressPlaceholder": "Street Address",
+        "cityPlaceholder": "City",
+        "regionPlaceholder": "Region",
+        "zipCodePlaceholder": "Zip",
+        "propertyTypePlaceholder": "Property Type",
+        "tbd": "TBD",
+        "propertyOwnerPlaceholder": "Property Owner"
+    },
+    "filter": "Filter"
 }
