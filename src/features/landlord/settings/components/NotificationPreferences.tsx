@@ -1,6 +1,9 @@
 import type { FC } from "react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { NotificationItem } from "./NotificationItem";
 import { useGetNotificationPreferencesQuery } from "../api/queries";
 
@@ -94,6 +97,7 @@ const notificationData = [
 export const NotificationPreferences: FC = () => {
   const [activeTab, setActiveTab] = useState("updates");
   const { data } = useGetNotificationPreferencesQuery();
+  const { t } = useTranslation();
 
   const currentNotifications = notificationData.filter(
     (item) => item.type === activeTab,
@@ -107,8 +111,12 @@ export const NotificationPreferences: FC = () => {
         className="w-full"
       >
         <TabsList className="mb-6 h-14">
-          <TabsTrigger value="updates">UPDATES & OFFERS</TabsTrigger>
-          <TabsTrigger value="account">ACCOUNT</TabsTrigger>
+          <TabsTrigger value="updates">
+            {t("notification.tabs.updates")}
+          </TabsTrigger>
+          <TabsTrigger value="account">
+            {t("notification.tabs.account")}
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value={activeTab}>
@@ -116,8 +124,8 @@ export const NotificationPreferences: FC = () => {
             <NotificationItem
               key={item.key}
               itemKey={item.key as keyof typeof data}
-              title={item.title}
-              description={item.description}
+              title={t(`notification.items.${item.key}.title`)}
+              description={t(`notification.items.${item.key}.description`)}
               channels={
                 data?.[item.key as keyof typeof data] as
                   | INotificationChannel

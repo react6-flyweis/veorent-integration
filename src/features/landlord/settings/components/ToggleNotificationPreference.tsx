@@ -9,9 +9,9 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
 
 const titleMap: Record<keyof INotificationChannel, string> = {
-  PushNotification: "Push Notifications",
-  Email: "Email Notifications",
-  Call: "Call Notifications",
+  PushNotification: "notification.channelTitles.push",
+  Email: "notification.channelTitles.email",
+  Call: "notification.channelTitles.call",
 };
 
 const iconMap: Record<keyof INotificationChannel, LucideIcon> = {
@@ -35,7 +35,7 @@ export function SingleTogglePreference({
 
   const id = useId();
   const [isToggleEnabled, setIsEnabled] = useState(isEnabled ?? false);
-  const title = titleMap[type];
+  const title = t(titleMap[type]);
   const Icon = iconMap[type];
 
   const handleToggle = (value: string) => {
@@ -84,11 +84,11 @@ export function SingleTogglePreference({
         >
           <div className="flex items-center space-x-1">
             <RadioGroupItem value="off" id={`${id}-off`} />
-            <Label htmlFor={`${id}-off`}>{t("off")}</Label>
+            <Label htmlFor={`${id}-off`}>{t("notification.off")}</Label>
           </div>
           <div className="flex items-center space-x-1">
             <RadioGroupItem value="on" id={`${id}-on`} />
-            <Label htmlFor={`${id}-on`}>{t("on")}</Label>
+            <Label htmlFor={`${id}-on`}>{t("notification.on")}</Label>
           </div>
         </RadioGroup>
       </div>

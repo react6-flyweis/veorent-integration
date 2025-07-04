@@ -27,19 +27,26 @@ import { getErrorMessage } from "@/utils/getErrorMessage";
 
 import { useUpdateProfileMutation } from "../api/mutation";
 
-// Schema for password change validation
-const passwordChangeSchema = z
-  .object({
-    currentPassword: z.string().min(1, "Current password is required"),
-    newPassword: z.string().min(8, "Password must be at least 8 characters"),
-    confirmPassword: z.string().min(1, "Please confirm your password"),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
+import type { TFunction } from "i18next";
 
-type PasswordChangeValues = z.infer<typeof passwordChangeSchema>;
+// Schema for password change validation
+const createPasswordChangeSchema = (t: TFunction) =>
+  z
+    .object({
+      currentPassword: z
+        .string()
+        .min(1, t("changePassword.validation.currentPassword")),
+      newPassword: z
+        .string()
+        .min(8, t("changePassword.validation.newPassword")),
+      confirmPassword: z
+        .string()
+        .min(1, t("changePassword.validation.confirmPassword")),
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+      message: t("changePassword.validation.match"),
+      path: ["confirmPassword"],
+    });
 
 interface ChangePasswordDialogProps {
   open: boolean;
@@ -51,6 +58,8 @@ export function ChangePasswordDialog({
   onOpenChange,
 }: ChangePasswordDialogProps) {
   const { t } = useTranslation();
+  const passwordChangeSchema = createPasswordChangeSchema(t);
+  type PasswordChangeValues = z.infer<typeof passwordChangeSchema>;
 
   const { mutateAsync } = useUpdateProfileMutation();
   const { showToast } = useToast();
@@ -84,7 +93,9 @@ export function ChangePasswordDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-xl">Change Your Password</DialogTitle>
+          <DialogTitle className="text-xl">
+            {t("changePassword.title")}
+          </DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -93,13 +104,13 @@ export function ChangePasswordDialog({
               name="currentPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("currentPassword")}</FormLabel>
+                  <FormLabel>{t("changePassword.currentPassword")}</FormLabel>
                   <FormControl>
                     <PasswordInput {...field} />
                   </FormControl>
                   <div className="text-sm text-blue-500">
                     <a href="#" className="underline">
-                      Forgot your password?
+                      {t("changePassword.forgot")}
                     </a>
                   </div>
                   <FormMessage />
@@ -112,7 +123,7 @@ export function ChangePasswordDialog({
               name="newPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("newPassword")}</FormLabel>
+                  <FormLabel>{t("changePassword.newPassword")}</FormLabel>
                   <FormControl>
                     <PasswordInput {...field} />
                   </FormControl>
@@ -126,7 +137,7 @@ export function ChangePasswordDialog({
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Confirm New Password</FormLabel>
+                  <FormLabel>{t("changePassword.confirmPassword")}</FormLabel>
                   <FormControl>
                     <PasswordInput {...field} />
                   </FormControl>
@@ -147,14 +158,14 @@ export function ChangePasswordDialog({
                 }}
                 className="w-36"
               >
-                CANCEL
+                {t("changePassword.cancel")}
               </Button>
               <LoadingButton
                 isLoading={form.formState.isSubmitting}
                 type="submit"
                 className="w-36"
               >
-                CHANGE
+                {t("changePassword.change")}
               </LoadingButton>
             </DialogFooter>
           </form>

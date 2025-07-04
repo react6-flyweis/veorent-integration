@@ -26,7 +26,7 @@ export default function Setting() {
         <TabsList className="mb-5 flex px-0 @lg:max-w-2xl @lg:gap-10">
           <TabsTrigger value="account">{t("account")}</TabsTrigger>
           <TabsTrigger value="notifications">
-            {t("notificationPreferences")}
+            {t("lNotificationPreferences")}
           </TabsTrigger>
           <TabsTrigger value="payment">{t("payment")}</TabsTrigger>
         </TabsList>

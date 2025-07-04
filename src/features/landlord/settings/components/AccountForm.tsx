@@ -22,41 +22,44 @@ import { ChangePasswordDialog } from "./ChangePasswordDialog";
 import { CompanyLogoUpload } from "./CompanyLogoUpload";
 import { useUpdateProfileMutation } from "../api/mutation";
 
-const accountFormSchema = z.object({
-  firstName: z.string().min(2, {
-    message: "First name must be at least 2 characters.",
-  }),
-  lastName: z.string().min(2, {
-    message: "Last name must be at least 2 characters.",
-  }),
-  company: z.string().optional(),
-  email: z.string().email({
-    message: "Please enter a valid email address.",
-  }),
-  phone: z.string().min(10, {
-    message: "Phone number must be at least 10 characters.",
-  }),
-  streetAddress: z.string().min(3, {
-    message: "Street address must be at least 3 characters.",
-  }),
-  unit: z.string().min(1, {
-    message: "Unit is required.",
-  }),
-  city: z.string().min(1, {
-    message: "City is required.",
-  }),
-  region: z.string().min(1, {
-    message: "Region is required.",
-  }),
-  zipCode: z.string().min(5, {
-    message: "Zip code must be at least 5 characters.",
-  }),
-});
+import type { TFunction } from "i18next";
 
-type AccountFormValues = z.infer<typeof accountFormSchema>;
+const createAccountFormSchema = (t: TFunction) =>
+  z.object({
+    firstName: z.string().min(2, {
+      message: t("accountForm.validation.firstName"),
+    }),
+    lastName: z.string().min(2, {
+      message: t("accountForm.validation.lastName"),
+    }),
+    company: z.string().optional(),
+    email: z.string().email({
+      message: t("accountForm.validation.email"),
+    }),
+    phone: z.string().min(10, {
+      message: t("accountForm.validation.phone"),
+    }),
+    streetAddress: z.string().min(3, {
+      message: t("accountForm.validation.streetAddress"),
+    }),
+    unit: z.string().min(1, {
+      message: t("accountForm.validation.unit"),
+    }),
+    city: z.string().min(1, {
+      message: t("accountForm.validation.city"),
+    }),
+    region: z.string().min(1, {
+      message: t("accountForm.validation.region"),
+    }),
+    zipCode: z.string().min(5, {
+      message: t("accountForm.validation.zipCode"),
+    }),
+  });
 
 export function AccountForm({ data }: { data: IUserFullDetails }) {
   const { t } = useTranslation();
+  const accountFormSchema = createAccountFormSchema(t);
+  type AccountFormValues = z.infer<typeof accountFormSchema>;
 
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
   const { mutateAsync } = useUpdateProfileMutation();
@@ -106,7 +109,9 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
 
   return (
     <div className="w-full">
-      <h2 className="mb-4 text-xl font-bold sm:mb-6">My Information</h2>
+      <h2 className="mb-4 text-xl font-bold sm:mb-6">
+        {t("accountForm.title")}
+      </h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           {/* Name Fields */}
@@ -117,7 +122,7 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="font-medium">
-                    {t("firstName")}
+                    {t("accountForm.firstName")}
                   </FormLabel>
                   <FormControl>
                     <Input {...field} className="w-full" />
@@ -131,7 +136,9 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-medium">{t("lastName")}</FormLabel>
+                  <FormLabel className="font-medium">
+                    {t("accountForm.lastName")}
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} className="w-full" />
                   </FormControl>
@@ -148,8 +155,10 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="font-medium">
-                  {t("company")}{" "}
-                  <span className="text-gray-500">(Optional)</span>
+                  {t("accountForm.company")}{" "}
+                  <span className="text-gray-500">
+                    ({t("accountForm.optional")})
+                  </span>
                 </FormLabel>
                 <FormControl>
                   <Input {...field} className="w-full" />
@@ -166,7 +175,9 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-medium">{t("email")}</FormLabel>
+                  <FormLabel className="font-medium">
+                    {t("accountForm.email")}
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} type="email" className="w-full" />
                   </FormControl>
@@ -179,7 +190,9 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
               name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-medium">{t("phone")}</FormLabel>
+                  <FormLabel className="font-medium">
+                    {t("accountForm.phone")}
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} type="tel" className="w-full" />
                   </FormControl>
@@ -199,7 +212,7 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="font-medium">
-                        {t("streetAddress")}
+                        {t("accountForm.streetAddress")}
                       </FormLabel>
                       <FormControl>
                         <Input {...field} className="w-full" />
@@ -215,7 +228,9 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
                   name="unit"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-medium">{t("unit")}</FormLabel>
+                      <FormLabel className="font-medium">
+                        {t("accountForm.unit")}
+                      </FormLabel>
                       <FormControl>
                         <Input {...field} className="w-full" />
                       </FormControl>
@@ -231,7 +246,9 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
                 name="city"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-medium">{t("city")}</FormLabel>
+                    <FormLabel className="font-medium">
+                      {t("accountForm.city")}
+                    </FormLabel>
                     <FormControl>
                       <Input {...field} className="w-full" />
                     </FormControl>
@@ -244,7 +261,9 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
                 name="region"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-medium">{t("region")}</FormLabel>
+                    <FormLabel className="font-medium">
+                      {t("accountForm.region")}
+                    </FormLabel>
                     <FormControl>
                       <Input {...field} className="w-full" />
                     </FormControl>
@@ -258,7 +277,7 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="font-medium">
-                      {t("zipCode")}
+                      {t("accountForm.zipCode")}
                     </FormLabel>
                     <FormControl>
                       <Input {...field} className="w-full" />
@@ -274,18 +293,20 @@ export function AccountForm({ data }: { data: IUserFullDetails }) {
               {/* Password Section */}
               <div className="flex h-full flex-col justify-between space-y-4">
                 <div>
-                  <h3 className="mb-2 text-lg font-medium">{t("password")}</h3>
+                  <h3 className="mb-2 text-lg font-medium">
+                    {t("accountForm.password")}
+                  </h3>
                   <Button
                     type="button"
                     variant="outlinePrimary"
                     className="w-full uppercase sm:w-auto sm:min-w-[160px]"
                     onClick={() => setShowPasswordDialog(true)}
                   >
-                    {t("changePassword")}
+                    {t("accountForm.changePassword")}
                   </Button>
                 </div>
                 <Button type="submit" className="w-full sm:w-auto">
-                  SAVE CHANGES
+                  {t("accountForm.save")}
                 </Button>
               </div>
 

@@ -68,7 +68,9 @@ export const NotificationItem: FC<NotificationItemProps> = ({
             className="h-8 bg-blue-50 px-3 text-blue-600 hover:bg-blue-100"
           >
             <Pencil className="mr-1 h-4 w-4" />
-            <span className="text-xs font-medium">{t("edit")}</span>
+            <span className="text-xs font-medium">
+              {t("notification.edit")}
+            </span>
           </Button>
         </div>
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
