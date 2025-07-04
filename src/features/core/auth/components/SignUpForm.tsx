@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -29,8 +28,6 @@ const signUpSchema = z.object({
 type SignUpFormValues = z.infer<typeof signUpSchema>;
 
 export function SignUpForm() {
-  const { t } = useTranslation();
-
   const { userType } = useUserPreferenceStore();
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -79,7 +76,7 @@ export function SignUpForm() {
             name="fName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("firstName")}</FormLabel>
+                <FormLabel>First Name</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -92,7 +89,7 @@ export function SignUpForm() {
             name="lName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("lastName")}</FormLabel>
+                <FormLabel>Last Name</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -106,7 +103,7 @@ export function SignUpForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("email")}</FormLabel>
+              <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input placeholder="you@example.com" {...field} />
               </FormControl>
@@ -120,7 +117,7 @@ export function SignUpForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("password")}</FormLabel>
+              <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input type="password" placeholder="••••••••" {...field} />
               </FormControl>

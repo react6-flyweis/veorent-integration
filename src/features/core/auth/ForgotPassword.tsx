@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
@@ -27,8 +26,6 @@ type EmailFormValues = z.infer<typeof emailSchema>;
 type OtpFormValues = z.infer<typeof otpSchema>;
 
 export function ForgotPasswordPage() {
-  const { t } = useTranslation();
-
   const [showOtp, setShowOtp] = useState(false);
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -67,7 +64,7 @@ export function ForgotPasswordPage() {
     <div className="">
       <img src="/logo-dark.png" alt="Veorent Logo" className="mb-6 h-8" />
 
-      <h2 className="mb-6 text-2xl font-semibold">{t("forgotPassword")}</h2>
+      <h2 className="mb-6 text-2xl font-semibold">Forgot Password</h2>
 
       <div className="space-y-6">
         {/* Step 1: Email */}
@@ -81,7 +78,7 @@ export function ForgotPasswordPage() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("email")}</FormLabel>
+                  <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input placeholder="you@example.com" {...field} />
                   </FormControl>
