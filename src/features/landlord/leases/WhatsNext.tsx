@@ -1,35 +1,37 @@
-import { PageTitle } from "@/components/PageTitle";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { IconRound } from "@/components/IconRound";
-
-import documentsIcon from "./assets/documents.png";
-import applicationIcon from "./assets/application.png";
+import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router";
 
+import { IconRound } from "@/components/IconRound";
+import { PageTitle } from "@/components/PageTitle";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+
+import applicationIcon from "./assets/application.png";
+import documentsIcon from "./assets/documents.png";
+
 export default function WhatsNext() {
+  const { t } = useTranslation();
   const { state } = useLocation();
   return (
     <div className="space-y-6">
-      <PageTitle title="What's next for you?" withBack />
+      <PageTitle title={t("leases.whatsNextTitle")} withBack />
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {[
           {
-            title: "Create a lease agreement",
+            title: t("leases.createLeaseAgreementTitle"),
             icon: documentsIcon,
-            description: "Stay compliant with Veorent lease agreements.",
-            buttonText: "Get a lease agreement",
+            description: t("leases.createLeaseAgreementDescription"),
+            buttonText: t("leases.getLeaseAgreement"),
             url: "/landlord/lease-agreement/create",
             isRecommended: true,
           },
           {
-            title: "Store a lease document",
+            title: t("leases.storeLeaseDocumentTitle"),
             icon: applicationIcon,
-            description:
-              "Stay organized by storing all lease documents in one place.",
-            buttonText: "Upload a document",
+            description: t("leases.storeLeaseDocumentDescription"),
+            buttonText: t("leases.uploadDocument"),
             url: "/landlord/leases/upload",
           },
         ].map((item, index) => (
@@ -40,7 +42,7 @@ export default function WhatsNext() {
                   variant="secondary"
                   className="bg-blue-500 font-semibold hover:bg-blue-600"
                 >
-                  RECOMMENDED
+                  {t("leases.recommended")}
                 </Badge>
               </div>
             )}
@@ -65,7 +67,7 @@ export default function WhatsNext() {
       <div className="flex justify-center">
         <Link to="/landlord/leases" className="w-4/5 @lg:w-3/5">
           <Button className="w-full" size="lg">
-            Skip For Now
+            {t("leases.skipForNow")}
           </Button>
         </Link>
       </div>

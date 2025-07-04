@@ -1,11 +1,13 @@
+import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+import FormErrors from "@/components/FormErrors";
 import { PageTitle } from "@/components/PageTitle";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DateInput } from "@/components/ui/date-input";
-import { Input } from "@/components/ui/input";
-import { LoadingButton } from "@/components/ui/loading-button";
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
@@ -14,25 +16,30 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-// import { MapPinIcon } from "lucide-react";
-import { useNavigate } from "react-router";
-import { useCreateLeaseMutation } from "./api/mutation";
+import { Input } from "@/components/ui/input";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import FormErrors from "@/components/FormErrors";
+
+import { useCreateLeaseMutation } from "./api/mutation";
 import { PropertiesSelector } from "../dashboard/components/PropertiesSelector";
 
 // Define Zod validation schema
-const formSchema = z.object({
-  rentalProperty: z.string().min(1, "Rental property is required"),
-  leaseNickname: z.string().min(1, "Lease nickname is required"),
-  startDate: z.date().optional(),
-  endDate: z.date().optional(),
-  isMonthToMonth: z.boolean(),
-});
+function createFormSchema(t: (key: string) => string) {
+  return z.object({
+    rentalProperty: z.string().min(1, t("leases.rentalPropertyRequired")),
+    leaseNickname: z.string().min(1, t("leases.leaseNicknameRequired")),
+    startDate: z.date().optional(),
+    endDate: z.date().optional(),
+    isMonthToMonth: z.boolean(),
+  });
+}
 
 export default function AddLeaseDetails() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { mutateAsync } = useCreateLeaseMutation();
+
+  const formSchema = createFormSchema(t);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -67,8 +74,8 @@ export default function AddLeaseDetails() {
   return (
     <div className="space-y-4">
       <PageTitle
-        title="Add Basic Lease Details"
-        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and"
+        title={t("leases.addLeaseDetails")}
+        description={t("leases.addLeaseDetailsDescription")}
         withBack
       />
 
@@ -79,7 +86,7 @@ export default function AddLeaseDetails() {
             name="rentalProperty"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Rental Property</FormLabel>
+                <FormLabel>{t("leases.rentalProperty")}</FormLabel>
                 <FormControl>
                   {/* <div className="relative">
                     <Input
@@ -95,7 +102,7 @@ export default function AddLeaseDetails() {
                     </div>
                   </div> */}
                   <PropertiesSelector
-                    placeholder="Press to select a property"
+                    placeholder={t("leases.selectProperty")}
                     {...field}
                   />
                 </FormControl>
@@ -109,16 +116,13 @@ export default function AddLeaseDetails() {
             name="leaseNickname"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Lease Nickname</FormLabel>
+                <FormLabel>{t("leases.leaseNickname")}</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
                 <FormMessage />
                 <p className="mt-1 text-sm text-gray-600">
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and
+                  {t("leases.leaseNicknameHelper")}
                 </p>
               </FormItem>
             )}
@@ -130,7 +134,7 @@ export default function AddLeaseDetails() {
               name="startDate"
               render={({ field }) => (
                 <FormItem className="flex-1">
-                  <FormLabel>Start Date (Optional)</FormLabel>
+                  <FormLabel>{t("leases.startDateOptional")}</FormLabel>
                   <FormControl>
                     <DateInput
                       {...field}
@@ -148,7 +152,7 @@ export default function AddLeaseDetails() {
               name="endDate"
               render={({ field }) => (
                 <FormItem className="flex-1">
-                  <FormLabel>End Date (Optional)</FormLabel>
+                  <FormLabel>{t("leases.endDateOptional")}</FormLabel>
                   <FormControl>
                     <DateInput
                       {...field}
@@ -174,7 +178,7 @@ export default function AddLeaseDetails() {
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">
-                  <FormLabel>Month-to-Month</FormLabel>
+                  <FormLabel>{t("leases.monthToMonth")}</FormLabel>
                 </div>
               </FormItem>
             )}
@@ -189,7 +193,7 @@ export default function AddLeaseDetails() {
               className="w-4/5 @lg:w-3/5"
               size="lg"
             >
-              Add Lease
+              {t("leases.addLease")}
             </LoadingButton>
           </div>
         </form>
