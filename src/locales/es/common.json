@@ -206,7 +206,7 @@
     "depositsDescription": "Lorem Ipsum es simplemente texto ficticio de la industria de impresión y tipografía. Lorem Ipsum ha sido el texto ficticio estándar de la industria desde el siglo XVI, cuando un impresor desconocido tomó una galera de tipos y la mezcló para hacer un libro de muestras tipográficas.",
     "selectLease": "Seleccionar un Contrato",
     "account": "CUENTA",
-    "notificationPreferences": "PREFERENCIAS DE NOTIFICACIONES",
+    "lNotificationPreferences": "PREFERENCIAS DE NOTIFICACIONES",
     "payment": "PAGO",
     "loadingAccountInformation": "Cargando información de la cuenta...",
     "give": "Dar",

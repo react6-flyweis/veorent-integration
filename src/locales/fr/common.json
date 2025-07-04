@@ -205,7 +205,7 @@
     "depositsDescription": "Lorem Ipsum est simplement un texte factice de l'industrie de l'impression et de la composition. Lorem Ipsum est le texte factice standard de l'industrie depuis les années 1500, lorsqu'un imprimeur inconnu a pris une galère de caractères et l'a brouillée pour en faire un spécimen de livre.",
     "selectLease": "Sélectionner un bail",
     "account": "COMPTE",
-    "notificationPreferences": "PRÉFÉRENCES DE NOTIFICATION",
+    "lNotificationPreferences": "PRÉFÉRENCES DE NOTIFICATION",
     "payment": "PAIEMENT",
     "loadingAccountInformation": "Chargement des informations du compte...",
     "give": "Donner",
