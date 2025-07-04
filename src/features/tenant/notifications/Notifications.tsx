@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import { PageTitle } from "@/components/PageTitle";
 
 import { useGetNotificationsQuery } from "./api/queries";
@@ -7,11 +9,12 @@ import {
 } from "./components/NotificationCard";
 
 export default function Notifications() {
+  const { t } = useTranslation();
   const { data: notifications, isLoading } = useGetNotificationsQuery();
 
   return (
     <div className="space-y-5">
-      <PageTitle title="Notifications" />
+      <PageTitle title={t("notifications.title")} />
       <div className="space-y-4">
         {isLoading ? (
           <div className="flex flex-col space-y-4">
