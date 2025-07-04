@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -49,26 +51,27 @@ const groupedData: Record<string, Request[]> = {
 };
 
 export function RequestHistory() {
+  const { t } = useTranslation();
   return (
     <div className="space-y-6">
       {Object.entries(groupedData).map(([date, requests]) => (
         <div key={date}>
-          <div className="bg-accent px-4 py-2 text-lg font-semibold text-primary">
+          <div className="bg-accent text-primary px-4 py-2 text-lg font-semibold">
             {date}
           </div>
           <ScrollArea>
             {requests.map((req) => (
-              <Card key={req.id} className="border mt-1 py-0">
-                <CardContent className="p-3! flex items-center justify-between">
+              <Card key={req.id} className="mt-1 border py-0">
+                <CardContent className="flex items-center justify-between p-3!">
                   <div>
-                    <p className="text-lg font-bold text-primary">
-                      REQUEST #{req.id}
+                    <p className="text-primary text-lg font-bold">
+                      {t("request")} #{req.id}
                     </p>
                     <p className="text-muted-foreground">
-                      {req.title} - {req.category}
+                      {t(req.title)} - {t(req.category)}
                     </p>
                   </div>
-                  <p className="text-muted-foreground">{req.status}</p>
+                  <p className="text-muted-foreground">{t(req.status)}</p>
                 </CardContent>
               </Card>
             ))}

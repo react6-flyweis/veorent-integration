@@ -1,28 +1,32 @@
-import { Button } from "@/components/ui/button";
-import { LeasingRequestForm } from "./components/LeasingRequestForm";
-import { XIcon } from "lucide-react";
-import { IconRound } from "@/components/IconRound";
-import pullImg from "@/assets/images/pull.png";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
+import { XIcon } from "lucide-react";
+
+import pullImg from "@/assets/images/pull.png";
+import { IconRound } from "@/components/IconRound";
+import { Button } from "@/components/ui/button";
+
+import { LeasingRequestForm } from "./components/LeasingRequestForm";
 
 export default function RequestLeasing() {
+  const { t } = useTranslation();
   return (
     <div>
-      <div className="flex gap-3 items-center">
-        <Button variant="outline" className="rounded-full size-8" asChild>
+      <div className="flex items-center gap-3">
+        <Button variant="outline" className="size-8 rounded-full" asChild>
           <Link to="/leases">
             <XIcon className="size-5!" />
           </Link>
         </Button>
-        <h2 className="text-2xl">Leasing Request</h2>
+        <h2 className="text-2xl">{t("leasingRequestTitle")}</h2>
       </div>
-      <div className="flex items-center gap-2 my-4">
+      <div className="my-4 flex items-center gap-2">
         <IconRound icon={pullImg} size="xs" />
-        <h3 className="text-2xl font-bold">New Request</h3>
+        <h3 className="text-2xl font-bold">{t("newRequestTitle")}</h3>
       </div>
       <div>
         <p className="text-primary text-xl font-semibold">
-          Please provide us with some information about your issue.
+          {t("leasingRequestDesc")}
         </p>
         <LeasingRequestForm />
       </div>

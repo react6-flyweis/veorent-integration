@@ -116,7 +116,7 @@ function Leases() {
                             {req.desc} - {req.category}
                           </p>
                         </div>
-                        <p className="text-muted-foreground">{req.status}</p>
+                        <p className="text-muted-foreground">{t(req.status)}</p>
                       </CardContent>
                     </Card>
                   ))}

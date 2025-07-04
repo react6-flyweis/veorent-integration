@@ -142,18 +142,18 @@ export function LeasingRequestForm() {
           name="priority"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Priority</FormLabel>
+              <FormLabel>{t("priority")}</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Priority..." />
+                    <SelectValue placeholder={t("priorityPlaceholder")} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="Emergency">Emergency</SelectItem>
-                  <SelectItem value="High">High</SelectItem>
-                  <SelectItem value="Medium">Medium</SelectItem>
-                  <SelectItem value="Low">Low</SelectItem>
+                  <SelectItem value="Emergency">{t("emergency")}</SelectItem>
+                  <SelectItem value="High">{t("high")}</SelectItem>
+                  <SelectItem value="Medium">{t("medium")}</SelectItem>
+                  <SelectItem value="Low">{t("low")}</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -167,18 +167,20 @@ export function LeasingRequestForm() {
           name="category"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Category</FormLabel>
+              <FormLabel>{t("category")}</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Category..." />
+                    <SelectValue placeholder={t("categoryPlaceholder")} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="Appliances">Appliances</SelectItem>
-                  <SelectItem value="Electrical">Electrical</SelectItem>
-                  <SelectItem value="Pest Control">Pest Control</SelectItem>
-                  <SelectItem value="Plumbing">Plumbing</SelectItem>
+                  <SelectItem value="Appliances">{t("Appliances")}</SelectItem>
+                  <SelectItem value="Electrical">{t("Electrical")}</SelectItem>
+                  <SelectItem value="Pest Control">
+                    {t("Pest Control")}
+                  </SelectItem>
+                  <SelectItem value="Plumbing">{t("Plumbing")}</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -197,14 +199,15 @@ export function LeasingRequestForm() {
                 <Textarea
                   rows={5}
                   className="h-24"
-                  placeholder="Describe the issue..."
+                  placeholder={t("descriptionPlaceholder")}
                   {...field}
                 />
               </FormControl>
               <FormDescription
                 className={cn(errors.description && "text-destructive")}
               >
-                {field.value.length}/500 characters | 100 minimum
+                {field.value.length}/500 {t("charactersLabel")} | 100{" "}
+                {t("minimumLabel")}
               </FormDescription>
             </FormItem>
           )}
@@ -216,7 +219,7 @@ export function LeasingRequestForm() {
           name="photos"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Add Photos</FormLabel>
+              <FormLabel>{t("addPhotos")}</FormLabel>
               <FormControl>
                 <ImageInput multiple maxFiles={5} {...field} />
               </FormControl>
@@ -230,18 +233,16 @@ export function LeasingRequestForm() {
           <div className="flex size-5 items-center justify-center rounded-full bg-white">
             <MicIcon className="text-primary" />
           </div>
-          <span className="text-base"> Voice Memo</span>
+          <span className="text-base">{t("voiceMemo")}</span>
         </Button>
 
         {/* Additional Info */}
         <div>
           <div className="my-2 flex items-center gap-2">
             <IconRound icon={infoIcon} size="xs" />
-            <h3 className="text-lg font-bold">Additional INFO</h3>
+            <h3 className="text-lg font-bold">{t("additionalInfo")}</h3>
           </div>
-          <p className="text-primary text-lg">
-            Are there animal(s) in the unit?
-          </p>
+          <p className="text-primary text-lg">{t("areThereAnimals")}</p>
           <FormField
             control={form.control}
             name="animals"
@@ -276,15 +277,15 @@ export function LeasingRequestForm() {
               name="animalInstructions"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Animal Details</FormLabel>
+                  <FormLabel>{t("animalDetails")}</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Please provide details about the animals..."
+                      placeholder={t("animalDetailsPlaceholder")}
                       {...field}
                     />
                   </FormControl>
                   <FormDescription>
-                    0/{field.value?.length || 0}/1000 characters
+                    0/{field.value?.length || 0}/1000 {t("charactersLabel")}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
