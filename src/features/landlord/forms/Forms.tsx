@@ -79,24 +79,38 @@ export default function Forms() {
             {t("previewTheFormsPack")}
           </h3>
           <div className="grid grid-cols-1 gap-5">
-            <DownloadableFormCard title="Lease Agreement Addendum" />
-            <DownloadableFormCard title="Co-Signer Agreement" />
-            <DownloadableFormCard title="Pet Addendum" />
-            <DownloadableFormCard title="Security Deposit Closing Statement" />
-            <DownloadableFormCard title="Rent Increase Notice" />
-            <DownloadableFormCard title="Notice to Pay Rent or Quit" />
-            <DownloadableFormCard title="Cleaning Required Notice" />
-            <DownloadableFormCard title="Noise Complaint Letter" />
-            <DownloadableFormCard title="Notice of Returned Check" />
-            <DownloadableFormCard title="Operating Budget Worksheet" />
-            <DownloadableFormCard title="Preventative Maintenance Schedule" />
-            <DownloadableFormCard title="Property Make-Ready Checklist" />
-            <DownloadableFormCard title="Tenant's Notice of Termination" />
-            <DownloadableFormCard title="Tenant Estoppel Certificate" />
-            <DownloadableFormCard title="Property Rules and Regulations" />
-            <DownloadableFormCard title="Trust Account Ledger" />
-            <DownloadableFormCard title="Welcome Letter" />
-            <DownloadableFormCard title="24 Hour Notice to Enter" />
+            <DownloadableFormCard title={t("forms.leaseAgreementAddendum")} />
+            <DownloadableFormCard title={t("forms.coSignerAgreement")} />
+            <DownloadableFormCard title={t("forms.petAddendum")} />
+            <DownloadableFormCard
+              title={t("forms.securityDepositClosingStatement")}
+            />
+            <DownloadableFormCard title={t("forms.rentIncreaseNotice")} />
+            <DownloadableFormCard title={t("forms.noticeToPayRentOrQuit")} />
+            <DownloadableFormCard title={t("forms.cleaningRequiredNotice")} />
+            <DownloadableFormCard title={t("forms.noiseComplaintLetter")} />
+            <DownloadableFormCard title={t("forms.noticeOfReturnedCheck")} />
+            <DownloadableFormCard title={t("forms.operatingBudgetWorksheet")} />
+            <DownloadableFormCard
+              title={t("forms.preventativeMaintenanceSchedule")}
+            />
+            <DownloadableFormCard
+              title={t("forms.propertyMakeReadyChecklist")}
+            />
+            <DownloadableFormCard
+              title={t("forms.tenantsNoticeOfTermination")}
+            />
+            <DownloadableFormCard
+              title={t("forms.tenantEstoppelCertificate")}
+            />
+            <DownloadableFormCard
+              title={t("forms.propertyRulesAndRegulations")}
+            />
+            <DownloadableFormCard title={t("forms.trustAccountLedger")} />
+            <DownloadableFormCard title={t("forms.welcomeLetter")} />
+            <DownloadableFormCard
+              title={t("forms.twentyFourHourNoticeToEnter")}
+            />
           </div>
         </div>
       </div>

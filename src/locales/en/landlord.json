@@ -121,6 +121,26 @@
         "buy": "Buy Subscription",
         "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
     },
+    "forms": {
+        "leaseAgreementAddendum": "Lease Agreement Addendum",
+        "coSignerAgreement": "Co-Signer Agreement",
+        "petAddendum": "Pet Addendum",
+        "securityDepositClosingStatement": "Security Deposit Closing Statement",
+        "rentIncreaseNotice": "Rent Increase Notice",
+        "noticeToPayRentOrQuit": "Notice to Pay Rent or Quit",
+        "cleaningRequiredNotice": "Cleaning Required Notice",
+        "noiseComplaintLetter": "Noise Complaint Letter",
+        "noticeOfReturnedCheck": "Notice of Returned Check",
+        "operatingBudgetWorksheet": "Operating Budget Worksheet",
+        "preventativeMaintenanceSchedule": "Preventative Maintenance Schedule",
+        "propertyMakeReadyChecklist": "Property Make-Ready Checklist",
+        "tenantsNoticeOfTermination": "Tenant's Notice of Termination",
+        "tenantEstoppelCertificate": "Tenant Estoppel Certificate",
+        "propertyRulesAndRegulations": "Property Rules and Regulations",
+        "trustAccountLedger": "Trust Account Ledger",
+        "welcomeLetter": "Welcome Letter",
+        "twentyFourHourNoticeToEnter": "24 Hour Notice to Enter"
+    },
     "payments": {
         "createCharge": "Create Charge",
         "haventCreatedLease": "Haven't created the lease yet?",
