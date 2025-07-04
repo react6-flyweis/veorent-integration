@@ -82,7 +82,7 @@ export default function Messages() {
     <ChatLayout>
       <ChatLayoutHeader className="mb-4">
         <div className="flex items-center justify-between">
-          <PageTitle title={t("message")} className="mb-0 hidden @md:flex" />
+          <PageTitle title={t("messages")} className="mb-0 hidden @md:flex" />
           <Link to="add">
             <CreateButton
               label={
