@@ -1,12 +1,16 @@
+import { useTranslation } from "react-i18next";
+import { Link, Navigate, useParams } from "react-router";
+import { ArrowLeftIcon } from "lucide-react";
+
 import { PageTitle } from "@/components/PageTitle";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 // import brokenPlateImage from "./assets/broken-plate.png";
-import { Link, Navigate, useParams } from "react-router";
-import { Button } from "@/components/ui/button";
-import { ArrowLeftIcon } from "lucide-react";
-import { useGetMaintenanceRequest } from "./api/queries";
+
 import { formatDate } from "@/utils/formatDate";
+
+import { useGetMaintenanceRequest } from "./api/queries";
 // interface MaintenanceDetail {
 //   id: string;
 //   requestedOn: string;
@@ -27,6 +31,7 @@ import { formatDate } from "@/utils/formatDate";
 // };
 
 export function MaintenanceDetails() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const { data: maintenanceDetail, isLoading } = useGetMaintenanceRequest(
     id || "",
@@ -47,12 +52,12 @@ export function MaintenanceDetails() {
             <ArrowLeftIcon className="text-primary size-5" />
           </Button>
         </Link>
-        <PageTitle title="Details" />
+        <PageTitle title={t("maintenance.detailsTitle")} />
       </div>
 
       {isLoading ? (
         <div className="flex items-center justify-center py-20">
-          <p className="text-gray-500">Loading maintenance details...</p>
+          <p className="text-gray-500">{t("maintenance.loadingDetails")}</p>
         </div>
       ) : maintenanceDetail ? (
         <Card className="p-6">
@@ -60,7 +65,7 @@ export function MaintenanceDetails() {
             <div className="grid grid-cols-1 gap-1">
               <div>
                 <span className="text-primary text-lg font-bold">
-                  Requested On:
+                  {t("maintenance.requestedOn")}
                 </span>
                 <span className="ml-1">
                   {formatDate(maintenanceDetail.createdAt, true)}
@@ -69,21 +74,21 @@ export function MaintenanceDetails() {
 
               <div>
                 <span className="text-primary text-lg font-bold">
-                  Preferred Time to Enter:
+                  {t("maintenance.preferredTime")}
                 </span>
                 <span className="ml-1">{maintenanceDetail.timePeriod}</span>
               </div>
 
               <div>
                 <span className="text-primary text-lg font-bold">
-                  Category:
+                  {t("maintenance.category")}
                 </span>
                 <span className="ml-1">{maintenanceDetail.category}</span>
               </div>
 
               <div>
                 <span className="text-primary text-lg font-bold">
-                  Description:
+                  {t("maintenance.description")}
                 </span>
                 <p className="mt-1 text-gray-700">
                   {maintenanceDetail.issueDescription}
@@ -108,7 +113,7 @@ export function MaintenanceDetails() {
         </Card>
       ) : (
         <div className="flex h-64 items-center justify-center">
-          <p className="text-gray-500">No maintenance details found.</p>
+          <p className="text-gray-500">{t("maintenance.noDetailsFound")}</p>
         </div>
       )}
     </div>

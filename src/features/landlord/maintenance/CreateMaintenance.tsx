@@ -25,52 +25,54 @@ import { getErrorMessage } from "@/utils/getErrorMessage";
 import { useCreateMaintenanceRequestMutation } from "./api/mutation";
 import { PropertiesSelector } from "../dashboard/components/PropertiesSelector";
 
-// Define the form schema with Zod
-const formSchema = z.object({
-  property: z.string({
-    required_error: "Property is required",
-  }),
-  lease: z.string().optional(),
-  leaseCategory: z
-    .string({
-      // required_error: "Lease category is required",
-    })
-    .optional(),
-  issueTitle: z
-    .string({
-      required_error: "Issue title is required",
-    })
-    .min(5, {
-      message: "Issue title must be at least 5 characters",
-    })
-    .max(50, {
-      message: "Issue title must be at most 50 characters",
-    }),
-  description: z
-    .string({
-      required_error: "Description is required",
-    })
-    .min(10, {
-      message: "Description must be at least 10 characters",
-    }),
-  preferredTime: z.enum(["anytime", "coordinate"], {
-    required_error: "Please select a preferred time",
-  }),
-  photos: z
-    .array(
-      z.union([
-        z.string(), // for URLs from server
-        z.instanceof(File), // for new uploads
-      ]),
-    )
-    .optional(),
-});
+import type { TFunction } from "i18next";
 
-type FormValues = z.infer<typeof formSchema>;
+// Define the form schema with Zod
+const createFormSchema = (t: TFunction) =>
+  z.object({
+    property: z.string({
+      required_error: t("maintenance.propertyRequired"),
+    }),
+    lease: z.string().optional(),
+    leaseCategory: z
+      .string({
+        // required_error: t("maintenance.leaseCategoryRequired"),
+      })
+      .optional(),
+    issueTitle: z
+      .string({
+        required_error: t("maintenance.issueTitleRequired"),
+      })
+      .min(5, {
+        message: t("maintenance.issueTitleMin"),
+      })
+      .max(50, {
+        message: t("maintenance.issueTitleMax"),
+      }),
+    description: z
+      .string({
+        required_error: t("maintenance.descriptionRequired"),
+      })
+      .min(10, {
+        message: t("maintenance.descriptionMin"),
+      }),
+    preferredTime: z.enum(["anytime", "coordinate"], {
+      required_error: t("maintenance.preferredTimeRequired"),
+    }),
+    photos: z
+      .array(
+        z.union([
+          z.string(), // for URLs from server
+          z.instanceof(File), // for new uploads
+        ]),
+      )
+      .optional(),
+  });
 
 export function CreateMaintenance() {
   const { t } = useTranslation();
-
+  const formSchema = createFormSchema(t);
+  type FormValues = z.infer<typeof formSchema>;
   const navigate = useNavigate();
   const { mutateAsync } = useCreateMaintenanceRequestMutation();
 
@@ -124,8 +126,8 @@ export function CreateMaintenance() {
   return (
     <div className="">
       <PageTitle
-        title="Create Maintenance Request"
-        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and "
+        title={t("maintenance.createRequest")}
+        description={t("maintenance.createRequestDescription")}
         withBack
       />
       <Form {...form}>
@@ -135,7 +137,7 @@ export function CreateMaintenance() {
             name="property"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Property</FormLabel>
+                <FormLabel>{t("maintenance.property")}</FormLabel>
                 <FormControl>
                   <PropertiesSelector {...field} />
                 </FormControl>
@@ -153,11 +155,16 @@ export function CreateMaintenance() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Lease
-                      <span className="text-muted-foreground"> (Optional)</span>
+                      {t("maintenance.lease")}{" "}
+                      <span className="text-muted-foreground">
+                        ({t("optional")})
+                      </span>
                     </FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter lease information" {...field} />
+                      <Input
+                        placeholder={t("maintenance.leasePlaceholder")}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -169,9 +176,12 @@ export function CreateMaintenance() {
                 name="leaseCategory"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Lease Category</FormLabel>
+                    <FormLabel>{t("maintenance.leaseCategory")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter lease category" {...field} />
+                      <Input
+                        placeholder={t("maintenance.leaseCategoryPlaceholder")}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -183,15 +193,15 @@ export function CreateMaintenance() {
                 name="issueTitle"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Issue Title</FormLabel>
+                    <FormLabel>{t("maintenance.issueTitle")}</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="e.g., Leaky Kitchen Faucet"
+                        placeholder={t("maintenance.issueTitlePlaceholder")}
                         {...field}
                       />
                     </FormControl>
                     <FormDescription>
-                      {field.value?.length ?? 0} / 50 characters
+                      {field.value?.length ?? 0} / 50 {t("characters")}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -203,13 +213,13 @@ export function CreateMaintenance() {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("description")}</FormLabel>
+                    <FormLabel>{t("maintenance.description")}</FormLabel>
                     <FormDescription>
-                      Lorem ipsum dolor, sit amet consectetur adipisicing
+                      {t("maintenance.descriptionHelper")}
                     </FormDescription>
                     <FormControl>
                       <Textarea
-                        placeholder="Describe the maintenance issue in detail"
+                        placeholder={t("maintenance.descriptionPlaceholder")}
                         {...field}
                         rows={5}
                       />
@@ -224,7 +234,7 @@ export function CreateMaintenance() {
                 name="preferredTime"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Preferred Time to Enter</FormLabel>
+                    <FormLabel>{t("maintenance.preferredTime")}</FormLabel>
                     <FormControl>
                       <RadioGroup
                         onValueChange={field.onChange}
@@ -235,14 +245,16 @@ export function CreateMaintenance() {
                           <FormControl>
                             <RadioGroupItem value="anytime" />
                           </FormControl>
-                          <FormLabel className="font-normal">Anytime</FormLabel>
+                          <FormLabel className="font-normal">
+                            {t("maintenance.anytime")}
+                          </FormLabel>
                         </FormItem>
                         <FormItem className="flex items-center space-y-0 space-x-3">
                           <FormControl>
                             <RadioGroupItem value="coordinate" />
                           </FormControl>
                           <FormLabel className="font-normal">
-                            Coordinate a Time First
+                            {t("maintenance.coordinate")}
                           </FormLabel>
                         </FormItem>
                       </RadioGroup>
@@ -257,12 +269,12 @@ export function CreateMaintenance() {
                 name="photos"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Photos (Optional)</FormLabel>
+                    <FormLabel>{t("maintenance.photos")}</FormLabel>
                     <FormControl>
                       <ImageInput maxFiles={3} {...field} />
                     </FormControl>
                     <FormDescription>
-                      Upload up to 3 photos of the issue
+                      {t("maintenance.photosHelper")}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -279,7 +291,7 @@ export function CreateMaintenance() {
               size="lg"
               className="w-4/5 @lg:w-3/5"
             >
-              Create Request
+              {t("maintenance.createRequestButton")}
             </LoadingButton>
           </div>
         </form>
