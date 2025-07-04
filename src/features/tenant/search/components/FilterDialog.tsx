@@ -139,18 +139,20 @@ export const FilterDialog = ({
       <DialogTrigger asChild>
         <Button variant="ghost" className="shrink-0">
           <ListFilterIcon className="size-5" />
-          <span className="ml-1 text-lg">{t("filter")}</span>
+          <span className="ml-1 text-lg">{t("filterDialog.filters")}</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[90vh] overflow-hidden p-0 sm:max-w-[425px]">
         <DialogHeader className="border-b p-3">
-          <DialogTitle>Filters</DialogTitle>
+          <DialogTitle>{t("filterDialog.filters")}</DialogTitle>
         </DialogHeader>
         <ScrollArea className="h-[66vh] pr-3">
           <div className="space-y-6 p-3">
             {/* Type of place */}
             <div className="space-y-3">
-              <h3 className="text-base font-medium">Type of place</h3>
+              <h3 className="text-base font-medium">
+                {t("filterDialog.typeOfPlace")}
+              </h3>
               <div className="flex w-full rounded-lg border border-gray-300 p-1">
                 <Button
                   variant={
@@ -161,7 +163,7 @@ export const FilterDialog = ({
                   }`}
                   onClick={() => handlePlaceTypeChange("any")}
                 >
-                  Any type
+                  {t("filterDialog.anyType")}
                 </Button>
                 <Button
                   variant={
@@ -172,7 +174,7 @@ export const FilterDialog = ({
                   }`}
                   onClick={() => handlePlaceTypeChange("room")}
                 >
-                  Room
+                  {t("filterDialog.room")}
                 </Button>
                 <Button
                   variant={
@@ -185,7 +187,7 @@ export const FilterDialog = ({
                   }`}
                   onClick={() => handlePlaceTypeChange("entire")}
                 >
-                  Entire home
+                  {t("filterDialog.entireHome")}
                 </Button>
               </div>
             </div>
@@ -241,7 +243,7 @@ export const FilterDialog = ({
             <Accordion type="single" collapsible defaultValue="property-type">
               <AccordionItem value="property-type">
                 <AccordionTrigger className="text-base font-medium">
-                  Property type
+                  {t("filterDialog.propertyType")}
                 </AccordionTrigger>
                 <AccordionContent>
                   <PropertyTypeFilter
@@ -256,7 +258,7 @@ export const FilterDialog = ({
             <Accordion type="single" collapsible>
               <AccordionItem value="accessibility">
                 <AccordionTrigger className="text-base font-medium">
-                  Accessibility features
+                  {t("filterDialog.accessibilityFeatures")}
                 </AccordionTrigger>
                 <AccordionContent>
                   <AccessibilityFilter
@@ -276,10 +278,10 @@ export const FilterDialog = ({
             onClick={handleClearFilters}
             className="flex-1"
           >
-            Clear all
+            {t("filterDialog.clearAll")}
           </Button>
           <Button onClick={handleApplyFilters} className="flex-1">
-            Apply filters
+            {t("filterDialog.applyFilters")}
           </Button>
         </DialogFooter>
       </DialogContent>

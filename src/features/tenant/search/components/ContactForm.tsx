@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 import { z } from "zod";
 
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormField,
@@ -13,20 +13,24 @@ import {
   FormControl,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { Textarea } from "@/components/ui/textarea";
 
-const contactFormSchema = z.object({
-  firstName: z.string().min(2, "First name is required"),
-  lastName: z.string().min(2, "Last name is required"),
-  phone: z.string().min(10, "Phone number is required"),
-  email: z.string().email("Enter a valid email"),
-  message: z.string().min(10, "Message should be at least 10 characters"),
-});
+const getContactFormSchema = (t: (key: string) => string) =>
+  z.object({
+    firstName: z.string().min(2, t("firstNameRequired")),
+    lastName: z.string().min(2, t("lastNameRequired")),
+    phone: z.string().min(10, t("phoneMin")),
+    email: z.string().email(t("invalidEmail")),
+    message: z.string().min(10, t("contactForm.validation.messageMinLength")),
+  });
 
-type ContactFormValues = z.infer<typeof contactFormSchema>;
+type ContactFormValues = z.infer<ReturnType<typeof getContactFormSchema>>;
 
 export function ContactForm() {
   const { t } = useTranslation();
+
+  const contactFormSchema = getContactFormSchema(t);
 
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
@@ -42,6 +46,10 @@ export function ContactForm() {
   function onSubmit(values: ContactFormValues) {
     console.log("Form submitted", values);
     // You can integrate email/send logic here or pass data to an API
+    setTimeout(() => {
+      toast.success(t("contactForm.success"));
+      form.reset();
+    }, 1000);
   }
 
   return (
@@ -52,7 +60,9 @@ export function ContactForm() {
           name="firstName"
           render={({ field }) => (
             <FormItem className="gap-1">
-              <FormLabel className="text-base">{t("firstName")}</FormLabel>
+              <FormLabel className="text-base">
+                {t("profileForm.firstName")}
+              </FormLabel>
               <FormControl>
                 <Input className="bg-white" {...field} />
               </FormControl>
@@ -65,7 +75,9 @@ export function ContactForm() {
           name="lastName"
           render={({ field }) => (
             <FormItem className="gap-1">
-              <FormLabel className="text-base">{t("lastName")}</FormLabel>
+              <FormLabel className="text-base">
+                {t("profileForm.lastName")}
+              </FormLabel>
               <FormControl>
                 <Input className="bg-white" {...field} />
               </FormControl>
@@ -78,7 +90,9 @@ export function ContactForm() {
           name="phone"
           render={({ field }) => (
             <FormItem className="gap-1">
-              <FormLabel className="text-base">{t("phoneNumber")}</FormLabel>
+              <FormLabel className="text-base">
+                {t("profileForm.mobileNumber")}
+              </FormLabel>
               <FormControl>
                 <Input className="bg-white" type="tel" {...field} />
               </FormControl>
@@ -91,7 +105,9 @@ export function ContactForm() {
           name="email"
           render={({ field }) => (
             <FormItem className="gap-1">
-              <FormLabel className="text-base">{t("email")}</FormLabel>
+              <FormLabel className="text-base">
+                {t("profileForm.email")}
+              </FormLabel>
               <FormControl>
                 <Input className="bg-white" type="email" {...field} />
               </FormControl>
@@ -104,18 +120,30 @@ export function ContactForm() {
           name="message"
           render={({ field }) => (
             <FormItem className="gap-1">
-              <FormLabel className="text-base">Message</FormLabel>
+              <FormLabel className="text-base">
+                {t("contactForm.writeYourMessage")}
+              </FormLabel>
               <FormControl>
-                <Textarea className="bg-white" rows={4} {...field} />
+                <Textarea
+                  className="bg-white"
+                  rows={4}
+                  {...field}
+                  placeholder={t("contactForm.writeHere")}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
         <div className="flex justify-center">
-          <Button type="submit" size="sm" className="rounded-full">
-            Send Message
-          </Button>
+          <LoadingButton
+            type="submit"
+            size="sm"
+            className="w-full rounded-full"
+            isLoading={form.formState.isSubmitting}
+          >
+            {t("contactForm.send")}
+          </LoadingButton>
         </div>
       </form>
     </Form>

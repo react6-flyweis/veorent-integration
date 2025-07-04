@@ -104,6 +104,12 @@ export default function ApplyListing() {
     }
   };
 
+  const coords = data?.currentLocation?.coordinates;
+  const mapUrl =
+    Array.isArray(coords) && coords.length === 2
+      ? `https://www.google.com/maps?q=${coords[1]},${coords[0]}`
+      : "#";
+
   return (
     <div className="space-y-5">
       <div className="flex justify-between">
@@ -159,7 +165,7 @@ export default function ApplyListing() {
                         >
                           <GalleryHorizontalEndIcon className="rotate-180" />
                           <span className="font-semibold">
-                            {data?.image?.length || 0} photos
+                            {data?.image?.length || 0} {t("listing.photos")}
                           </span>
                         </Button>
                       )}
@@ -167,18 +173,23 @@ export default function ApplyListing() {
 
                     <div>
                       <h2 className="text-xl font-semibold">
-                        {data?.name || "Property Name"}
+                        {data?.name || t("listing.propertyNamePlaceholder")}
                       </h2>
                       <div className="flex gap-1">
                         <a
-                          href="#"
+                          href={mapUrl}
                           className="text-lg tracking-wide text-blue-600"
                         >
                           {data?.addressDetails?.streetAddress ||
-                            "Street Address"}
-                          , {data?.addressDetails?.city || "City"},{" "}
-                          {data?.addressDetails?.region || "Region"}{" "}
-                          {data?.addressDetails?.zipCode || "Zip"}
+                            t("listing.streetAddressPlaceholder")}
+                          ,{" "}
+                          {data?.addressDetails?.city ||
+                            t("listing.cityPlaceholder")}
+                          ,{" "}
+                          {data?.addressDetails?.region ||
+                            t("listing.regionPlaceholder")}{" "}
+                          {data?.addressDetails?.zipCode ||
+                            t("listing.zipCodePlaceholder")}
                         </a>
                         <MapIcon className="text-blue-600" />
                       </div>
@@ -187,40 +198,47 @@ export default function ApplyListing() {
                           <BedDoubleIcon className="size-7" />
                           <span>
                             {" "}
-                            {data?.rentalDetails?.beds || "N/A"} Beds
+                            {data?.rentalDetails?.beds ||
+                              t("listingCard.na")}{" "}
+                            {t("listing.beds")}
                           </span>
                         </div>
                         <div className="flex flex-col items-center gap-1">
                           <BathIcon className="size-7" />
                           <span>
                             {" "}
-                            {data?.rentalDetails?.baths || "N/A"} Baths
+                            {data?.rentalDetails?.baths ||
+                              t("listingCard.na")}{" "}
+                            {t("listing.baths")}
                           </span>
                         </div>
                         <div className="flex flex-col items-center gap-1">
                           <HomeIcon className="size-7" />
                           <span>
-                            {data?.propertyTypeId?.name || "Property Type"}
+                            {data?.propertyTypeId?.name ||
+                              t("listing.propertyTypePlaceholder")}
                           </span>
                         </div>
                         <div className="flex flex-col items-center gap-1">
                           <CalendarIcon className="size-7" />
                           <span>
-                            Available{" "}
+                            {t("listing.available")}{" "}
                             {data?.leasingBasics?.Date
                               ? formatDate(data.leasingBasics.Date)
-                              : "TBD"}
+                              : t("listing.tbd")}
                           </span>
                         </div>
                       </div>
                     </div>
 
                     <div className="">
-                      <span className="font-semibold uppercase">Landlord:</span>
+                      <span className="font-semibold uppercase">
+                        {t("listingCard.landlord")}
+                      </span>
                       <span className="">
                         {data?.owner?.firstname && data?.owner?.lastname
                           ? ` ${data.owner.firstname} ${data.owner.lastname}`
-                          : " Property Owner"}
+                          : ` ${t("listing.propertyOwnerPlaceholder")}`}
                       </span>
                     </div>
                   </>
@@ -297,9 +315,14 @@ export default function ApplyListing() {
                       name="firstName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("firstName")}</FormLabel>
+                          <FormLabel>{t("profileForm.firstName")}</FormLabel>
                           <FormControl>
-                            <Input placeholder="John" {...field} />
+                            <Input
+                              placeholder={t(
+                                "applyListing.placeholders.firstName",
+                              )}
+                              {...field}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -311,9 +334,14 @@ export default function ApplyListing() {
                       name="lastName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("lastName")}</FormLabel>
+                          <FormLabel>{t("profileForm.lastName")}</FormLabel>
                           <FormControl>
-                            <Input placeholder="Doe" {...field} />
+                            <Input
+                              placeholder={t(
+                                "applyListing.placeholders.lastName",
+                              )}
+                              {...field}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -328,11 +356,11 @@ export default function ApplyListing() {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("email")}</FormLabel>
+                          <FormLabel>{t("profileForm.email")}</FormLabel>
                           <FormControl>
                             <Input
                               type="email"
-                              placeholder="you@example.com"
+                              placeholder={t("applyListing.placeholders.email")}
                               {...field}
                             />
                           </FormControl>
@@ -346,11 +374,11 @@ export default function ApplyListing() {
                       name="phone"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("phoneNumber")}</FormLabel>
+                          <FormLabel>{t("profileForm.mobileNumber")}</FormLabel>
                           <FormControl>
                             <Input
                               type="tel"
-                              placeholder="123-456-7890"
+                              placeholder={t("applyListing.placeholders.phone")}
                               {...field}
                             />
                           </FormControl>
@@ -366,7 +394,7 @@ export default function ApplyListing() {
                     name="dob"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel>{t("dateOfBirth")}</FormLabel>
+                        <FormLabel>{t("applyListing.dobLabel")}</FormLabel>
                         <DateInput isDob {...field} />
                         <FormMessage />
                       </FormItem>
@@ -384,7 +412,7 @@ export default function ApplyListing() {
                 className="w-3/5"
                 isLoading={form.formState.isSubmitting}
               >
-                {t("next")}
+                {t("saveAndNext")}
               </LoadingButton>
             </div>
           </form>

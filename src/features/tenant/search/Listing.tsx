@@ -246,6 +246,12 @@ export default function PropertyListingDetail() {
     );
   }
 
+  const coords = data?.currentLocation?.coordinates;
+  const mapUrl =
+    Array.isArray(coords) && coords.length === 2
+      ? `https://www.google.com/maps?q=${coords[1]},${coords[0]}`
+      : "#";
+
   return (
     <div className="space-y-5">
       <div className="flex justify-between">
@@ -275,7 +281,7 @@ export default function PropertyListingDetail() {
               >
                 <GalleryHorizontalEndIcon className="rotate-180" />
                 <span className="font-semibold">
-                  {data?.image?.length || 0} photos
+                  {data?.image?.length || 0} {t("listing.photos")}
                 </span>
               </Button>
             )}
@@ -284,21 +290,31 @@ export default function PropertyListingDetail() {
           <div>
             <h2 className="text-xl font-semibold">{data?.name}</h2>
             <div className="flex gap-1">
-              <a href="#" className="text-lg tracking-wide text-blue-600">
+              <a
+                href={mapUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-lg tracking-wide text-blue-600"
+              >
                 {data?.addressDetails?.streetAddress},{" "}
                 {data?.addressDetails?.city}, {data?.addressDetails?.region}{" "}
                 {data?.addressDetails?.zipCode}
               </a>
+
               <MapIcon className="text-blue-600" />
             </div>
             <div className="mt-2 flex w-full items-end justify-around text-gray-700">
               <div className="flex flex-col items-center gap-1">
                 <BedDoubleIcon className="size-7" />
-                <span> {data?.rentalDetails?.beds} Beds</span>
+                <span>
+                  {data?.rentalDetails?.beds} {t("listing.beds")}
+                </span>
               </div>
               <div className="flex flex-col items-center gap-1">
                 <BathIcon className="size-7" />
-                <span> {data?.rentalDetails?.baths} Baths</span>
+                <span>
+                  {data?.rentalDetails?.baths} {t("listing.baths")}
+                </span>
               </div>
               <div className="flex flex-col items-center gap-1">
                 <HomeIcon className="size-7" />
@@ -306,26 +322,34 @@ export default function PropertyListingDetail() {
               </div>
               <div className="flex flex-col items-center gap-1">
                 <HammerIcon className="size-7" />
-                <span>Built in {data?.propertySize?.yearBuilt}</span>
+                <span>
+                  {t("listing.builtIn")} {data?.propertySize?.yearBuilt}
+                </span>
               </div>
             </div>
           </div>
 
           {/* Description */}
           <div>
-            <h3 className="text-xl font-semibold">{t("description")}</h3>
+            <h3 className="text-xl font-semibold">
+              {t("listing.description")}
+            </h3>
             <p className="text-muted-foreground mt-2">{data?.description}</p>
           </div>
 
           {/* Features */}
           <div>
-            <h3 className="mt-4 text-xl font-semibold">{t("features")}</h3>
+            <h3 className="mt-4 text-xl font-semibold">
+              {t("listing.features")}
+            </h3>
             <div className="mt-2 flex flex-wrap gap-5">
               <span
                 className={`flex items-center gap-1 ${data?.permission?.pets ? "text-green-600" : "text-red-600"}`}
               >
                 <PawPrintIcon className="size-5" />
-                {data?.permission?.pets ? t("petsAllowed") : t("noPetsAllowed")}
+                {data?.permission?.pets
+                  ? t("listing.petsAllowed")
+                  : t("listing.noPetsAllowed")}
               </span>
               <span
                 className={`flex items-center gap-1 ${
@@ -336,20 +360,24 @@ export default function PropertyListingDetail() {
               >
                 <CigaretteIcon className="size-5" />
                 {data?.permission?.smoking === "Yes"
-                  ? t("smokingAllowed")
-                  : t("smokingOutsideOnly")}
+                  ? t("listing.smokingAllowed")
+                  : t("listing.smokingOutsideOnly")}
               </span>
             </div>
           </div>
 
           {/* Utilities */}
-          {renderSection("utilitiesIncluded", utilityMap, data?.amenities)}
+          {renderSection(
+            "listing.utilitiesIncluded",
+            utilityMap,
+            data?.amenities,
+          )}
 
           {/* Amenities */}
-          {renderSection("amenities", amenityMap, data?.amenities)}
+          {renderSection("listing.amenities", amenityMap, data?.amenities)}
 
           {/* Appliances */}
-          {renderSection("appliances", applianceMap, data?.amenities)}
+          {renderSection("listing.appliances", applianceMap, data?.amenities)}
         </div>
 
         {/* Right: Sidebar */}
@@ -357,20 +385,24 @@ export default function PropertyListingDetail() {
           <Card className="gap-2 rounded bg-gray-50 p-3 shadow-none">
             <CardHeader className="px-1">
               <div className="flex items-center justify-between">
-                <span className="text-muted-foreground text-xl">Rent</span>
+                <span className="text-muted-foreground text-xl">
+                  {t("listing.rent")}
+                </span>
                 <div className="flex items-center gap-1">
                   <CurrencyIcon size="sm" />
                   <span className="text-2xl font-bold">
                     {data?.rentalDetails?.targetRent}
                   </span>
-                  <span className="">/MO</span>
+                  <span className="">{t("listing.perMonth")}</span>
                 </div>
               </div>
             </CardHeader>
             <CardContent className="px-1">
               <div className="space-y-1">
                 <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Deposit</span>
+                  <span className="text-muted-foreground">
+                    {t("listing.deposit")}
+                  </span>
                   <div className="flex items-center gap-1">
                     <CurrencyIcon size="sm" />
                     {data?.rentalDetails?.targetDeposite}
@@ -378,14 +410,16 @@ export default function PropertyListingDetail() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-muted-foreground">
-                    {t("available")}
+                    {t("listing.available")}
                   </span>
                   <span className="">
                     {formatDate(data?.leasingBasics?.Date || "")}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Lease Terms</span>
+                  <span className="text-muted-foreground">
+                    {t("listing.leaseTerms")}
+                  </span>
                   <span className="">
                     {data?.leasingBasics?.desiredLeaseTerm}
                   </span>
@@ -394,7 +428,9 @@ export default function PropertyListingDetail() {
             </CardContent>
             <CardFooter className="flex justify-center">
               <Button size="sm" className="rounded-full">
-                <Link to={`/tenant/listing/${id}/apply`}>{t("applyNow")}</Link>
+                <Link to={`/tenant/listing/${id}/apply`}>
+                  {t("listing.applyNow")}
+                </Link>
               </Button>
             </CardFooter>
           </Card>
@@ -404,9 +440,9 @@ export default function PropertyListingDetail() {
             <CardContent className="space-y-3 px-3">
               <div className="space-y-1">
                 <h3 className="text-xl font-semibold">
-                  {t("contactLandlord")}
+                  {t("listing.contactLandlord")}
                 </h3>
-                <p>{t("contactLandlordDesc")}</p>
+                <p>{t("listing.contactLandlordDesc")}</p>
               </div>
               <ContactForm />
             </CardContent>
