@@ -110,5 +110,15 @@
         "invalidFile": "Please select a valid image file",
         "fileSize": "File size must be less than 5MB",
         "success": "Company logo updated successfully!"
+    },
+    "subscription": {
+        "loading": "Loading subscription plans...",
+        "noPlans": "No subscription plans available.",
+        "premiumPlan": "Premium Plan",
+        "learnMore": "Learn More",
+        "getNow": "Get Now",
+        "detailsTitle": "Subscription Details",
+        "buy": "Buy Subscription",
+        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
     }
 }

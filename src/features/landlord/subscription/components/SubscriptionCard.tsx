@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,14 +11,15 @@ import {
 import premiumImage from "../assets/premium.png";
 
 export function SubscriptionCard({ plan }: { plan: ISubscription }) {
+  const { t } = useTranslation();
   return (
     <Card className="relative flex h-full flex-col gap-2 py-3 shadow-xl">
       {plan.name.toLowerCase().includes("premium") && (
         <img
           src={premiumImage}
-          alt="Premium Plan"
+          alt={t("subscription.premiumPlan")}
           className="absolute top-0 right-2 max-h-12 max-w-12"
-          title="Premium Plan"
+          title={t("subscription.premiumPlan")}
         />
       )}
       <CardHeader>
@@ -42,11 +45,13 @@ export function SubscriptionCard({ plan }: { plan: ISubscription }) {
           ))}
         </ul>
         <p className="mt-4 cursor-pointer text-sm text-blue-500 hover:underline">
-          Learn More
+          {t("subscription.learnMore")}
         </p>
       </CardContent>
       <CardFooter>
-        <Button className="w-full rounded-full">Get Now</Button>
+        <Button className="w-full rounded-full">
+          {t("subscription.getNow")}
+        </Button>
       </CardFooter>
     </Card>
   );

@@ -1,12 +1,14 @@
-import { Button } from "@/components/ui/button";
-import { CurrencyIcon } from "@/components/CurrencyIcon";
+import { useTranslation } from "react-i18next";
+import { Navigate, useParams } from "react-router";
 
-import subscriptionDetailsIcon from "./assets/subscription-details.png";
 import { BackButton } from "@/components/BackButton";
+import { CurrencyIcon } from "@/components/CurrencyIcon";
+import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { PaymentModeDialog } from "@/features/shared/payments/components/PaymentModeDialog";
-import { Navigate, useParams } from "react-router";
+
 import { useGetSubscriptionPlanQuery } from "./api/queries";
+import subscriptionDetailsIcon from "./assets/subscription-details.png";
 
 // const subscriptionPlan = {
 //   title: "Veorent Standard",
@@ -24,6 +26,7 @@ import { useGetSubscriptionPlanQuery } from "./api/queries";
 // };
 
 export default function SubscriptionDetails() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const { data: subscriptionPlan, isLoading } = useGetSubscriptionPlanQuery(
     id || "",
@@ -43,19 +46,14 @@ export default function SubscriptionDetails() {
         <div className="flex items-center gap-2">
           <img
             src={subscriptionDetailsIcon}
-            alt="Subscription Details"
+            alt={t("subscription.detailsTitle")}
             className="max-h-9 max-w-9"
           />
           <h1 className="text-2xl font-bold">{subscriptionPlan.name}</h1>
         </div>
 
         {/* <p className="text-gray-600">{subscriptionPlan.description}</p> */}
-        <p className="text-gray-600">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Architecto,
-          quo consequuntur alias culpa voluptatibus accusamus dolore
-          reprehenderit ex autem asperiores debitis magni voluptas nesciunt
-          laudantium quibusdam impedit quis, hic atque.
-        </p>
+        <p className="text-gray-600">{t("subscription.description")}</p>
 
         <div className="rounded-lg border p-2 shadow">
           <div className="flex items-baseline gap-1">
@@ -80,7 +78,7 @@ export default function SubscriptionDetails() {
           <Dialog>
             <DialogTrigger asChild>
               <Button className="w-3/5" size="lg">
-                Buy Subscription
+                {t("subscription.buy")}
               </Button>
             </DialogTrigger>
             <DialogContent>

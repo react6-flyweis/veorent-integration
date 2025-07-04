@@ -58,7 +58,7 @@ export default function Subscription() {
         {isLoading ? (
           <div className="col-span-1 @md:col-span-2 @xl:col-span-3">
             <p className="text-muted-foreground text-center">
-              Loading subscription plans...
+              {t("subscription.loading")}
             </p>
           </div>
         ) : subscriptionPlans?.length ? (
@@ -70,7 +70,7 @@ export default function Subscription() {
         ) : (
           <div className="col-span-1 @md:col-span-2 @xl:col-span-3">
             <p className="text-muted-foreground text-center">
-              No subscription plans available.
+              {t("subscription.noPlans")}
             </p>
           </div>
         )}
