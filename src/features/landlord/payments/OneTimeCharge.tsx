@@ -100,18 +100,19 @@ export default function OneTimeCharge() {
             <MultiStepperHeader>
               <div className="flex items-center gap-5 border-b-3 border-gray-700 pb-3">
                 <MultiStepperBackButton routeBack={goBack} />
-                <PageTitle title="One-Time Charge" className="mb-0" />
+                <PageTitle
+                  title={t("payments.oneTimeCharge")}
+                  className="mb-0"
+                />
               </div>
             </MultiStepperHeader>
 
             <MultiStepperStep onValidate={() => form.trigger()}>
               <div className="space-y-6">
                 <section>
-                  <h2 className="mb-4 text-lg font-semibold">Details</h2>
+                  <h2 className="mb-4 text-lg font-semibold">{t("details")}</h2>
                   <p className="mb-4 text-gray-600">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s.
+                    {t("payments.oneTimeDetails")}
                   </p>
 
                   <div className="space-y-4">
@@ -120,23 +121,29 @@ export default function OneTimeCharge() {
                       name="category"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Category</FormLabel>
+                          <FormLabel>{t("category")}</FormLabel>
                           <Select
                             onValueChange={field.onChange}
                             defaultValue={field.value}
                           >
                             <FormControl>
                               <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Select a category..." />
+                                <SelectValue
+                                  placeholder={t("selectCategory")}
+                                />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
                               <SelectGroup>
-                                <SelectItem value="Rent">Rent</SelectItem>
-                                <SelectItem value="Utilities">
-                                  Utilities
+                                <SelectItem value="Rent">
+                                  {t("rent")}
                                 </SelectItem>
-                                <SelectItem value="Other">Other</SelectItem>
+                                <SelectItem value="Utilities">
+                                  {t("utilities")}
+                                </SelectItem>
+                                <SelectItem value="Other">
+                                  {t("other")}
+                                </SelectItem>
                               </SelectGroup>
                             </SelectContent>
                           </Select>
@@ -150,10 +157,10 @@ export default function OneTimeCharge() {
                       name="description"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Description (Optional)</FormLabel>
+                          <FormLabel>{t("descriptionOptional")}</FormLabel>
                           <FormControl>
                             <Textarea
-                              placeholder="Enter description..."
+                              placeholder={t("enterDescription")}
                               className="resize-none"
                               {...field}
                             />
@@ -169,7 +176,9 @@ export default function OneTimeCharge() {
                 </section>
 
                 <section>
-                  <h2 className="mb-4 text-lg font-semibold">Charge Info</h2>
+                  <h2 className="mb-4 text-lg font-semibold">
+                    {t("chargeInfo")}
+                  </h2>
 
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <FormField
@@ -188,7 +197,7 @@ export default function OneTimeCharge() {
                               <Input
                                 type="number"
                                 className="pl-8"
-                                placeholder="0.00"
+                                placeholder={t("zeroAmount")}
                                 {...field}
                               />
                             </div>
@@ -217,35 +226,41 @@ export default function OneTimeCharge() {
                   </div>
 
                   <p className="my-4 text-gray-600">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s.
+                    {t("payments.oneTimeInfo")}
                   </p>
                 </section>
 
                 <section>
-                  <h2 className="mb-4 text-lg font-semibold">Bank Account</h2>
+                  <h2 className="mb-4 text-lg font-semibold">
+                    {t("bankAccount")}
+                  </h2>
                   <FormField
                     control={form.control}
                     name="bankAccount"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Choose your bank account</FormLabel>
+                        <FormLabel>{t("chooseBankAccount")}</FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
                           <FormControl>
                             <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Choose your bank account..." />
+                              <SelectValue
+                                placeholder={t("chooseBankAccountPlaceholder")}
+                              />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
                             <SelectItem value="standard">
-                              Standard Bank Group
+                              {t("standardBankGroup")}
                             </SelectItem>
-                            <SelectItem value="firstrand">FirstRand</SelectItem>
-                            <SelectItem value="absa">Absa Group</SelectItem>
+                            <SelectItem value="firstrand">
+                              {t("firstRand")}
+                            </SelectItem>
+                            <SelectItem value="absa">
+                              {t("absaGroup")}
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -254,43 +269,26 @@ export default function OneTimeCharge() {
                   />
                 </section>
                 <div className="text-primary mt-5 rounded-sm bg-blue-200 p-4 text-sm">
-                  <p>
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s, when an unknown
-                    printer took a galley of type and scrambled it to make a
-                    type specimen book.
-                  </p>
+                  <p>{t("payments.oneTimeDisclaimer")}</p>
                 </div>
               </div>
             </MultiStepperStep>
 
             <MultiStepperStep>
               <section>
-                <h3 className="text-xl font-semibold">Rent</h3>
-                <p className="text-gray-600">Due monthly on the 1st</p>
+                <h3 className="text-xl font-semibold">{t("rent")}</h3>
+                <p className="text-gray-600">{t("dueMonthlyOnFirst")}</p>
 
                 <div className="mt-4 space-y-3">
-                  <h4 className="text-xl font-semibold">Charge Info</h4>
+                  <h4 className="text-xl font-semibold">{t("chargeInfo")}</h4>
                   <p className="mt-2 text-gray-600">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s, when an unknown
-                    printer took a galley of type and scrambled it to make a
-                    type specimen book. It has survived not only five centuries,
-                    but also the leap into electronic typesetting, remaining
-                    essentially unchanged. It was popularised in the 1960s.
+                    {t("payments.oneTimeChargeInfo1")}
                   </p>
                   <p className="text-gray-600">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Explicabo officiis dolores aperiam sint laborum impedit
-                    dignissimos dolore nobis voluptate, dolorum voluptas nostrum
-                    iusto, quas quos quod praesentium neque dicta. Explicabo.
+                    {t("payments.oneTimeChargeInfo2")}
                   </p>
                   <p className="text-gray-600">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Magni quod ducimus est dolorum temporibus nemo tempore
-                    molestiae, esse ut eligendi.
+                    {t("payments.oneTimeChargeInfo3")}
                   </p>
                 </div>
                 <FormErrors errors={form.formState.errors} />
@@ -299,7 +297,7 @@ export default function OneTimeCharge() {
 
             <MultiStepperButton>
               <Button type="submit" size="lg" className="w-3/5">
-                Create Monthly Charge
+                {t("payments.createOneTimeCharge")}
               </Button>
             </MultiStepperButton>
           </MultiStepper>

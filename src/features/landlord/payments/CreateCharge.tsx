@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import { X } from "lucide-react";
 
@@ -13,6 +14,7 @@ import paydayIcon from "./assets/payday.png";
 import { LeaseSelector } from "./components/LeaseSelector";
 
 const CreateCharge: React.FC = () => {
+  const { t } = useTranslation();
   const goBack = useGoBack();
 
   const [lease, setLease] = useState<string | null>(null);
@@ -28,40 +30,39 @@ const CreateCharge: React.FC = () => {
         >
           <X className="h-5 w-5" />
         </Button>
-        <h1 className="text-2xl font-bold">Create Charge</h1>
+        <h1 className="text-2xl font-bold">{t("payments.createCharge")}</h1>
       </div>
 
       <div className="space-y-6">
         <div>
           <LeaseSelector value={lease || ""} onChange={setLease} />
-          <p className="mt-2 underline">Haven't created the lease yet?</p>
+          <p className="mt-2 underline">{t("payments.haventCreatedLease")}</p>
         </div>
 
         <div>
-          <h2 className="mb-4 text-lg font-medium">What type of Charge?</h2>
+          <h2 className="mb-4 text-lg font-medium">
+            {t("payments.typeOfCharge")}
+          </h2>
           <div className="grid grid-cols-1 gap-4 @lg:grid-cols-2 @2xl:grid-cols-3">
             {[
               {
                 type: "monthly",
-                title: "Monthly Charge",
-                description:
-                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's",
+                title: t("payments.monthlyCharge"),
+                description: t("payments.monthlyChargeDescription"),
                 icon: monthlyChargeIcon,
                 path: "/landlord/payments/monthly-charge",
               },
               {
                 type: "daily",
-                title: "Daily Charge",
-                description:
-                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's",
+                title: t("payments.dailyCharge"),
+                description: t("payments.dailyChargeDescription"),
                 icon: dailyChargeIcon,
                 path: "/landlord/payments/daily-charge",
               },
               {
                 type: "one-time",
-                title: "One-Time Charge",
-                description:
-                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's",
+                title: t("payments.oneTimeCharge"),
+                description: t("payments.oneTimeChargeDescription"),
                 icon: paydayIcon,
                 path: "/landlord/payments/one-time-charge",
               },

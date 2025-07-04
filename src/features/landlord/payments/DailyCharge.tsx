@@ -103,18 +103,16 @@ const DailyCharge: React.FC = () => {
             <MultiStepperHeader>
               <div className="flex items-center gap-5 border-b-3 border-gray-700 pb-3">
                 <MultiStepperBackButton routeBack={goBack} />
-                <PageTitle title="Daily Charge" className="mb-0" />
+                <PageTitle title={t("payments.dailyCharge")} className="mb-0" />
               </div>
             </MultiStepperHeader>
 
             <MultiStepperStep onValidate={() => form.trigger()}>
               <div className="space-y-6">
                 <section>
-                  <h2 className="mb-4 text-lg font-semibold">Details</h2>
+                  <h2 className="mb-4 text-lg font-semibold">{t("details")}</h2>
                   <p className="mb-4 text-gray-600">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s.
+                    {t("payments.dailyDetails")}
                   </p>
 
                   <div className="space-y-4">
@@ -123,23 +121,29 @@ const DailyCharge: React.FC = () => {
                       name="category"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Category</FormLabel>
+                          <FormLabel>{t("category")}</FormLabel>
                           <Select
                             onValueChange={field.onChange}
                             defaultValue={field.value}
                           >
                             <FormControl>
                               <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Select a category..." />
+                                <SelectValue
+                                  placeholder={t("selectCategory")}
+                                />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
                               <SelectGroup>
-                                <SelectItem value="Rent">Rent</SelectItem>
-                                <SelectItem value="Utilities">
-                                  Utilities
+                                <SelectItem value="Rent">
+                                  {t("rent")}
                                 </SelectItem>
-                                <SelectItem value="Other">Other</SelectItem>
+                                <SelectItem value="Utilities">
+                                  {t("utilities")}
+                                </SelectItem>
+                                <SelectItem value="Other">
+                                  {t("other")}
+                                </SelectItem>
                               </SelectGroup>
                             </SelectContent>
                           </Select>
@@ -153,10 +157,10 @@ const DailyCharge: React.FC = () => {
                       name="description"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Description (Optional)</FormLabel>
+                          <FormLabel>{t("descriptionOptional")}</FormLabel>
                           <FormControl>
                             <Textarea
-                              placeholder="Enter description..."
+                              placeholder={t("enterDescription")}
                               className="resize-none"
                               {...field}
                             />
@@ -172,7 +176,9 @@ const DailyCharge: React.FC = () => {
                 </section>
 
                 <section>
-                  <h2 className="mb-4 text-lg font-semibold">Charge Info</h2>
+                  <h2 className="mb-4 text-lg font-semibold">
+                    {t("chargeInfo")}
+                  </h2>
 
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <FormField
@@ -180,7 +186,7 @@ const DailyCharge: React.FC = () => {
                       name="amount"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Daily Amount</FormLabel>
+                          <FormLabel>{t("payments.dailyAmount")}</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
@@ -191,7 +197,7 @@ const DailyCharge: React.FC = () => {
                               <Input
                                 type="number"
                                 className="pl-8"
-                                placeholder="0.00"
+                                placeholder={t("zeroAmount")}
                                 {...field}
                               />
                             </div>
@@ -220,9 +226,7 @@ const DailyCharge: React.FC = () => {
                   </div>
 
                   <p className="my-4 text-gray-600">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s.
+                    {t("payments.dailyInfo")}
                   </p>
 
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -231,16 +235,16 @@ const DailyCharge: React.FC = () => {
                       name="maxDays"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Maximum Days (Optional)</FormLabel>
+                          <FormLabel>{t("maxDaysOptional")}</FormLabel>
                           <FormControl>
                             <Input
                               type="number"
-                              placeholder="e.g., 30"
+                              placeholder={t("maxDaysPlaceholder")}
                               {...field}
                             />
                           </FormControl>
                           <FormDescription>
-                            Leave empty for unlimited duration
+                            {t("leaveEmptyUnlimited")}
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -252,7 +256,7 @@ const DailyCharge: React.FC = () => {
                       name="endDate"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>End Date (Optional)</FormLabel>
+                          <FormLabel>{t("endDateOptional")}</FormLabel>
                           <FormControl>
                             {form.watch("hasEndDate") ? (
                               <DateInput
@@ -261,7 +265,7 @@ const DailyCharge: React.FC = () => {
                               />
                             ) : (
                               <Input
-                                placeholder="Select end date checkbox first"
+                                placeholder={t("selectEndDateCheckbox")}
                                 disabled
                                 className="bg-gray-50"
                               />
@@ -286,7 +290,7 @@ const DailyCharge: React.FC = () => {
                             />
                           </FormControl>
                           <div className="space-y-1 leading-none">
-                            <FormLabel>Set end date</FormLabel>
+                            <FormLabel>{t("setEndDate")}</FormLabel>
                           </div>
                         </FormItem>
                       )}
@@ -295,43 +299,28 @@ const DailyCharge: React.FC = () => {
                 </section>
 
                 <div className="text-primary mt-5 rounded-sm bg-blue-200 p-4 text-sm">
-                  <p>
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s, when an unknown
-                    printer took a galley of type and scrambled it to make a
-                    type specimen book.
-                  </p>
+                  <p>{t("payments.dailyDisclaimer")}</p>
                 </div>
               </div>
             </MultiStepperStep>
 
             <MultiStepperStep>
               <section>
-                <h3 className="text-xl font-semibold">Daily Charge</h3>
-                <p className="text-gray-600">Charged daily</p>
+                <h3 className="text-xl font-semibold">
+                  {t("payments.dailyCharge")}
+                </h3>
+                <p className="text-gray-600">{t("payments.chargedDaily")}</p>
 
                 <div className="mt-4 space-y-3">
-                  <h4 className="text-xl font-semibold">Charge Info</h4>
+                  <h4 className="text-xl font-semibold">{t("chargeInfo")}</h4>
                   <p className="mt-2 text-gray-600">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s, when an unknown
-                    printer took a galley of type and scrambled it to make a
-                    type specimen book. It has survived not only five centuries,
-                    but also the leap into electronic typesetting, remaining
-                    essentially unchanged. It was popularised in the 1960s.
+                    {t("payments.dailyChargeInfo1")}
                   </p>
                   <p className="text-gray-600">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Explicabo officiis dolores aperiam sint laborum impedit
-                    dignissimos dolore nobis voluptate, dolorum voluptas nostrum
-                    iusto, quas quos quod praesentium neque dicta. Explicabo.
+                    {t("payments.dailyChargeInfo2")}
                   </p>
                   <p className="text-gray-600">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Magni quod ducimus est dolorum temporibus nemo tempore
-                    molestiae, esse ut eligendi.
+                    {t("payments.dailyChargeInfo3")}
                   </p>
                 </div>
                 <FormErrors errors={form.formState.errors} />
@@ -340,7 +329,7 @@ const DailyCharge: React.FC = () => {
 
             <MultiStepperButton>
               <Button type="submit" size="lg" className="w-3/5">
-                Create Daily Charge
+                {t("payments.createDailyCharge")}
               </Button>
             </MultiStepperButton>
           </MultiStepper>
