@@ -43,5 +43,14 @@
         "uploadPhoto": "Upload Photo",
         "uploadSuccess": "Profile picture updated successfully",
         "uploadFailed": "Failed to upload profile picture"
+    },
+    "transaction": {
+        "id": "TransactionId",
+        "credit": "Credit",
+        "debit": "Debit",
+        "details": "Details",
+        "paymentMode": "Payment Mode",
+        "paymentStatus": "Payment Status",
+        "amount": "Amount"
     }
 }

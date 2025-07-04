@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { MinusIcon, PlusIcon } from "lucide-react";
 
 import { CurrencyIcon } from "@/components/CurrencyIcon";
@@ -12,13 +13,14 @@ export function TransactionCard({
   data: ITransaction;
   showSymbol?: boolean;
 }) {
-  const type = data.cr ? "Credit" : "Debit";
+  const { t } = useTranslation();
+  const type = data.cr ? "credit" : "debit";
   return (
     <Card key={data._id} className="mt-1 border py-0">
       <CardContent className="flex items-center justify-between p-3!">
         <div>
           <p className="text-primary text-lg font-bold">
-            TransactionId #{data._id}
+            {t("transaction.id")} #{data._id}
           </p>
           <p className="text-muted-foreground">{data.details}</p>
           <p className="text-muted-foreground">
@@ -33,7 +35,9 @@ export function TransactionCard({
                 : "text-red-500",
             )}
           >
-            {type}
+            {type === "credit"
+              ? t("transaction.credit")
+              : t("transaction.debit")}
           </p>
         )}
         <div className="flex items-center">
