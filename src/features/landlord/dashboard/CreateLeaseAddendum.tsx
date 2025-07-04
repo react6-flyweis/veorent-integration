@@ -8,6 +8,8 @@ import { CurrencyInput } from "@/components/CurrencyInput";
 import { PageTitle } from "@/components/PageTitle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { DateInput } from "@/components/ui/date-input";
 import {
   Form,
@@ -17,13 +19,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { LoadingButton } from "@/components/ui/loading-button";
-
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
+import { LoadingButton } from "@/components/ui/loading-button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/useAlertToast";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 
@@ -114,15 +113,15 @@ export default function CreateLeaseAddendum() {
   return (
     <div className="space-y-5">
       <PageTitle
-        title="Create Lease Addendum"
-        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard"
+        title={t("leases.createLeaseAddendumTitle")}
+        description={t("leases.createLeaseAddendumDescription")}
         withBack
       />
 
       <Card className="gap-0 rounded-lg bg-blue-200 py-2">
         <CardHeader>
           <CardTitle className="text-lg font-bold">
-            The most common reasons for using an addendum are:
+            {t("leases.addendumReasonsTitle")}
           </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col justify-center">
@@ -130,10 +129,7 @@ export default function CreateLeaseAddendum() {
             {[1, 2, 3, 4].map((item) => (
               <li key={item} className="flex items-center">
                 <div className="mt-1 mr-2 h-4 w-4 rounded-sm bg-orange-400"></div>
-                <p className="text-sm">
-                  Lorem ipsum is simply dummy text of the printing and
-                  typesetting industry.
-                </p>
+                <p className="text-sm">{t(`leases.addendumReason${item}`)}</p>
               </li>
             ))}
           </ul>
@@ -146,30 +142,28 @@ export default function CreateLeaseAddendum() {
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <img src={penApplication} alt="Lease Icon" className="size-10" />
-              <h3 className="text-2xl font-semibold">Lease History</h3>
+              <h3 className="text-2xl font-semibold">
+                {t("leases.leaseHistory")}
+              </h3>
             </div>
 
             {/* Tenants Section */}
             <div className="space-y-2">
               <h3 className="text-lg font-medium text-black">{t("tenants")}</h3>
               <div className="rounded-md border p-4 text-center shadow">
-                <p className="text-lg font-bold">You Don't Have Any Tenants!</p>
-                <p className="text-sm">
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book.
-                </p>
+                <p className="text-lg font-bold">{t("leases.noTenants")}</p>
+                <p className="text-sm">{t("leases.noTenantsDescription")}</p>
                 <Button className="mt-3 w-52" variant="outlinePrimary">
-                  Go To My Lease
+                  {t("leases.goToMyLease")}
                 </Button>
               </div>
             </div>
 
             {/* Landlord Section */}
             <div className="space-y-4">
-              <h3 className="text-lg font-medium text-black">Landlord</h3>
+              <h3 className="text-lg font-medium text-black">
+                {t("landlord")}
+              </h3>
               <div className="flex items-start gap-4">
                 <Avatar className="size-10">
                   <AvatarImage src="#" alt="Landlord" />
@@ -190,13 +184,10 @@ export default function CreateLeaseAddendum() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        When was the original lease agreement dated?
+                        {t("leases.originalLeaseDateQuestion")}
                       </FormLabel>
                       <p className="text-primary">
-                        Lorem Ipsum is simply dummy text of the printing and
-                        typesetting industry. Lorem Ipsum has been the
-                        industry's standard dummy text ever since the 1500s,
-                        when an unknown
+                        {t("leases.originalLeaseDateDescription")}
                       </p>
                       <FormControl>
                         <DateInput className="@md:w-1/2" {...field} />
@@ -219,9 +210,7 @@ export default function CreateLeaseAddendum() {
                 name="endDateChange"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Will there be a change to the lease agreement end date?
-                    </FormLabel>
+                    <FormLabel>{t("leases.endDateChangeQuestion")}</FormLabel>
                     <FormControl>
                       <RadioGroup
                         className="flex space-x-4"
@@ -250,7 +239,7 @@ export default function CreateLeaseAddendum() {
                   name="newEndDate"
                   render={({ field }) => (
                     <FormItem className="mt-4">
-                      <FormLabel>New End Date</FormLabel>
+                      <FormLabel>{t("leases.newEndDate")}</FormLabel>
                       <FormControl>
                         <DateInput className="@md:w-1/2" {...field} />
                       </FormControl>
@@ -261,12 +250,7 @@ export default function CreateLeaseAddendum() {
               )}
 
               <div className="text-primary mt-2 rounded-md bg-blue-100 p-3 text-sm">
-                <p>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and
-                </p>
+                <p>{t("leases.endDateChangeDescription")}</p>
               </div>
             </div>
           </div>
@@ -275,16 +259,16 @@ export default function CreateLeaseAddendum() {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <img src={monthIcon} alt="Month Icon" className="size-8" />
-              <h3 className="text-2xl font-semibold">Monthly Rent</h3>
+              <h3 className="text-2xl font-semibold">
+                {t("leases.monthlyRent")}
+              </h3>
             </div>
             <FormField
               control={form.control}
               name="monthlyRentChange"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Will there be a change to the monthly rent amount?
-                  </FormLabel>
+                  <FormLabel>{t("leases.monthlyRentChangeQuestion")}</FormLabel>
                   <FormControl>
                     <RadioGroup
                       className="flex space-x-4"
@@ -313,7 +297,7 @@ export default function CreateLeaseAddendum() {
                 name="newMonthlyRent"
                 render={({ field }) => (
                   <FormItem className="mt-4">
-                    <FormLabel>New Monthly Rent</FormLabel>
+                    <FormLabel>{t("leases.newMonthlyRent")}</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -330,12 +314,7 @@ export default function CreateLeaseAddendum() {
             )}
 
             <div className="text-primary mt-2 rounded-md bg-blue-100 p-3 text-sm">
-              <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when an unknown printer took a galley
-                of type and
-              </p>
+              <p>{t("leases.monthlyRentChangeDescription")}</p>
             </div>
           </div>
 
@@ -343,16 +322,14 @@ export default function CreateLeaseAddendum() {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <img src={coinBagIcon} alt="Coin Bag Icon" className="size-8" />
-              <h3 className="text-2xl font-semibold">Deposits</h3>
+              <h3 className="text-2xl font-semibold">{t("leases.deposits")}</h3>
             </div>
             <FormField
               control={form.control}
               name="depositChange"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Will there be a change to any deposit amount?
-                  </FormLabel>
+                  <FormLabel>{t("leases.depositChangeQuestion")}</FormLabel>
                   <FormControl>
                     <RadioGroup
                       className="flex space-x-4"
@@ -391,7 +368,7 @@ export default function CreateLeaseAddendum() {
                           />
                         </FormControl>
                         <FormLabel className="text-sm font-normal">
-                          {t("securityDeposit")}
+                          {t("leases.securityDeposit")}
                         </FormLabel>
                       </FormItem>
                     )}
@@ -426,7 +403,7 @@ export default function CreateLeaseAddendum() {
                           />
                         </FormControl>
                         <FormLabel className="text-sm font-normal">
-                          Pet Deposit
+                          {t("leases.petDeposit")}
                         </FormLabel>
                       </FormItem>
                     )}
@@ -461,7 +438,7 @@ export default function CreateLeaseAddendum() {
                           />
                         </FormControl>
                         <FormLabel className="text-sm font-normal">
-                          Other Deposit
+                          {t("leases.otherDeposit")}
                         </FormLabel>
                       </FormItem>
                     )}
@@ -485,12 +462,7 @@ export default function CreateLeaseAddendum() {
             )}
 
             <div className="text-primary mt-2 rounded-md bg-blue-100 p-3 text-sm">
-              <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when an unknown printer took a galley
-                of type and
-              </p>
+              <p>{t("leases.depositChangeDescription")}</p>
             </div>
           </div>
 
@@ -502,17 +474,16 @@ export default function CreateLeaseAddendum() {
                 alt="Amendment Icon"
                 className="size-8"
               />
-              <h3 className="text-2xl font-semibold">Other Amendments</h3>
+              <h3 className="text-2xl font-semibold">
+                {t("leases.otherAmendments")}
+              </h3>
             </div>
             <FormField
               control={form.control}
               name="otherAmendments"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Will there be other amendments to the original lease
-                    agreement terms?
-                  </FormLabel>
+                  <FormLabel>{t("leases.otherAmendmentsQuestion")}</FormLabel>
                   <FormControl>
                     <RadioGroup
                       className="flex space-x-4"
@@ -543,7 +514,7 @@ export default function CreateLeaseAddendum() {
                   <FormItem className="mt-4">
                     <FormControl>
                       <Textarea
-                        placeholder="Describe the other amendments..."
+                        placeholder={t("leases.otherAmendmentsPlaceholder")}
                         className="min-h-[120px]"
                         {...field}
                       />
@@ -557,12 +528,7 @@ export default function CreateLeaseAddendum() {
               />
             )}
             <div className="text-primary mt-2 rounded-md bg-blue-100 p-3 text-sm">
-              <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when an unknown printer took a galley
-                of type and
-              </p>
+              <p>{t("leases.otherAmendmentsDescription")}</p>
             </div>
           </div>
 
@@ -570,25 +536,22 @@ export default function CreateLeaseAddendum() {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <img src={calendarIcon} alt="Calendar Icon" className="size-8" />
-              <h3 className="text-2xl font-semibold">Effective Date</h3>
+              <h3 className="text-2xl font-semibold">
+                {t("leases.effectiveDate")}
+              </h3>
             </div>
             <FormField
               control={form.control}
               name="effectiveDate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>When does this addendum take effect?</FormLabel>
+                  <FormLabel>{t("leases.effectiveDateQuestion")}</FormLabel>
                   <FormControl>
                     <DateInput className="@lg:w-1/2" {...field} />
                   </FormControl>
                   <FormMessage />
                   <div className="text-primary mt-2 rounded-md bg-blue-100 p-3 text-sm">
-                    <p>
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry. Lorem Ipsum has been the industry's
-                      standard dummy text ever since the 1500s, when an unknown
-                      printer took a galley of type and
-                    </p>
+                    <p>{t("leases.effectiveDateDescription")}</p>
                   </div>
                 </FormItem>
               )}
@@ -603,7 +566,7 @@ export default function CreateLeaseAddendum() {
               size="lg"
               className="w-3/5"
             >
-              Save & Finish Later
+              {t("leases.saveAndFinishLater")}
             </LoadingButton>
           </div>
         </form>

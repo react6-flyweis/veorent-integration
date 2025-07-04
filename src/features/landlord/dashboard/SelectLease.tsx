@@ -27,16 +27,18 @@ export default function SelectLease() {
       <div className="mb-6 flex items-center gap-5">
         <BackButton />
         <h2 className="text-2xl font-semibold">
-          Select Which Lease Needs an Agreement
+          {t("leases.selectLeaseAgreementTitle")}
         </h2>
       </div>
 
       <div className="mb-4">
-        <label className="mb-1 block text-sm font-medium">Lease</label>
+        <label className="mb-1 block text-sm font-medium">
+          {t("leases.leaseLabel")}
+        </label>
         <PropertiesSelector
           value={selectedAddress}
           onChange={setSelectedAddress}
-          placeholder="Choose an address"
+          placeholder={t("leases.chooseAddressPlaceholder")}
         />
       </div>
       <div className="flex justify-center">

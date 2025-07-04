@@ -1,7 +1,11 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { XIcon } from "lucide-react";
 import * as z from "zod";
 
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -11,7 +15,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { LoadingButton } from "@/components/ui/loading-button";
 import {
   Select,
@@ -20,10 +23,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { useGoBack } from "@/hooks/useGoBack";
-import { XIcon } from "lucide-react";
-import { useNavigate } from "react-router";
 
 // Define form schema with zod
 const formSchema = z.object({
@@ -37,6 +38,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export default function NeedsWork() {
+  const { t } = useTranslation();
   const goBack = useGoBack();
   const navigate = useNavigate();
 
@@ -71,7 +73,9 @@ export default function NeedsWork() {
         >
           <XIcon className="text-primary size-5" />
         </Button>
-        <h2 className="text-2xl font-semibold">Contact Support</h2>
+        <h2 className="text-2xl font-semibold">
+          {t("needsWork.contactSupportTitle")}
+        </h2>
       </div>
 
       <Form {...form}>
@@ -82,10 +86,13 @@ export default function NeedsWork() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="font-medium">
-                  Email on Your Veorent Account
+                  {t("needsWork.emailLabel")}
                 </FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter your email address" {...field} />
+                  <Input
+                    placeholder={t("needsWork.emailPlaceholder")}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -97,23 +104,33 @@ export default function NeedsWork() {
             name="category"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="font-medium">Category</FormLabel>
+                <FormLabel className="font-medium">
+                  {t("needsWork.categoryLabel")}
+                </FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Provide Feedback" />
+                      <SelectValue
+                        placeholder={t("needsWork.categoryPlaceholder")}
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="feedback">Provide Feedback</SelectItem>
-                    <SelectItem value="bug">Report a bug</SelectItem>
-                    <SelectItem value="question">
-                      Ask a question about Veorent
+                    <SelectItem value="feedback">
+                      {t("needsWork.categoryFeedback")}
                     </SelectItem>
-                    <SelectItem value="other">Something else</SelectItem>
+                    <SelectItem value="bug">
+                      {t("needsWork.categoryBug")}
+                    </SelectItem>
+                    <SelectItem value="question">
+                      {t("needsWork.categoryQuestion")}
+                    </SelectItem>
+                    <SelectItem value="other">
+                      {t("needsWork.categoryOther")}
+                    </SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -126,10 +143,12 @@ export default function NeedsWork() {
             name="message"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="font-medium">Message</FormLabel>
+                <FormLabel className="font-medium">
+                  {t("needsWork.messageLabel")}
+                </FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Let us know how we can improve"
+                    placeholder={t("needsWork.messagePlaceholder")}
                     className="min-h-[120px]"
                     {...field}
                   />
@@ -146,7 +165,7 @@ export default function NeedsWork() {
               className="w-3/5"
               size="lg"
             >
-              Send Message
+              {t("needsWork.sendMessage")}
             </LoadingButton>
           </div>
         </form>

@@ -1,6 +1,10 @@
-import * as z from "zod";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { Navigate, useLocation, useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+import FormErrors from "@/components/FormErrors";
 import {
   Form,
   FormControl,
@@ -9,18 +13,17 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { BuilderLayout } from "./components/BuilderLayout";
+import { ImageInput } from "@/components/ui/image-input";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { Textarea } from "@/components/ui/textarea";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
+import { useCreateOrUpdateLeaseAgreementMutation } from "./api/mutation";
+import { useUploadImageMutation } from "../api/mutations";
 import additionalTermsIcon from "./assets/additional.png";
 import attachmentIcon from "./assets/attachment.png";
-import { Navigate, useLocation, useNavigate } from "react-router";
-import { useCreateOrUpdateLeaseAgreementMutation } from "./api/mutation";
-import { getErrorMessage } from "@/utils/getErrorMessage";
-import FormErrors from "@/components/FormErrors";
-import { ImageInput } from "@/components/ui/image-input";
-import { useUploadImageMutation } from "../api/mutations";
+import { BuilderLayout } from "./components/BuilderLayout";
+
 
 // Define schema for the form
 const provisionAttachmentSchema = z.object({
@@ -31,6 +34,7 @@ const provisionAttachmentSchema = z.object({
 type ProvisionAttachmentValues = z.infer<typeof provisionAttachmentSchema>;
 
 export default function ProvisionAttachment() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { state } = useLocation();
   const { mutateAsync, isSuccess } = useCreateOrUpdateLeaseAgreementMutation();
@@ -89,8 +93,8 @@ export default function ProvisionAttachment() {
 
   return (
     <BuilderLayout
-      title="Provisions & Attachments"
-      description="Add custom clauses, rules or provisions specific to your property and/or local area."
+      title={t("leases.provisionAttachmentTitle")}
+      description={t("leases.provisionAttachmentDescription")}
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -98,29 +102,15 @@ export default function ProvisionAttachment() {
           <div>
             <div className="flex items-center gap-2 font-medium">
               <img src={additionalTermsIcon} alt="Keys" className="size-10" />
-              <h3 className="text-xl">Additional Terms</h3>
+              <h3 className="text-xl">{t("leases.additionalTermsTitle")}</h3>
             </div>
             <div className="text-primary mt-2 mb-4 space-y-2 font-semibold">
               <p className="text-black">
-                Are there any additional terms you'd like to add to this
-                agreement?
+                {t("leases.additionalTermsQuestion")}
               </p>
-              <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when an unknown printer took a galley
-                of type and scrambled it to make a type specimen book. It has
-                survived not only
-              </p>
-              <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when an unknown
-              </p>
-              <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's
-              </p>
+              <p>{t("leases.additionalTermsDesc1")}</p>
+              <p>{t("leases.additionalTermsDesc2")}</p>
+              <p>{t("leases.additionalTermsDesc3")}</p>
             </div>
 
             <FormField
@@ -129,15 +119,21 @@ export default function ProvisionAttachment() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    <span className="text-xl uppercase">Additional Terms</span>
-                    <span className="text-muted-foreground"> (Optional)</span>
+                    <span className="text-xl uppercase">
+                      {t("leases.additionalTermsLabel")}
+                    </span>
+                    <span className="text-muted-foreground">
+                      {" "}
+                      ({t("optional")})
+                    </span>
                   </FormLabel>
                   <FormControl>
                     <div>
                       <Textarea className="min-h-28" {...field} />
                       <div className="mt-1 flex">
                         <span className="text-muted-foreground">
-                          {field.value.length}/10000 characters used
+                          {field.value.length}/10000 {t("characters")}{" "}
+                          {t("used")}
                         </span>
                       </div>
                     </div>
@@ -152,30 +148,20 @@ export default function ProvisionAttachment() {
           <div className="space-y-4">
             <div className="flex items-center gap-2 font-medium">
               <img src={attachmentIcon} alt="Keys" className="size-10" />
-              <h3 className="text-xl">Attachments</h3>
+              <h3 className="text-xl">{t("leases.attachmentsTitle")}</h3>
             </div>
             <h2 className="mb-2 text-xl font-medium"></h2>
             <div className="">
               <p className="mb-4 text-gray-600">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when an unknown printer took a galley
-                of type and scrambled it to make a type specimen book. It has
-                survived not only
+                {t("leases.attachmentsDesc1")}
               </p>
 
               {/* Property Condition Report */}
               <div className="mb-4 rounded-lg border bg-blue-200 p-4">
                 <h3 className="text-lg font-medium">
-                  Property Condition Report
+                  {t("leases.propertyConditionReportTitle")}
                 </h3>
-                <p className="">
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book. It has survived not only
-                </p>
+                <p className="">{t("leases.propertyConditionReportDesc")}</p>
               </div>
 
               <FormField
@@ -202,7 +188,9 @@ export default function ProvisionAttachment() {
               className="w-3/5 rounded-lg"
               type="submit"
             >
-              {isSuccess ? "Saved!" : "Save & Next"}
+              {isSuccess
+                ? t("leases.savedSuccessfully")
+                : t("leases.saveAndNext")}
             </LoadingButton>
           </div>
         </form>

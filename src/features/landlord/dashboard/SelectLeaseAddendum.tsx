@@ -80,7 +80,7 @@ export default function SelectLeaseAddendum() {
                     <li key={item} className="flex items-center">
                       <div className="mt-1 mr-2 h-4 w-4 rounded-sm bg-orange-400"></div>
                       <p className="text-sm">
-                        {t("selectLeaseAddendum.commonReason")}
+                        {t(`selectLeaseAddendum.commonReason${item}`)}
                       </p>
                     </li>
                   ))}
@@ -98,17 +98,17 @@ export default function SelectLeaseAddendum() {
                   {
                     icon: fingerSnapIcon,
                     title: t("selectLeaseAddendum.easyToFill"),
-                    description: t("selectLeaseAddendum.commonReason"),
+                    description: t("selectLeaseAddendum.easyToFillDesc"),
                   },
                   {
                     icon: balanceIcon,
                     title: t("selectLeaseAddendum.legalConfidence"),
-                    description: t("selectLeaseAddendum.commonReason"),
+                    description: t("selectLeaseAddendum.legalConfidenceDesc"),
                   },
                   {
                     icon: smoothPenIcon,
                     title: t("selectLeaseAddendum.fastToSign"),
-                    description: t("selectLeaseAddendum.commonReason"),
+                    description: t("selectLeaseAddendum.fastToSignDesc"),
                   },
                 ].map((item, index) => (
                   <div key={index} className="flex items-start">

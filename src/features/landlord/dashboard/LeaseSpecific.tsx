@@ -103,8 +103,8 @@ export default function LeaseSpecific() {
 
   return (
     <BuilderLayout
-      title="Lease Specific"
-      description="We automatically filled information we had on file. Please double check it since it will go into the legal agreement."
+      title={t("leases.leaseSpecificTitle")}
+      description={t("leases.leaseSpecificDescription")}
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -112,7 +112,7 @@ export default function LeaseSpecific() {
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-lg font-medium">
               <img src={houseIcon} className="size-10" />
-              <span>Rental Property</span>
+              <span>{t("leases.rentalProperty")}</span>
             </div>
 
             <FormField
@@ -192,7 +192,7 @@ export default function LeaseSpecific() {
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-lg font-medium">
               <img src={leaseIcon} className="size-10" />
-              <span>Lease Term</span>
+              <span>{t("leases.leaseTermLabel")}</span>
             </div>
 
             <FormField
@@ -200,7 +200,7 @@ export default function LeaseSpecific() {
               name="leaseTerm"
               render={({ field }) => (
                 <FormItem className="space-y-2">
-                  <FormLabel>What is the term for this lease?</FormLabel>
+                  <FormLabel>{t("leases.leaseTermQuestion")}</FormLabel>
                   <FormControl>
                     <RadioGroup
                       onValueChange={field.onChange}
@@ -212,7 +212,7 @@ export default function LeaseSpecific() {
                           <RadioGroupItem value="fixed" />
                         </FormControl>
                         <FormLabel className="font-normal">
-                          Fixed Term
+                          {t("leases.fixedTerm")}
                         </FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-2">
@@ -220,7 +220,7 @@ export default function LeaseSpecific() {
                           <RadioGroupItem value="month-to-month" />
                         </FormControl>
                         <FormLabel className="font-normal">
-                          Month-to-Month
+                          {t("leases.monthToMonth")}
                         </FormLabel>
                       </FormItem>
                     </RadioGroup>
@@ -254,7 +254,9 @@ export default function LeaseSpecific() {
               className="w-4/5 rounded-lg @lg:w-3/5"
               type="submit"
             >
-              {isSuccess ? "Saved Successfully" : "Save & Next"}
+              {isSuccess
+                ? t("leases.savedSuccessfully")
+                : t("leases.saveAndNext")}
             </LoadingButton>
           </div>
         </form>

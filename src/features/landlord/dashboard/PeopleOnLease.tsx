@@ -1,6 +1,12 @@
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { useLocation, useNavigate } from "react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 
+import FormErrors from "@/components/FormErrors";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -9,17 +15,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useLocation, useNavigate } from "react-router";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-
-import FormErrors from "@/components/FormErrors";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { getErrorMessage } from "@/utils/getErrorMessage";
+
 import { useCreateOrUpdateLeaseAgreementMutation } from "./api/mutation";
 import houseOwnerIcon from "./assets/house-owner.png";
 import houseIcon from "./assets/house.png";
@@ -170,8 +170,8 @@ export default function PeopleOnLease() {
 
   return (
     <BuilderLayout
-      title="People on the Lease"
-      description="Add all parties to be included on the lease agreement."
+      title={t("leases.peopleOnLeaseTitle")}
+      description={t("leases.peopleOnLeaseDescription")}
     >
       <Form {...form}>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -184,20 +184,16 @@ export default function PeopleOnLease() {
 
             <Card className="gap-2 border-0 bg-blue-200 p-4">
               <CardTitle className="text-semibold text-lg">
-                Here's what you need to know:
+                {t("leases.peopleOnLeaseInfoTitle")}
               </CardTitle>
               <CardContent className="p-0">
                 <ul className="list-disc space-y-1">
-                  {new Array(4)
-                    .fill(
-                      "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-                    )
-                    .map((t, i) => (
-                      <li key={i} className="flex items-center gap-2">
-                        <div className="size-3 bg-orange-400"></div>
-                        <span>{t}</span>
-                      </li>
-                    ))}
+                  {[1, 2, 3, 4].map((i) => (
+                    <li key={i} className="flex items-center gap-2">
+                      <div className="size-3 bg-orange-400"></div>
+                      <span>{t(`leases.peopleOnLeaseInfo${i}`)}</span>
+                    </li>
+                  ))}
                 </ul>
               </CardContent>
             </Card>
@@ -208,11 +204,11 @@ export default function PeopleOnLease() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="font-medium">
-                    Search for Existing Renters
+                    {t("leases.tenantSearchLabel")}
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Search by name or property"
+                      placeholder={t("leases.tenantSearchPlaceholder")}
                       className="max-w-full"
                       {...field}
                     />
@@ -237,7 +233,7 @@ export default function PeopleOnLease() {
                     htmlFor="add-tenants-later"
                     className="text-primary text-base font-normal"
                   >
-                    I'll add my tenants later
+                    {t("leases.addTenantsLaterLabel")}
                   </FormLabel>
                   <FormMessage />
                 </FormItem>
@@ -253,16 +249,13 @@ export default function PeopleOnLease() {
                 className="size-10"
                 alt="Additional Occupant"
               />
-              <span>Additional Occupants</span>
+              <span>{t("leases.additionalOccupantsTitle")}</span>
             </div>
 
             <div>
-              <p className="mb-2">Will there be any additional occupants?</p>
+              <p className="mb-2">{t("leases.additionalOccupantsQuestion")}</p>
               <p className="mb-3 text-sm text-gray-500">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry standard dummy text
-                ever since the 1500s. This is additional content that is right
-                of the main text.
+                {t("leases.additionalOccupantsDescription")}
               </p>
               <FormField
                 control={form.control}
@@ -318,7 +311,7 @@ export default function PeopleOnLease() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-sm font-medium">
-                            Relationship
+                            {t("relationship")}
                           </FormLabel>
                           <FormControl>
                             <Input className="mt-1" {...field} />
@@ -332,7 +325,7 @@ export default function PeopleOnLease() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-sm font-medium">
-                            Age
+                            {t("age")}
                           </FormLabel>
                           <FormControl>
                             <Input className="mt-1" type="number" {...field} />
@@ -349,7 +342,7 @@ export default function PeopleOnLease() {
             <div className="space-y-4 pt-4">
               <div className="flex items-center gap-2 text-lg font-medium">
                 <img src={houseOwnerIcon} className="size-10" alt="Landlord" />
-                <span>Landlord</span>
+                <span>{t("leases.landlordTitle")}</span>
               </div>
 
               <FormField
@@ -368,7 +361,9 @@ export default function PeopleOnLease() {
                             id="individual-type"
                             value="individual"
                           />
-                          <label htmlFor="individual-type">Individual</label>
+                          <label htmlFor="individual-type">
+                            {t("leases.individual")}
+                          </label>
                         </div>
                         <div className="flex items-center space-x-2">
                           <RadioGroupItem id="company-type" value="company" />
@@ -389,7 +384,7 @@ export default function PeopleOnLease() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm font-medium">
-                          Legal First Name
+                          {t("leases.legalFirstName")}
                         </FormLabel>
                         <FormControl>
                           <Input className="mt-1" {...field} />
@@ -422,7 +417,7 @@ export default function PeopleOnLease() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm font-medium">
-                          Company Name
+                          {t("leases.companyName")}
                         </FormLabel>
                         <FormControl>
                           <Input className="mt-1" {...field} />
@@ -471,7 +466,7 @@ export default function PeopleOnLease() {
               {occupantType === "company" && (
                 <div className="pt-4">
                   <h3 className="mb-4 text-base font-medium">
-                    OWNER INFORMATION
+                    {t("leases.ownerInfoTitle")}
                   </h3>
                   <div className="grid grid-cols-2 gap-4">
                     <FormField
@@ -480,7 +475,7 @@ export default function PeopleOnLease() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-sm font-medium">
-                            Legal First Name
+                            {t("leases.legalFirstName")}
                           </FormLabel>
                           <FormControl>
                             <Input className="mt-1" {...field} />
@@ -525,7 +520,7 @@ export default function PeopleOnLease() {
                       htmlFor="add-another-landlord"
                       className="text-sm font-medium uppercase"
                     >
-                      Add another landlord
+                      {t("leases.addAnotherLandlord")}
                     </FormLabel>
                     <FormMessage />
                   </FormItem>
@@ -535,7 +530,7 @@ export default function PeopleOnLease() {
               {form.watch("addAnotherLandlord") && (
                 <div className="mt-4">
                   <h3 className="mb-4 text-base font-medium">
-                    LANDLORD MAILING ADDRESS
+                    {t("leases.landlordMailingAddressTitle")}
                   </h3>
 
                   <FormField
@@ -628,7 +623,7 @@ export default function PeopleOnLease() {
                 className="size-10"
                 alt="Uncommon Scenarios"
               />
-              <span>Uncommon Scenarios</span>
+              <span>{t("leases.uncommonScenariosTitle")}</span>
             </div>
 
             <FormField
@@ -637,8 +632,7 @@ export default function PeopleOnLease() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="mb-2 block">
-                    Will the manager or owner have a mailing address that
-                    differs from the rental property address:
+                    {t("leases.differentAddressQuestion")}
                   </FormLabel>
                   <FormControl>
                     <RadioGroup
@@ -754,7 +748,7 @@ export default function PeopleOnLease() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="mb-2 block">
-                    Are there any additional signers?
+                    {t("leases.additionalSignersQuestion")}
                   </FormLabel>
                   <FormControl>
                     <RadioGroup
@@ -791,7 +785,7 @@ export default function PeopleOnLease() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm font-medium">
-                          Legal First Name
+                          {t("leases.legalFirstName")}
                         </FormLabel>
                         <FormControl>
                           <Input className="mt-1" {...field} />
@@ -845,7 +839,9 @@ export default function PeopleOnLease() {
               className="w-3/5 rounded-lg"
               type="submit"
             >
-              {isSuccess ? "Saved Successfully" : "Save & Next"}
+              {isSuccess
+                ? t("leases.savedSuccessfully")
+                : t("leases.saveAndNext")}
             </LoadingButton>
           </div>
         </form>
