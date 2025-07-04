@@ -52,5 +52,19 @@
         "paymentMode": "Payment Mode",
         "paymentStatus": "Payment Status",
         "amount": "Amount"
+    },
+    "contactForm": {
+        "fullName": "Full Name",
+        "fullNamePlaceholder": "Enter your full name",
+        "mobile": "Mobile",
+        "mobilePlaceholder": "+91 1234567890",
+        "email": "Email",
+        "emailPlaceholder": "support@gmail.com",
+        "writeYourMessage": "Write your message",
+        "writeHere": "Write here...",
+        "send": "Send",
+        "call": "Call",
+        "calling": "Calling...",
+        "success": "Your message has been sent successfully!"
     }
 }

@@ -21,17 +21,46 @@ import { getErrorMessage } from "@/utils/getErrorMessage";
 
 import { contactApi } from "../api/contactApi";
 
-const formSchema = z.object({
-  fullName: z.string().min(2, "Full name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
-  mobileNumber: z.string().min(10, "Enter a valid mobile number"),
-  message: z.string().min(5, "Message must be at least 5 characters"),
-});
+import type { TFunction } from "i18next";
 
-type ContactFormData = z.infer<typeof formSchema>;
+const createFormSchema = (t: TFunction<"translation", undefined>) =>
+  z.object({
+    fullName: z.string().min(
+      2,
+      t("contactForm.fullNameMin", {
+        defaultValue: "Full name must be at least 2 characters",
+      }),
+    ),
+    email: z
+      .string()
+      .email(
+        t("contactForm.invalidEmail", {
+          defaultValue: "Invalid email address",
+        }),
+      ),
+    mobileNumber: z
+      .string()
+      .min(
+        10,
+        t("contactForm.mobileMin", {
+          defaultValue: "Enter a valid mobile number",
+        }),
+      ),
+    message: z
+      .string()
+      .min(
+        5,
+        t("contactForm.messageMin", {
+          defaultValue: "Message must be at least 5 characters",
+        }),
+      ),
+  });
 
 export function ContactForm() {
   const { t } = useTranslation();
+
+  const formSchema = createFormSchema(t);
+  type ContactFormData = z.infer<typeof formSchema>;
 
   const { showToast } = useToast();
   const user = useAuthStore((state) => state.user);
@@ -57,7 +86,7 @@ export function ContactForm() {
         await contactApi.submitUserContact(data);
       }
 
-      showToast("Your message has been sent successfully!", "success");
+      showToast(t("contactForm.success"), "success");
       form.reset(); // Reset form after successful submission
     } catch (error) {
       form.setError("root", {
@@ -75,10 +104,10 @@ export function ContactForm() {
           name="fullName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("fullName")}</FormLabel>
+              <FormLabel>{t("contactForm.fullName")}</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Enter your full name"
+                  placeholder={t("contactForm.fullNamePlaceholder")}
                   {...field}
                   className="bg-muted border-0"
                 />
@@ -94,10 +123,10 @@ export function ContactForm() {
           name="mobileNumber"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Mobile</FormLabel>
+              <FormLabel>{t("contactForm.mobile")}</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="+91 1234567890"
+                  placeholder={t("contactForm.mobilePlaceholder")}
                   {...field}
                   className="bg-muted border-0"
                 />
@@ -113,10 +142,10 @@ export function ContactForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("email")}</FormLabel>
+              <FormLabel>{t("contactForm.email")}</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="support@gmail.com"
+                  placeholder={t("contactForm.emailPlaceholder")}
                   {...field}
                   className="bg-muted border-0"
                 />
@@ -132,10 +161,10 @@ export function ContactForm() {
           name="message"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("writeYourMessage")}</FormLabel>
+              <FormLabel>{t("contactForm.writeYourMessage")}</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder={t("writeHere")}
+                  placeholder={t("contactForm.writeHere")}
                   {...field}
                   className="bg-muted border-0"
                 />
@@ -152,16 +181,16 @@ export function ContactForm() {
             className="w-full @lg:w-44"
             isLoading={form.formState.isSubmitting}
           >
-            {t("send")}
+            {t("contactForm.send")}
           </LoadingButton>
           <Button
             type="button"
             className="w-full bg-green-600 @lg:w-44"
             onClick={() => {
-              alert(t("calling"));
+              alert(t("contactForm.calling"));
             }}
           >
-            {t("call")}
+            {t("contactForm.call")}
           </Button>
         </div>
       </form>
