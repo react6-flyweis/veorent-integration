@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import { SearchIcon, XIcon, FilterIcon } from "lucide-react";
 
@@ -16,6 +17,7 @@ import { usePropertyFilters } from "./hooks/usePropertyFilters";
 import { getActiveFilters } from "./utils/filterConfig";
 
 export default function SearchProperty() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const {
     filters,
@@ -73,7 +75,7 @@ export default function SearchProperty() {
         <img src="/logo-dark.png" alt="Veorent Logo" className="h-8" />
         <div className="border-primary flex w-full items-center border">
           <Input
-            placeholder="Search rentals..."
+            placeholder={t("searchProperty.searchRentals")}
             className="w-full border-0"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -101,13 +103,17 @@ export default function SearchProperty() {
             <div className="text-sm text-gray-600">
               {data.length > 0 ? (
                 <span>
-                  Found {data.length} propert{data.length === 1 ? "y" : "ies"}
-                  {activeFilters.length > 0 ? " matching your filters" : ""}
+                  {t("searchProperty.found", { count: data.length })}
+                  {activeFilters.length > 0
+                    ? t("searchProperty.matchingFilters")
+                    : ""}
                 </span>
               ) : (
                 <span>
-                  No properties found
-                  {activeFilters.length > 0 ? " matching your filters" : ""}
+                  {t("searchProperty.noProperties")}
+                  {activeFilters.length > 0
+                    ? t("searchProperty.matchingFilters")
+                    : ""}
                 </span>
               )}
             </div>
@@ -118,7 +124,9 @@ export default function SearchProperty() {
             <div className="flex items-center gap-2">
               <FilterIcon className="size-4 text-gray-600" />
               <span className="text-sm font-medium text-gray-700">
-                Active Filters ({activeFilters.length})
+                {t("searchProperty.activeFilters", {
+                  count: activeFilters.length,
+                })}
               </span>
               <Button
                 variant="ghost"
@@ -126,7 +134,7 @@ export default function SearchProperty() {
                 onClick={handleClearFilters}
                 className="text-primary hover:text-primary-foreground h-6 px-2 py-0 text-xs"
               >
-                Clear All
+                {t("searchProperty.clearAll")}
               </Button>
             </div>
           )}
@@ -162,7 +170,7 @@ export default function SearchProperty() {
       {error && (
         <div className="flex items-center justify-center py-8">
           <div className="text-lg text-red-500">
-            Error loading properties. Please try again.
+            {t("searchProperty.errorLoading")}
           </div>
         </div>
       )}
@@ -181,7 +189,7 @@ export default function SearchProperty() {
         ) : (
           <div className="flex items-center justify-center py-8">
             <div className="text-lg text-gray-500">
-              No properties found matching your criteria.
+              {t("searchProperty.noPropertiesCriteria")}
             </div>
           </div>
         )}

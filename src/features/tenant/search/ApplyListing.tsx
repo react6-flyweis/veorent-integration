@@ -41,18 +41,19 @@ import { getErrorMessage } from "@/utils/getErrorMessage";
 
 import { useCreateBookingMutation } from "./api/mutation";
 
-const applicationSchema = z.object({
-  role: z.enum(["tenant", "cosigner"], {
-    required_error: "Please select a role",
-  }),
-  firstName: z.string().min(2, "First name is required"),
-  lastName: z.string().min(2, "Last name is required"),
-  email: z.string().email("Enter a valid email"),
-  phone: z.string().min(10, "Phone number is required"),
-  dob: z.date({ required_error: "Date of birth is required" }),
-});
+import type { TFunction } from "i18next";
 
-type ApplicationFormValues = z.infer<typeof applicationSchema>;
+const createApplicationSchema = (t: TFunction) =>
+  z.object({
+    role: z.enum(["tenant", "cosigner"], {
+      required_error: t("applyListing.roleRequired"),
+    }),
+    firstName: z.string().min(2, t("applyListing.firstNameRequired")),
+    lastName: z.string().min(2, t("applyListing.lastNameRequired")),
+    email: z.string().email(t("applyListing.emailInvalid")),
+    phone: z.string().min(10, t("applyListing.phoneRequired")),
+    dob: z.date({ required_error: t("applyListing.dobRequired") }),
+  });
 
 export default function ApplyListing() {
   const { t } = useTranslation();
@@ -61,6 +62,9 @@ export default function ApplyListing() {
   const { data, isLoading } = useGetPropertyByIdQuery(id || "");
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const { mutateAsync } = useCreateBookingMutation();
+
+  const applicationSchema = createApplicationSchema(t);
+  type ApplicationFormValues = z.infer<typeof applicationSchema>;
 
   const form = useForm<ApplicationFormValues>({
     resolver: zodResolver(applicationSchema),
@@ -228,22 +232,22 @@ export default function ApplyListing() {
                 <Card className="gap-2 rounded p-3">
                   <CardHeader className="px-1">
                     <CardTitle className="text-center text-xl">
-                      Start My Application
+                      {t("applyListing.startApplication")}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <ul className="space-y-1">
                       <li className="flex gap-1">
                         <CheckCircle2Icon className="text-green-500" />
-                        <span>Easy to save and resume at any time</span>
+                        <span>{t("applyListing.easySaveResume")}</span>
                       </li>
                       <li className="flex gap-1">
                         <CheckCircle2Icon className="text-green-500" />
-                        <span>Takes less then 11 minutes</span>
+                        <span>{t("applyListing.takesLessThan11Min")}</span>
                       </li>
                       <li className="flex gap-1">
                         <CheckCircle2Icon className="text-green-500" />
-                        <span>Will never impact your credit score</span>
+                        <span>{t("applyListing.noCreditScoreImpact")}</span>
                       </li>
                     </ul>
                   </CardContent>
@@ -259,7 +263,7 @@ export default function ApplyListing() {
                     render={({ field }) => (
                       <FormItem className="flex justify-between">
                         <FormLabel className="text-base">
-                          What are you applying as?
+                          {t("applyListing.roleLabel")}
                         </FormLabel>
                         <FormControl>
                           <div className="flex gap-2 rounded border p-2">
@@ -275,7 +279,9 @@ export default function ApplyListing() {
                                     : "bg-muted text-foreground",
                                 )}
                               >
-                                {value === "tenant" ? "Tenant" : "Co-Signer"}
+                                {value === "tenant"
+                                  ? t("applyListing.tenant")
+                                  : t("applyListing.cosigner")}
                               </button>
                             ))}
                           </div>

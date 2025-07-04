@@ -50,40 +50,40 @@ import { ContactForm } from "./components/ContactForm";
 
 // Utility mappings
 const utilityMap = {
-  water: { icon: DropletsIcon, label: "Water" },
-  sewage: { icon: ToiletIcon, label: "Sewage" },
-  internet: { icon: WifiIcon, label: "Internet" },
-  cable: { icon: TvIcon, label: "Cable" },
-  electricty: { icon: ZapIcon, label: "Electricity" },
-  gas: { icon: FlameKindlingIcon, label: "Gas" },
-  garbage: { icon: Trash2Icon, label: "Garbage" },
+  water: { icon: DropletsIcon, label: "water" },
+  sewage: { icon: ToiletIcon, label: "sewage" },
+  internet: { icon: WifiIcon, label: "internet" },
+  cable: { icon: TvIcon, label: "cable" },
+  electricty: { icon: ZapIcon, label: "electricity" },
+  gas: { icon: FlameKindlingIcon, label: "gas" },
+  garbage: { icon: Trash2Icon, label: "garbage" },
 };
 
 // Amenity mappings
 const amenityMap = {
-  furnished: { icon: SofaIcon, label: "Furnished" },
-  onSiteLaundry: { icon: WashingMachineIcon, label: "On Site Laundry" },
-  cableReady: { icon: TvIcon, label: "Cable Ready" },
-  offStreetParking: { icon: ParkingCircleIcon, label: "Off Street Parking" },
-  wiredFromInternet: { icon: WifiIcon, label: "High Speed Internet" },
-  fencedyard: { icon: FenceIcon, label: "Fenced Yard" },
-  firePlace: { icon: FlameKindlingIcon, label: "Fireplace" },
-  swimmingPool: { icon: Waves, label: "Swimming Pool" },
-  fitnessCenter: { icon: DumbbellIcon, label: "Fitness Center" },
-  garage: { icon: HomeIcon, label: "Garage" },
-  accessibility: { icon: AccessibilityIcon, label: "Accessibility" },
+  furnished: { icon: SofaIcon, label: "furnished" },
+  onSiteLaundry: { icon: WashingMachineIcon, label: "onSiteLaundry" },
+  cableReady: { icon: TvIcon, label: "cableReady" },
+  offStreetParking: { icon: ParkingCircleIcon, label: "offStreetParking" },
+  wiredFromInternet: { icon: WifiIcon, label: "wiredFromInternet" },
+  fencedyard: { icon: FenceIcon, label: "fencedyard" },
+  firePlace: { icon: FlameKindlingIcon, label: "firePlace" },
+  swimmingPool: { icon: Waves, label: "swimmingPool" },
+  fitnessCenter: { icon: DumbbellIcon, label: "fitnessCenter" },
+  garage: { icon: HomeIcon, label: "garage" },
+  accessibility: { icon: AccessibilityIcon, label: "accessibility" },
 };
 
 // Appliance mappings
 const applianceMap = {
-  washer: { icon: WashingMachineIcon, label: "Washer" },
-  dryer: { icon: WashingMachineIcon, label: "Dryer" },
-  microwave: { icon: MicrowaveIcon, label: "Microwave" },
-  refrigerator: { icon: RefrigeratorIcon, label: "Refrigerator" },
-  garbageDisposal: { icon: Trash2Icon, label: "Garbage Disposal" },
-  dishwasher: { icon: UtensilsCrossedIcon, label: "Dishwasher" },
-  oven: { icon: MicrowaveIcon, label: "Oven" },
-  freezer: { icon: RefrigeratorIcon, label: "Freezer" },
+  washer: { icon: WashingMachineIcon, label: "washer" },
+  dryer: { icon: WashingMachineIcon, label: "dryer" },
+  microwave: { icon: MicrowaveIcon, label: "microwave" },
+  refrigerator: { icon: RefrigeratorIcon, label: "refrigerator" },
+  garbageDisposal: { icon: Trash2Icon, label: "garbageDisposal" },
+  dishwasher: { icon: UtensilsCrossedIcon, label: "dishwasher" },
+  oven: { icon: MicrowaveIcon, label: "oven" },
+  freezer: { icon: RefrigeratorIcon, label: "freezer" },
 };
 
 export default function PropertyListingDetail() {
@@ -123,13 +123,13 @@ export default function PropertyListingDetail() {
 
     return (
       <div>
-        <h3 className="mt-4 text-xl font-semibold">{title}</h3>
+        <h3 className="mt-4 text-xl font-semibold">{t(title)}</h3>
         <div className="mt-2 flex flex-wrap gap-5">
           {items.map(([key, config]) => {
             const IconComponent = config.icon;
             return (
               <span key={key} className="flex items-center gap-1">
-                <IconComponent className="size-5" /> {config.label}
+                <IconComponent className="size-5" /> {t(config.label)}
               </span>
             );
           })}
@@ -319,13 +319,13 @@ export default function PropertyListingDetail() {
 
           {/* Features */}
           <div>
-            <h3 className="mt-4 text-xl font-semibold">Features</h3>
+            <h3 className="mt-4 text-xl font-semibold">{t("features")}</h3>
             <div className="mt-2 flex flex-wrap gap-5">
               <span
                 className={`flex items-center gap-1 ${data?.permission?.pets ? "text-green-600" : "text-red-600"}`}
               >
                 <PawPrintIcon className="size-5" />
-                {data?.permission?.pets ? "Pets Allowed" : "No Pets Allowed"}
+                {data?.permission?.pets ? t("petsAllowed") : t("noPetsAllowed")}
               </span>
               <span
                 className={`flex items-center gap-1 ${
@@ -336,20 +336,20 @@ export default function PropertyListingDetail() {
               >
                 <CigaretteIcon className="size-5" />
                 {data?.permission?.smoking === "Yes"
-                  ? "Smoking Allowed"
-                  : "Smoking Outside Only"}
+                  ? t("smokingAllowed")
+                  : t("smokingOutsideOnly")}
               </span>
             </div>
           </div>
 
           {/* Utilities */}
-          {renderSection("Utilities Included", utilityMap, data?.amenities)}
+          {renderSection("utilitiesIncluded", utilityMap, data?.amenities)}
 
           {/* Amenities */}
-          {renderSection("Amenities", amenityMap, data?.amenities)}
+          {renderSection("amenities", amenityMap, data?.amenities)}
 
           {/* Appliances */}
-          {renderSection("Appliances", applianceMap, data?.amenities)}
+          {renderSection("appliances", applianceMap, data?.amenities)}
         </div>
 
         {/* Right: Sidebar */}
@@ -394,7 +394,7 @@ export default function PropertyListingDetail() {
             </CardContent>
             <CardFooter className="flex justify-center">
               <Button size="sm" className="rounded-full">
-                <Link to={`/tenant/listing/${id}/apply`}>Apply Now</Link>
+                <Link to={`/tenant/listing/${id}/apply`}>{t("applyNow")}</Link>
               </Button>
             </CardFooter>
           </Card>
@@ -403,11 +403,10 @@ export default function PropertyListingDetail() {
           <Card className="gap-2 rounded bg-gray-50 p-3 shadow-none">
             <CardContent className="space-y-3 px-3">
               <div className="space-y-1">
-                <h3 className="text-xl font-semibold">Contact the Landlord</h3>
-                <p>
-                  Send a message to the landlord if you are interested in or
-                  have any questions about this property.
-                </p>
+                <h3 className="text-xl font-semibold">
+                  {t("contactLandlord")}
+                </h3>
+                <p>{t("contactLandlordDesc")}</p>
               </div>
               <ContactForm />
             </CardContent>
