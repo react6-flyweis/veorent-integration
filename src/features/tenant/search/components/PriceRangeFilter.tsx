@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import { CurrencyInput } from "@/components/CurrencyInput";
 import { Slider } from "@/components/ui/slider";
 
@@ -14,6 +16,8 @@ export const PriceRangeFilter = ({
   min = 0,
   max = 30000,
 }: PriceRangeFilterProps) => {
+  const { t } = useTranslation();
+
   // This would typically come from backend data
   // For demonstration, we're creating mock histogram data
   const getHistogramData = () => {
@@ -29,9 +33,11 @@ export const PriceRangeFilter = ({
 
   return (
     <div className="space-y-3">
-      <h3 className="text-base font-medium">Price range</h3>
+      <h3 className="text-base font-medium">
+        {t("filterDialog.priceRange.title")}
+      </h3>
       <p className="text-muted-foreground text-sm">
-        Nightly prices before fees and taxes
+        {t("filterDialog.priceRange.nightlyPrices")}
       </p>
 
       {/* Histogram visualization */}
@@ -80,8 +86,8 @@ export const PriceRangeFilter = ({
         </div>
 
         <div className="text-muted-foreground mt-2 flex justify-between text-sm">
-          <div>Minimum</div>
-          <div>Maximum</div>
+          <div>{t("filterDialog.priceRange.minimum")}</div>
+          <div>{t("filterDialog.priceRange.maximum")}</div>
         </div>
       </div>
     </div>

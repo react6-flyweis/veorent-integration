@@ -41,7 +41,7 @@ export const LocationFilter = ({
         </Label>
         <Input
           id="city"
-          placeholder="Enter city name"
+          placeholder={t("filterDialog.location.cityPlaceholder")}
           value={city}
           onChange={(e) => handleInputChange("city", e.target.value)}
           className="h-10"
@@ -50,11 +50,11 @@ export const LocationFilter = ({
 
       <div className="space-y-2">
         <Label htmlFor="region" className="text-sm font-medium">
-          State/Region
+          {t("filterDialog.location.region")}
         </Label>
         <Input
           id="region"
-          placeholder="Enter state or region"
+          placeholder={t("filterDialog.location.regionPlaceholder")}
           value={region}
           onChange={(e) => handleInputChange("region", e.target.value)}
           className="h-10"
@@ -67,7 +67,7 @@ export const LocationFilter = ({
         </Label>
         <Input
           id="country"
-          placeholder="Enter country name"
+          placeholder={t("filterDialog.location.countryPlaceholder")}
           value={country}
           onChange={(e) => handleInputChange("country", e.target.value)}
           className="h-10"

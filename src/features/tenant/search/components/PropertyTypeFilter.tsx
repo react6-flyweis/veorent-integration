@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import { Button } from "@/components/ui/button";
 
 interface PropertyType {
@@ -11,38 +13,40 @@ interface PropertyTypeFilterProps {
   setSelectedPropertyTypes: (types: string[]) => void;
 }
 
-const propertyTypes: PropertyType[] = [
-  {
-    id: "single-family",
-    label: "Single family",
-    icon: "🏠",
-  },
-  {
-    id: "furnished-home",
-    label: "Furnished home",
-    icon: "🏠",
-  },
-  {
-    id: "apartment",
-    label: "Apartment",
-    icon: "🏢",
-  },
-  {
-    id: "townhouse",
-    label: "Townhouse",
-    icon: "🏘️",
-  },
-  {
-    id: "multi-family",
-    label: "Multi-family",
-    icon: "🏢",
-  },
-];
-
 export const PropertyTypeFilter = ({
   selectedPropertyTypes,
   setSelectedPropertyTypes,
 }: PropertyTypeFilterProps) => {
+  const { t } = useTranslation();
+
+  const propertyTypes: PropertyType[] = [
+    {
+      id: "single-family",
+      label: t("filterDialog.propertyTypes.singleFamily"),
+      icon: "🏠",
+    },
+    {
+      id: "furnished-home",
+      label: t("filterDialog.propertyTypes.furnishedHome"),
+      icon: "🏠",
+    },
+    {
+      id: "apartment",
+      label: t("filterDialog.propertyTypes.apartment"),
+      icon: "🏢",
+    },
+    {
+      id: "townhouse",
+      label: t("filterDialog.propertyTypes.townhouse"),
+      icon: "🏘️",
+    },
+    {
+      id: "multi-family",
+      label: t("filterDialog.propertyTypes.multiFamily"),
+      icon: "🏢",
+    },
+  ];
+
   const handlePropertyTypeToggle = (typeId: string) => {
     if (selectedPropertyTypes.includes(typeId)) {
       setSelectedPropertyTypes(

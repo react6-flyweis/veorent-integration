@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import { BedDoubleIcon, BathIcon, CalendarIcon, HouseIcon } from "lucide-react";
 
@@ -12,6 +13,7 @@ type ListingProps = {
 };
 
 export function RentalListingCard({ data }: ListingProps) {
+  const { t } = useTranslation();
   return (
     <Card className="flex gap-4 p-3">
       <CardContent className="flex gap-2 p-0">
@@ -28,7 +30,7 @@ export function RentalListingCard({ data }: ListingProps) {
           <div className="">
             <div className="flex items-center gap-2">
               <Badge variant="outline">
-                {data.propertyTypeId?.name || "N/A"}
+                {data.propertyTypeId?.name || t("listingCard.na")}
               </Badge>
             </div>
             <h3 className="mt-1 text-base font-semibold">{data.name}</h3>
@@ -39,18 +41,18 @@ export function RentalListingCard({ data }: ListingProps) {
             <div className="text-muted-foreground mt-2 flex gap-4 text-sm">
               <span className="flex items-center gap-1">
                 <BedDoubleIcon className="h-4 w-4" /> {data.rentalDetails?.beds}{" "}
-                Beds
+                {t("listingCard.beds")}
               </span>
               <span className="flex items-center gap-1">
                 <BathIcon className="h-4 w-4" /> {data.rentalDetails?.baths}{" "}
-                Baths
+                {t("listingCard.baths")}
               </span>
               <span className="flex items-center gap-1">
                 <CalendarIcon className="h-4 w-4" /> {data.status}
               </span>
             </div>
             <p className="text-muted-foreground mt-1 text-xs">
-              Landlord:{" "}
+              {t("listingCard.landlord")}{" "}
               <span className="font-medium">{data.owner.firstname}</span>
             </p>
           </div>
@@ -59,10 +61,12 @@ export function RentalListingCard({ data }: ListingProps) {
               <span className="text-lg font-bold">
                 {data.rentalDetails?.targetRent}
               </span>
-              <span className="text-lg">/MO</span>
+              <span className="text-lg">{t("listingCard.perMonth")}</span>
             </div>
             <Button className="rounded-full" size="sm" asChild>
-              <Link to={`/tenant/listing/${data._id}`}>View Listing</Link>
+              <Link to={`/tenant/listing/${data._id}`}>
+                {t("listingCard.viewListing")}
+              </Link>
             </Button>
           </div>
         </div>

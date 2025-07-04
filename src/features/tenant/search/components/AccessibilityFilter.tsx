@@ -1,3 +1,5 @@
+import { t } from "i18next";
+
 import { Checkbox } from "@/components/ui/checkbox";
 
 type AccessibilityCategory = {
@@ -10,48 +12,75 @@ type AccessibilityCategory = {
 
 const accessibilityData: AccessibilityCategory[] = [
   {
-    title: "Guest entrance and parking",
+    title: t("filterDialog.accessibility.guestEntranceParking"),
     features: [
-      { id: "Step-free guest entrance", label: "Step-free guest entrance" },
+      {
+        id: "Step-free guest entrance",
+        label: t("filterDialog.accessibility.stepFreeGuestEntrance"),
+      },
       {
         id: "Guest entrance wider than 32 inches",
-        label: "Guest entrance wider than 32 inches",
+        label: t("filterDialog.accessibility.guestEntranceWider32"),
       },
       {
         id: "Step-free path to guest entrance",
-        label: "Step-free path to the guest entrance",
+        label: t("filterDialog.accessibility.stepFreePathToGuestEntrance"),
       },
-      { id: "Accessible parking spot", label: "Accessible parking spot" },
+      {
+        id: "Accessible parking spot",
+        label: t("filterDialog.accessibility.accessibleParkingSpot"),
+      },
     ],
   },
   {
-    title: "Bedroom",
+    title: t("filterDialog.accessibility.bedroom"),
     features: [
-      { id: "Step-free bedroom access", label: "Step-free bedroom access" },
+      {
+        id: "Step-free bedroom access",
+        label: t("filterDialog.accessibility.stepFreeBedroomAccess"),
+      },
       {
         id: "Bedroom entrance wider than 32 inches",
-        label: "Bedroom entrance wider than 32 inches",
+        label: t("filterDialog.accessibility.bedroomEntranceWider32"),
       },
     ],
   },
   {
-    title: "Bathroom",
+    title: t("filterDialog.accessibility.bathroom"),
     features: [
-      { id: "Step-free bathroom access", label: "Step-free bathroom access" },
+      {
+        id: "Step-free bathroom access",
+        label: t("filterDialog.accessibility.stepFreeBathroomAccess"),
+      },
       {
         id: "Bathroom entrance wider than 32 inches",
-        label: "Bathroom entrance wider than 32 inches",
+        label: t("filterDialog.accessibility.bathroomEntranceWider32"),
       },
-      { id: "Toilet grab bar", label: "Toilet grab bar" },
-      { id: "Shower grab bar", label: "Shower grab bar" },
-      { id: "Step-free shower", label: "Step-free shower" },
-      { id: "Shower or bath chair", label: "Shower or bath chair" },
+      {
+        id: "Toilet grab bar",
+        label: t("filterDialog.accessibility.toiletGrabBar"),
+      },
+      {
+        id: "Shower grab bar",
+        label: t("filterDialog.accessibility.showerGrabBar"),
+      },
+      {
+        id: "Step-free shower",
+        label: t("filterDialog.accessibility.stepFreeShower"),
+      },
+      {
+        id: "Shower or bath chair",
+        label: t("filterDialog.accessibility.showerOrBathChair"),
+      },
     ],
   },
   {
-    title: "Adaptive equipment",
+    title: t("filterDialog.accessibility.adaptiveEquipment"),
     features: [
-      { id: "Ceiling or mobile hoist", label: "Ceiling or mobile hoist" },
+      {
+        id: "Ceiling or mobile hoist",
+        label: t("filterDialog.accessibility.ceilingOrMobileHoist"),
+      },
     ],
   },
 ];

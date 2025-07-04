@@ -1,6 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { MinusIcon, PlusIcon } from "lucide-react";
 import React from "react";
+import { useTranslation } from "react-i18next";
+import { MinusIcon, PlusIcon } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 
 interface RoomsAndBedsFilterProps {
   bedrooms: number;
@@ -25,15 +27,31 @@ export const RoomsAndBedsFilter: React.FC<RoomsAndBedsFilterProps> = ({
   bathrooms,
   setBathrooms,
 }) => {
+  const { t } = useTranslation();
+
   const filterItems: FilterItem[] = [
-    { label: "Bedrooms", value: bedrooms, setValue: setBedrooms },
-    { label: "Beds", value: beds, setValue: setBeds },
-    { label: "Bathrooms", value: bathrooms, setValue: setBathrooms },
+    {
+      label: t("filterDialog.roomsAndBeds.bedrooms"),
+      value: bedrooms,
+      setValue: setBedrooms,
+    },
+    {
+      label: t("filterDialog.roomsAndBeds.beds"),
+      value: beds,
+      setValue: setBeds,
+    },
+    {
+      label: t("filterDialog.roomsAndBeds.bathrooms"),
+      value: bathrooms,
+      setValue: setBathrooms,
+    },
   ];
 
   return (
     <div className="space-y-4">
-      <h3 className="text-base font-medium">Rooms and beds</h3>
+      <h3 className="text-base font-medium">
+        {t("filterDialog.roomsAndBeds.title")}
+      </h3>
 
       <div className="space-y-5">
         {filterItems.map((item) => (

@@ -207,9 +207,12 @@
         "success": "Your message has been sent successfully!"
     },
     "searchProperty": {
-        "found": "Found {{count}} propert{{count === 1 ? 'y' : 'ies'}}",
+        "searchRentals": "Search rentals...",
+        "found": "Found {{count}} properties",
         "matchingFilters": " matching your filters",
         "noProperties": "No properties found",
+        "activeFilters": "Active Filters ({{count}})",
+        "clearAll": "Clear All",
         "errorLoading": "Error loading properties. Please try again.",
         "noPropertiesCriteria": "No properties found matching your criteria."
     },
@@ -264,5 +267,97 @@
         "roleLabel": "What are you applying as?",
         "tenant": "Tenant",
         "cosigner": "Co-Signer"
+    },
+    "filterDialog": {
+        "filters": "Filters",
+        "typeOfPlace": "Type of place",
+        "anyType": "Any type",
+        "room": "Room",
+        "entireHome": "Entire home",
+        "clearAll": "Clear all",
+        "applyFilters": "Apply filters",
+        "priceRange": {
+            "title": "Price range",
+            "nightlyPrices": "Nightly prices before fees and taxes",
+            "minimum": "Minimum",
+            "maximum": "Maximum"
+        },
+        "roomsAndBeds": {
+            "title": "Rooms and beds",
+            "bedrooms": "Bedrooms",
+            "beds": "Beds",
+            "bathrooms": "Bathrooms"
+        },
+        "location": {
+            "cityPlaceholder": "Enter city name",
+            "region": "State/Region",
+            "regionPlaceholder": "Enter state or region",
+            "countryPlaceholder": "Enter country"
+        },
+        "propertyType": "Property type",
+        "propertyTypes": {
+            "singleFamily": "Single family",
+            "furnishedHome": "Furnished home",
+            "apartment": "Apartment",
+            "townhouse": "Townhouse",
+            "multiFamily": "Multi-family"
+        },
+        "amenities": {
+            "essentials": "Essentials",
+            "wifi": "Wifi",
+            "kitchen": "Kitchen",
+            "dryer": "Dryer",
+            "washingMachine": "Washing machine",
+            "airConditioning": "Air conditioning",
+            "tv": "TV",
+            "heating": "Heating",
+            "features": "Features",
+            "pool": "Pool",
+            "gym": "Gym",
+            "freeParking": "Free parking",
+            "indoorFireplace": "Indoor fireplace",
+            "breakfast": "Breakfast",
+            "location": "Location",
+            "beachfront": "Beachfront",
+            "waterfall": "Waterfall",
+            "skiInOut": "Ski-in/out",
+            "hillfront": "Hillfront",
+            "bookingOptions": "Booking options",
+            "allowPets": "Allow pets",
+            "instantBook": "Instant book",
+            "selfCheckIn": "Self check-in",
+            "hotTub": "Hot tub",
+            "bbqGrill": "BBQ grill",
+            "kingBed": "King bed",
+            "smokingAllowed": "Smoking allowed"
+        },
+        "accessibilityFeatures": "Accessibility features",
+        "accessibility": {
+            "guestEntranceParking": "Guest entrance and parking",
+            "stepFreeGuestEntrance": "Step-free guest entrance",
+            "guestEntranceWider32": "Guest entrance wider than 32 inches",
+            "stepFreePathToGuestEntrance": "Step-free path to the guest entrance",
+            "accessibleParkingSpot": "Accessible parking spot",
+            "bedroom": "Bedroom",
+            "stepFreeBedroomAccess": "Step-free bedroom access",
+            "bedroomEntranceWider32": "Bedroom entrance wider than 32 inches",
+            "bathroom": "Bathroom",
+            "stepFreeBathroomAccess": "Step-free bathroom access",
+            "bathroomEntranceWider32": "Bathroom entrance wider than 32 inches",
+            "toiletGrabBar": "Toilet grab bar",
+            "showerGrabBar": "Shower grab bar",
+            "stepFreeShower": "Step-free shower",
+            "showerOrBathChair": "Shower or bath chair",
+            "adaptiveEquipment": "Adaptive equipment",
+            "ceilingOrMobileHoist": "Ceiling or mobile hoist"
+        }
+    },
+    "listingCard": {
+        "na": "N/A",
+        "beds": "Beds",
+        "baths": "Baths",
+        "landlord": "Landlord:",
+        "perMonth": "/MO",
+        "viewListing": "View Listing"
     }
 }
