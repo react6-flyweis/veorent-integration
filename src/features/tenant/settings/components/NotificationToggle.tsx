@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import { Loader } from "@/components/Loader";
@@ -27,6 +28,7 @@ export function NotificationToggle({
   showToggle = false,
   onToggleVisibilityChange,
 }: NotificationToggleProps) {
+  const { t } = useTranslation();
   const [showNotificationToggles, setShowNotificationToggles] =
     useState(showToggle);
   const [showNotificationPreferences, setShowNotificationPreferences] =
@@ -56,11 +58,10 @@ export function NotificationToggle({
   return (
     <div className="space-y-1">
       <h2 className="text-primary text-xl font-semibold">
-        Notification Preferences
+        {t("notificationPreferences.title")}
       </h2>
       <p className="text-muted-foreground">
-        Manage your notification preferences to control how you receive updates
-        and alerts.
+        {t("notificationPreferences.description")}
       </p>
       <div className="flex items-center justify-between">
         <Button
@@ -68,7 +69,7 @@ export function NotificationToggle({
           variant="outlinePrimary"
           className="w-42"
         >
-          Change Preferences
+          {t("notificationPreferences.change")}
         </Button>
         {showNotificationToggles && (
           <div className="flex items-center space-x-2">

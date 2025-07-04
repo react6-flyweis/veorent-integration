@@ -84,7 +84,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
           name="firstName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("firstName")}</FormLabel>
+              <FormLabel>{t("profileForm.firstName")}</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -99,7 +99,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
           name="lastName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("lastName")}</FormLabel>
+              <FormLabel>{t("profileForm.lastName")}</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -114,7 +114,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
           name="mobileNumber"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("mobileNumber")}</FormLabel>
+              <FormLabel>{t("profileForm.mobileNumber")}</FormLabel>
               <FormControl>
                 <Input type="tel" {...field} />
               </FormControl>
@@ -129,7 +129,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("email")}</FormLabel>
+              <FormLabel>{t("profileForm.email")}</FormLabel>
               <FormControl>
                 <Input type="email" {...field} />
               </FormControl>
@@ -144,7 +144,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
           className="w-full"
           isLoading={form.formState.isSubmitting}
         >
-          {t("saveChanges")}
+          {t("profileForm.saveChanges")}
         </LoadingButton>
       </form>
     </Form>

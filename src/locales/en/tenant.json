@@ -1,5 +1,47 @@
 {
     "notifications": {
         "title": "Notifications"
+    },
+    "tSettings": {
+        "accountSettings": "Account Settings",
+        "failedToLoadProfile": "Failed to load profile.",
+        "myInformation": "My Information",
+        "password": "Password",
+        "changePassword": "Change Password",
+        "cancel": "Cancel"
+    },
+    "notificationPreferences": {
+        "title": "Notification Preferences",
+        "description": "Manage your notification preferences to control how you receive updates and alerts.",
+        "change": "Change Preferences",
+        "failedUpdate": "Failed to update notification preference: {{message}}"
+    },
+    "profileForm": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "mobileNumber": "Mobile Number",
+        "email": "Email",
+        "saveChanges": "Save Changes",
+        "profileUpdated": "Profile updated successfully.",
+        "errorMessage": "An error occurred. Please try again."
+    },
+    "changePasswordForm": {
+        "emailPlaceholder": "Enter your email",
+        "sendOtp": "Send OTP",
+        "sending": "Sending...",
+        "otpLabel": "Enter OTP",
+        "otpSent": "OTP sent to your email",
+        "otpFailed": "Failed to send OTP",
+        "newPassword": "New Password",
+        "newPasswordPlaceholder": "Enter new password",
+        "confirmPassword": "Re-enter Password",
+        "confirmPasswordPlaceholder": "Confirm new password",
+        "passwordChanged": "Password changed successfully"
+    },
+    "profilePicture": {
+        "uploading": "Uploading...",
+        "uploadPhoto": "Upload Photo",
+        "uploadSuccess": "Profile picture updated successfully",
+        "uploadFailed": "Failed to upload profile picture"
     }
 }

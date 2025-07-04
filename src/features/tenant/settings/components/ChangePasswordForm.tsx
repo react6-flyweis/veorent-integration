@@ -146,10 +146,10 @@ export function ChangePasswordForm({
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("email")}</FormLabel>
+                <FormLabel>{t("profileForm.email")}</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Enter your email"
+                    placeholder={t("changePasswordForm.emailPlaceholder")}
                     {...field}
                     disabled={step !== "email"}
                   />
@@ -167,7 +167,9 @@ export function ChangePasswordForm({
               disabled={forgetPasswordMutation.isPending}
               className="w-full"
             >
-              {forgetPasswordMutation.isPending ? "Sending..." : "Send OTP"}
+              {forgetPasswordMutation.isPending
+                ? t("changePasswordForm.sending")
+                : t("changePasswordForm.sendOtp")}
             </Button>
           )}
 
@@ -178,7 +180,7 @@ export function ChangePasswordForm({
               name="otp"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Enter OTP</FormLabel>
+                  <FormLabel>{t("changePasswordForm.otpLabel")}</FormLabel>
                   <FormControl>
                     <div className="flex gap-2">
                       {Array.from({ length: 6 }).map((_, index) => (
@@ -214,11 +216,13 @@ export function ChangePasswordForm({
                 name="newPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("newPassword")}</FormLabel>
+                    <FormLabel>{t("changePasswordForm.newPassword")}</FormLabel>
                     <FormControl>
                       <Input
                         type="password"
-                        placeholder="Enter new password"
+                        placeholder={t(
+                          "changePasswordForm.newPasswordPlaceholder",
+                        )}
                         {...field}
                       />
                     </FormControl>
@@ -232,11 +236,15 @@ export function ChangePasswordForm({
                 name="confirmPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Re-enter Password</FormLabel>
+                    <FormLabel>
+                      {t("changePasswordForm.confirmPassword")}
+                    </FormLabel>
                     <FormControl>
                       <Input
                         type="password"
-                        placeholder="Confirm new password"
+                        placeholder={t(
+                          "changePasswordForm.confirmPasswordPlaceholder",
+                        )}
                         {...field}
                       />
                     </FormControl>

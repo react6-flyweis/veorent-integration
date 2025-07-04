@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { User2Icon } from "lucide-react";
 
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -7,6 +8,7 @@ import { useToast } from "@/hooks/useAlertToast";
 import { useUploadProfilePictureMutation } from "../api/mutations";
 
 export function ProfilePicture({ profile }: { profile?: IUser }) {
+  const { t } = useTranslation();
   const uploadProfilePictureMutation = useUploadProfilePictureMutation();
   const { showToast } = useToast();
 
@@ -18,9 +20,9 @@ export function ProfilePicture({ profile }: { profile?: IUser }) {
         formData.append("image", file);
 
         await uploadProfilePictureMutation.mutateAsync(formData);
-        showToast("Profile picture updated successfully", "success");
+        showToast(t("profilePicture.uploadSuccess"), "success");
       } catch {
-        showToast("Failed to upload profile picture", "error");
+        showToast(t("profilePicture.uploadFailed"), "error");
       }
     }
   };
@@ -53,8 +55,8 @@ export function ProfilePicture({ profile }: { profile?: IUser }) {
           type="button"
         >
           {uploadProfilePictureMutation.isPending
-            ? "Uploading..."
-            : "Upload Photo"}
+            ? t("profilePicture.uploading")
+            : t("profilePicture.uploadPhoto")}
         </Button>
       </div>
     </div>
