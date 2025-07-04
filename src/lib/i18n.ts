@@ -5,7 +5,9 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import en from "@/locales/en/common.json";
 import enTenant from "@/locales/en/tenant.json";
 import es from "@/locales/es/common.json";
+import esTenant from "@/locales/es/tenant.json";
 import fr from "@/locales/fr/common.json";
+import frTenant from "@/locales/fr/tenant.json";
 
 i18n
   .use(LanguageDetector)
@@ -16,10 +18,10 @@ i18n
         translation: Object.assign({}, en, enTenant),
       },
       es: {
-        translation: es,
+        translation: Object.assign({}, es, esTenant),
       },
       fr: {
-        translation: fr,
+        translation: Object.assign({}, fr, frTenant),
       },
     },
     fallbackLng: "en",

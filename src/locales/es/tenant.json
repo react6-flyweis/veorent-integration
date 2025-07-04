@@ -1,0 +1,47 @@
+{
+    "notifications": {
+        "title": "Notificaciones"
+    },
+    "tSettings": {
+        "accountSettings": "Configuración de la cuenta",
+        "failedToLoadProfile": "No se pudo cargar el perfil.",
+        "myInformation": "Mi información",
+        "password": "Contraseña",
+        "changePassword": "Cambiar contraseña",
+        "cancel": "Cancelar"
+    },
+    "notificationPreferences": {
+        "title": "Preferencias de notificación",
+        "description": "Administra tus preferencias de notificación para controlar cómo recibes actualizaciones y alertas.",
+        "change": "Cambiar preferencias",
+        "failedUpdate": "No se pudo actualizar la preferencia de notificación: {{message}}"
+    },
+    "profileForm": {
+        "firstName": "Nombre",
+        "lastName": "Apellido",
+        "mobileNumber": "Número de móvil",
+        "email": "Correo electrónico",
+        "saveChanges": "Guardar cambios",
+        "profileUpdated": "Perfil actualizado correctamente.",
+        "errorMessage": "Ocurrió un error. Por favor, inténtalo de nuevo."
+    },
+    "changePasswordForm": {
+        "emailPlaceholder": "Introduce tu correo electrónico",
+        "sendOtp": "Enviar OTP",
+        "sending": "Enviando...",
+        "otpLabel": "Introduce el OTP",
+        "otpSent": "OTP enviado a tu correo electrónico",
+        "otpFailed": "No se pudo enviar el OTP",
+        "newPassword": "Nueva contraseña",
+        "newPasswordPlaceholder": "Introduce la nueva contraseña",
+        "confirmPassword": "Reingresa la contraseña",
+        "confirmPasswordPlaceholder": "Confirma la nueva contraseña",
+        "passwordChanged": "Contraseña cambiada correctamente"
+    },
+    "profilePicture": {
+        "uploading": "Subiendo...",
+        "uploadPhoto": "Subir foto",
+        "uploadSuccess": "Foto de perfil actualizada correctamente",
+        "uploadFailed": "No se pudo subir la foto de perfil"
+    }
+}

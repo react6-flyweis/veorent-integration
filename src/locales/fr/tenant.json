@@ -1,0 +1,47 @@
+{
+    "notifications": {
+        "title": "Notifications"
+    },
+    "tSettings": {
+        "accountSettings": "Paramètres du compte",
+        "failedToLoadProfile": "Échec du chargement du profil.",
+        "myInformation": "Mes informations",
+        "password": "Mot de passe",
+        "changePassword": "Changer le mot de passe",
+        "cancel": "Annuler"
+    },
+    "notificationPreferences": {
+        "title": "Préférences de notification",
+        "description": "Gérez vos préférences de notification pour contrôler la façon dont vous recevez les mises à jour et les alertes.",
+        "change": "Modifier les préférences",
+        "failedUpdate": "Échec de la mise à jour de la préférence de notification : {{message}}"
+    },
+    "profileForm": {
+        "firstName": "Prénom",
+        "lastName": "Nom de famille",
+        "mobileNumber": "Numéro de mobile",
+        "email": "E-mail",
+        "saveChanges": "Enregistrer les modifications",
+        "profileUpdated": "Profil mis à jour avec succès.",
+        "errorMessage": "Une erreur s'est produite. Veuillez réessayer."
+    },
+    "changePasswordForm": {
+        "emailPlaceholder": "Entrez votre e-mail",
+        "sendOtp": "Envoyer le code OTP",
+        "sending": "Envoi...",
+        "otpLabel": "Entrez le code OTP",
+        "otpSent": "Code OTP envoyé à votre e-mail",
+        "otpFailed": "Échec de l'envoi du code OTP",
+        "newPassword": "Nouveau mot de passe",
+        "newPasswordPlaceholder": "Entrez le nouveau mot de passe",
+        "confirmPassword": "Ressaisir le mot de passe",
+        "confirmPasswordPlaceholder": "Confirmez le nouveau mot de passe",
+        "passwordChanged": "Mot de passe changé avec succès"
+    },
+    "profilePicture": {
+        "uploading": "Téléchargement...",
+        "uploadPhoto": "Télécharger une photo",
+        "uploadSuccess": "Photo de profil mise à jour avec succès",
+        "uploadFailed": "Échec du téléchargement de la photo de profil"
+    }
+}
