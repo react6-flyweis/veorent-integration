@@ -2,6 +2,7 @@ import { MinusIcon, PlusIcon } from "lucide-react";
 
 import { CurrencyIcon } from "@/components/CurrencyIcon";
 import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
 export function TransactionCard({
@@ -50,5 +51,26 @@ export function TransactionCard({
         </div>
       </CardContent>
     </Card>
+  );
+}
+
+export function TransactionCardSkeleton() {
+  return (
+    <div className="mt-1 rounded-md border py-0">
+      <div className="flex items-center justify-between p-3">
+        <div className="flex-1">
+          <Skeleton className="mb-2 h-5 w-48" />
+          <Skeleton className="mb-1 h-4 w-32" />
+          <Skeleton className="h-4 w-40" />
+        </div>
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-6 w-6" />
+          <div className="flex items-center gap-1">
+            <Skeleton className="h-4 w-4" />
+            <Skeleton className="h-6 w-16" />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

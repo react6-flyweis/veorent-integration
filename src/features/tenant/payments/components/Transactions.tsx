@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { TransactionCard } from "./TransactionCard";
+import { TransactionCard, TransactionCardSkeleton } from "./TransactionCard";
 import { useGetTransactionsQuery } from "../api/queries";
 
 export function Transactions() {
@@ -70,22 +70,7 @@ export function Transactions() {
             {/* Skeleton for transaction cards */}
             {Array.from({ length: Math.floor(Math.random() * 3) + 1 }).map(
               (_, cardIndex) => (
-                <div key={cardIndex} className="mt-1 rounded-md border py-0">
-                  <div className="flex items-center justify-between p-3">
-                    <div className="flex-1">
-                      <Skeleton className="mb-2 h-5 w-48" />
-                      <Skeleton className="mb-1 h-4 w-32" />
-                      <Skeleton className="h-4 w-40" />
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Skeleton className="h-6 w-6" />
-                      <div className="flex items-center gap-1">
-                        <Skeleton className="h-4 w-4" />
-                        <Skeleton className="h-6 w-16" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <TransactionCardSkeleton key={cardIndex} />
               ),
             )}
           </div>
