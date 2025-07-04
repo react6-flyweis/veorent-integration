@@ -1,0 +1,26 @@
+{
+    "sidebar": {
+        "dashboard": "Tableau de bord",
+        "messages": "Messages",
+        "properties": "Propriétés",
+        "bookingCalendar": "Calendrier de réservation",
+        "maintenance": "Maintenance",
+        "leases": "Baux",
+        "form": "Formulaire",
+        "renters": "Locataires",
+        "payments": "Paiements",
+        "expenses": "Dépenses",
+        "accounting": "Comptabilité",
+        "education": "Éducation",
+        "help": "Aide",
+        "referral": "Parrainage",
+        "subscription": "Abonnement",
+        "settings": "Paramètres",
+        "documents": "Documents",
+        "signDocuments": "Signer les documents",
+        "notification": "Notification"
+    },
+    "pageTitle": {
+        "forms": "Formulaires"
+    }
+}

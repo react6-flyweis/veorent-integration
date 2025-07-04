@@ -48,7 +48,7 @@ const Expenses = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <PageTitle title={t("expenses")} className="mb-0" />
+        <PageTitle title={t("sidebar.expenses")} className="mb-0" />
         <Dialog>
           <DialogTrigger asChild>
             <CreateButton label={t("addNewExpense")} />

@@ -34,7 +34,7 @@ export default function Payments() {
 
   return (
     <div className="flex h-full flex-col">
-      <PageTitle title={t("payments")} />
+      <PageTitle title={t("sidebar.payments")} />
       <Tabs className="flex-1" defaultValue="balance">
         <TabsList>
           <TabsTrigger value="balance">{t("balanceDetails")}</TabsTrigger>

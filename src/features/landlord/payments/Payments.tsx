@@ -25,7 +25,7 @@ export default function Payments() {
   return (
     <div className="">
       <div className="mb-5 flex items-center justify-between">
-        <PageTitle title={t("payments")} className="mb-0" />
+        <PageTitle title={t("sidebar.payments")} className="mb-0" />
         <Link to="/landlord/payments/create-charge">
           <CreateButton label={t("createCharge")} />
         </Link>

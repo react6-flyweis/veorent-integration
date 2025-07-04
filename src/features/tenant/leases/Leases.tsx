@@ -69,7 +69,7 @@ function Leases() {
 
   return (
     <div className="flex flex-1 flex-col">
-      <PageTitle title={t("leases")} />
+      <PageTitle title={t("sidebar.leases")} />
       <Tabs defaultValue="open" className="flex-1" onValueChange={setActiveTab}>
         <TabsList className="px-0">
           <TabsTrigger className="pl-0" value="open">

@@ -53,7 +53,7 @@ export default function Subscription() {
 
   return (
     <div className="container">
-      <PageTitle title={t("subscription")} />
+      <PageTitle title={t("sidebar.subscription")} />
       <div className="grid grid-cols-1 gap-10 @md:grid-cols-2 @xl:grid-cols-3 @2xl:gap-14 @3xl:gap-20">
         {isLoading ? (
           <div className="col-span-1 @md:col-span-2 @xl:col-span-3">

@@ -4,51 +4,51 @@ import { type SidebarItem } from "@/features/shared/layouts/AppSidebar";
 export const tenantNavigation: SidebarItem[] = [
   {
     icon: "dashboard.png",
-    title: "Dashboard",
+    title: "sidebar.dashboard",
     url: "/tenant",
   },
   {
-    title: "Messages",
+    title: "sidebar.messages",
     icon: "message.png",
     url: "/tenant/messages",
   },
   {
-    title: "Maintenance",
+    title: "sidebar.maintenance",
     icon: "maintenance.png",
     url: "/tenant/maintenance",
   },
   {
-    title: "Leases",
+    title: "sidebar.leases",
     icon: "lease.png",
     url: "/tenant/leases",
   },
   {
-    title: "Documents",
+    title: "sidebar.documents",
     icon: "documents.png",
     url: "/tenant/documents",
   },
   {
-    title: "Sign Documents",
+    title: "sidebar.signDocuments",
     icon: "sign-documents.png",
     url: "/tenant/sign-documents",
   },
   {
-    title: "Payments",
+    title: "sidebar.payments",
     icon: "finance.png",
     url: "/tenant/payments",
   },
   {
-    title: "Notification",
+    title: "sidebar.notification",
     icon: "notification.png",
     url: "/tenant/notification",
   },
   {
-    title: "Help",
+    title: "sidebar.help",
     icon: "help.png",
     url: "/tenant/help",
   },
   {
-    title: "Settings",
+    title: "sidebar.settings",
     icon: "setting.png",
     url: "/tenant/settings",
   },

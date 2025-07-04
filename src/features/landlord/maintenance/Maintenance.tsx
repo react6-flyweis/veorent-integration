@@ -154,7 +154,7 @@ export default function Maintenance() {
   return (
     <div className="w-full space-y-8">
       <div className="flex items-center justify-between">
-        <PageTitle title={t("maintenance")} className="mb-0" />
+        <PageTitle title={t("sidebar.maintenance")} className="mb-0" />
         <Link to="create">
           <CreateButton label={t("createRequest")} />
         </Link>

@@ -65,7 +65,7 @@ export default function Leases() {
   return (
     <div className="space-y-5">
       <div className="flex items-end justify-between">
-        <PageTitle title={t("leases")} className="mb-0" />
+        <PageTitle title={t("sidebar.leases")} className="mb-0" />
         <Link to="create">
           <CreateButton label={t("createLease")} />
         </Link>

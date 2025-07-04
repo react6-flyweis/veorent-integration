@@ -1,0 +1,26 @@
+{
+    "sidebar": {
+        "dashboard": "Dashboard",
+        "messages": "Messages",
+        "properties": "Properties",
+        "bookingCalendar": "Booking Calendar",
+        "maintenance": "Maintenance",
+        "leases": "Leases",
+        "form": "Form",
+        "renters": "Renters",
+        "payments": "Payments",
+        "expenses": "Expenses",
+        "accounting": "Accounting",
+        "education": "Education",
+        "help": "Help",
+        "referral": "Referral",
+        "subscription": "Subscription",
+        "settings": "Settings",
+        "documents": "Documents",
+        "signDocuments": "Sign Documents",
+        "notification": "Notification"
+    },
+    "pageTitle": {
+        "forms": "Forms"
+    }
+}

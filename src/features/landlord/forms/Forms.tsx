@@ -11,7 +11,7 @@ export default function Forms() {
 
   return (
     <div className="">
-      <PageTitle title={t("forms")} />
+      <PageTitle title={t("pageTitle.forms")} />
 
       <div className="mt-2 mb-6">
         <span className="text-sm font-medium text-blue-500 uppercase">

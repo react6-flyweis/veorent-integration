@@ -69,7 +69,7 @@ export default function Maintenance() {
 
   return (
     <div className="flex flex-1 flex-col">
-      <PageTitle title={t("maintenance")} />
+      <PageTitle title={t("sidebar.maintenance")} />
       <Tabs defaultValue="open" className="flex-1" onValueChange={setActiveTab}>
         <TabsList className="px-0">
           <TabsTrigger className="pl-0" value="open">
