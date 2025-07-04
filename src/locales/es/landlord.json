@@ -1,0 +1,114 @@
+{
+    "notification": {
+        "tabs": {
+            "updates": "ACTUALIZACIONES Y OFERTAS",
+            "account": "CUENTA"
+        },
+        "items": {
+            "platformUpdates": {
+                "title": "Actualizaciones de la plataforma",
+                "description": "Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto."
+            },
+            "promotions": {
+                "title": "Promociones",
+                "description": "Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto."
+            },
+            "weeklyNewsletter": {
+                "title": "El boletín semanal The Key",
+                "description": "Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto."
+            },
+            "webinarsAndEvents": {
+                "title": "Seminarios web y eventos de networking",
+                "description": "Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto."
+            },
+            "messagesFromRenters": {
+                "title": "Mensajes de los inquilinos",
+                "description": "Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto."
+            },
+            "property": {
+                "title": "Propiedad",
+                "description": "Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto."
+            },
+            "leads": {
+                "title": "Clientes potenciales",
+                "description": "Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto."
+            },
+            "applicants": {
+                "title": "Solicitantes",
+                "description": "Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto."
+            },
+            "leases": {
+                "title": "Contratos de arrendamiento",
+                "description": "Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto."
+            },
+            "payments": {
+                "title": "Pagos",
+                "description": "Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto."
+            },
+            "feedback": {
+                "title": "Registros y comentarios de mantenimiento",
+                "description": "Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto."
+            }
+        },
+        "edit": "Editar",
+        "on": "Activado",
+        "off": "Desactivado",
+        "channelTitles": {
+            "push": "Notificaciones push",
+            "email": "Notificaciones por correo electrónico",
+            "call": "Notificaciones de llamadas"
+        }
+    },
+    "accountForm": {
+        "title": "Mi información",
+        "firstName": "Nombre",
+        "lastName": "Apellido",
+        "company": "Empresa",
+        "optional": "Opcional",
+        "email": "Correo electrónico",
+        "phone": "Teléfono",
+        "streetAddress": "Dirección",
+        "unit": "Unidad",
+        "city": "Ciudad",
+        "region": "Región",
+        "zipCode": "Código postal",
+        "password": "Contraseña",
+        "changePassword": "Cambiar contraseña",
+        "save": "Guardar cambios",
+        "validation": {
+            "firstName": "El nombre debe tener al menos 2 caracteres.",
+            "lastName": "El apellido debe tener al menos 2 caracteres.",
+            "email": "Por favor, introduce una dirección de correo electrónico válida.",
+            "phone": "El número de teléfono debe tener al menos 10 caracteres.",
+            "streetAddress": "La dirección debe tener al menos 3 caracteres.",
+            "unit": "La unidad es obligatoria.",
+            "city": "La ciudad es obligatoria.",
+            "region": "La región es obligatoria.",
+            "zipCode": "El código postal debe tener al menos 5 caracteres."
+        }
+    },
+    "changePassword": {
+        "title": "Cambia tu contraseña",
+        "currentPassword": "Contraseña actual",
+        "newPassword": "Nueva contraseña",
+        "confirmPassword": "Confirmar nueva contraseña",
+        "forgot": "¿Olvidaste tu contraseña?",
+        "cancel": "Cancelar",
+        "change": "Cambiar",
+        "validation": {
+            "currentPassword": "La contraseña actual es obligatoria",
+            "newPassword": "La contraseña debe tener al menos 8 caracteres",
+            "confirmPassword": "Por favor, confirma tu contraseña",
+            "match": "Las contraseñas no coinciden"
+        }
+    },
+    "companyLogoUpload": {
+        "label": "Logotipo de la empresa",
+        "alt": "Logotipo de la empresa",
+        "add": "Añadir logotipo",
+        "uploading": "Subiendo...",
+        "invalidFile": "Por favor, selecciona un archivo de imagen válido",
+        "fileSize": "El tamaño del archivo debe ser inferior a 5 MB",
+        "success": "¡El logotipo de la empresa se ha actualizado correctamente!"
+    }
+}

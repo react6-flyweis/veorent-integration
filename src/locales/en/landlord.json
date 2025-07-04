@@ -1,0 +1,114 @@
+{
+    "notification": {
+        "tabs": {
+            "updates": "UPDATES & OFFERS",
+            "account": "ACCOUNT"
+        },
+        "items": {
+            "platformUpdates": {
+                "title": "Platform Updates",
+                "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            },
+            "promotions": {
+                "title": "Promotions",
+                "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            },
+            "weeklyNewsletter": {
+                "title": "The Key Weekly Newsletter",
+                "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            },
+            "webinarsAndEvents": {
+                "title": "Webinars & Networking Events",
+                "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            },
+            "messagesFromRenters": {
+                "title": "Messages from Renters",
+                "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            },
+            "property": {
+                "title": "Property",
+                "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            },
+            "leads": {
+                "title": "Leads",
+                "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            },
+            "applicants": {
+                "title": "Applicants",
+                "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            },
+            "leases": {
+                "title": "Leases",
+                "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            },
+            "payments": {
+                "title": "Payments",
+                "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            },
+            "feedback": {
+                "title": "Check-ins & Maintenance Feedback",
+                "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            }
+        },
+        "edit": "Edit",
+        "on": "On",
+        "off": "Off",
+        "channelTitles": {
+            "push": "Push Notifications",
+            "email": "Email Notifications",
+            "call": "Call Notifications"
+        }
+    },
+    "accountForm": {
+        "title": "My Information",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "company": "Company",
+        "optional": "Optional",
+        "email": "Email",
+        "phone": "Phone",
+        "streetAddress": "Street Address",
+        "unit": "Unit",
+        "city": "City",
+        "region": "Region",
+        "zipCode": "Zip Code",
+        "password": "Password",
+        "changePassword": "Change Password",
+        "save": "Save Changes",
+        "validation": {
+            "firstName": "First name must be at least 2 characters.",
+            "lastName": "Last name must be at least 2 characters.",
+            "email": "Please enter a valid email address.",
+            "phone": "Phone number must be at least 10 characters.",
+            "streetAddress": "Street address must be at least 3 characters.",
+            "unit": "Unit is required.",
+            "city": "City is required.",
+            "region": "Region is required.",
+            "zipCode": "Zip code must be at least 5 characters."
+        }
+    },
+    "changePassword": {
+        "title": "Change Your Password",
+        "currentPassword": "Current Password",
+        "newPassword": "New Password",
+        "confirmPassword": "Confirm New Password",
+        "forgot": "Forgot your password?",
+        "cancel": "Cancel",
+        "change": "Change",
+        "validation": {
+            "currentPassword": "Current password is required",
+            "newPassword": "Password must be at least 8 characters",
+            "confirmPassword": "Please confirm your password",
+            "match": "Passwords don't match"
+        }
+    },
+    "companyLogoUpload": {
+        "label": "Company Logo",
+        "alt": "Company Logo",
+        "add": "Add Logo",
+        "uploading": "Uploading...",
+        "invalidFile": "Please select a valid image file",
+        "fileSize": "File size must be less than 5MB",
+        "success": "Company logo updated successfully!"
+    }
+}

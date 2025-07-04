@@ -1,0 +1,114 @@
+{
+    "notification": {
+        "tabs": {
+            "updates": "MISES À JOUR ET OFFRES",
+            "account": "COMPTE"
+        },
+        "items": {
+            "platformUpdates": {
+                "title": "Mises à jour de la plateforme",
+                "description": "Le Lorem Ipsum est simplement du faux texte de l'industrie de l'imprimerie et de la composition."
+            },
+            "promotions": {
+                "title": "Promotions",
+                "description": "Le Lorem Ipsum est simplement du faux texte de l'industrie de l'imprimerie et de la composition."
+            },
+            "weeklyNewsletter": {
+                "title": "La newsletter hebdomadaire The Key",
+                "description": "Le Lorem Ipsum est simplement du faux texte de l'industrie de l'imprimerie et de la composition."
+            },
+            "webinarsAndEvents": {
+                "title": "Webinaires et événements de réseautage",
+                "description": "Le Lorem Ipsum est simplement du faux texte de l'industrie de l'imprimerie et de la composition."
+            },
+            "messagesFromRenters": {
+                "title": "Messages des locataires",
+                "description": "Le Lorem Ipsum est simplement du faux texte de l'industrie de l'imprimerie et de la composition."
+            },
+            "property": {
+                "title": "Propriété",
+                "description": "Le Lorem Ipsum est simplement du faux texte de l'industrie de l'imprimerie et de la composition."
+            },
+            "leads": {
+                "title": "Pistes",
+                "description": "Le Lorem Ipsum est simplement du faux texte de l'industrie de l'imprimerie et de la composition."
+            },
+            "applicants": {
+                "title": "Candidats",
+                "description": "Le Lorem Ipsum est simplement du faux texte de l'industrie de l'imprimerie et de la composition."
+            },
+            "leases": {
+                "title": "Baux",
+                "description": "Le Lorem Ipsum est simplement du faux texte de l'industrie de l'imprimerie et de la composition."
+            },
+            "payments": {
+                "title": "Paiements",
+                "description": "Le Lorem Ipsum est simplement du faux texte de l'industrie de l'imprimerie et de la composition."
+            },
+            "feedback": {
+                "title": "Enregistrements et commentaires sur la maintenance",
+                "description": "Le Lorem Ipsum est simplement du faux texte de l'industrie de l'imprimerie et de la composition."
+            }
+        },
+        "edit": "Modifier",
+        "on": "Activé",
+        "off": "Désactivé",
+        "channelTitles": {
+            "push": "Notifications push",
+            "email": "Notifications par e-mail",
+            "call": "Notifications d'appel"
+        }
+    },
+    "accountForm": {
+        "title": "Mes informations",
+        "firstName": "Prénom",
+        "lastName": "Nom de famille",
+        "company": "Entreprise",
+        "optional": "Facultatif",
+        "email": "E-mail",
+        "phone": "Téléphone",
+        "streetAddress": "Adresse de la rue",
+        "unit": "Unité",
+        "city": "Ville",
+        "region": "Région",
+        "zipCode": "Code postal",
+        "password": "Mot de passe",
+        "changePassword": "Changer le mot de passe",
+        "save": "Enregistrer les modifications",
+        "validation": {
+            "firstName": "Le prénom doit comporter au moins 2 caractères.",
+            "lastName": "Le nom de famille doit comporter au moins 2 caractères.",
+            "email": "Veuillez saisir une adresse e-mail valide.",
+            "phone": "Le numéro de téléphone doit comporter au moins 10 caractères.",
+            "streetAddress": "L'adresse de la rue doit comporter au moins 3 caractères.",
+            "unit": "L'unité est requise.",
+            "city": "La ville est requise.",
+            "region": "La région est requise.",
+            "zipCode": "Le code postal doit comporter au moins 5 caractères."
+        }
+    },
+    "changePassword": {
+        "title": "Changez votre mot de passe",
+        "currentPassword": "Mot de passe actuel",
+        "newPassword": "Nouveau mot de passe",
+        "confirmPassword": "Confirmer le nouveau mot de passe",
+        "forgot": "Mot de passe oublié ?",
+        "cancel": "Annuler",
+        "change": "Changer",
+        "validation": {
+            "currentPassword": "Le mot de passe actuel est requis",
+            "newPassword": "Le mot de passe doit comporter au moins 8 caractères",
+            "confirmPassword": "Veuillez confirmer votre mot de passe",
+            "match": "Les mots de passe ne correspondent pas"
+        }
+    },
+    "companyLogoUpload": {
+        "label": "Logo de l'entreprise",
+        "alt": "Logo de l'entreprise",
+        "add": "Ajouter un logo",
+        "uploading": "Téléchargement...",
+        "invalidFile": "Veuillez sélectionner un fichier image valide",
+        "fileSize": "La taille du fichier doit être inférieure à 5 Mo",
+        "success": "Le logo de l'entreprise a été mis à jour avec succès !"
+    }
+}
