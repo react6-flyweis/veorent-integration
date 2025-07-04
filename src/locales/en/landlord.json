@@ -121,6 +121,18 @@
         "buy": "Buy Subscription",
         "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
     },
+    "expenses": {
+        "datePaid": "Date Paid",
+        "amountPaid": "Amount Paid",
+        "property": "Property",
+        "description": "Description (Optional)",
+        "descriptionPlaceholder": "Enter expense description",
+        "notes": "Notes (Optional)",
+        "notesPlaceholder": "Add any additional notes about this expense",
+        "receipts": "Receipts & Documents",
+        "cancel": "CANCEL",
+        "addExpense": "ADD EXPENSE"
+    },
     "forms": {
         "leaseAgreementAddendum": "Lease Agreement Addendum",
         "coSignerAgreement": "Co-Signer Agreement",

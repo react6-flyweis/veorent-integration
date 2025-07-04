@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -42,6 +43,7 @@ export const CreateExpense = () => {
   const navigate = useNavigate();
   const { showToast } = useToast();
   const { mutateAsync } = useCreateExpenseMutation();
+  const { t } = useTranslation();
 
   const form = useForm<ExpenseFormValues>({
     resolver: zodResolver(formSchema),
@@ -82,7 +84,9 @@ export const CreateExpense = () => {
             name="date"
             render={({ field }) => (
               <FormItem className="flex flex-col gap-1">
-                <FormLabel className="text-base">Date Paid</FormLabel>
+                <FormLabel className="text-base">
+                  {t("expenses.datePaid")}
+                </FormLabel>
                 <FormControl>
                   <DateInput {...field} />
                 </FormControl>
@@ -96,7 +100,9 @@ export const CreateExpense = () => {
             name="amount"
             render={({ field }) => (
               <FormItem className="gap-1">
-                <FormLabel className="text-base">Amount Paid</FormLabel>
+                <FormLabel className="text-base">
+                  {t("expenses.amountPaid")}
+                </FormLabel>
                 <FormControl>
                   <CurrencyInput {...field} />
                 </FormControl>
@@ -111,7 +117,9 @@ export const CreateExpense = () => {
           name="rental"
           render={({ field }) => (
             <FormItem className="gap-1">
-              <FormLabel className="text-base">Property</FormLabel>
+              <FormLabel className="text-base">
+                {t("expenses.property")}
+              </FormLabel>
               <FormControl>
                 <PropertiesSelector {...field} />
               </FormControl>
@@ -127,10 +135,13 @@ export const CreateExpense = () => {
           render={({ field }) => (
             <FormItem className="gap-1">
               <FormLabel className="text-base">
-                Description (Optional)
+                {t("expenses.description")}
               </FormLabel>
               <FormControl>
-                <Input placeholder="Enter expense description" {...field} />
+                <Input
+                  placeholder={t("expenses.descriptionPlaceholder")}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -142,10 +153,10 @@ export const CreateExpense = () => {
           name="notes"
           render={({ field }) => (
             <FormItem className="gap-1">
-              <FormLabel className="text-base">Notes (Optional)</FormLabel>
+              <FormLabel className="text-base">{t("expenses.notes")}</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Add any additional notes about this expense"
+                  placeholder={t("expenses.notesPlaceholder")}
                   className="resize-none"
                   {...field}
                 />
@@ -156,7 +167,7 @@ export const CreateExpense = () => {
         />
 
         <div>
-          <p className="mb-1 font-medium">Receipts & Documents</p>
+          <p className="mb-1 font-medium">{t("expenses.receipts")}</p>
           <FormField
             control={form.control}
             name="files"
@@ -174,7 +185,7 @@ export const CreateExpense = () => {
         <div className="flex justify-between gap-4">
           <DialogClose asChild>
             <Button type="button" variant="outlinePrimary">
-              CANCEL
+              {t("expenses.cancel")}
             </Button>
           </DialogClose>
           <LoadingButton
@@ -182,7 +193,7 @@ export const CreateExpense = () => {
             type="submit"
             className="w-32"
           >
-            ADD EXPENSE
+            {t("expenses.addExpense")}
           </LoadingButton>
         </div>
       </form>
