@@ -24,40 +24,36 @@ import {
 import { Input } from "@/components/ui/input";
 import { PropertyTypeSelector } from "@/features/landlord/components/PropertyTypeSelector";
 
-const formSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  email: z.string().email("Invalid email address"),
-  phone: z
-    .string()
-    .min(10, "Phone number must be at least 10 digits")
-    .max(15, "Phone number is too long"),
+const createFormSChema = (t: (key: string) => string) =>
+  z.object({
+    firstName: z.string().min(1, t("firstNameRequired")),
+    lastName: z.string().min(1, t("lastNameRequired")),
+    email: z.string().email(t("invalidEmail")),
+    phone: z.string().min(10, t("phoneMin")).max(15, t("phoneMax")),
 
-  propertyType: z.string().min(1, "Please select a property type"),
+    propertyType: z.string().min(1, t("propertyTypeRequired")),
 
-  street: z.string().min(1, "Street is required"),
-  unit: z.string().optional(),
-  city: z.string().min(1, "City is required"),
-  region: z.string().min(1, "Region is required"),
-  zipCode: z
-    .string()
-    .min(4, "Zip code is too short")
-    .max(10, "Zip code is too long"),
+    street: z.string().min(1, t("streetRequired")),
+    unit: z.string().optional(),
+    city: z.string().min(1, t("cityRequired")),
+    region: z.string().min(1, t("regionRequired")),
+    zipCode: z.string().min(4, t("zipMin")).max(10, t("zipMax")),
 
-  beds: z.coerce.number().min(0, "Beds cannot be negative"),
-  bath: z.coerce.number().min(0, "Bathrooms cannot be negative"),
-  squareFeet: z.coerce.number().min(0, "Square footage cannot be negative"),
+    beds: z.coerce.number().min(0, t("bedsMin")),
+    bath: z.coerce.number().min(0, t("bathMin")),
+    squareFeet: z.coerce.number().min(0, t("squareFeetMin")),
 
-  year: z
-    .string()
-    .regex(/^\d{4}$/, "Enter a valid 4-digit year")
-    .refine((val) => +val <= new Date().getFullYear(), {
-      message: "Year must not be in the future",
-    }),
-});
+    year: z
+      .string()
+      .regex(/^\d{4}$/, t("yearValid"))
+      .refine((val) => +val <= new Date().getFullYear(), {
+        message: t("yearFuture"),
+      }),
+  });
 
 export default function HomeInsuranceForm() {
   const { t } = useTranslation();
+  const formSchema = createFormSChema(t);
 
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -115,13 +111,11 @@ export default function HomeInsuranceForm() {
                 <div className="flex items-center gap-3">
                   <IconRound icon={legacyIconImg} size="sm" />
                   <h2 className="text-2xl font-bold text-blue-900">
-                    Let&apos;s simplify your home insurance
+                    {t("homeInsuranceTitle")}
                   </h2>
                 </div>
                 <div className="text-muted-foreground">
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s,
+                  {t("homeInsuranceDescription")}
                 </div>
               </div>
             </MultiStepperHeader>
@@ -207,7 +201,7 @@ export default function HomeInsuranceForm() {
                   name="street"
                   render={({ field }) => (
                     <FormItem className="col-span-2">
-                      <FormLabel>Street</FormLabel>
+                      <FormLabel>{t("streetAddress")}</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -285,7 +279,7 @@ export default function HomeInsuranceForm() {
                   name="bath"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Baths</FormLabel>
+                      <FormLabel>{t("baths")}</FormLabel>
                       <FormControl>
                         <Input type="number" {...field} />
                       </FormControl>
@@ -298,7 +292,7 @@ export default function HomeInsuranceForm() {
                   name="squareFeet"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Square Feet</FormLabel>
+                      <FormLabel>{t("squareFeet")}</FormLabel>
                       <FormControl>
                         <Input type="number" {...field} />
                       </FormControl>
@@ -311,10 +305,10 @@ export default function HomeInsuranceForm() {
                   name="year"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Year</FormLabel>
+                      <FormLabel>{t("year")}</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="YYYY"
+                          placeholder={t("yearPlaceholder")}
                           type="text"
                           maxLength={4}
                           {...field}

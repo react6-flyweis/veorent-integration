@@ -1,4 +1,5 @@
 import { useForm, Controller, useWatch } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 
 import duesImg from "@/assets/images/charges.png";
@@ -36,6 +37,7 @@ type FormValues = {
 };
 
 export default function MakePayment() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { data: pendingRent, isLoading, error } = useGetPendingRentQuery();
 
@@ -64,9 +66,7 @@ export default function MakePayment() {
   if (error) {
     return (
       <div className="flex min-h-[200px] items-center justify-center">
-        <p className="text-red-500">
-          Error loading pending rent data. Please try again.
-        </p>
+        <p className="text-red-500">{t("pendingRentError")}</p>
       </div>
     );
   }
@@ -76,14 +76,12 @@ export default function MakePayment() {
       <div className="flex min-h-[200px] flex-col items-center justify-center space-y-4">
         <img
           src={paperMoneyImg}
-          alt="No pending rent"
+          alt={t("noPendingRentAlt")}
           className="size-16 opacity-50"
         />
         <div className="text-center">
-          <h3 className="text-lg font-semibold">No Pending Rent</h3>
-          <p className="text-muted-foreground">
-            You don't have any pending rent payments at the moment.
-          </p>
+          <h3 className="text-lg font-semibold">{t("noPendingRent")}</h3>
+          <p className="text-muted-foreground">{t("noPendingRentDesc")}</p>
         </div>
       </div>
     );
@@ -102,7 +100,7 @@ export default function MakePayment() {
             <MultiStepperHeader>
               <div className="flex items-center gap-2">
                 <MultiStepperBackButton routeBack={() => navigate(-1)} />
-                <PageTitle title="Make Payment" className="mb-0" />
+                <PageTitle title={t("makePaymentTitle")} className="mb-0" />
               </div>
             </MultiStepperHeader>
 
@@ -116,7 +114,7 @@ export default function MakePayment() {
                     {dues.map((due) => (
                       <FormItem key={due._id} className="space-y-1">
                         <FormLabel className="sr-only">
-                          {`Rent - Due: ${due.dueDate}`}
+                          {`${t("rentLabel")} - ${t("dueLabel")}: ${due.dueDate}`}
                         </FormLabel>
                         <FormControl>
                           <label className="cursor-pointer">
@@ -129,7 +127,7 @@ export default function MakePayment() {
                                     alt=""
                                   />
                                   <p className="text-primary text-2xl font-semibold">
-                                    Rent
+                                    {t("rentLabel")}
                                   </p>
                                 </div>
                                 <Controller
@@ -154,7 +152,7 @@ export default function MakePayment() {
                                 <div className="flex justify-between">
                                   <div>
                                     <div>
-                                      <span>Due Date: </span>
+                                      <span>{t("dueDateLabel")}: </span>
                                       <span>
                                         {new Date(
                                           due.dueDate,
@@ -162,18 +160,18 @@ export default function MakePayment() {
                                       </span>
                                     </div>
                                     <div className="flex items-center gap-1">
-                                      <span>Amount: </span>
+                                      <span>{t("amountLabel")}: </span>
                                       <CurrencyIcon size="xs" />
                                       <span>{due.amount}</span>
                                     </div>
                                   </div>
                                   <div>
                                     <div>
-                                      <span>Status: </span>
+                                      <span>{t("statusLabel")}: </span>
                                       <span>{due.amountStatus}</span>
                                     </div>
                                     <div className="flex items-center gap-1">
-                                      <span>Late Fee: </span>
+                                      <span>{t("lateFeeLabel")}: </span>
                                       <CurrencyIcon size="xs" />
                                       <span>{due.lateFee}</span>
                                     </div>
@@ -196,13 +194,15 @@ export default function MakePayment() {
                 <div className="flex flex-col items-center justify-center space-y-4 py-8">
                   <img
                     src={duesImg}
-                    alt="No selection"
+                    alt={t("noDuesSelectedAlt")}
                     className="size-16 opacity-50"
                   />
                   <div className="text-center">
-                    <h3 className="text-lg font-semibold">No Dues Selected</h3>
+                    <h3 className="text-lg font-semibold">
+                      {t("noDuesSelected")}
+                    </h3>
                     <p className="text-muted-foreground">
-                      Please go back and select the dues you want to pay.
+                      {t("noDuesSelectedDesc")}
                     </p>
                   </div>
                 </div>
@@ -211,7 +211,7 @@ export default function MakePayment() {
                   <div className="flex items-center gap-2">
                     <img src={duesImg} alt="icon" className="h-6 w-6" />
                     <h2 className="text-lg font-semibold">
-                      Selected dues you would like to pay:
+                      {t("selectedDuesTitle")}
                     </h2>
                   </div>
 
@@ -223,11 +223,11 @@ export default function MakePayment() {
                           <div className="flex flex-1 items-center justify-between">
                             <div className="flex-1 space-y-1">
                               <p className="text-muted-foreground text-sm">
-                                Due On:{" "}
+                                {t("dueOnLabel")}:{" "}
                                 {new Date(due.dueDate).toLocaleDateString()}
                               </p>
                               <p className="text-base font-semibold text-blue-900">
-                                Rent
+                                {t("rentLabel")}
                               </p>
                             </div>
                             <div className="text-right font-bold text-blue-900">
@@ -249,7 +249,7 @@ export default function MakePayment() {
                     name="note"
                     render={({ field }) => (
                       <div>
-                        <Label htmlFor="note">Payment Note (Optional)</Label>
+                        <Label htmlFor="note">{t("paymentNoteLabel")}</Label>
                         <Textarea
                           id="note"
                           className="mt-1"
@@ -261,17 +261,15 @@ export default function MakePayment() {
                   />
 
                   <div>
-                    <h3 className="">Summary</h3>
+                    <h3 className="">{t("summaryTitle")}</h3>
                     <p className="text-muted-foreground text-sm">
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry. Lorem Ipsum has been the industry's
-                      standard dummy text ever since the 1500s
+                      {t("summaryDesc")}
                     </p>
                   </div>
 
                   <div className="mt-4 flex items-center justify-between border-t pt-4">
                     <p className="text-lg font-semibold text-blue-900">
-                      Total Payable Amount:
+                      {t("totalPayableLabel")}
                     </p>
                     <p className="flex items-center gap-1 text-lg font-bold text-blue-900">
                       <CurrencyIcon size="sm" />
@@ -289,7 +287,7 @@ export default function MakePayment() {
               <Dialog>
                 <DialogTrigger asChild>
                   <Button size="lg" type="submit" className="w-3/5">
-                    Make Payment
+                    {t("makePaymentBtn")}
                   </Button>
                 </DialogTrigger>
                 <DialogContent>

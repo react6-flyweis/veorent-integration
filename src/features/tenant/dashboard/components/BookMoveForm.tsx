@@ -87,7 +87,9 @@ export function BookMyMoveForm({
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <img src={houseIcon} alt="Property Icon" className="size-6" />
-            <h3 className="text-lg font-semibold">Current Property Address</h3>
+            <h3 className="text-lg font-semibold">
+              {t("currentPropertyAddress")}
+            </h3>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <FormField
@@ -160,14 +162,14 @@ export function BookMyMoveForm({
         {/* Lease Term */}
         <div className="flex items-center gap-2">
           <img src={leaseIcon} alt="Lease Icon" className="max-h-8 max-w-8" />
-          <h3 className="text-lg font-semibold">Lease Term (Optional)</h3>
+          <h3 className="text-lg font-semibold">{t("leaseTermOptional")}</h3>
         </div>
         <FormField
           name="leaseType"
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>What is the term for this lease?</FormLabel>
+              <FormLabel>{t("whatIsTheTermForThisLease")}</FormLabel>
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
@@ -176,11 +178,11 @@ export function BookMyMoveForm({
                 >
                   <FormItem className="flex items-center space-x-2">
                     <RadioGroupItem value="Fixed Term" />
-                    <FormLabel>Fixed Term</FormLabel>
+                    <FormLabel>{t("fixedTerm")}</FormLabel>
                   </FormItem>
                   <FormItem className="flex items-center space-x-2">
                     <RadioGroupItem value="Month-to-Month" />
-                    <FormLabel>Month-to-Month</FormLabel>
+                    <FormLabel>{t("monthToMonth")}</FormLabel>
                   </FormItem>
                 </RadioGroup>
               </FormControl>
@@ -219,10 +221,10 @@ export function BookMyMoveForm({
           <div className="flex items-center gap-2">
             <img
               src={PropertyIcon}
-              alt="New Property Icon"
+              alt={t("newPropertyAddress")}
               className="max-h-8 max-w-8"
             />
-            <h3 className="text-lg font-semibold">New Property Address</h3>
+            <h3 className="text-lg font-semibold">{t("newPropertyAddress")}</h3>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <FormField
@@ -296,14 +298,14 @@ export function BookMyMoveForm({
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <img src={leaseIcon} alt="Lease Icon" className="max-h-8 max-w-8" />
-            <h3 className="text-lg font-semibold">Lease Term</h3>
+            <h3 className="text-lg font-semibold">{t("leaseTerm")}</h3>
           </div>
           <FormField
             name="newLeaseType"
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>What is the term for this lease?</FormLabel>
+                <FormLabel>{t("whatIsTheTermForThisLease")}</FormLabel>
                 <FormControl>
                   <RadioGroup
                     onValueChange={field.onChange}
@@ -312,11 +314,11 @@ export function BookMyMoveForm({
                   >
                     <FormItem className="flex items-center space-x-2">
                       <RadioGroupItem value="Fixed Term" />
-                      <FormLabel>Fixed Term</FormLabel>
+                      <FormLabel>{t("fixedTerm")}</FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-x-2">
                       <RadioGroupItem value="Month-to-Month" />
-                      <FormLabel>Month-to-Month</FormLabel>
+                      <FormLabel>{t("monthToMonth")}</FormLabel>
                     </FormItem>
                   </RadioGroup>
                 </FormControl>
@@ -351,7 +353,7 @@ export function BookMyMoveForm({
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <img src={fastIcon} alt="Fast Icon" className="max-h-8 max-w-8" />
-            <h3 className="text-lg font-semibold">Move In Date & Time</h3>
+            <h3 className="text-lg font-semibold">{t("moveInDateTime")}</h3>
           </div>
           <div className="grid gap-4 @md:grid-cols-2 @lg:grid-cols-4">
             <FormField
@@ -369,7 +371,7 @@ export function BookMyMoveForm({
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Start Time</FormLabel>
+                  <FormLabel>{t("moveStartTime")}</FormLabel>
                   <FormControl>
                     <Input type="time" {...field} />
                   </FormControl>
@@ -391,7 +393,7 @@ export function BookMyMoveForm({
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>End Time</FormLabel>
+                  <FormLabel>{t("moveEndTime")}</FormLabel>
                   <FormControl>
                     <Input type="time" {...field} />
                   </FormControl>
@@ -406,7 +408,7 @@ export function BookMyMoveForm({
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Are you flexible with timings?</FormLabel>
+                <FormLabel>{t("areYouFlexibleWithTimings")}</FormLabel>
                 <FormControl>
                   <RadioGroup
                     onValueChange={field.onChange}
@@ -435,7 +437,7 @@ export function BookMyMoveForm({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="sr-only">
-                    Flexibility Duration
+                    {t("flexibilityDuration")}
                   </FormLabel>
                   <FormControl>
                     <Select
@@ -444,13 +446,15 @@ export function BookMyMoveForm({
                     >
                       <FormItem className="flex items-center space-x-2">
                         <SelectTrigger>
-                          <SelectValue placeholder="Flexible for.." />
+                          <SelectValue placeholder={t("flexibleFor")} />
                         </SelectTrigger>
                       </FormItem>
                       <SelectContent>
-                        <SelectItem value="30m">30 Minutes</SelectItem>
-                        <SelectItem value="1hr">1 Hour</SelectItem>
-                        <SelectItem value="2hr">2 Hours</SelectItem>
+                        <SelectItem value="30m">
+                          {t("thirtyMinutes")}
+                        </SelectItem>
+                        <SelectItem value="1hr">{t("oneHour")}</SelectItem>
+                        <SelectItem value="2hr">{t("twoHours")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormControl>
@@ -462,7 +466,7 @@ export function BookMyMoveForm({
 
         <div className="flex items-center justify-center">
           <Button type="submit" className="w-4/5 @xl:w-3/5">
-            Save & Next
+            {t("saveAndNext")}
           </Button>
         </div>
       </form>

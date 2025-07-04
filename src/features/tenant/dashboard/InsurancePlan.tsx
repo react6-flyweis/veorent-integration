@@ -15,6 +15,7 @@ import { useGetInsurancePlansQuery } from "./api/queries";
 import homeInsuranceIcon from "./assets/home-insurance.png";
 
 export const InsurancePlan: React.FC<{ plan: IInsurancePlan }> = ({ plan }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { state } = useLocation();
 
@@ -48,13 +49,13 @@ export const InsurancePlan: React.FC<{ plan: IInsurancePlan }> = ({ plan }) => {
             <div className="flex flex-col">
               <h3 className="text-lg font-semibold">{planName}</h3>
               <button className="flex items-center text-left text-sm text-blue-600">
-                View {additionalPlans} more plans{" "}
+                {t("viewMorePlans", { count: additionalPlans })}{" "}
                 <ChevronRight className="h-4 w-4" />
               </button>
             </div>
           </div>
           <div className="mt-2">
-            <p className="text-sm text-gray-500">Cover</p>
+            <p className="text-sm text-gray-500">{t("coverLabel")}</p>
             <div className="flex items-center gap-1">
               <CurrencyIcon size="sm" />
               <span className="font-medium">
@@ -71,12 +72,14 @@ export const InsurancePlan: React.FC<{ plan: IInsurancePlan }> = ({ plan }) => {
             className="flex items-center gap-1"
             onClick={handleViewPlanDetails}
           >
-            View Features <ChevronRight className="h-4 w-4" />
+            {t("viewFeatures")} <ChevronRight className="h-4 w-4" />
           </Button>
 
           <Button onClick={handleViewPlanDetails}>
             <CurrencyIcon className="text-white" size="sm" />
-            <span className="font-medium">{premium.monthlyPremium}/month</span>
+            <span className="font-medium">
+              {premium.monthlyPremium}/{t("perMonth")}
+            </span>
           </Button>
         </div>
       </div>
@@ -100,13 +103,9 @@ export default function InsurancePlans() {
       <BackButton />
       <div className="my-2 flex items-center gap-3">
         <IconRound size="sm" icon={homeInsuranceIcon} />
-        <h2 className="text-2xl font-bold">We have these plans for you</h2>
+        <h2 className="text-2xl font-bold">{t("insurancePlansTitle")}</h2>
       </div>
-      <p className="mb-6 text-gray-500">
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry's standard dummy text ever
-        since the 1500s.
-      </p>
+      <p className="mb-6 text-gray-500">{t("insurancePlansDesc")}</p>
 
       <div className="space-y-4">
         {isLoading ? (
@@ -140,9 +139,7 @@ export default function InsurancePlans() {
           plans.map((plan) => <InsurancePlan key={plan._id} plan={plan} />)
         ) : (
           <div className="py-8 text-center">
-            <p className="text-gray-500">
-              No insurance plans available at this time.
-            </p>
+            <p className="text-gray-500">{t("noInsurancePlans")}</p>
           </div>
         )}
       </div>

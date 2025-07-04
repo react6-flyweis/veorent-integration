@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 
 import { BackButton } from "@/components/BackButton";
@@ -17,6 +18,7 @@ import { useGetInsurancePlanQuery } from "./api/queries";
 import homeInsuranceIcon from "./assets/home-insurance.png";
 
 export default function PlanDetails() {
+  const { t } = useTranslation();
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
   const [purchaseId, setPurchaseId] = useState<string | null>(null);
   const { state } = useLocation();
@@ -119,9 +121,7 @@ export default function PlanDetails() {
       <div>
         <BackButton />
         <div className="mt-8 text-center">
-          <p className="text-red-500">
-            Plan information not found. Please try again later.
-          </p>
+          <p className="text-red-500">{t("planInfoNotFound")}</p>
         </div>
       </div>
     );
@@ -146,9 +146,9 @@ export default function PlanDetails() {
             </div>
 
             <div>
-              <h3 className="text-xl font-bold">Plan Details</h3>
+              <h3 className="text-xl font-bold">{t("planDetailsTitle")}</h3>
               <div className="mb-2 flex items-center gap-2">
-                <span className="text-sm text-gray-500">Cover</span>
+                <span className="text-sm text-gray-500">{t("coverLabel")}</span>
                 <CurrencyIcon size="sm" />
                 <span className="text-lg font-medium">
                   {plan.coverAmount.toLocaleString()}
@@ -163,13 +163,13 @@ export default function PlanDetails() {
               <div className="flex items-center gap-2">
                 <CurrencyIcon size="sm" />
                 <span className="font-medium">
-                  ${plan.premium.monthlyPremium}/month
+                  ${plan.premium.monthlyPremium}/{t("perMonth")}
                 </span>
               </div>
               <div className="flex items-center gap-1">
                 <CurrencyIcon size="xs" />
                 <span className="text-sm">
-                  {plan.premium.annualPremium} paid annually
+                  {plan.premium.annualPremium} {t("paidAnnually")}
                 </span>
               </div>
             </div>
@@ -177,14 +177,11 @@ export default function PlanDetails() {
         </CardContent>
       </Card>
 
-      <p className="mb-4">
-        {plan.description ||
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum asperiores molestias voluptatibus sunt quibusdam accusamus deleniti alias nobis nemo animi!"}
-      </p>
+      <p className="mb-4">{plan.description || t("planDetailsDesc")}</p>
 
       <Card className="mb-4 py-3">
         <CardContent>
-          <h4 className="text-lg font-semibold">What's covered?</h4>
+          <h4 className="text-lg font-semibold">{t("whatsCovered")}</h4>
         </CardContent>
       </Card>
 
@@ -207,24 +204,16 @@ export default function PlanDetails() {
                       </li>
                     ),
                 )
-              : new Array(7)
-                  .fill(
-                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-                  )
-                  .map((detail, index) => (
-                    <li key={index} className="mb-1">
-                      {detail}
-                    </li>
-                  ))}
+              : new Array(7).fill(t("dummyCoverage")).map((detail, index) => (
+                  <li key={index} className="mb-1">
+                    {detail}
+                  </li>
+                ))}
           </ul>
         </CardContent>
       </Card>
 
-      <p className="mb-6 text-sm text-gray-500">
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry's standard dummy text ever
-        since the 1500s.
-      </p>
+      <p className="mb-6 text-sm text-gray-500">{t("planDetailsFooter")}</p>
 
       <Dialog open={isPaymentDialogOpen} onOpenChange={setIsPaymentDialogOpen}>
         <DialogContent>
@@ -241,7 +230,7 @@ export default function PlanDetails() {
           className="w-4/5 @lg:w-3/5"
           onClick={handleProceedToBuy}
         >
-          Proceed to buy
+          {t("proceedToBuy")}
         </Button>
       </div>
     </div>

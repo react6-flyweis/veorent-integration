@@ -107,13 +107,13 @@ export default function AutoPay() {
   if (cardsError || !cards || cards.length === 0) {
     return (
       <div className="space-y-5">
-        <PageTitle title="Rent Payment Method" withBack />
+        <PageTitle title={t("rentPaymentMethodTitle")} withBack />
         <div className="py-8 text-center">
           <p className="text-muted-foreground mb-4">
-            No payment methods found. Please add a card to continue.
+            {t("noPaymentMethodsFound")}
           </p>
           <Button onClick={() => navigate("/tenant/add-card")}>
-            Add Card Details
+            {t("addCardDetails")}
           </Button>
         </div>
       </div>
@@ -126,20 +126,20 @@ export default function AutoPay() {
 
   return (
     <div className="space-y-5">
-      <PageTitle title="Rent Payment Method" withBack />
+      <PageTitle title={t("rentPaymentMethodTitle")} withBack />
       <div className="flex items-center gap-3">
         <img className="size-6" src={paymentMethodImg} alt="" />
-        <h3 className="text-xl font-semibold">Auto Pay</h3>
+        <h3 className="text-xl font-semibold">{t("autoPayTitle")}</h3>
       </div>
       <div className="">
         <p className="space-x-1">
-          <span>Card Holder Name:</span>
+          <span>{t("cardHolderNameLabel")}</span>
           <span className="text-primary">
-            {defaultCard?.cardHolderName || "N/A"}
+            {defaultCard?.cardHolderName || t("notAvailable")}
           </span>
         </p>
         <p className="space-x-1">
-          <span>Card Number:</span>
+          <span>{t("cardNumberLabel")}</span>
           <span className="text-primary">{maskedCardNumber}</span>
         </p>
       </div>
@@ -159,9 +159,7 @@ export default function AutoPay() {
       {/* Status message */}
       {!latestPendingRent && (
         <div className="rounded-md border border-yellow-200 bg-yellow-50 p-3">
-          <p className="text-sm text-yellow-800">
-            No pending rent found. Auto Pay is automatically disabled.
-          </p>
+          <p className="text-sm text-yellow-800">{t("noPendingRentAutoPay")}</p>
         </div>
       )}
 
@@ -176,7 +174,7 @@ export default function AutoPay() {
         <CardHeader className="flex gap-2 px-2">
           <img className="size-8" src={rentIconImg} alt="" />
           <p className="text-primary text-2xl font-semibold">
-            {latestPendingRent ? "Latest Pending Rent" : "No Pending Rent"}
+            {latestPendingRent ? t("latestPendingRent") : t("noPendingRent")}
           </p>
         </CardHeader>
         <CardContent className="px-2">
@@ -184,20 +182,20 @@ export default function AutoPay() {
             <div className="flex justify-between">
               <div className="">
                 <div className="">
-                  <span>Due Date: </span>
+                  <span>{t("dueDateLabel")}: </span>
                   <span>
                     {new Date(latestPendingRent.dueDate).toLocaleDateString()}
                   </span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <span>Amount: </span>
+                  <span>{t("amountLabel")}: </span>
                   <CurrencyIcon size="sm" />
                   <span>{latestPendingRent.amount.toLocaleString()}</span>
                 </div>
               </div>
               <div className="">
                 <div className="">
-                  <span>Status: </span>
+                  <span>{t("statusLabel")}: </span>
                   <span
                     className={`${
                       latestPendingRent.amountStatus === "Paid"
@@ -212,7 +210,7 @@ export default function AutoPay() {
                 </div>
                 {latestPendingRent.lateFee > 0 && (
                   <div className="flex items-center gap-1">
-                    <span>Late Fee: </span>
+                    <span>{t("lateFeeLabel")}: </span>
                     <CurrencyIcon size="sm" />
                     <span>{latestPendingRent.lateFee.toLocaleString()}</span>
                   </div>
@@ -222,7 +220,7 @@ export default function AutoPay() {
           ) : (
             <div className="py-4 text-center">
               <p className="text-muted-foreground">
-                You have no pending rent payments at this time.
+                {t("noPendingRentAtThisTime")}
               </p>
             </div>
           )}
