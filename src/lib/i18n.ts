@@ -3,6 +3,7 @@ import i18n from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
 import en from "@/locales/en/common.json";
+import enTenant from "@/locales/en/tenant.json";
 import es from "@/locales/es/common.json";
 import fr from "@/locales/fr/common.json";
 
@@ -12,7 +13,7 @@ i18n
   .init({
     resources: {
       en: {
-        translation: en,
+        translation: Object.assign({}, en, enTenant),
       },
       es: {
         translation: es,
