@@ -27,7 +27,7 @@ export const ListingSuccessScreen = ({
       <div className="mb-2 flex items-center gap-3">
         <IconRound icon={listingImage} size="sm" />
         <h2 className="text-2xl font-bold">
-          Your Listing Is Successfully Published
+          {t("yourListingIsSuccessfullyPublished")}
         </h2>
       </div>
 

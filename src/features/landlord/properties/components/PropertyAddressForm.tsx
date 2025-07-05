@@ -20,15 +20,16 @@ import { getErrorMessage } from "@/utils/getErrorMessage";
 
 import { useUpdatePropertyMutation } from "../api/mutation";
 
-const formSchema = z.object({
-  streetAddress: z.string().min(1, "Street address is required"),
-  unit: z.string().min(1, "Unit is required"),
-  city: z.string().min(1, "City is required"),
-  region: z.string().min(1, "Region is required"),
-  zipCode: z.string().min(1, "Zip code is required"),
-});
+const formSchema = (t: (key: string) => string) =>
+  z.object({
+    streetAddress: z.string().min(1, t("formSchema.streetAddress_required")),
+    unit: z.string().min(1, t("formSchema.unit_required")),
+    city: z.string().min(1, t("formSchema.city_required")),
+    region: z.string().min(1, t("formSchema.region_required")),
+    zipCode: z.string().min(1, t("formSchema.zipCode_required")),
+  });
 
-type FormValues = z.infer<typeof formSchema>;
+type FormValues = z.infer<ReturnType<typeof formSchema>>;
 
 export function PropertyAddressForm({
   defaultValues,
@@ -46,7 +47,7 @@ export function PropertyAddressForm({
   const { mutateAsync } = useUpdatePropertyMutation(id || "");
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchema(t)),
     defaultValues: {
       streetAddress: defaultValues?.streetAddress || "",
       unit: defaultValues?.unit || "",
@@ -101,7 +102,7 @@ export function PropertyAddressForm({
             <FormItem>
               <FormLabel>{t("streetAddress")}</FormLabel>
               <FormControl>
-                <Input placeholder="Enter street address" {...field} />
+                <Input placeholder={t("enterStreetAddress")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -117,7 +118,7 @@ export function PropertyAddressForm({
                 <FormLabel>{t("unit")}</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Apartment, suite, etc. (optional)"
+                    placeholder={t("apartmentSuiteEtcOptional")}
                     {...field}
                   />
                 </FormControl>
@@ -132,7 +133,7 @@ export function PropertyAddressForm({
               <FormItem>
                 <FormLabel>{t("city")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter city" {...field} />
+                  <Input placeholder={t("enterCity")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -148,7 +149,7 @@ export function PropertyAddressForm({
               <FormItem>
                 <FormLabel>{t("region")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="State/Province/Region" {...field} />
+                  <Input placeholder={t("stateProvinceRegion")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -161,7 +162,7 @@ export function PropertyAddressForm({
               <FormItem>
                 <FormLabel>{t("zipCode")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter zip code" {...field} />
+                  <Input placeholder={t("enterZipCode")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -171,11 +172,7 @@ export function PropertyAddressForm({
 
         <Card className="rounded-none border-0 bg-blue-200 p-4">
           <p className="text-primary text-sm">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui harum
-            distinctio, quidem dicta perspiciatis eveniet sapiente mollitia
-            culpa. Iure vero debitis magni iusto obcaecati velit at suscipit
-            libero, voluptas praesentium ut eum reiciendis ullam incidunt vel
-            vitae accusantium doloremque commodi!
+            {t("propertyAddressDescription")}
           </p>
         </Card>
         <div className="flex items-center justify-center">

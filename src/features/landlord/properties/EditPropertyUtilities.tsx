@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router";
 
 import { BackButton } from "@/components/BackButton";
@@ -6,12 +7,13 @@ import { useGetPropertyByIdQuery } from "./api/queries";
 import { UtilitiesForm } from "./components/UtilitiesForm";
 
 export default function EditPropertyUtilities() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { data } = useGetPropertyByIdQuery(id || "");
 
   const propertyAddress =
-    data?.propertyDetails?.streetAddress || "Property Address";
+    data?.propertyDetails?.streetAddress || t("propertyAddress");
 
   return (
     <div>

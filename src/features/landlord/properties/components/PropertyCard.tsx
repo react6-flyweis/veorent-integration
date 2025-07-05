@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { StarIcon } from "lucide-react";
 
 import { CurrencyIcon } from "@/components/CurrencyIcon";
@@ -19,6 +20,7 @@ import { ScreenMethodDialog } from "../../dashboard/components/ScreenMethodDialo
 // import { Link } from "react-router";
 
 export function PropertyCard({ property }: { property: IProperty }) {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
   const status = useMemo(() => {
@@ -42,7 +44,7 @@ export function PropertyCard({ property }: { property: IProperty }) {
             className="absolute top-0 left-0 z-10 bg-orange-500 text-white"
             variant="secondary"
           >
-            Incomplete
+            {t("incomplete")}
           </Badge>
         )}
         {status === "marketing" && (
@@ -50,7 +52,7 @@ export function PropertyCard({ property }: { property: IProperty }) {
             className="bg-primary absolute top-0 left-0 z-10 text-white"
             variant="secondary"
           >
-            Marketing
+            {t("marketing")}
           </Badge>
         )}
       </CardHeader>
@@ -91,13 +93,13 @@ export function PropertyCard({ property }: { property: IProperty }) {
             <div className="flex flex-1 justify-start">
               <div className="">
                 <div>
-                  <span>Baths/Beds: </span>
+                  <span>{t("bathsBeds")}: </span>
                   <span className="text-sm font-medium text-gray-700">
                     {property.propertySize?.baths}/{property.propertySize?.beds}
                   </span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <span>Rent: </span>
+                  <span>{t("rent")}: </span>
                   <CurrencyIcon size="sm" />
                   <span className="text-sm font-medium text-gray-700">
                     {property.leasingBasics?.targetRent}/-
@@ -111,7 +113,7 @@ export function PropertyCard({ property }: { property: IProperty }) {
       <CardFooter className="p-0">
         {/* {property.propertyTypeId?.name === "Single Family" ? ( */}
         <div className="grid w-full grid-cols-2 gap-1">
-          <Button variant="outline">Share Listing</Button>
+          <Button variant="outline">{t("shareListing")}</Button>
 
           <Button
             onClick={(e) => {
@@ -121,7 +123,7 @@ export function PropertyCard({ property }: { property: IProperty }) {
             }}
             variant="outline"
           >
-            Screen Tenant
+            {t("screenTenant")}
           </Button>
         </div>
         {/* ) : (
@@ -130,7 +132,7 @@ export function PropertyCard({ property }: { property: IProperty }) {
             to={`/landlord/properties/${property._id}/units`}
           >
             <Button className="w-full" variant="outline">
-              Show Units & Rooms
+              {t("showUnitsRooms")}
             </Button>
           </Link>
         )} */}

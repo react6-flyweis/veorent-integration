@@ -27,26 +27,29 @@ import permissionsIcon from "../assets/permissions.png";
 import petsIcon from "../assets/pets.png";
 import smokingIcon from "../assets/smoking.png";
 
-const permissionsSchema = z.object({
-  smoking: z.boolean({
-    required_error: "Please select a smoking policy",
-  }),
-  pets: z.boolean({
-    required_error: "Please specify if pets are allowed",
-  }),
-  occupancyLimit: z.boolean({
-    required_error: "Please specify if there is an occupancy limit",
-  }),
-  occupancyCount: z.number().optional(),
-});
+const createPermissionsSchema = (t: (key: string) => string) =>
+  z.object({
+    smoking: z.boolean({
+      required_error: t("formSchema.smoking_required"),
+    }),
+    pets: z.boolean({
+      required_error: t("formSchema.pets_required"),
+    }),
+    occupancyLimit: z.boolean({
+      required_error: t("formSchema.occupancyLimit_required"),
+    }),
+    occupancyCount: z.number().optional(),
+  });
 
-type PermissionsFormValues = z.infer<typeof permissionsSchema>;
 interface PermissionsFormProps {
   defaultValues?: IPermission;
   onSuccess: (data: PermissionsFormValues) => void;
   propertyName?: string;
   completionStatus?: IFormCompletionStatus;
 }
+type PermissionsFormValues = z.infer<
+  ReturnType<typeof createPermissionsSchema>
+>;
 
 export const PermissionsForm = ({
   defaultValues,
@@ -58,7 +61,7 @@ export const PermissionsForm = ({
 
   const { id } = useParams<{ id: string }>();
   const { mutateAsync } = useUpdatePropertyMutation(id || "");
-
+  const permissionsSchema = createPermissionsSchema(t);
   const form = useForm<PermissionsFormValues>({
     resolver: zodResolver(permissionsSchema),
     defaultValues: {
@@ -101,7 +104,9 @@ export const PermissionsForm = ({
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <div className="mb-3 flex items-center gap-2">
           <IconRound icon={permissionsIcon} size="sm" />
-          <h2 className="text-xl font-semibold text-gray-800">Permissions</h2>
+          <h2 className="text-xl font-semibold text-gray-800">
+            {t("permissions")}
+          </h2>
         </div>
 
         {propertyName && (
@@ -112,7 +117,7 @@ export const PermissionsForm = ({
           <div>
             <h3 className="mb-2 flex items-center gap-2 text-base font-medium">
               <IconRound icon={smokingIcon} size="xs" />
-              Smoking
+              {t("smoking")}
             </h3>
 
             <FormField
@@ -121,7 +126,7 @@ export const PermissionsForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-gray-700">
-                    Do you allow smoking?
+                    {t("doYouAllowSmoking")}
                   </FormLabel>
                   <FormControl>
                     <RadioGroup
@@ -157,7 +162,7 @@ export const PermissionsForm = ({
           <div>
             <h3 className="mb-2 flex items-center gap-2 text-base font-medium">
               <IconRound icon={petsIcon} size="xs" />
-              Pets
+              {t("pets")}
             </h3>
 
             <FormField
@@ -166,7 +171,7 @@ export const PermissionsForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-gray-700">
-                    Do you allow any pets?
+                    {t("doYouAllowAnyPets")}
                   </FormLabel>
                   <FormControl>
                     <RadioGroup
@@ -202,7 +207,7 @@ export const PermissionsForm = ({
           <div>
             <h3 className="mb-2 flex items-center gap-2 text-base font-medium">
               <IconRound icon={occupancyIcon} size="xs" />
-              Occupancy Limits
+              {t("occupancyLimits")}
             </h3>
 
             <FormField
@@ -211,7 +216,7 @@ export const PermissionsForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-gray-700">
-                    Do you have an occupancy limit?
+                    {t("doYouHaveOccupancyLimit")}
                   </FormLabel>
                   <FormControl>
                     <RadioGroup
@@ -254,7 +259,7 @@ export const PermissionsForm = ({
                 render={({ field }) => (
                   <FormItem className="mt-4">
                     <FormLabel className="sr-only text-gray-700">
-                      Maximum number of occupants
+                      {t("maximumNumberOfOccupants")}
                     </FormLabel>
                     <FormControl>
                       <div className="flex items-center gap-3">

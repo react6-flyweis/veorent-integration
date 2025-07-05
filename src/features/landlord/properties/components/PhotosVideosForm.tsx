@@ -26,16 +26,17 @@ import mediaIcon from "../assets/media.png";
 import propertyDescriptionIcon from "../assets/property-description.png";
 
 // Define our form schema with Zod
-const formSchema = z.object({
-  photos: z.array(z.union([z.instanceof(File), z.string()])),
-  videoUrl: z
-    .string()
-    .url("Please enter a valid URL")
-    .or(z.string().length(0))
-    .optional(),
-});
+const formSchema = (t: (key: string) => string) =>
+  z.object({
+    photos: z.array(z.union([z.instanceof(File), z.string()])),
+    videoUrl: z
+      .string()
+      .url(t("formSchema.videoUrl_url"))
+      .or(z.string().length(0))
+      .optional(),
+  });
 
-type FormValues = z.infer<typeof formSchema>;
+type FormValues = z.infer<ReturnType<typeof formSchema>>;
 
 interface PhotosVideosFormProps {
   defaultValues?: {
@@ -61,7 +62,7 @@ export function PhotosVideosForm({
 
   // Initialize form with React Hook Form and Zod validation
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchema(t)),
     defaultValues: {
       photos: defaultValues?.photos
         ? defaultValues?.photos?.map(({ img }) => img)
@@ -133,7 +134,7 @@ export function PhotosVideosForm({
       <div className="mb-6">
         <div className="mb-6 flex items-center gap-4">
           <IconRound icon={mediaIcon} />
-          <h1 className="text-2xl font-bold">Photos & Videos</h1>
+          <h1 className="text-2xl font-bold">{t("photosAndVideos")}</h1>
         </div>
         {propertyName && (
           <div className="text-primary mb-5 text-xl">{propertyName}</div>
@@ -145,7 +146,7 @@ export function PhotosVideosForm({
           <section className="mb-8">
             <div className="mb-4 flex items-center">
               <IconRound icon={listingTitleIcon} size="sm" className="mr-2" />
-              <h2 className="text-lg font-semibold">Photos</h2>
+              <h2 className="text-lg font-semibold">{t("photos")}</h2>
             </div>
 
             <FormField
@@ -169,7 +170,7 @@ export function PhotosVideosForm({
                 size="sm"
                 className="mr-2"
               />
-              <h2 className="text-lg font-semibold">Video Tour</h2>
+              <h2 className="text-lg font-semibold">{t("videoTour")}</h2>
             </div>
 
             <FormField
@@ -178,7 +179,7 @@ export function PhotosVideosForm({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    YouTube, Vimeo, or Matterport URL (Optional)
+                    {t("youtubeVimeoMatterportUrlOptional")}
                   </FormLabel>
                   <FormControl>
                     <Input placeholder="https://" {...field} />
@@ -197,7 +198,7 @@ export function PhotosVideosForm({
             disabled={form.formState.isSubmitting}
             size="lg"
           >
-            {form.formState.isSubmitting ? "Uploading..." : t("next")}
+            {form.formState.isSubmitting ? t("uploading") : t("next")}
           </Button>
         </form>
       </Form>

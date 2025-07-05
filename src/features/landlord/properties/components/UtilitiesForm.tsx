@@ -100,7 +100,7 @@ export const UtilitiesForm = ({
           <div className="mb-6 flex items-center gap-2">
             <IconRound icon={utilitiesIcon} size="sm" />
             <h2 className="text-xl font-semibold text-gray-800">
-              Utilities & Amenities
+              {t("utilitiesAndAmenities")}
             </h2>
           </div>
 
@@ -112,7 +112,7 @@ export const UtilitiesForm = ({
             <div>
               <h3 className="mb-4 flex items-center gap-2 text-base font-medium">
                 <IconRound icon={utilitiesCoveredIcon} size="xs" />
-                Utilities Paid by Landlord
+                {t("utilitiesPaidByLandlord")}
               </h3>
 
               <div className="grid grid-cols-2 gap-x-6 gap-y-3">
@@ -128,7 +128,7 @@ export const UtilitiesForm = ({
                         />
                       </FormControl>
                       <FormLabel className="text-base font-normal">
-                        Cable
+                        {t("cable")}
                       </FormLabel>
                     </FormItem>
                   )}
@@ -146,7 +146,7 @@ export const UtilitiesForm = ({
                         />
                       </FormControl>
                       <FormLabel className="text-base font-normal">
-                        Internet
+                        {t("internet")}
                       </FormLabel>
                     </FormItem>
                   )}
@@ -164,7 +164,7 @@ export const UtilitiesForm = ({
                         />
                       </FormControl>
                       <FormLabel className="text-base font-normal">
-                        Electricity
+                        {t("electricity")}
                       </FormLabel>
                     </FormItem>
                   )}
@@ -182,7 +182,7 @@ export const UtilitiesForm = ({
                         />
                       </FormControl>
                       <FormLabel className="text-base font-normal">
-                        Satellite TV
+                        {t("satelliteTV")}
                       </FormLabel>
                     </FormItem>
                   )}
@@ -200,7 +200,7 @@ export const UtilitiesForm = ({
                         />
                       </FormControl>
                       <FormLabel className="text-base font-normal">
-                        Garbage
+                        {t("garbage")}
                       </FormLabel>
                     </FormItem>
                   )}
@@ -218,7 +218,7 @@ export const UtilitiesForm = ({
                         />
                       </FormControl>
                       <FormLabel className="text-base font-normal">
-                        Sewage
+                        {t("sewage")}
                       </FormLabel>
                     </FormItem>
                   )}
@@ -236,7 +236,7 @@ export const UtilitiesForm = ({
                         />
                       </FormControl>
                       <FormLabel className="text-base font-normal">
-                        Gas
+                        {t("gas")}
                       </FormLabel>
                     </FormItem>
                   )}
@@ -254,7 +254,7 @@ export const UtilitiesForm = ({
                         />
                       </FormControl>
                       <FormLabel className="text-base font-normal">
-                        Water
+                        {t("water")}
                       </FormLabel>
                     </FormItem>
                   )}

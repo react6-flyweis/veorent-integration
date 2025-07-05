@@ -25,13 +25,17 @@ import listingDescriptionIcon from "../assets/listing-description.png";
 import listingTitleIcon from "../assets/listing-title.png";
 import propertyDescriptionIcon from "../assets/property-description.png";
 
-const formSchema = z.object({
-  title: z.string().min(1, { message: "Property title is required" }).max(100),
-  description: z
-    .string()
-    .min(20, { message: "Description must be at least 20 characters" })
-    .max(1000),
-});
+const formSchema = (t: (key: string) => string) =>
+  z.object({
+    title: z
+      .string()
+      .min(1, { message: t("formSchema.title_required") })
+      .max(100),
+    description: z
+      .string()
+      .min(20, { message: t("formSchema.description_min") })
+      .max(1000),
+  });
 
 type ListingDescriptionFormProps = {
   defaultValues?: {
@@ -52,15 +56,15 @@ export function ListingDescriptionForm({
   const { id } = useParams<{ id: string }>();
   const { mutateAsync } = useUpdatePropertyMutation(id || "");
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<ReturnType<typeof formSchema>>>({
+    resolver: zodResolver(formSchema(t)),
     defaultValues: {
       title: defaultValues?.title || "",
       description: defaultValues?.description || "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<ReturnType<typeof formSchema>>) {
     try {
       const valuesToSubmit: IPropertyUpdateData = {
         name: values.title,
@@ -80,13 +84,13 @@ export function ListingDescriptionForm({
       <div>
         <div className="flex items-center gap-2">
           <IconRound icon={listingDescriptionIcon} size="sm" />
-          <h2 className="text-2xl font-semibold">Listing Description</h2>
+          <h2 className="text-2xl font-semibold">{t("listingDescription")}</h2>
         </div>
         {propertyName && (
           <div className="text-primary mb-5 text-xl">{propertyName}</div>
         )}
         <p className="text-muted-foreground">
-          Provide details about your property
+          {t("provideDetailsAboutProperty")}
         </p>
       </div>
 
@@ -99,15 +103,17 @@ export function ListingDescriptionForm({
               <FormItem>
                 <div className="flex items-center gap-2">
                   <IconRound icon={listingTitleIcon} size="sm" />
-                  <FormLabel>Property Title</FormLabel>
+                  <FormLabel>{t("propertyTitle")}</FormLabel>
                 </div>
                 <FormControl>
                   <Input
-                    placeholder="e.g. Cozy Downtown Apartment"
+                    placeholder={t("exampleCozyDowntownApartment")}
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>0/100 characters used</FormDescription>
+                <FormDescription>
+                  {field.value.length}/100 {t("charactersUsed")}
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -120,17 +126,18 @@ export function ListingDescriptionForm({
               <FormItem>
                 <div className="flex items-center gap-2">
                   <IconRound icon={propertyDescriptionIcon} size="sm" />
-                  <FormLabel>Property Description</FormLabel>
+                  <FormLabel>{t("propertyDescription")}</FormLabel>
                 </div>
                 <FormControl>
                   <Textarea
-                    placeholder="Describe your property in detail..."
+                    placeholder={t("describePropertyInDetail")}
                     className="min-h-[150px]"
                     {...field}
                   />
                 </FormControl>
                 <FormDescription>
-                  {field.value.length}/1000 characters used | 100 minimum
+                  {field.value.length}/1000 {t("charactersUsed")} | 20{" "}
+                  {t("minimum")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>

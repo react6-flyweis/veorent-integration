@@ -90,50 +90,50 @@ interface AmenitiesFormProps {
 }
 
 const amenitiesFields = [
-  { name: "accessibility", label: "Accessibility" },
-  { name: "alarmSystem", label: "Alarm System" },
-  { name: "bicycleParking", label: "Bicycle Parking" },
-  { name: "cableReady", label: "Cable-Ready" },
-  { name: "lawn", label: "Lawn" },
-  { name: "onSiteLaundry", label: "On-Site Laundry" },
-  { name: "swimmingPool", label: "Swimming Pool" },
-  { name: "fencedYard", label: "Fenced Yard" },
-  { name: "fireplace", label: "Fireplace" },
-  { name: "fitnessCenter", label: "Fitness Center" },
-  { name: "furnished", label: "Furnished" },
-  { name: "nearPark", label: "Near Park" },
-  { name: "secureBuilding", label: "Secure Building" },
-  { name: "vaultedCeiling", label: "Vaulted Ceiling" },
-  { name: "garage", label: "Garage" },
-  { name: "hotTubSpa", label: "Hot Tub/Spa" },
-  { name: "intercom", label: "Intercom" },
-  { name: "laundryHookups", label: "Laundry Hookups" },
-  { name: "offStreetParking", label: "Off-Street Parking" },
-  { name: "securityCameras", label: "Security Cameras" },
-  { name: "wiredForInternet", label: "Wired For Internet" },
+  { name: "accessibility", label: "accessibility" },
+  { name: "alarmSystem", label: "alarmSystem" },
+  { name: "bicycleParking", label: "bicycleParking" },
+  { name: "cableReady", label: "cableReady" },
+  { name: "lawn", label: "lawn" },
+  { name: "onSiteLaundry", label: "onSiteLaundry" },
+  { name: "swimmingPool", label: "swimmingPool" },
+  { name: "fencedYard", label: "fencedYard" },
+  { name: "fireplace", label: "fireplace" },
+  { name: "fitnessCenter", label: "fitnessCenter" },
+  { name: "furnished", label: "furnished" },
+  { name: "nearPark", label: "nearPark" },
+  { name: "secureBuilding", label: "secureBuilding" },
+  { name: "vaultedCeiling", label: "vaultedCeiling" },
+  { name: "garage", label: "garage" },
+  { name: "hotTubSpa", label: "hotTubSpa" },
+  { name: "intercom", label: "intercom" },
+  { name: "laundryHookups", label: "laundryHookups" },
+  { name: "offStreetParking", label: "offStreetParking" },
+  { name: "securityCameras", label: "securityCameras" },
+  { name: "wiredForInternet", label: "wiredForInternet" },
 ] as const;
 
 const appliancesFields = [
-  { name: "dishwasher", label: "Dishwasher" },
-  { name: "dryer", label: "Dryer" },
-  { name: "freezer", label: "Freezer" },
-  { name: "garbageDisposal", label: "Garbage Disposal" },
-  { name: "microwave", label: "Microwave" },
-  { name: "oven", label: "Oven" },
-  { name: "refrigerator", label: "Refrigerator" },
-  { name: "washer", label: "Washer" },
+  { name: "dishwasher", label: "dishwasher" },
+  { name: "dryer", label: "dryer" },
+  { name: "freezer", label: "freezer" },
+  { name: "garbageDisposal", label: "garbageDisposal" },
+  { name: "microwave", label: "microwave" },
+  { name: "oven", label: "oven" },
+  { name: "refrigerator", label: "refrigerator" },
+  { name: "washer", label: "washer" },
 ] as const;
 
 const floorCoveringsFields = [
-  { name: "carpet", label: "Carpet" },
-  { name: "concrete", label: "Concrete" },
-  { name: "hardwood", label: "Hardwood" },
-  { name: "laminate", label: "Laminate" },
-  { name: "linoleumVinyl", label: "Linoleum / Vinyl" },
-  { name: "slate", label: "Slate" },
-  { name: "softwood", label: "Softwood" },
-  { name: "tile", label: "Tile" },
-  { name: "other", label: "Other" },
+  { name: "carpet", label: "carpet" },
+  { name: "concrete", label: "concrete" },
+  { name: "hardwood", label: "hardwood" },
+  { name: "laminate", label: "laminate" },
+  { name: "linoleumVinyl", label: "linoleumVinyl" },
+  { name: "slate", label: "slate" },
+  { name: "softwood", label: "softwood" },
+  { name: "tile", label: "tile" },
+  { name: "other", label: "other" },
 ] as const;
 
 export const AmenitiesForm = ({
@@ -314,7 +314,7 @@ export const AmenitiesForm = ({
                           />
                         </FormControl>
                         <FormLabel className="text-sm font-normal">
-                          {field.label}
+                          {t(field.label)}
                         </FormLabel>
                       </FormItem>
                     )}
@@ -347,7 +347,7 @@ export const AmenitiesForm = ({
                           />
                         </FormControl>
                         <FormLabel className="text-sm font-normal">
-                          {field.label}
+                          {t(field.label)}
                         </FormLabel>
                       </FormItem>
                     )}
@@ -380,7 +380,7 @@ export const AmenitiesForm = ({
                           />
                         </FormControl>
                         <FormLabel className="text-sm font-normal">
-                          {field.label}
+                          {t(field.label)}
                         </FormLabel>
                       </FormItem>
                     )}

@@ -25,23 +25,28 @@ import { useUpdatePropertyMutation } from "../api/mutation";
 import rentLeaseIcon from "../assets/rent-lease.png";
 import rentIcon from "../assets/rent.png";
 
-const leasingBasicsSchema = z.object({
-  dateAvailable: z.date({
-    required_error: "Please select a date",
-  }),
-  leaseTerm: z.enum(
-    ["contact", "oneYear", "monthly", "rentToOwn", "sixMonths"],
-    {
-      required_error: "Please select a lease term",
-    },
-  ),
-  targetRent: z.coerce.number().min(1, { message: "Target rent is required" }),
-  targetDeposit: z.coerce
-    .number()
-    .min(1, { message: "Target deposit is required" }),
-});
+const leasingBasicsSchema = (t: (key: string) => string) =>
+  z.object({
+    dateAvailable: z.date({
+      required_error: t("formSchema.dateAvailable_required"),
+    }),
+    leaseTerm: z.enum(
+      ["contact", "oneYear", "monthly", "rentToOwn", "sixMonths"],
+      {
+        required_error: t("formSchema.leaseTerm_required"),
+      },
+    ),
+    targetRent: z.coerce
+      .number()
+      .min(1, { message: t("formSchema.targetRent_required") }),
+    targetDeposit: z.coerce
+      .number()
+      .min(1, { message: t("formSchema.targetDeposit_required") }),
+  });
 
-export type LeasingBasicsFormValues = z.infer<typeof leasingBasicsSchema>;
+export type LeasingBasicsFormValues = z.infer<
+  ReturnType<typeof leasingBasicsSchema>
+>;
 
 interface LeasingBasicsFormProps {
   defaultValues?: ILeasingBasics;
@@ -62,7 +67,7 @@ export const LeasingBasicsForm = ({
   const { mutateAsync } = useUpdatePropertyMutation(id || "");
 
   const form = useForm<LeasingBasicsFormValues>({
-    resolver: zodResolver(leasingBasicsSchema),
+    resolver: zodResolver(leasingBasicsSchema(t)),
     defaultValues: {
       leaseTerm: "contact",
       targetRent: defaultValues?.targetRent || 0,
@@ -102,7 +107,7 @@ export const LeasingBasicsForm = ({
         <div className="mb-3 flex items-center gap-2">
           <IconRound icon={rentIcon} size="sm" />
           <h2 className="text-xl font-semibold text-gray-800">
-            Leasing Basics
+            {t("leasingBasics")}
           </h2>
         </div>
 
@@ -114,7 +119,7 @@ export const LeasingBasicsForm = ({
           <div className="mb-2 flex gap-2">
             <IconRound icon={rentLeaseIcon} size="xs" />
             <h3 className="flex items-center gap-2 text-xl font-bold">
-              Leasing Term
+              {t("leasingTerm")}
             </h3>
           </div>
 
@@ -139,7 +144,7 @@ export const LeasingBasicsForm = ({
             name="leaseTerm"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>What is your desired lease term?</FormLabel>
+                <FormLabel>{t("whatIsDesiredLeaseTerm")}</FormLabel>
                 <FormControl>
                   <RadioGroup
                     onValueChange={field.onChange}
@@ -150,7 +155,7 @@ export const LeasingBasicsForm = ({
                         <RadioGroupItem value="contact" />
                       </FormControl>
                       <FormLabel className="text-base font-normal">
-                        Contact For Details
+                        {t("contactForDetails")}
                       </FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-y-0 space-x-3">
@@ -158,7 +163,7 @@ export const LeasingBasicsForm = ({
                         <RadioGroupItem value="oneYear" />
                       </FormControl>
                       <FormLabel className="text-base font-normal">
-                        One Year
+                        {t("oneYear")}
                       </FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-y-0 space-x-3">
@@ -166,7 +171,7 @@ export const LeasingBasicsForm = ({
                         <RadioGroupItem value="monthly" />
                       </FormControl>
                       <FormLabel className="text-base font-normal">
-                        Monthly
+                        {t("monthly")}
                       </FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-y-0 space-x-3">
@@ -174,7 +179,7 @@ export const LeasingBasicsForm = ({
                         <RadioGroupItem value="daily" />
                       </FormControl>
                       <FormLabel className="text-base font-normal">
-                        Daily
+                        {t("daily")}
                       </FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-y-0 space-x-3">
@@ -182,7 +187,7 @@ export const LeasingBasicsForm = ({
                         <RadioGroupItem value="rentToOwn" />
                       </FormControl>
                       <FormLabel className="text-base font-normal">
-                        Rent To Own
+                        {t("rentToOwn")}
                       </FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-y-0 space-x-3">
@@ -190,7 +195,7 @@ export const LeasingBasicsForm = ({
                         <RadioGroupItem value="sixMonths" />
                       </FormControl>
                       <FormLabel className="text-base font-normal">
-                        Six Months
+                        {t("sixMonths")}
                       </FormLabel>
                     </FormItem>
                   </RadioGroup>
@@ -204,7 +209,7 @@ export const LeasingBasicsForm = ({
         <div className="mb-4 space-y-4">
           <h3 className="mb-2 flex items-center gap-2 text-base font-medium">
             <IconRound icon={rentLeaseIcon} size="xs" />
-            Rent & Deposit
+            {t("rentAndDeposit")}
           </h3>
 
           <div className="mb-4 grid grid-cols-2 gap-4">
@@ -213,7 +218,7 @@ export const LeasingBasicsForm = ({
               name="targetRent"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Target Rent</FormLabel>
+                  <FormLabel>{t("targetRent")}</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <div className="absolute top-1/2 left-2 -translate-y-1/2">
@@ -232,7 +237,7 @@ export const LeasingBasicsForm = ({
               name="targetDeposit"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Target Deposit</FormLabel>
+                  <FormLabel>{t("targetDeposit")}</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <div className="absolute top-1/2 left-2 -translate-y-1/2">

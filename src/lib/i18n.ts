@@ -5,16 +5,19 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import enApplying from "@/locales/en/applying.json";
 import en from "@/locales/en/common.json";
 import enLandlord from "@/locales/en/landlord.json";
+import enProperties from "@/locales/en/properties.json";
 import enSidebar from "@/locales/en/sidebar.json";
 import enTenant from "@/locales/en/tenant.json";
 import esApplying from "@/locales/es/applying.json";
 import es from "@/locales/es/common.json";
 import esLandlord from "@/locales/es/landlord.json";
+import esProperties from "@/locales/es/properties.json";
 import esSidebar from "@/locales/es/sidebar.json";
 import esTenant from "@/locales/es/tenant.json";
 import frApplying from "@/locales/fr/applying.json";
 import fr from "@/locales/fr/common.json";
 import frLandlord from "@/locales/fr/landlord.json";
+import frProperties from "@/locales/fr/properties.json";
 import frSidebar from "@/locales/fr/sidebar.json";
 import frTenant from "@/locales/fr/tenant.json";
 
@@ -31,6 +34,7 @@ i18n
           enLandlord,
           enSidebar,
           enApplying,
+          enProperties,
         ),
       },
       es: {
@@ -41,6 +45,7 @@ i18n
           esLandlord,
           esSidebar,
           esApplying,
+          esProperties,
         ),
       },
       fr: {
@@ -51,6 +56,7 @@ i18n
           frLandlord,
           frSidebar,
           frApplying,
+          frProperties,
         ),
       },
     },

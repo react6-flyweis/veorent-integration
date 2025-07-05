@@ -35,31 +35,30 @@ import { useCreatePropertyMutation } from "./api/mutation";
 import mapPinIcon from "./assets/map-pin.png";
 import { PropertyAddressForm } from "./components/PropertyAddressForm";
 
-const formSchema = z.object({
-  propertyName: z.string().min(1, "Property name is required"),
-  description: z
-    .string({
-      required_error: "Description is required",
-    })
-    .max(500, "Description cannot exceed 500 characters"),
-  propertyType: z.string().min(1, "Please select a property type"),
-  hasRoomRentals: z.enum(["yes", "no"]),
-  streetAddress: z.string().min(1, "Street address is required"),
-  unit: z.string().min(1, "Unit is required"),
-  city: z.string().min(1, "City is required"),
-  region: z.string().min(1, "Region is required"),
-  zipCode: z.string().min(1, "Zip code is required"),
-  roomName: z.string().min(1, "Room name is required"),
-  beds: z.coerce.number().min(1, "Number of beds must be at least 1"),
-  baths: z.coerce.number().min(1, "Number of baths must be at least 1"),
-  apartmentUnit: z.coerce.number().optional(),
-  studioUnit: z.coerce.number().optional(),
-  roomsUnit: z.coerce.number().optional(),
-  targetRent: z.coerce.number().min(1, "Target rent must be greater than 0"),
-  targetDeposit: z.coerce
-    .number()
-    .min(1, "Target deposit must be greater than 0"),
-});
+const formSchema = (t: (key: string) => string) =>
+  z.object({
+    propertyName: z.string().min(1, t("formSchema.propertyName_required")),
+    description: z
+      .string({
+        required_error: t("formSchema.description_required"),
+      })
+      .max(500, t("formSchema.description_max")),
+    propertyType: z.string().min(1, t("formSchema.propertyType_required")),
+    hasRoomRentals: z.enum(["yes", "no"]),
+    streetAddress: z.string().min(1, t("formSchema.streetAddress_required")),
+    unit: z.string().min(1, t("formSchema.unit_required")),
+    city: z.string().min(1, t("formSchema.city_required")),
+    region: z.string().min(1, t("formSchema.region_required")),
+    zipCode: z.string().min(1, t("formSchema.zipCode_required")),
+    roomName: z.string().min(1, t("formSchema.roomName_required")),
+    beds: z.coerce.number().min(1, t("formSchema.beds_min")),
+    baths: z.coerce.number().min(1, t("formSchema.baths_min")),
+    apartmentUnit: z.coerce.number().optional(),
+    studioUnit: z.coerce.number().optional(),
+    roomsUnit: z.coerce.number().optional(),
+    targetRent: z.coerce.number().min(1, t("formSchema.targetRent_min")),
+    targetDeposit: z.coerce.number().min(1, t("formSchema.targetDeposit_min")),
+  });
 
 export default function AddProperty() {
   const { t } = useTranslation();
@@ -68,14 +67,14 @@ export default function AddProperty() {
   const { mutateAsync } = useCreatePropertyMutation();
   const navigate = useNavigate();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<ReturnType<typeof formSchema>>>({
+    resolver: zodResolver(formSchema(t)),
     defaultValues: {
       hasRoomRentals: "yes",
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<ReturnType<typeof formSchema>>) => {
     try {
       const valuesToSubmit: IPropertyCreateData = {
         name: values.propertyName,
@@ -136,10 +135,7 @@ export default function AddProperty() {
               }
             >
               <div className="space-y-4">
-                <PageTitle
-                  title="Which best describes your property?"
-                  withBack
-                />
+                <PageTitle title={t("whichBestDescribesProperty")} withBack />
 
                 <FormField
                   control={form.control}
@@ -159,7 +155,7 @@ export default function AddProperty() {
                   name="propertyName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Property Name</FormLabel>
+                      <FormLabel>{t("propertyName")}</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -187,7 +183,7 @@ export default function AddProperty() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="">
-                        Will you have rooms rentals?
+                        {t("willYouHaveRoomRentals")}
                       </FormLabel>
                       <FormControl>
                         <RadioGroup
@@ -226,12 +222,14 @@ export default function AddProperty() {
               <div className="">
                 <div className="mb-4 flex items-center gap-5">
                   <MultiStepperBackButton />
-                  <PageTitle title="Add Property Address" className="m-0" />
+                  <PageTitle title={t("addPropertyAddress")} className="m-0" />
                 </div>
                 <div className="space-y-6">
                   <div className="flex items-center gap-2">
                     <img src={mapPinIcon} alt="" className="max-h-7 max-w-7" />
-                    <h2 className="text-2xl font-bold">Property Address</h2>
+                    <h2 className="text-2xl font-bold">
+                      {t("propertyAddress")}
+                    </h2>
                   </div>
 
                   <PropertyAddressForm
@@ -251,14 +249,16 @@ export default function AddProperty() {
               <div>
                 <div className="mb-4 flex items-center gap-5">
                   <MultiStepperBackButton />
-                  <PageTitle title="Add Property details" className="m-0" />
+                  <PageTitle title={t("addPropertyDetails")} className="m-0" />
                 </div>
 
                 <div className="flex items-center gap-2">
                   <div className="rounded-full bg-blue-100 p-2">
                     <HouseIcon />
                   </div>
-                  <h2 className="text-2xl font-bold">Add Property details</h2>
+                  <h2 className="text-2xl font-bold">
+                    {t("addPropertyDetails")}
+                  </h2>
                 </div>
                 <div className="my-5 grid grid-cols-2 gap-5">
                   <FormField
@@ -266,9 +266,9 @@ export default function AddProperty() {
                     name="roomName"
                     render={({ field }) => (
                       <FormItem className="col-span-2">
-                        <FormLabel>Room Name</FormLabel>
+                        <FormLabel>{t("roomName")}</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter room name" {...field} />
+                          <Input placeholder={t("enterRoomName")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -285,7 +285,7 @@ export default function AddProperty() {
                           <Input
                             type="number"
                             min="1"
-                            placeholder="Number of beds"
+                            placeholder={t("numberOfBeds")}
                             {...field}
                             onChange={(e) =>
                               field.onChange(Number(e.target.value))
@@ -302,12 +302,12 @@ export default function AddProperty() {
                     name="baths"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Baths</FormLabel>
+                        <FormLabel>{t("baths")}</FormLabel>
                         <FormControl>
                           <Input
                             type="number"
                             min="1"
-                            placeholder="Number of baths"
+                            placeholder={t("numberOfBaths")}
                             {...field}
                             onChange={(e) =>
                               field.onChange(Number(e.target.value))
@@ -324,10 +324,10 @@ export default function AddProperty() {
                     name="apartmentUnit"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Apartment Unit</FormLabel>
+                        <FormLabel>{t("apartmentUnit")}</FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="Enter apartment unit"
+                            placeholder={t("enterApartmentUnit")}
                             {...field}
                           />
                         </FormControl>
@@ -341,9 +341,12 @@ export default function AddProperty() {
                     name="studioUnit"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Studio Unit</FormLabel>
+                        <FormLabel>{t("studioUnit")}</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter studio unit" {...field} />
+                          <Input
+                            placeholder={t("enterStudioUnit")}
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -355,9 +358,9 @@ export default function AddProperty() {
                     name="roomsUnit"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Rooms Unit</FormLabel>
+                        <FormLabel>{t("roomsUnit")}</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter rooms unit" {...field} />
+                          <Input placeholder={t("enterRoomsUnit")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -369,7 +372,7 @@ export default function AddProperty() {
                     name="targetRent"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Target Rent</FormLabel>
+                        <FormLabel>{t("targetRent")}</FormLabel>
                         <FormControl>
                           <CurrencyInput {...field} />
                         </FormControl>
@@ -383,7 +386,7 @@ export default function AddProperty() {
                     name="targetDeposit"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Target Deposit</FormLabel>
+                        <FormLabel>{t("targetDeposit")}</FormLabel>
                         <FormControl>
                           <CurrencyInput {...field} />
                         </FormControl>

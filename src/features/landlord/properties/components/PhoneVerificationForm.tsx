@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -24,21 +25,23 @@ import { useSendOtpMutation, useVerifyOtpMutation } from "../api/mutation";
 import verifyIcon from "../assets/verify.png";
 
 // Zod schemas for form validation
-const phoneVerificationSchema = z.object({
-  phone: z.string().min(10, "Phone number must be at least 10 digits"),
-  verificationMethod: z.enum(["text", "call"], {
-    required_error: "Please select a verification method",
-  }),
-});
+const phoneVerificationSchema = (t: (key: string) => string) =>
+  z.object({
+    phone: z.string().min(10, t("formSchema.phone_min")),
+    verificationMethod: z.enum(["text", "call"], {
+      required_error: t("formSchema.verificationMethod_required"),
+    }),
+  });
 
-const otpVerificationSchema = z.object({
-  otp: z
-    .array(z.string().length(1, "Required"))
-    .length(6, "Enter all 6 digits"),
-});
+const otpVerificationSchema = (t: (key: string) => string) =>
+  z.object({
+    otp: z
+      .array(z.string().length(1, t("formSchema.otp_length")))
+      .length(6, t("formSchema.otp_length")),
+  });
 
-type PhoneFormValues = z.infer<typeof phoneVerificationSchema>;
-type OtpFormValues = z.infer<typeof otpVerificationSchema>;
+type PhoneFormValues = z.infer<ReturnType<typeof phoneVerificationSchema>>;
+type OtpFormValues = z.infer<ReturnType<typeof otpVerificationSchema>>;
 
 interface PhoneVerificationFormProps {
   defaultValues?: {
@@ -56,6 +59,8 @@ export const PhoneVerificationForm = ({
   onSkip,
   propertyName,
 }: PhoneVerificationFormProps) => {
+  const { t } = useTranslation();
+
   const { id } = useParams<{ id: string }>();
   const { mutateAsync: sendOtp, isPending: isSendingOtp } = useSendOtpMutation(
     id || "",
@@ -69,7 +74,7 @@ export const PhoneVerificationForm = ({
 
   // Phone verification form
   const phoneForm = useForm<PhoneFormValues>({
-    resolver: zodResolver(phoneVerificationSchema),
+    resolver: zodResolver(phoneVerificationSchema(t)),
     defaultValues: {
       phone: defaultValues?.phone || "",
       verificationMethod: "text" as const,
@@ -78,7 +83,7 @@ export const PhoneVerificationForm = ({
 
   // OTP verification form
   const otpForm = useForm<OtpFormValues>({
-    resolver: zodResolver(otpVerificationSchema),
+    resolver: zodResolver(otpVerificationSchema(t)),
     defaultValues: {
       otp: ["", "", "", "", "", ""],
     },
@@ -187,7 +192,7 @@ export const PhoneVerificationForm = ({
       <div className="mb-6 flex items-center">
         <IconRound icon={verifyIcon} size="sm" />
         <h2 className="ml-2 text-xl font-semibold">
-          Verify Your Phone to Publish the Listing
+          {t("verifyPhoneToPublishListing")}
         </h2>
       </div>
 
@@ -196,10 +201,7 @@ export const PhoneVerificationForm = ({
           <p className="text-muted-foreground mb-6">{propertyName}</p>
         )}
         <p className="text-muted-foreground mb-6 text-sm">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book.
+          {t("setUpListingPromptDescription")}
         </p>
 
         {!otpSent ? (
@@ -210,7 +212,7 @@ export const PhoneVerificationForm = ({
             >
               <div>
                 <h3 className="mb-4 text-base font-medium">
-                  How would you like to receive the verification code?
+                  {t("howToReceiveVerificationCode")}
                 </h3>
                 <FormField
                   control={phoneForm.control}
@@ -229,7 +231,7 @@ export const PhoneVerificationForm = ({
                               htmlFor="text-option"
                               className="font-normal"
                             >
-                              Send a text message
+                              {t("sendATextMessage")}
                             </Label>
                           </div>
                           <div className="flex items-center space-x-2">
@@ -238,7 +240,7 @@ export const PhoneVerificationForm = ({
                               htmlFor="call-option"
                               className="font-normal"
                             >
-                              Call my phone
+                              {t("callMyPhone")}
                             </Label>
                           </div>
                         </RadioGroup>
@@ -255,7 +257,7 @@ export const PhoneVerificationForm = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-base font-medium">
-                      Phone
+                      {t("phone")}
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -282,14 +284,14 @@ export const PhoneVerificationForm = ({
                   onClick={handleSkip}
                   disabled={isSending || isSkipping || isSendingOtp}
                 >
-                  Skip Marketing For Now
+                  {t("skipMarketingForNow")}
                 </Button>
                 <Button
                   type="submit"
                   className="flex-1"
                   disabled={isSending || isSkipping || isSendingOtp}
                 >
-                  Send Code
+                  {t("sendCode")}
                 </Button>
               </div>
             </form>
@@ -301,7 +303,7 @@ export const PhoneVerificationForm = ({
               className="space-y-6"
             >
               <div>
-                <h3 className="mb-4 text-base font-medium">Enter OTP</h3>
+                <h3 className="mb-4 text-base font-medium">{t("enterOtp")}</h3>
                 <FormField
                   control={otpForm.control}
                   name="otp"
@@ -351,7 +353,7 @@ export const PhoneVerificationForm = ({
                   onClick={handleSkip}
                   disabled={isSending || isSkipping || isVerifyingOtp}
                 >
-                  Skip Marketing For Now
+                  {t("skipMarketingForNow")}
                 </Button>
                 <Button
                   type="submit"
@@ -359,7 +361,7 @@ export const PhoneVerificationForm = ({
                   className="flex-1"
                   disabled={isSending || isSkipping || isVerifyingOtp}
                 >
-                  Please Verify
+                  {t("pleaseVerify")}
                 </Button>
               </div>
             </form>

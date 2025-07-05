@@ -1,13 +1,17 @@
-import { BackButton } from "@/components/BackButton";
-import propertyEditIcon from "./assets/edit-property.png";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import keyIcon from "./assets/key.png";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { EditIcon } from "lucide-react";
 
+import { BackButton } from "@/components/BackButton";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+import propertyEditIcon from "./assets/edit-property.png";
+import keyIcon from "./assets/key.png";
+
 export default function PropertyUnits() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   return (
     <div className="space-y-5">
@@ -39,7 +43,9 @@ export default function PropertyUnits() {
       <div className="grid @lg:grid-cols-2">
         <Card className="border shadow-md">
           <CardHeader>
-            <CardTitle className="text-xl font-bold">Units & Rooms</CardTitle>
+            <CardTitle className="text-xl font-bold">
+              {t("unitsAndRooms")}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -47,7 +53,7 @@ export default function PropertyUnits() {
               <div className="pl-2">
                 <div className="flex items-center gap-2 font-medium">
                   <img src={keyIcon} alt="Key Icon" className="h-5 w-5" />
-                  <span>Units 1</span>
+                  <span>{t("units")} 1</span>
                 </div>
 
                 <div className="relative ml-3 border-l-2 border-dashed">
@@ -56,10 +62,10 @@ export default function PropertyUnits() {
                     <div className="flex items-center justify-between p-3">
                       <div className="flex items-center gap-2">
                         <img src={keyIcon} alt="Key Icon" className="h-5 w-5" />
-                        <span>Room A</span>
+                        <span>{t("room")} A</span>
                       </div>
                       <Badge className="bg-orange-500 text-black hover:bg-orange-600">
-                        Incomplete
+                        {t("incomplete")}
                       </Badge>
                     </div>
 
@@ -70,14 +76,14 @@ export default function PropertyUnits() {
                         size="sm"
                         className="rounded-md"
                       >
-                        Set Up Listing
+                        {t("setUpListing")}
                       </Button>
                       <Button
                         variant="outline"
                         size="sm"
                         className="rounded-md"
                       >
-                        Screen Tenant
+                        {t("screenTenant")}
                       </Button>
                     </div>
                   </div>

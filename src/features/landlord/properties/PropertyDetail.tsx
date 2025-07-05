@@ -118,7 +118,7 @@ export default function PropertyDetail() {
       navigate("/landlord/properties/marketing-extended");
     } catch (error) {
       console.error("Failed to extend marketing date:", error);
-      toast.error("Failed to extend marketing date. Please try again.");
+      toast.error(t("failedToExtendMarketing"));
     }
   };
 
@@ -130,10 +130,10 @@ export default function PropertyDetail() {
         marketingExtendedDate: "",
       });
 
-      toast.success("Marketing has been turned off successfully.");
+      toast.success(t("marketingTurnedOff"));
     } catch (error) {
       console.error("Failed to turn off marketing:", error);
-      toast.error("Failed to turn off marketing. Please try again.");
+      toast.error(t("failedToTurnOffMarketing"));
     }
   };
 
@@ -149,10 +149,10 @@ export default function PropertyDetail() {
         marketingExtendedDate: marketingEndDate.toISOString(),
       });
 
-      toast.success("Marketing has been turned on for 30 days!");
+      toast.success(t("marketingTurnedOn"));
     } catch (error) {
       console.error("Failed to start marketing:", error);
-      toast.error("Failed to start marketing. Please try again.");
+      toast.error(t("failedToStartMarketing"));
     }
   };
 
@@ -236,13 +236,15 @@ export default function PropertyDetail() {
             <div className="flex flex-wrap gap-6">
               <div className="flex items-center gap-2">
                 <span className="text-muted-foreground text-sm">
-                  Property ID
+                  {t("propertyId")}
                 </span>
                 <p className="font-medium">{property._id}</p>
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="text-muted-foreground text-sm">Rent</span>
+                <span className="text-muted-foreground text-sm">
+                  {t("rent")}
+                </span>
                 <p className="flex items-center gap-1 font-medium">
                   <CurrencyIcon size="sm" />
                   {property.rentalDetails?.targetRent?.toLocaleString()}
@@ -268,13 +270,13 @@ export default function PropertyDetail() {
         {status === "marketing" && (
           <div className="rounded-md p-4">
             <h3 className="mb-2 text-lg font-medium">
-              Marketing Online: {property.isMarketing ? "ON" : "OFF"}
+              {t("marketingOnlineOn")}
             </h3>
             <p className="text-muted-foreground text-sm">
-              <span>EXPIRES ON:</span>{" "}
+              <span>{t("expiresOn")}</span>{" "}
               <span>
                 {formatDate(property.marketingExtendedDate)} (
-                {getDaysLeft(property.marketingExtendedDate)} Days left)
+                {getDaysLeft(property.marketingExtendedDate)} {t("daysLeft")})
               </span>
             </p>
             <div className="mt-4 flex justify-around gap-5">
@@ -284,7 +286,7 @@ export default function PropertyDetail() {
                 onClick={handleTurnOffMarketing}
                 isLoading={isPending}
               >
-                Turn Off
+                {t("turnOff")}
               </LoadingButton>
               {!property.isMarketingExtended && (
                 <LoadingButton
@@ -292,7 +294,7 @@ export default function PropertyDetail() {
                   onClick={handleExtendMarketing}
                   isLoading={isPending}
                 >
-                  Extend
+                  {t("extend")}
                 </LoadingButton>
               )}
             </div>
@@ -302,7 +304,7 @@ export default function PropertyDetail() {
         {status === "Available" && (
           <div className="rounded-md p-4">
             <h3 className="mb-2 text-2xl font-bold">
-              Market My Rental For Free
+              {t("marketMyRentalForFree")}
             </h3>
 
             <div className="mt-4 flex flex-col gap-3">
@@ -310,27 +312,21 @@ export default function PropertyDetail() {
                 <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-full text-white">
                   <UserIcon className="h-4 w-4" />
                 </div>
-                <p className="text-sm">
-                  Reach thousands of renters with a 5 minute setup
-                </p>
+                <p className="text-sm">{t("reachThousandsOfRenters")}</p>
               </div>
 
               <div className="flex items-center gap-3">
                 <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-full text-white">
                   <LinkIcon className="h-4 w-4" />
                 </div>
-                <p className="text-sm">
-                  Post to the top listing sites from one place
-                </p>
+                <p className="text-sm">{t("postToTopListingSites")}</p>
               </div>
 
               <div className="flex items-center gap-3">
                 <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-full text-white">
                   <UserIcon className="h-4 w-4" />
                 </div>
-                <p className="text-sm">
-                  Fill your vacancy with the perfect tenant!
-                </p>
+                <p className="text-sm">{t("fillYourVacancy")}</p>
               </div>
             </div>
 
@@ -341,7 +337,7 @@ export default function PropertyDetail() {
                 onClick={handleMarketNow}
                 isLoading={isPending}
               >
-                Market Now
+                {t("marketNow")}
               </LoadingButton>
             </div>
           </div>
@@ -349,9 +345,11 @@ export default function PropertyDetail() {
 
         {status === "incomplete" && (
           <div className="p-4">
-            <h3 className="mb-2 text-lg font-medium">Marketing Online: OFF</h3>
+            <h3 className="mb-2 text-lg font-medium">
+              {t("marketingOnlineOff")}
+            </h3>
             <p className="text-muted-foreground text-sm">
-              Your listing is almost ready!
+              {t("yourListingIsAlmostReady")}
             </p>
             <p className="mt-2 text-sm">{property.description}</p>
           </div>
@@ -366,7 +364,7 @@ export default function PropertyDetail() {
             to={`/landlord/properties/${property._id}/setup`}
           >
             <Button size="lg" className="mt-4 w-full">
-              {status ? "Complete" : t("create")} My Listing
+              {status ? t("completeMyListing") : t("createMyListing")}
             </Button>
           </Link>
         </div>
@@ -375,7 +373,7 @@ export default function PropertyDetail() {
         <Card className="py-4">
           <CardContent className="space-y-5 px-4">
             <div className="space-y-1">
-              <h3 className="text-lg font-medium">Listing Page</h3>
+              <h3 className="text-lg font-medium">{t("listingPage")}</h3>
               <p className="text-blue-600">
                 {PROPERTY_URL_PREFIX}
                 {property._id}
@@ -386,14 +384,14 @@ export default function PropertyDetail() {
                   className="text-primary h-6 bg-blue-200 hover:bg-blue-300"
                 >
                   <ForwardIcon className="size-3" />
-                  <span className="ml-2">Share</span>
+                  <span className="ml-2">{t("share")}</span>
                 </Button>
                 <Button
                   size="sm"
                   className="text-primary h-6 bg-blue-200 hover:bg-blue-300"
                 >
                   <CopyIcon className="size-3" />
-                  <span className="ml-2">Copy</span>
+                  <span className="ml-2">{t("copy")}</span>
                 </Button>
                 <Button
                   size="sm"
@@ -409,7 +407,7 @@ export default function PropertyDetail() {
 
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <h3 className="text-lg font-medium">Pre-Screener</h3>
+                <h3 className="text-lg font-medium">{t("preScreener")}</h3>
                 <BadgeInfoIcon className="size-4" />
               </div>
 
@@ -420,14 +418,14 @@ export default function PropertyDetail() {
                   className="text-primary h-6 bg-blue-200 hover:bg-blue-300"
                 >
                   <ForwardIcon className="size-3" />
-                  <span className="ml-2">Share</span>
+                  <span className="ml-2">{t("share")}</span>
                 </Button>
                 <Button
                   size="sm"
                   className="text-primary h-6 bg-blue-200 hover:bg-blue-300"
                 >
                   <CopyIcon className="size-3" />
-                  <span className="ml-2">Copy</span>
+                  <span className="ml-2">{t("copy")}</span>
                 </Button>
               </div>
             </div>

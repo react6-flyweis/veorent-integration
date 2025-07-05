@@ -21,14 +21,17 @@ import { getErrorMessage } from "@/utils/getErrorMessage";
 import { useUpdatePropertyMutation } from "../api/mutation";
 import propertySizeIcon from "../assets/property-size.png";
 
-const propertySizeSchema = z.object({
-  beds: z.coerce.number().min(1, { message: "Number of beds is required" }),
-  baths: z.coerce.number().min(1, { message: "Number of baths is required" }),
-  squareFeet: z.coerce.number().optional(),
-  yearBuilt: z.coerce.number().optional(),
-});
+const propertySizeSchema = (t: (key: string) => string) =>
+  z.object({
+    beds: z.coerce.number().min(1, { message: t("formSchema.beds_required") }),
+    baths: z.coerce
+      .number()
+      .min(1, { message: t("formSchema.baths_required") }),
+    squareFeet: z.coerce.number().optional(),
+    yearBuilt: z.coerce.number().optional(),
+  });
 
-type PropertySizeFormValues = z.infer<typeof propertySizeSchema>;
+type PropertySizeFormValues = z.infer<ReturnType<typeof propertySizeSchema>>;
 
 interface PropertySizeFormProps {
   defaultValues?: IPropertySize;
@@ -49,7 +52,7 @@ export const PropertySizeForm = ({
   const { mutateAsync } = useUpdatePropertyMutation(id || "");
 
   const form = useForm<PropertySizeFormValues>({
-    resolver: zodResolver(propertySizeSchema),
+    resolver: zodResolver(propertySizeSchema(t)),
     defaultValues: {
       beds: defaultValues?.beds || 0,
       baths: defaultValues?.baths || 0,
@@ -87,7 +90,7 @@ export const PropertySizeForm = ({
           <div className="mb-6 flex items-center gap-2">
             <IconRound icon={propertySizeIcon} size="sm" />
             <h2 className="text-xl font-semibold text-gray-800">
-              Property Size
+              {t("propertySize")}
             </h2>
           </div>
 
@@ -115,7 +118,7 @@ export const PropertySizeForm = ({
               name="baths"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Baths</FormLabel>
+                  <FormLabel>{t("baths")}</FormLabel>
                   <FormControl>
                     <Input type="number" {...field} />
                   </FormControl>
@@ -131,7 +134,7 @@ export const PropertySizeForm = ({
               name="squareFeet"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Square Feet (Optional)</FormLabel>
+                  <FormLabel>{t("squareFeetOptional")}</FormLabel>
                   <FormControl>
                     <Input type="number" {...field} />
                   </FormControl>
@@ -145,7 +148,7 @@ export const PropertySizeForm = ({
               name="yearBuilt"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Year Built (Optional)</FormLabel>
+                  <FormLabel>{t("yearBuiltOptional")}</FormLabel>
                   <FormControl>
                     <Input type="number" {...field} />
                   </FormControl>

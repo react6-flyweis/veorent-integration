@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
+
 import { IconRound } from "@/components/IconRound";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 // Using an existing icon that could represent publish listing
@@ -17,6 +19,7 @@ export const PublishListingForm = ({
   onSaveDraft,
   address = "123 Main St.",
 }: PublishListingFormProps) => {
+  const { t } = useTranslation();
   const [isPublishing, setIsPublishing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -46,7 +49,9 @@ export const PublishListingForm = ({
     <div>
       <div className="mb-6 flex items-center gap-2">
         <IconRound icon={listingIcon} size="sm" />
-        <h2 className="text-xl font-semibold text-gray-800">Publish Listing</h2>
+        <h2 className="text-xl font-semibold text-gray-800">
+          {t("publishListing")}
+        </h2>
       </div>
 
       <Card className="mb-8 overflow-hidden">
@@ -75,7 +80,7 @@ export const PublishListingForm = ({
             <div>
               <h3 className="font-medium">{address}</h3>
               <p className="text-sm text-gray-500">
-                Your property is ready to be published
+                {t("yourPropertyIsReadyToBePublished")}
               </p>
             </div>
           </div>
@@ -89,14 +94,14 @@ export const PublishListingForm = ({
           onClick={handleSaveDraft}
           disabled={isSaving || isPublishing}
         >
-          {isSaving ? "Saving..." : "Save & Publish Later"}
+          {isSaving ? t("saving") : t("saveAndPublishLater")}
         </Button>
         <Button
           className="w-full sm:w-60"
           onClick={handlePublish}
           disabled={isSaving || isPublishing}
         >
-          {isPublishing ? "Publishing..." : "Publish My Listing"}
+          {isPublishing ? t("publishing") : t("publishMyListing")}
         </Button>
       </div>
     </div>
