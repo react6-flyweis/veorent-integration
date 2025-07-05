@@ -27,7 +27,7 @@ export function LogoutConfirmDialog({
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="text-center text-xl">
-            Are You Sure Want To Logout ?
+            {t("confirmLogout")}
           </DialogTitle>
         </DialogHeader>
         <DialogFooter className="flex flex-row justify-center gap-4 sm:justify-center">
