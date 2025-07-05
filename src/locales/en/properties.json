@@ -203,6 +203,11 @@
   "sewage": "Sewage",
   "gas": "Gas",
   "water": "Water",
+  "multiFamilyHome": "Multi-family-home",
+  "mainStreetAddress": "123 Main St.",
+  "cityStateZip": "Denver, Co 80023",
+  "editAltText": "Edit",
+  "notApplicable": "N/A",
   "formSchema": {
     "propertyName_required": "Property name is required",
     "description_required": "Description is required",
