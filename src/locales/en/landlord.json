@@ -366,6 +366,7 @@
         "soundsGood": "Sounds Good! Let's Start"
     },
     "needsWork": {
+        "title": "Needs Work",
         "contactSupportTitle": "Contact Support",
         "emailLabel": "Email on Your Veorent Account",
         "emailPlaceholder": "Enter your email address",

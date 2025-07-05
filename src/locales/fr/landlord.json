@@ -366,6 +366,7 @@
         "soundsGood": "Ça a l'air bien ! Commençons"
     },
     "needsWork": {
+        "title": "À améliorer",
         "contactSupportTitle": "Contacter le support",
         "emailLabel": "E-mail de votre compte Veorent",
         "emailPlaceholder": "Saisissez votre adresse e-mail",
