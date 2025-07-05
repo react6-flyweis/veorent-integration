@@ -7,10 +7,12 @@ import en from "@/locales/en/common.json";
 import enLandlord from "@/locales/en/landlord.json";
 import enSidebar from "@/locales/en/sidebar.json";
 import enTenant from "@/locales/en/tenant.json";
+import esApplying from "@/locales/es/applying.json";
 import es from "@/locales/es/common.json";
 import esLandlord from "@/locales/es/landlord.json";
 import esSidebar from "@/locales/es/sidebar.json";
 import esTenant from "@/locales/es/tenant.json";
+import frApplying from "@/locales/fr/applying.json";
 import fr from "@/locales/fr/common.json";
 import frLandlord from "@/locales/fr/landlord.json";
 import frSidebar from "@/locales/fr/sidebar.json";
@@ -32,10 +34,24 @@ i18n
         ),
       },
       es: {
-        translation: Object.assign({}, es, esTenant, esLandlord, esSidebar),
+        translation: Object.assign(
+          {},
+          es,
+          esTenant,
+          esLandlord,
+          esSidebar,
+          esApplying,
+        ),
       },
       fr: {
-        translation: Object.assign({}, fr, frTenant, frLandlord, frSidebar),
+        translation: Object.assign(
+          {},
+          fr,
+          frTenant,
+          frLandlord,
+          frSidebar,
+          frApplying,
+        ),
       },
     },
     fallbackLng: "en",

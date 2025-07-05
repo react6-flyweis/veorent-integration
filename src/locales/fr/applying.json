@@ -1,0 +1,135 @@
+{
+    "error": {
+        "loadingApplication": "Erreur lors du chargement de la demande",
+        "unableToLoad": "Impossible de charger les données de votre demande. Veuillez réessayer.",
+        "notFound": "Demande non trouvée",
+        "notFoundDesc": "La demande que vous recherchez n'existe pas ou a été supprimée."
+    },
+    "actions": {
+        "retry": "Réessayer",
+        "goBack": "Retourner",
+        "saveAndFinishLater": "Enregistrer et terminer plus tard",
+        "saveNext": "Enregistrer et suivant"
+    },
+    "applicationInfo": {
+        "title": "Informations sur la demande",
+        "moveInDate": "Date d'emménagement souhaitée",
+        "coSignersLabel": "D'autres personnes postulent-elles avec vous (y compris des co-signataires) ?",
+        "coSignersDesc": "Veuillez indiquer si quelqu'un d'autre, y compris des co-signataires, postule avec vous.",
+        "shortPeriodLabel": "Réservez-vous ce bien pour une courte période ?",
+        "shortPeriodDesc": "Veuillez indiquer s'il s'agit d'une réservation de courte durée.",
+        "peopleLabel": "Combien de personnes vivront au total dans le logement ?",
+        "peopleDesc": "Veuillez indiquer le nombre total de personnes qui résideront dans le logement."
+    },
+    "residentialHistory": {
+        "title": "Historique résidentiel",
+        "desc": "Veuillez fournir vos adresses actuelles et précédentes.",
+        "currentAddress": "Adresse actuelle",
+        "addCurrent": "Ajouter l'adresse actuelle",
+        "editCurrent": "Modifier l'adresse actuelle",
+        "pastAddress": "Adresse précédente",
+        "addPast": "Ajouter une adresse précédente",
+        "editPast": "Modifier l'adresse précédente",
+        "notApplicable": "Non applicable"
+    },
+    "employment": {
+        "title": "Emploi",
+        "desc": "Veuillez fournir vos informations d'emploi actuelles et passées.",
+        "currentEmployer": "Employeur actuel",
+        "addCurrent": "Ajouter un employeur actuel",
+        "editCurrent": "Modifier l'employeur actuel",
+        "pastEmployer": "Employeur précédent",
+        "addPast": "Ajouter un employeur précédent",
+        "editPast": "Modifier l'employeur précédent",
+        "notApplicable": "Non applicable"
+    },
+    "otherIncome": {
+        "title": "Autres revenus",
+        "desc": "Y a-t-il d'autres sources de revenus que vous souhaitez inclure ?",
+        "descMore": "Incluez toute source de revenu supplémentaire que vous souhaitez faire prendre en compte (ex : freelance, investissements, etc.)",
+        "bankLabel": "Banque / Institution financière actuelle",
+        "bankDesc": "Indiquez le nom de votre banque ou institution financière actuelle."
+    },
+    "generalInfo": {
+        "title": "Informations générales",
+        "haveAnimal": "Aurez-vous un animal vivant avec vous dans ce logement ?",
+        "haveVehicle": "Aurez-vous un véhicule dans ce logement ?",
+        "smoke": "Fumez-vous ?",
+        "requirement": "Avez-vous des demandes ou exigences particulières dont nous devrions être informés ?"
+    },
+    "emergencyContact": {
+        "title": "Autres informations",
+        "emergencyTitle": "Contact d'urgence",
+        "firstName": "Prénom",
+        "relationship": "Relation",
+        "phoneNumber": "Numéro de téléphone",
+        "additionalComments": "Commentaires supplémentaires",
+        "additionalCommentsOptional": "Commentaires supplémentaires (optionnel)",
+        "additionalCommentsDesc": "Fournissez toute information ou commentaire supplémentaire pouvant aider votre demande (optionnel).",
+        "foundThrough": "Comment avez-vous trouvé ce logement ?",
+        "website": "Site web",
+        "agent": "Agent",
+        "social": "Réseaux sociaux",
+        "friend": "Ami / Référence"
+    },
+    "background": {
+        "title": "Antécédents",
+        "evicted": "Avez-vous (ou une personne nommée dans cette demande) déjà été expulsé d'un logement ou laissé des dettes ?",
+        "criminalOffense": "Avez-vous ou un membre de votre foyer déjà été condamné (ou plaidé coupable ou nolo contendere) pour une infraction autre qu'une infraction mineure ayant abouti à un acquittement ou à un verdict de 'non coupable' ?",
+        "bankrupted": "Avez-vous (ou une personne nommée dans cette demande) déjà fait faillite, été saisi ou été défendeur dans une action civile ?"
+    },
+    "uploadDocuments": {
+        "title": "Télécharger des documents",
+        "desc": "Veuillez télécharger les documents requis.",
+        "photoId": "Pièce d'identité avec photo",
+        "photoIdDesc": "Téléchargez une pièce d'identité officielle avec photo (ex : permis de conduire, passeport ou carte nationale d'identité).",
+        "proofOfIncome": "Justificatif de revenus",
+        "proofOfIncomeDesc": "Téléchargez votre dernière fiche de paie, relevé bancaire ou autre justificatif de revenus.",
+        "otherDocs": "Autres documents (optionnel)",
+        "otherDocsDesc": "Téléchargez tout document supplémentaire que vous souhaitez fournir (optionnel).",
+        "uploadLater": "Télécharger les documents plus tard"
+    },
+    "paymentFee": {
+        "title": "Payer les frais de vérification",
+        "amount": "Montant du paiement",
+        "pay": "Payer",
+        "cardHolderName": "Nom du titulaire de la carte",
+        "cardNumber": "Numéro de carte",
+        "expiration": "Expiration",
+        "cvc": "CVC",
+        "zipCode": "Code postal",
+        "orangePay": "Paiement Orange Money",
+        "mtnPay": "Paiement MTN Money",
+        "or": "OU"
+    },
+    "address": {
+        "residenceType": "Type de résidence",
+        "rent": "Louer",
+        "own": "Propriétaire",
+        "other": "Autre",
+        "monthMovedIn": "Mois d'emménagement",
+        "monthPlaceholder": "MM",
+        "yearMovedIn": "Année d'emménagement",
+        "yearPlaceholder": "AAAA",
+        "monthlyRent": "Loyer mensuel",
+        "amountPlaceholder": "Montant",
+        "reasonForMoving": "Pourquoi déménagez-vous ?",
+        "reasonForMovingPlaceholder": "Optionnel",
+        "landlordContactInfo": "Coordonnées du propriétaire",
+        "unknownEmail": "Je ne connais pas l'e-mail de mon propriétaire",
+        "addCurrentAddress": "Ajouter l'adresse actuelle"
+    },
+    "saveAndFinishDialog": {
+        "title": "Ne manquez pas cette location !",
+        "description": "Enregistrez votre progression et terminez votre demande plus tard. Vos informations seront stockées en toute sécurité.",
+        "backToApplication": "Retour à la demande",
+        "saveAndFinishLater": "Enregistrer et terminer plus tard",
+        "iconAlt": "Icône TV"
+    },
+    "applicationSavedDialog": {
+        "title": "Demande enregistrée",
+        "description": "Votre demande a été enregistrée avec succès. Vous pouvez y revenir et la compléter à tout moment.",
+        "iconAlt": "Icône de validation",
+        "done": "Terminé"
+    }
+}

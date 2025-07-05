@@ -1,0 +1,135 @@
+{
+    "error": {
+        "loadingApplication": "Error al cargar la solicitud",
+        "unableToLoad": "No se puede cargar los datos de su solicitud. Por favor, inténtelo de nuevo.",
+        "notFound": "Solicitud no encontrada",
+        "notFoundDesc": "La solicitud que busca no existe o ha sido eliminada."
+    },
+    "actions": {
+        "retry": "Reintentar",
+        "goBack": "Volver",
+        "saveAndFinishLater": "Guardar y terminar después",
+        "saveNext": "Guardar y siguiente"
+    },
+    "applicationInfo": {
+        "title": "Información de la solicitud",
+        "moveInDate": "Fecha deseada de mudanza",
+        "coSignersLabel": "¿Hay otras personas que solicitan con usted (incluidos co-firmantes)?",
+        "coSignersDesc": "Indique si alguien más, incluidos co-firmantes, está solicitando con usted.",
+        "shortPeriodLabel": "¿Está reservando esta propiedad por un período corto?",
+        "shortPeriodDesc": "Indique si se trata de una reserva a corto plazo.",
+        "peopleLabel": "¿Cuántas personas vivirán en la propiedad en total?",
+        "peopleDesc": "Ingrese el número total de personas que residirán en la propiedad."
+    },
+    "residentialHistory": {
+        "title": "Historial residencial",
+        "desc": "Por favor, proporcione su información de dirección actual y pasada.",
+        "currentAddress": "Dirección actual",
+        "addCurrent": "Agregar dirección actual",
+        "editCurrent": "Editar dirección actual",
+        "pastAddress": "Dirección anterior",
+        "addPast": "Agregar dirección anterior",
+        "editPast": "Editar dirección anterior",
+        "notApplicable": "No aplica"
+    },
+    "employment": {
+        "title": "Empleo",
+        "desc": "Por favor, proporcione su información de empleo actual y pasada.",
+        "currentEmployer": "Empleador actual",
+        "addCurrent": "Agregar empleador actual",
+        "editCurrent": "Editar empleador actual",
+        "pastEmployer": "Empleador anterior",
+        "addPast": "Agregar empleador anterior",
+        "editPast": "Editar empleador anterior",
+        "notApplicable": "No aplica"
+    },
+    "otherIncome": {
+        "title": "Otros ingresos",
+        "desc": "¿Hay otras fuentes de ingresos que le gustaría incluir?",
+        "descMore": "Incluya cualquier fuente adicional de ingresos que desee considerar (por ejemplo, freelance, inversiones, etc.)",
+        "bankLabel": "Banco / Institución financiera actual",
+        "bankDesc": "Ingrese el nombre de su banco o institución financiera actual."
+    },
+    "generalInfo": {
+        "title": "Información general",
+        "haveAnimal": "¿Tendrá un animal viviendo con usted en esta propiedad?",
+        "haveVehicle": "¿Tendrá un vehículo en esta propiedad?",
+        "smoke": "¿Fuma?",
+        "requirement": "¿Tiene alguna solicitud o requisito especial que debamos conocer?"
+    },
+    "emergencyContact": {
+        "title": "Otra información",
+        "emergencyTitle": "Contacto de emergencia",
+        "firstName": "Nombre",
+        "relationship": "Relación",
+        "phoneNumber": "Número de teléfono",
+        "additionalComments": "Comentarios adicionales",
+        "additionalCommentsOptional": "Comentarios adicionales (opcional)",
+        "additionalCommentsDesc": "Proporcione cualquier información o comentario adicional que pueda ayudar a su solicitud (opcional).",
+        "foundThrough": "¿Cómo encontró esta propiedad?",
+        "website": "Sitio web",
+        "agent": "Agente",
+        "social": "Redes sociales",
+        "friend": "Amigo / Referido"
+    },
+    "background": {
+        "title": "Antecedentes",
+        "evicted": "¿Alguna vez usted (o alguna persona nombrada en esta solicitud) ha sido desalojado de una vivienda o ha dejado deudas pendientes?",
+        "criminalOffense": "¿Usted o algún miembro de su hogar ha sido condenado (o se ha declarado culpable o no impugnó) por algún delito que no sea una infracción menor resuelta por absolución o un veredicto de 'no culpable'?",
+        "bankrupted": "¿Alguna vez usted (o alguna persona nombrada en esta solicitud) ha presentado o estado involucrado en una bancarrota, ha sido embargado o ha sido demandado en un juicio civil?"
+    },
+    "uploadDocuments": {
+        "title": "Subir documentos",
+        "desc": "Por favor, suba los documentos requeridos.",
+        "photoId": "Identificación con foto",
+        "photoIdDesc": "Suba una identificación oficial con foto (por ejemplo, licencia de conducir, pasaporte o identificación nacional).",
+        "proofOfIncome": "Comprobante de ingresos",
+        "proofOfIncomeDesc": "Suba su recibo de pago más reciente, estado de cuenta bancaria u otro comprobante de ingresos.",
+        "otherDocs": "Otros documentos (opcional)",
+        "otherDocsDesc": "Suba cualquier documento adicional que desee proporcionar (opcional).",
+        "uploadLater": "Subir documentos después"
+    },
+    "paymentFee": {
+        "title": "Pagar tarifa de evaluación",
+        "amount": "Monto del pago",
+        "pay": "Pagar",
+        "cardHolderName": "Nombre del titular de la tarjeta",
+        "cardNumber": "Número de tarjeta",
+        "expiration": "Vencimiento",
+        "cvc": "CVC",
+        "zipCode": "Código postal",
+        "orangePay": "Pago con Orange Money",
+        "mtnPay": "Pago con MTN Money",
+        "or": "O"
+    },
+    "address": {
+        "residenceType": "Tipo de residencia",
+        "rent": "Alquilar",
+        "own": "Propia",
+        "other": "Otra",
+        "monthMovedIn": "Mes de mudanza",
+        "monthPlaceholder": "MM",
+        "yearMovedIn": "Año de mudanza",
+        "yearPlaceholder": "AAAA",
+        "monthlyRent": "Alquiler mensual",
+        "amountPlaceholder": "Cantidad",
+        "reasonForMoving": "¿Por qué se muda?",
+        "reasonForMovingPlaceholder": "Opcional",
+        "landlordContactInfo": "Información de contacto del arrendador",
+        "unknownEmail": "No sé el correo electrónico de mi arrendador",
+        "addCurrentAddress": "Agregar dirección actual"
+    },
+    "saveAndFinishDialog": {
+        "title": "¡No pierda esta oportunidad de alquiler!",
+        "description": "Guarde su progreso y termine su solicitud más tarde. Su información se almacenará de forma segura.",
+        "backToApplication": "Volver a la solicitud",
+        "saveAndFinishLater": "Guardar y terminar después",
+        "iconAlt": "Icono de TV"
+    },
+    "applicationSavedDialog": {
+        "title": "Solicitud guardada",
+        "description": "Su solicitud ha sido guardada exitosamente. Puede regresar y completarla en cualquier momento.",
+        "iconAlt": "Icono de verificación",
+        "done": "Listo"
+    }
+}
