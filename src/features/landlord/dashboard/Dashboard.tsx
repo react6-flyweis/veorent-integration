@@ -148,7 +148,7 @@ export default function Dashboard() {
                     variant="outlinePrimary"
                     className="w-full rounded-lg bg-transparent"
                   >
-                    {t("needsWork")}
+                    {t("needsWork.title")}
                   </Button>
                 </Link>
                 <Button className="rounded-lg">{t("itsGreat")}</Button>
