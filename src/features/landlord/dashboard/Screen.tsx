@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
+import { PageTitle } from "@/components/PageTitle";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -28,34 +29,34 @@ import screenFeeIcon from "./assets/screen-fee.png";
 import { ApplicationTypeCard } from "./components/ApplicationTypeCard";
 import { PropertiesSelector } from "./components/PropertiesSelector";
 
-const screeningFormSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  inviteMethod: z.enum(["email", "text", "both"], {
-    required_error: "Please select an invite method",
-  }),
-  email: z.string().email("Invalid email format").min(1, "Email is required"),
-  propertyId: z.string({
-    required_error: "Please select a property",
-  }),
-  streetAddress: z.string().min(1, "Street address is required"),
-  unit: z.string().optional(),
-  city: z.string().min(1, "City is required"),
-  region: z.string().min(1, "Region is required"),
-  zipCode: z.string().min(1, "Zip code is required"),
-  phoneNumber: z.string().min(1, "Phone number is required"),
-  screeningReportType: z.enum(["premium", "standard"], {
-    required_error: "Please select a screening report type",
-  }),
-  paymentMethod: z.enum(["renter", "me"], {
-    required_error: "Please select who will pay for the screening report",
-  }),
-});
-
-type ScreeningFormValues = z.infer<typeof screeningFormSchema>;
-
 export default function Screen() {
   const { t } = useTranslation();
+
+  const screeningFormSchema = z.object({
+    firstName: z.string().min(1, t("firstNameRequired")),
+    lastName: z.string().min(1, t("lastNameRequired")),
+    inviteMethod: z.enum(["email", "text", "both"], {
+      required_error: t("inviteMethodRequired"),
+    }),
+    email: z.string().email(t("emailInvalid")).min(1, t("emailRequired")),
+    propertyId: z.string({
+      required_error: t("propertyIdRequired"),
+    }),
+    streetAddress: z.string().min(1, t("streetAddressRequired")),
+    unit: z.string().optional(),
+    city: z.string().min(1, t("cityRequired")),
+    region: z.string().min(1, t("regionRequired")),
+    zipCode: z.string().min(1, t("zipCodeRequired")),
+    phoneNumber: z.string().min(1, t("phoneNumberRequired")),
+    screeningReportType: z.enum(["premium", "standard"], {
+      required_error: t("screeningReportTypeRequired"),
+    }),
+    paymentMethod: z.enum(["renter", "me"], {
+      required_error: t("paymentMethodRequired"),
+    }),
+  });
+
+  type ScreeningFormValues = z.infer<typeof screeningFormSchema>;
 
   const { mutateAsync } = useInviteTenantMutation();
   const { showToast } = useToast();
@@ -121,9 +122,7 @@ export default function Screen() {
 
   return (
     <div className="space-y-5">
-      <h2 className="text-3xl font-semibold">
-        <span>{t("requestTenantScreening")}</span>
-      </h2>
+      <PageTitle title={t("requestTenantScreening")} withBack />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {/* Renter Info Section */}

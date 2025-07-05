@@ -29,27 +29,26 @@ import rentHouseIcon from "./assets/rent-house.png";
 import { ApplicationTypeCard } from "./components/ApplicationTypeCard";
 import { PropertiesSelector } from "./components/PropertiesSelector";
 
-const inviteFormSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  inviteMethod: z.enum(["email", "text", "both"], {
-    required_error: "Please select an invite method",
-  }),
-  email: z.string().email("Invalid email format").min(1, "Email is required"),
-  propertyId: z.string({
-    required_error: "Please select a property",
-  }),
-  rentAmount: z.string().min(1, "Rent amount is required"),
-  securityDeposit: z.string().min(1, "Security deposit is required"),
-  applicationType: z.enum(["premium", "standard"], {
-    required_error: "Please select an application type",
-  }),
-});
-
-type InviteFormValues = z.infer<typeof inviteFormSchema>;
-
 export default function Invite() {
   const { t } = useTranslation();
+  const inviteFormSchema = z.object({
+    firstName: z.string().min(1, t("firstNameRequired")),
+    lastName: z.string().min(1, t("lastNameRequired")),
+    inviteMethod: z.enum(["email", "text", "both"], {
+      required_error: t("inviteMethodRequired"),
+    }),
+    email: z.string().email(t("emailInvalid")).min(1, t("emailRequired")),
+    propertyId: z.string({
+      required_error: t("propertyIdRequired"),
+    }),
+    rentAmount: z.string().min(1, t("rentAmountRequired")),
+    securityDeposit: z.string().min(1, t("securityDepositRequired")),
+    applicationType: z.enum(["premium", "standard"], {
+      required_error: t("applicationTypeRequired"),
+    }),
+  });
+
+  type InviteFormValues = z.infer<typeof inviteFormSchema>;
 
   const { mutateAsync } = useInviteRenterMutation();
   const goBack = useGoBack();
