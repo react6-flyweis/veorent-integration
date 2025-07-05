@@ -2,6 +2,7 @@ import { initReactI18next } from "react-i18next";
 import i18n from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
+import enApplying from "@/locales/en/applying.json";
 import en from "@/locales/en/common.json";
 import enLandlord from "@/locales/en/landlord.json";
 import enSidebar from "@/locales/en/sidebar.json";
@@ -21,7 +22,14 @@ i18n
   .init({
     resources: {
       en: {
-        translation: Object.assign({}, en, enTenant, enLandlord, enSidebar),
+        translation: Object.assign(
+          {},
+          en,
+          enTenant,
+          enLandlord,
+          enSidebar,
+          enApplying,
+        ),
       },
       es: {
         translation: Object.assign({}, es, esTenant, esLandlord, esSidebar),

@@ -76,8 +76,8 @@ export default function ApplicationProcess() {
   const showSavedDialog = () => {
     setIsApplicationSavedOpen(true);
     setTimeout(() => {
-      setIsApplicationSavedOpen(false);
-    }, 3000); // Auto-close after 3 seconds
+      navigate("/tenant");
+    }, 2000); // Auto-close after 3 seconds
   };
 
   const handleExternalNext = () => {
@@ -106,12 +106,12 @@ export default function ApplicationProcess() {
     return (
       <div className="flex flex-col items-center justify-center p-6">
         <h2 className="mb-2 text-xl font-semibold text-red-600">
-          Error Loading Application
+          {t("error.loadingApplication")}
         </h2>
-        <p className="mb-4 text-gray-600">
-          Unable to load your application data. Please try again.
-        </p>
-        <Button onClick={() => window.location.reload()}>{t("retry")}</Button>
+        <p className="mb-4 text-gray-600">{t("error.unableToLoad")}</p>
+        <Button onClick={() => window.location.reload()}>
+          {t("actions.retry")}
+        </Button>
       </div>
     );
   }
@@ -121,12 +121,10 @@ export default function ApplicationProcess() {
     return (
       <div className="flex flex-col items-center justify-center p-6">
         <h2 className="mb-2 text-xl font-semibold text-gray-600">
-          Application Not Found
+          {t("error.notFound")}
         </h2>
-        <p className="mb-4 text-gray-600">
-          The application you're looking for doesn't exist or has been removed.
-        </p>
-        <Button onClick={goBack}>Go Back</Button>
+        <p className="mb-4 text-gray-600">{t("error.notFoundDesc")}</p>
+        <Button onClick={goBack}>{t("actions.goBack")}</Button>
       </div>
     );
   }
@@ -140,7 +138,7 @@ export default function ApplicationProcess() {
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="ghost">
-                <span>Save & Finish Later</span>
+                <span>{t("actions.saveAndFinishLater")}</span>
               </Button>
             </AlertDialogTrigger>
             <SaveAndFinishDialog onSuccess={showSavedDialog} />

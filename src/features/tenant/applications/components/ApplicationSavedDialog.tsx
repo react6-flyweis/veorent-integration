@@ -29,15 +29,17 @@ export function ApplicationSavedDialog({
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent className="max-w-xs overflow-hidden rounded-lg p-6">
         <div className="flex flex-col items-center">
-          <img src={checkIcon} alt="Check Icon" className="max-h-12 max-w-12" />
+          <img
+            src={checkIcon}
+            alt={t("applicationSavedDialog.iconAlt") || "Check Icon"}
+            className="max-h-12 max-w-12"
+          />
           <AlertDialogHeader className="gap-2">
             <AlertDialogTitle className="text-center text-xl font-semibold">
-              Application Saved
+              {t("applicationSavedDialog.title")}
             </AlertDialogTitle>
             <AlertDialogDescription className="text-center text-sm text-gray-600">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s.
+              {t("applicationSavedDialog.description")}
             </AlertDialogDescription>
           </AlertDialogHeader>
 

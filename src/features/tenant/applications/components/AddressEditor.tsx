@@ -83,7 +83,9 @@ export function AddressEditor({
           name="residenceType"
           render={({ field }) => (
             <FormItem className="gap-1">
-              <FormLabel className="text-base">Residence Type</FormLabel>
+              <FormLabel className="text-base">
+                {t("address.residenceType")}
+              </FormLabel>
               <FormControl>
                 <RadioGroup
                   className="flex space-x-4"
@@ -91,15 +93,15 @@ export function AddressEditor({
                   defaultValue={field.value}
                 >
                   <FormItem className="flex items-center gap-2">
-                    <RadioGroupItem value="rent" /> Rent
+                    <RadioGroupItem value="rent" /> {t("address.rent")}
                     <FormMessage />
                   </FormItem>
                   <FormItem className="flex items-center gap-2">
-                    <RadioGroupItem value="own" /> Own
+                    <RadioGroupItem value="own" /> {t("address.own")}
                     <FormMessage />
                   </FormItem>
                   <FormItem className="flex items-center gap-2">
-                    <RadioGroupItem value="other" /> {t("other")}
+                    <RadioGroupItem value="other" /> {t("address.other")}
                     <FormMessage />
                   </FormItem>
                 </RadioGroup>
@@ -115,9 +117,14 @@ export function AddressEditor({
             name="monthMovedIn"
             render={({ field }) => (
               <FormItem className="gap-1">
-                <FormLabel className="text-base">Month Moved In</FormLabel>
+                <FormLabel className="text-base">
+                  {t("address.monthMovedIn")}
+                </FormLabel>
                 <FormControl>
-                  <Input placeholder="MM" {...field} />
+                  <Input
+                    placeholder={t("address.monthPlaceholder") || "MM"}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -128,9 +135,14 @@ export function AddressEditor({
             name="yearMovedIn"
             render={({ field }) => (
               <FormItem className="gap-1">
-                <FormLabel className="text-base">Year Moved In</FormLabel>
+                <FormLabel className="text-base">
+                  {t("address.yearMovedIn")}
+                </FormLabel>
                 <FormControl>
-                  <Input placeholder="YYYY" {...field} />
+                  <Input
+                    placeholder={t("address.yearPlaceholder") || "YYYY"}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -215,7 +227,9 @@ export function AddressEditor({
           name="monthlyRent"
           render={({ field }) => (
             <FormItem className="gap-1">
-              <FormLabel className="text-base">Monthly Rent</FormLabel>
+              <FormLabel className="text-base">
+                {t("address.monthlyRent")}
+              </FormLabel>
               <div className="relative">
                 <div className="text-muted-foreground absolute top-1/2 left-2 -translate-y-1/2">
                   <CurrencyIcon />
@@ -223,7 +237,7 @@ export function AddressEditor({
                 <FormControl>
                   <Input
                     className="pl-8"
-                    placeholder="{t('amount')}"
+                    placeholder={t("address.amountPlaceholder")}
                     {...field}
                   />
                 </FormControl>
@@ -238,10 +252,12 @@ export function AddressEditor({
           name="reasonForMoving"
           render={({ field }) => (
             <FormItem className="gap-1">
-              <FormLabel className="text-base">Why are you moving?</FormLabel>
+              <FormLabel className="text-base">
+                {t("address.reasonForMoving")}
+              </FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Optional"
+                  placeholder={t("address.reasonForMovingPlaceholder")}
                   className="resize-none"
                   {...field}
                 />
@@ -253,7 +269,9 @@ export function AddressEditor({
         />
 
         <div>
-          <h3 className="font-semibold text-blue-700">Landlord Contact Info</h3>
+          <h3 className="font-semibold text-blue-700">
+            {t("address.landlordContactInfo")}
+          </h3>
         </div>
 
         <FormField
@@ -276,7 +294,7 @@ export function AddressEditor({
             name="landlordEmail"
             render={({ field }) => (
               <FormItem className="gap-1">
-                <FormLabel className="text-base">Email Address</FormLabel>
+                <FormLabel className="text-base">{t("email")}</FormLabel>
                 <FormControl>
                   <Input type="email" {...field} />
                 </FormControl>
@@ -298,7 +316,7 @@ export function AddressEditor({
                 />
               </FormControl>
               <FormLabel className="text-muted-foreground text-sm">
-                I don&apos;t know my landlord&apos;s email
+                {t("address.unknownEmail")}
               </FormLabel>
               <FormMessage />
             </FormItem>
@@ -326,7 +344,7 @@ export function AddressEditor({
             size="lg"
             className="mt-3 w-full @lg:w-3/5"
           >
-            Add Current Address
+            {t("address.addCurrentAddress")}
           </Button>
         </div>
       </div>

@@ -85,7 +85,9 @@ export function ApplicationInfo({
     <div className="space-y-5">
       <div className="flex items-center gap-3">
         <IconRound icon={applicationIcon} size="sm" />
-        <h2 className="text-2xl font-bold text-blue-900">Application Info</h2>
+        <h2 className="text-2xl font-bold text-blue-900">
+          {t("applicationInfo.title")}
+        </h2>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -95,7 +97,7 @@ export function ApplicationInfo({
             render={({ field }) => (
               <FormItem className="gap-1">
                 <FormLabel className="text-base">
-                  Desired Move-in Date
+                  {t("applicationInfo.moveInDate")}
                 </FormLabel>
                 <DateInput allowPastDates={false} className="w-52" {...field} />
                 <FormMessage />
@@ -108,13 +110,10 @@ export function ApplicationInfo({
             render={({ field }) => (
               <FormItem className="gap-1">
                 <FormLabel className="text-base">
-                  Are there others applying with you (including co-signers)?
+                  {t("applicationInfo.coSignersLabel")}
                 </FormLabel>
                 <FormDescription>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and
+                  {t("applicationInfo.coSignersDesc")}
                 </FormDescription>
                 <FormControl>
                   <RadioGroup
@@ -142,13 +141,10 @@ export function ApplicationInfo({
             render={({ field }) => (
               <FormItem className="gap-1">
                 <FormLabel className="text-base">
-                  Are you booking this property for a short period of time?
+                  {t("applicationInfo.shortPeriodLabel")}
                 </FormLabel>
                 <FormDescription>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and
+                  {t("applicationInfo.shortPeriodDesc")}
                 </FormDescription>
                 <FormControl>
                   <RadioGroup
@@ -176,13 +172,10 @@ export function ApplicationInfo({
             render={({ field }) => (
               <FormItem className="gap-1">
                 <FormLabel className="text-base">
-                  How many people will be living in the property in total?
+                  {t("applicationInfo.peopleLabel")}
                 </FormLabel>
                 <FormDescription>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and
+                  {t("applicationInfo.peopleDesc")}
                 </FormDescription>
                 <FormControl>
                   <CounterInput className="w-52" max={10} {...field} />
@@ -201,7 +194,7 @@ export function ApplicationInfo({
               className="w-4/5 @lg:w-3/5"
               isLoading={isPending}
             >
-              Save & Next
+              {t("actions.saveNext")}
             </LoadingButton>
           </div>
         </form>

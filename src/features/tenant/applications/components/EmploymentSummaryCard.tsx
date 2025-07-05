@@ -21,17 +21,21 @@ export function EmployerSummaryCard({
       <CardContent className="space-y-1 px-2 text-sm">
         <p className="text-primary font-bold">{data.employerName}</p>
         <p>
-          <strong>Position:</strong> {data.monthStarted}
+          <strong>{t("employment.position")}:</strong> {data.position}
+        </p>
+        <p>
+          <strong>{t("employment.startDate")}:</strong> {data.monthStarted}{" "}
           {data.yearStarted}
         </p>
         <p>
-          <strong>Monthly Income: </strong> {data.monthlyIncome}
+          <strong>{t("employment.monthlyIncome")}:</strong> {data.monthlyIncome}
         </p>
         <p>
-          <strong>Employment Reference:</strong> {data.referenceName}
+          <strong>{t("employment.referenceName")}:</strong> {data.referenceName}
         </p>
         <p>
-          <strong>Phone No:</strong> {data.referenceNumber}
+          <strong>{t("employment.referenceNumber")}:</strong>{" "}
+          {data.referenceNumber}
         </p>
         <div className="flex justify-between pt-2">
           <Button

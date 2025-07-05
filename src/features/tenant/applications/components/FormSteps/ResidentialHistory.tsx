@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusCircleIcon, XIcon } from "lucide-react";
@@ -95,6 +96,7 @@ export function ResidentialHistory({
 }) {
   const { id } = useParams<{ id: string }>();
   const { mutateAsync, isPending } = useUpdateBookingMutation(id || "");
+  const { t } = useTranslation();
 
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(residentialHistorySchema),
@@ -153,14 +155,12 @@ export function ResidentialHistory({
         <div className="flex items-center gap-3">
           <IconRound icon={fileIcon} size="sm" />
           <h2 className="text-2xl font-bold text-blue-900">
-            Residential history
+            {t("residentialHistory.title")}
           </h2>
         </div>
 
         <p className="text-muted-foreground text-sm @lg:text-base">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s.
+          {t("residentialHistory.desc")}
         </p>
       </div>
 
@@ -172,7 +172,7 @@ export function ResidentialHistory({
             name="currentAddress"
             render={({ field }) => (
               <FormItem className="">
-                <FormLabel> Current Address</FormLabel>
+                <FormLabel>{t("residentialHistory.currentAddress")}</FormLabel>
                 <FormControl>
                   <div className="">
                     {field.value ? (
@@ -188,7 +188,7 @@ export function ResidentialHistory({
                         type="button"
                       >
                         <PlusCircleIcon className="size-5" />
-                        <span>Add Current Address</span>
+                        <span>{t("residentialHistory.addCurrent")}</span>
                       </Button>
                     )}
                     <AddressDialog
@@ -207,7 +207,9 @@ export function ResidentialHistory({
 
           {/* Past Address */}
           <div className="space-y-1">
-            <h3 className="text-primary text-xl font-semibold">Past Address</h3>
+            <h3 className="text-primary text-xl font-semibold">
+              {t("residentialHistory.pastAddress")}
+            </h3>
 
             <FormField
               control={form.control}
@@ -220,7 +222,7 @@ export function ResidentialHistory({
                       onCheckedChange={(c) => field.onChange(c === true)}
                     />
                   </FormControl>
-                  <FormLabel>Not Applicable</FormLabel>
+                  <FormLabel>{t("residentialHistory.notApplicable")}</FormLabel>
                 </FormItem>
               )}
             />
@@ -246,7 +248,7 @@ export function ResidentialHistory({
                             type="button"
                           >
                             <PlusCircleIcon className="size-5" />
-                            <span>Add Past Address</span>
+                            <span>{t("residentialHistory.addPast")}</span>
                           </Button>
                         ))}
                       <AddressDialog
@@ -283,7 +285,7 @@ export function ResidentialHistory({
               className="w-4/5 @lg:w-3/5"
               isLoading={isPending}
             >
-              Save & Next
+              {t("actions.saveNext")}
             </LoadingButton>
           </div>
         </form>

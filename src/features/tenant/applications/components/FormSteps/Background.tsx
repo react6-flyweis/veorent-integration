@@ -72,7 +72,7 @@ export function BackgroundInfo({
     <div className="space-y-5">
       <div className="flex items-center gap-3">
         <IconRound icon={bgCheckIcon} size="sm" />
-        <h2 className="text-2xl font-bold">Background</h2>
+        <h2 className="text-2xl font-bold">{t("background.title")}</h2>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -82,8 +82,7 @@ export function BackgroundInfo({
             render={({ field }) => (
               <FormItem className="gap-1">
                 <FormLabel className="text-base">
-                  Have you (or any person you have named on this application)
-                  ever been evicted from a tenancy or left owing money?
+                  {t("background.evicted")}
                 </FormLabel>
                 <FormControl>
                   <RadioGroup
@@ -111,10 +110,7 @@ export function BackgroundInfo({
             render={({ field }) => (
               <FormItem className="gap-1">
                 <FormLabel className="text-base">
-                  Have you or any member of your household ever been convicted
-                  of (or pled guilty or no contest to) any criminal offense(s)
-                  other than minor infraction(s) that were disposed of by means
-                  other than acquittal or a finding of "not guilty"?
+                  {t("background.criminalOffense")}
                 </FormLabel>
                 <FormControl>
                   <RadioGroup
@@ -142,9 +138,7 @@ export function BackgroundInfo({
             render={({ field }) => (
               <FormItem className="gap-1">
                 <FormLabel className="text-base">
-                  Have you (or any person you have named on this application)
-                  ever filed for or been involved in a bankruptcy, been
-                  foreclosed on, or been a defendant in a civil suit?
+                  {t("background.bankrupted")}
                 </FormLabel>
                 <FormControl>
                   <RadioGroup
@@ -176,7 +170,7 @@ export function BackgroundInfo({
               className="w-4/5 @lg:w-3/5"
               isLoading={isPending}
             >
-              Save & Next
+              {t("actions.saveNext")}
             </LoadingButton>
           </div>
         </form>

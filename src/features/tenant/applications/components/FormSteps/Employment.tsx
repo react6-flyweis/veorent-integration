@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusCircleIcon, XIcon } from "lucide-react";
@@ -107,6 +108,7 @@ export function EmploymentDetails({
 }) {
   const { id } = useParams<{ id: string }>();
   const { mutateAsync, isPending } = useUpdateBookingMutation(id || "");
+  const { t } = useTranslation();
 
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(employerDetailsSchema),
@@ -194,19 +196,17 @@ export function EmploymentDetails({
       <form onSubmit={form.handleSubmit(submitHandler)} className="space-y-5">
         <div className="flex items-center gap-3">
           <IconRound icon={businessmanIcon} size="sm" />
-          <h2 className="text-primary text-2xl font-bold">Employment</h2>
+          <h2 className="text-primary text-2xl font-bold">
+            {t("employment.title")}
+          </h2>
         </div>
 
-        <p>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s.
-        </p>
+        <p>{t("employment.desc")}</p>
 
         {/*  Current Employer */}
         <div className="space-y-1">
           <h3 className="text-primary text-xl font-semibold">
-            Current Employer
+            {t("employment.currentEmployer")}
           </h3>
 
           <FormField
@@ -220,7 +220,7 @@ export function EmploymentDetails({
                     onCheckedChange={(c) => field.onChange(c === true)}
                   />
                 </FormControl>
-                <FormLabel>Not Applicable</FormLabel>
+                <FormLabel>{t("employment.notApplicable")}</FormLabel>
               </FormItem>
             )}
           />
@@ -247,7 +247,7 @@ export function EmploymentDetails({
                           type="button"
                         >
                           <PlusCircleIcon className="size-5" />
-                          <span>Add Current Employer</span>
+                          <span>{t("employment.addCurrent")}</span>
                         </Button>
                       ))}
                     <EmployerDialog
@@ -267,7 +267,9 @@ export function EmploymentDetails({
 
         {/* Past Employer */}
         <div className="space-y-1">
-          <h3 className="text-primary text-xl font-semibold">Past Employer</h3>
+          <h3 className="text-primary text-xl font-semibold">
+            {t("employment.pastEmployer")}
+          </h3>
 
           <FormField
             control={form.control}
@@ -280,7 +282,7 @@ export function EmploymentDetails({
                     onCheckedChange={(c) => field.onChange(c === true)}
                   />
                 </FormControl>
-                <FormLabel>Not Applicable</FormLabel>
+                <FormLabel>{t("employment.notApplicable")}</FormLabel>
               </FormItem>
             )}
           />
@@ -308,7 +310,7 @@ export function EmploymentDetails({
                           type="button"
                         >
                           <PlusCircleIcon className="size-5" />
-                          <span>Add Past Address</span>
+                          <span>{t("employment.addPast")}</span>
                         </Button>
                       ))}
                     <EmployerDialog
@@ -345,7 +347,7 @@ export function EmploymentDetails({
             className="w-4/5 @lg:w-3/5"
             isLoading={isPending}
           >
-            Save & Next
+            {t("actions.saveNext")}
           </LoadingButton>
         </div>
       </form>

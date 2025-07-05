@@ -76,7 +76,9 @@ export function OtherIncome({
     <div className="space-y-5">
       <div className="flex items-center gap-3">
         <IconRound icon={otherIncomeIcon} size="sm" />
-        <h2 className="text-2xl font-bold text-blue-900">Other Income</h2>
+        <h2 className="text-2xl font-bold text-blue-900">
+          {t("otherIncome.title")}
+        </h2>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -86,14 +88,9 @@ export function OtherIncome({
             render={({ field }) => (
               <FormItem className="gap-1">
                 <FormLabel className="text-base">
-                  Are there other sources of income you would like to include?
+                  {t("otherIncome.desc")}
                 </FormLabel>
-                <FormDescription>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and
-                </FormDescription>
+                <FormDescription>{t("otherIncome.descMore")}</FormDescription>
                 <FormControl>
                   <RadioGroup
                     className="flex gap-6"
@@ -121,14 +118,9 @@ export function OtherIncome({
             render={({ field }) => (
               <FormItem className="gap-1">
                 <FormLabel className="text-xl">
-                  Current Bank / Financial Institution
+                  {t("otherIncome.bankLabel")}
                 </FormLabel>
-                <FormDescription>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and
-                </FormDescription>
+                <FormDescription>{t("otherIncome.bankDesc")}</FormDescription>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -146,7 +138,7 @@ export function OtherIncome({
               className="w-4/5 @lg:w-3/5"
               isLoading={isPending}
             >
-              Save & Next
+              {t("actions.saveNext")}
             </LoadingButton>
           </div>
         </form>

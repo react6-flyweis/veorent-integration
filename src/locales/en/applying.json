@@ -1,0 +1,135 @@
+{
+    "error": {
+        "loadingApplication": "Error Loading Application",
+        "unableToLoad": "Unable to load your application data. Please try again.",
+        "notFound": "Application Not Found",
+        "notFoundDesc": "The application you're looking for doesn't exist or has been removed."
+    },
+    "actions": {
+        "retry": "Retry",
+        "goBack": "Go Back",
+        "saveAndFinishLater": "Save & Finish Later",
+        "saveNext": "Save & Next"
+    },
+    "applicationInfo": {
+        "title": "Application Info",
+        "moveInDate": "Desired Move-in Date",
+        "coSignersLabel": "Are there others applying with you (including co-signers)?",
+        "coSignersDesc": "Please indicate if anyone else, including co-signers, is applying with you.",
+        "shortPeriodLabel": "Are you booking this property for a short period of time?",
+        "shortPeriodDesc": "Please indicate if this is a short-term booking.",
+        "peopleLabel": "How many people will be living in the property in total?",
+        "peopleDesc": "Please enter the total number of people who will reside in the property."
+    },
+    "residentialHistory": {
+        "title": "Residential history",
+        "desc": "Please provide your current and past address information.",
+        "currentAddress": "Current Address",
+        "addCurrent": "Add Current Address",
+        "editCurrent": "Edit Current Address",
+        "pastAddress": "Past Address",
+        "addPast": "Add Past Address",
+        "editPast": "Edit Past Address",
+        "notApplicable": "Not Applicable"
+    },
+    "employment": {
+        "title": "Employment",
+        "desc": "Please provide your current and past employment information.",
+        "currentEmployer": "Current Employer",
+        "addCurrent": "Add Current Employer",
+        "editCurrent": "Edit Current Employer",
+        "pastEmployer": "Past Employer",
+        "addPast": "Add Past Employer",
+        "editPast": "Edit Past Employer",
+        "notApplicable": "Not Applicable"
+    },
+    "otherIncome": {
+        "title": "Other Income",
+        "desc": "Are there other sources of income you would like to include?",
+        "descMore": "Include any additional sources of income you would like considered (e.g., freelance, investments, etc.)",
+        "bankLabel": "Current Bank / Financial Institution",
+        "bankDesc": "Enter the name of your current bank or financial institution."
+    },
+    "generalInfo": {
+        "title": "General Information",
+        "haveAnimal": "Will you have an animal living with you at this property?",
+        "haveVehicle": "Will you have a vehicle at this property?",
+        "smoke": "Do you smoke?",
+        "requirement": "Do you have any special requests or requirements we should be aware of?"
+    },
+    "emergencyContact": {
+        "title": "Other Information",
+        "emergencyTitle": "Emergency Contact",
+        "firstName": "First Name",
+        "relationship": "Relationship",
+        "phoneNumber": "Phone Number",
+        "additionalComments": "Additional Comments",
+        "additionalCommentsOptional": "Additional Comments (Optional)",
+        "additionalCommentsDesc": "Provide any additional information or comments that may help your application (optional).",
+        "foundThrough": "How did you find this property?",
+        "website": "Website",
+        "agent": "Agent",
+        "social": "Social Media",
+        "friend": "Friend / Referral"
+    },
+    "background": {
+        "title": "Background",
+        "evicted": "Have you (or any person you have named on this application) ever been evicted from a tenancy or left owing money?",
+        "criminalOffense": "Have you or any member of your household ever been convicted of (or pled guilty or no contest to) any criminal offense(s) other than minor infraction(s) that were disposed of by means other than acquittal or a finding of 'not guilty'?",
+        "bankrupted": "Have you (or any person you have named on this application) ever filed for or been involved in a bankruptcy, been foreclosed on, or been a defendant in a civil suit?"
+    },
+    "uploadDocuments": {
+        "title": "Upload Documents",
+        "desc": "Please upload the required documents.",
+        "photoId": "Photo ID",
+        "photoIdDesc": "Upload a government-issued photo identification (e.g., driver's license, passport, or national ID).",
+        "proofOfIncome": "Proof of Income",
+        "proofOfIncomeDesc": "Upload your most recent pay stub, bank statement, or other proof of income.",
+        "otherDocs": "Other Docs (Optional)",
+        "otherDocsDesc": "Upload any additional documents you wish to provide (optional).",
+        "uploadLater": "Upload documents later"
+    },
+    "paymentFee": {
+        "title": "Pay Screening Fee",
+        "amount": "Payment Amount",
+        "pay": "Pay",
+        "cardHolderName": "Cardholder Name",
+        "cardNumber": "Card Number",
+        "expiration": "Expiration",
+        "cvc": "CVC",
+        "zipCode": "Zip Code",
+        "orangePay": "Orange money pay",
+        "mtnPay": "MTN money pay",
+        "or": "OR"
+    },
+    "address": {
+        "residenceType": "Residence Type",
+        "rent": "Rent",
+        "own": "Own",
+        "other": "Other",
+        "monthMovedIn": "Month Moved In",
+        "monthPlaceholder": "MM",
+        "yearMovedIn": "Year Moved In",
+        "yearPlaceholder": "YYYY",
+        "monthlyRent": "Monthly Rent",
+        "amountPlaceholder": "Amount",
+        "reasonForMoving": "Why are you moving?",
+        "reasonForMovingPlaceholder": "Optional",
+        "landlordContactInfo": "Landlord Contact Info",
+        "unknownEmail": "I don't know my landlord's email",
+        "addCurrentAddress": "Add Current Address"
+    },
+    "saveAndFinishDialog": {
+        "title": "Don't miss out on this rental!",
+        "description": "Save your progress and finish your application later. Your information will be securely stored.",
+        "backToApplication": "Back To Application",
+        "saveAndFinishLater": "Save & Finish Later",
+        "iconAlt": "TV icon"
+    },
+    "applicationSavedDialog": {
+        "title": "Application Saved",
+        "description": "Your application has been saved successfully. You can return and complete it at any time.",
+        "iconAlt": "Check icon",
+        "done": "Done"
+    }
+}

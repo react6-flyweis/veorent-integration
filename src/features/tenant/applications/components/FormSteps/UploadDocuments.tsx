@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusCircleIcon } from "lucide-react";
@@ -66,6 +67,7 @@ export default function UploadDocumentsForm({
 }) {
   const { id } = useParams<{ id: string }>();
   const { mutateAsync, isPending } = useUpdateBookingMutation(id || "");
+  const { t } = useTranslation();
 
   const form = useForm<UploadFormType>({
     resolver: zodResolver(UploadSchema),
@@ -97,13 +99,14 @@ export default function UploadDocumentsForm({
     <div className="space-y-5">
       <div className="flex items-center gap-3">
         <IconRound icon={documentsIcon} size="sm" />
-        <h2 className="text-primary text-2xl font-bold">Upload Documents</h2>
+        <h2 className="text-primary text-2xl font-bold">
+          {t("uploadDocuments.title")}
+        </h2>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <p className="text-muted-foreground text-sm">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry...
+            {t("uploadDocuments.desc")}
           </p>
 
           {/* Photo ID Upload */}
@@ -113,10 +116,10 @@ export default function UploadDocumentsForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-primary font-semibold">
-                  Photo ID
+                  {t("uploadDocuments.photoId")}
                 </FormLabel>
                 <FormDescription>
-                  Lorem Ipsum is simply dummy text of the printing...
+                  {t("uploadDocuments.photoIdDesc")}
                 </FormDescription>
                 <FormControl>
                   <div>
@@ -131,7 +134,7 @@ export default function UploadDocumentsForm({
                       className="bg-accent flex w-40 cursor-pointer items-center justify-center gap-3 border p-1 shadow hover:bg-white"
                     >
                       <PlusCircleIcon className="size-5" />
-                      <span>Upload a Photo Id</span>
+                      <span>{t("uploadDocuments.photoId")}</span>
                     </Label>
                   </div>
                 </FormControl>
@@ -147,10 +150,10 @@ export default function UploadDocumentsForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-primary font-semibold">
-                  Proof of Income
+                  {t("uploadDocuments.proofOfIncome")}
                 </FormLabel>
                 <FormDescription>
-                  Lorem Ipsum is simply dummy text of the printing...
+                  {t("uploadDocuments.proofOfIncomeDesc")}
                 </FormDescription>
                 <FormControl>
                   <div className="">
@@ -165,7 +168,7 @@ export default function UploadDocumentsForm({
                       className="bg-accent flex w-40 cursor-pointer items-center justify-center gap-3 border p-1 shadow hover:bg-white"
                     >
                       <PlusCircleIcon className="size-5" />
-                      <span>Upload a Proof of Income</span>
+                      <span>{t("uploadDocuments.proofOfIncome")}</span>
                     </Label>
                   </div>
                 </FormControl>
@@ -181,11 +184,10 @@ export default function UploadDocumentsForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-primary font-semibold">
-                  Other Docs{" "}
-                  <span className="text-muted-foreground">(Optional)</span>
+                  {t("uploadDocuments.otherDocs")}
                 </FormLabel>
                 <FormDescription>
-                  Lorem Ipsum is simply dummy text of the printing...
+                  {t("uploadDocuments.otherDocsDesc")}
                 </FormDescription>
                 <FormControl>
                   <div className="">
@@ -200,7 +202,7 @@ export default function UploadDocumentsForm({
                       className="bg-accent flex w-40 cursor-pointer items-center justify-center gap-3 border p-1 shadow hover:bg-white"
                     >
                       <PlusCircleIcon className="size-5" />
-                      <span>Upload a other docs</span>
+                      <span>{t("uploadDocuments.otherDocs")}</span>
                     </Label>
                   </div>
                 </FormControl>
@@ -228,15 +230,14 @@ export default function UploadDocumentsForm({
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">
-                  <FormLabel>Upload documents later</FormLabel>
+                  <FormLabel>{t("uploadDocuments.uploadLater")}</FormLabel>
                 </div>
               </FormItem>
             )}
           />
 
           <p className="text-muted-foreground text-sm">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry...
+            {t("uploadDocuments.desc")}
           </p>
 
           <FormErrors errors={form.formState.errors} />
@@ -247,7 +248,7 @@ export default function UploadDocumentsForm({
               className="w-4/5 @lg:w-3/5"
               isLoading={isPending}
             >
-              Save & Next
+              {t("actions.saveNext")}
             </LoadingButton>
           </div>
         </form>

@@ -98,13 +98,15 @@ export function PaymentFee() {
             <SwissFrancIcon />
           </div>
         </div>
-        <h2 className="text-primary text-2xl font-bold">Pay Screening Fee</h2>
+        <h2 className="text-primary text-2xl font-bold">
+          {t("paymentFee.title")}
+        </h2>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <p className="text-muted-foreground font-semibold uppercase">
-              Payment Amount
+              {t("paymentFee.amount")}
             </p>
             <div className="flex items-center gap-1">
               <CurrencyIcon />
@@ -128,7 +130,7 @@ export function PaymentFee() {
                     alt="orange pay"
                     className="size-5 rounded-full"
                   />
-                  Orange money pay
+                  {t("paymentFee.orangePay")}
                 </Button>
               </DialogTrigger>
               <DialogTrigger asChild>
@@ -142,7 +144,7 @@ export function PaymentFee() {
                     alt="mtn money"
                     className="size-5 rounded-full"
                   />
-                  MTN money pay
+                  {t("paymentFee.mtnPay")}
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-md">
@@ -158,7 +160,7 @@ export function PaymentFee() {
           <div className="relative flex items-center justify-center py-5">
             <div className="border-accent w-full border"></div>
             <div className="text-muted-foreground absolute bg-white p-1 px-3 text-center text-sm">
-              OR
+              {t("paymentFee.or")}
             </div>
           </div>
 
@@ -175,9 +177,12 @@ export function PaymentFee() {
             name="cardHolderName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("cardHolderName")}</FormLabel>
+                <FormLabel>{t("paymentFee.cardHolderName")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Full name on card" {...field} />
+                  <Input
+                    placeholder={t("paymentFee.cardHolderName")}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -189,7 +194,7 @@ export function PaymentFee() {
             name="cardNumber"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("cardNumber")}</FormLabel>
+                <FormLabel>{t("paymentFee.cardNumber")}</FormLabel>
                 <FormControl>
                   <CardNumberInput {...field} />
                 </FormControl>
@@ -204,7 +209,7 @@ export function PaymentFee() {
               name="expiration"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Expiration</FormLabel>
+                  <FormLabel>{t("paymentFee.expiration")}</FormLabel>
                   <FormControl>
                     <CardExpiryInput {...field} />
                   </FormControl>
@@ -218,7 +223,7 @@ export function PaymentFee() {
               name="cvc"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>CVC</FormLabel>
+                  <FormLabel>{t("paymentFee.cvc")}</FormLabel>
                   <FormControl>
                     <CardCvcInput {...field} />
                   </FormControl>
@@ -232,9 +237,9 @@ export function PaymentFee() {
               name="zipCode"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("zipCode")}</FormLabel>
+                  <FormLabel>{t("paymentFee.zipCode")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="{t('zipCode')}" {...field} />
+                    <Input placeholder={t("paymentFee.zipCode")} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -243,7 +248,7 @@ export function PaymentFee() {
           </div>
 
           <Button disabled type="submit" className="w-full">
-            <span>Pay</span>
+            <span>{t("paymentFee.pay")}</span>
             <CurrencyIcon size="sm" />
             <span>{SCREENING_AMOUNT}</span>
           </Button>

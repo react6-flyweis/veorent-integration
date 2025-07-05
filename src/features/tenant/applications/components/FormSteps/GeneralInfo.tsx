@@ -86,7 +86,7 @@ export function GeneralInfo({
     <div className="space-y-5">
       <div className="flex items-center gap-3">
         <IconRound icon={informationIcon} size="sm" />
-        <h2 className="text-2xl font-bold">General Information</h2>
+        <h2 className="text-2xl font-bold">{t("generalInfo.title")}</h2>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -96,7 +96,7 @@ export function GeneralInfo({
             render={({ field }) => (
               <FormItem className="gap-1">
                 <FormLabel className="text-base">
-                  Will you have an animal living with you at this property?
+                  {t("generalInfo.haveAnimal")}
                 </FormLabel>
                 <FormControl>
                   <RadioGroup
@@ -124,7 +124,7 @@ export function GeneralInfo({
             render={({ field }) => (
               <FormItem className="gap-1">
                 <FormLabel className="text-base">
-                  Will you have a vehicle at this property?
+                  {t("generalInfo.haveVehicle")}
                 </FormLabel>
                 <FormControl>
                   <RadioGroup
@@ -151,7 +151,9 @@ export function GeneralInfo({
             name="smoke"
             render={({ field }) => (
               <FormItem className="gap-1">
-                <FormLabel className="text-base">Do you smoke?</FormLabel>
+                <FormLabel className="text-base">
+                  {t("generalInfo.smoke")}
+                </FormLabel>
                 <FormControl>
                   <RadioGroup
                     className="flex"
@@ -178,8 +180,7 @@ export function GeneralInfo({
             render={({ field }) => (
               <FormItem className="gap-1">
                 <FormLabel className="text-base">
-                  Do you have any special requests or requirements we should be
-                  aware of?
+                  {t("generalInfo.requirement")}
                 </FormLabel>
                 <FormControl>
                   <RadioGroup
@@ -211,7 +212,7 @@ export function GeneralInfo({
               className="w-4/5 @lg:w-3/5"
               isLoading={isPending}
             >
-              Save & Next
+              {t("actions.saveNext")}
             </LoadingButton>
           </div>
         </form>

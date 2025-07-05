@@ -87,21 +87,23 @@ export default function EmergencyContactForm({
     <div className="space-y-5">
       <div className="flex items-center gap-3">
         <IconRound icon={infoCircleIcon} size="sm" />
-        <h2 className="text-primary text-2xl font-bold">Other Information</h2>
+        <h2 className="text-primary text-2xl font-bold">
+          {t("emergencyContact.title")}
+        </h2>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {/* Emergency Contact Section */}
           <div>
             <h2 className="text-md text-primary mb-1 font-semibold">
-              Emergency Contact
+              {t("emergencyContact.emergencyTitle")}
             </h2>
             <FormField
               control={form.control}
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("firstName")}</FormLabel>
+                  <FormLabel>{t("emergencyContact.firstName")}</FormLabel>
                   <FormControl>
                     <Input placeholder="John" {...field} />
                   </FormControl>
@@ -115,7 +117,7 @@ export default function EmergencyContactForm({
                 name="relationship"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Relationship</FormLabel>
+                    <FormLabel>{t("emergencyContact.relationship")}</FormLabel>
                     <FormControl>
                       <Input placeholder="Brother, Friend..." {...field} />
                     </FormControl>
@@ -128,7 +130,7 @@ export default function EmergencyContactForm({
                 name="phoneNumber"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("phoneNumber")}</FormLabel>
+                    <FormLabel>{t("emergencyContact.phoneNumber")}</FormLabel>
                     <FormControl>
                       <Input placeholder="+1 123 456 7890" {...field} />
                     </FormControl>
@@ -146,14 +148,10 @@ export default function EmergencyContactForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-primary">
-                  Additional Comments{" "}
-                  <span className="text-muted-foreground">(Optional)</span>
+                  {t("emergencyContact.additionalCommentsOptional")}
                 </FormLabel>
                 <FormDescription>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and
+                  {t("emergencyContact.additionalCommentsDesc")}
                 </FormDescription>
                 <FormControl>
                   <Textarea rows={4} {...field} />
@@ -169,21 +167,31 @@ export default function EmergencyContactForm({
             name="foundThrough"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>How did you find this property?</FormLabel>
+                <FormLabel>{t("emergencyContact.foundThrough")}</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Choose an option" />
+                      <SelectValue
+                        placeholder={t("emergencyContact.foundThrough")}
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="website">{t("website")}</SelectItem>
-                    <SelectItem value="agent">Agent</SelectItem>
-                    <SelectItem value="social">Social Media</SelectItem>
-                    <SelectItem value="friend">Friend / Referral</SelectItem>
+                    <SelectItem value="website">
+                      {t("emergencyContact.website")}
+                    </SelectItem>
+                    <SelectItem value="agent">
+                      {t("emergencyContact.agent")}
+                    </SelectItem>
+                    <SelectItem value="social">
+                      {t("emergencyContact.social")}
+                    </SelectItem>
+                    <SelectItem value="friend">
+                      {t("emergencyContact.friend")}
+                    </SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -200,7 +208,7 @@ export default function EmergencyContactForm({
               className="mt-2 w-4/5 @lg:w-3/5"
               isLoading={isPending}
             >
-              Save & Next
+              {t("actions.saveNext")}
             </LoadingButton>
           </div>
         </form>

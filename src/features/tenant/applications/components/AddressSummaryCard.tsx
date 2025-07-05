@@ -24,17 +24,17 @@ export function AddressSummaryCard({
           {address.zipCode}
         </p>
         <p>
-          <strong>Type:</strong> {address.residenceType}
+          <strong>{t("address.residenceType")}:</strong> {address.residenceType}
         </p>
         <p>
-          <strong>Moved In:</strong> {address.monthMovedIn}
+          <strong>{t("address.movedIn")}:</strong> {address.monthMovedIn}{" "}
           {address.yearMovedIn}
         </p>
         <p>
-          <strong>Landlord:</strong> {address.landlordName}
+          <strong>{t("address.landlordName")}:</strong> {address.landlordName}
         </p>
         <p>
-          <strong>Phone No:</strong> {address.landlordPhone}
+          <strong>{t("address.landlordPhone")}:</strong> {address.landlordPhone}
         </p>
         <div className="flex justify-between pt-2">
           <Button

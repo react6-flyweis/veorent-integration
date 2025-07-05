@@ -48,7 +48,9 @@ export function EmployerEditor({
           name="employerName"
           render={({ field }) => (
             <FormItem className="gap-1">
-              <FormLabel className="text-base">Employer Name</FormLabel>
+              <FormLabel className="text-base">
+                {t("employment.employerName")}
+              </FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -62,7 +64,7 @@ export function EmployerEditor({
           render={({ field }) => (
             <FormItem className="gap-1">
               <FormLabel className="text-base">
-                Position / Title / Occupation
+                {t("employment.position")}
               </FormLabel>
               <FormControl>
                 <Input {...field} />
@@ -77,9 +79,14 @@ export function EmployerEditor({
             name="monthStarted"
             render={({ field }) => (
               <FormItem className="gap-1">
-                <FormLabel className="text-base">Month Started</FormLabel>
+                <FormLabel className="text-base">
+                  {t("employment.monthStarted")}
+                </FormLabel>
                 <FormControl>
-                  <Input placeholder="MM" {...field} />
+                  <Input
+                    placeholder={t("employment.monthPlaceholder")}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -90,9 +97,14 @@ export function EmployerEditor({
             name="yearStarted"
             render={({ field }) => (
               <FormItem className="gap-1">
-                <FormLabel className="text-base">Year Started</FormLabel>
+                <FormLabel className="text-base">
+                  {t("employment.yearStarted")}
+                </FormLabel>
                 <FormControl>
-                  <Input placeholder="YYYY" {...field} />
+                  <Input
+                    placeholder={t("employment.yearPlaceholder")}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -107,7 +119,7 @@ export function EmployerEditor({
             render={({ field }) => (
               <FormItem className="gap-1">
                 <FormLabel className="text-base">
-                  {t("monthlyIncome")}
+                  {t("employment.monthlyIncome")}
                 </FormLabel>
                 <div className="relative">
                   <div className="text-muted-foreground absolute top-1/2 left-2 -translate-y-1/2">
@@ -116,7 +128,7 @@ export function EmployerEditor({
                   <FormControl>
                     <Input
                       className="pl-8"
-                      placeholder="{t('amount')}"
+                      placeholder={t("employment.amountPlaceholder")}
                       {...field}
                     />
                   </FormControl>
@@ -128,7 +140,9 @@ export function EmployerEditor({
         </div>
 
         <div>
-          <h3 className="font-semibold text-blue-700">Employment Reference</h3>
+          <h3 className="font-semibold text-blue-700">
+            {t("employment.referenceTitle")}
+          </h3>
         </div>
 
         <FormField
@@ -136,7 +150,9 @@ export function EmployerEditor({
           name="referenceName"
           render={({ field }) => (
             <FormItem className="gap-1">
-              <FormLabel className="text-base">{t("fullName")}</FormLabel>
+              <FormLabel className="text-base">
+                {t("employment.referenceName")}
+              </FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -150,7 +166,9 @@ export function EmployerEditor({
           name="referenceNumber"
           render={({ field }) => (
             <FormItem className="gap-1">
-              <FormLabel className="text-base">{t("phoneNumber")}</FormLabel>
+              <FormLabel className="text-base">
+                {t("employment.referenceNumber")}
+              </FormLabel>
               <FormControl>
                 <Input type="tel" {...field} />
               </FormControl>
@@ -166,7 +184,7 @@ export function EmployerEditor({
             size="lg"
             className="w-3/5"
           >
-            Add Current Address
+            {t("employment.addCurrent")}
           </Button>
         </div>
       </div>
