@@ -86,7 +86,7 @@ export default function AutoPay() {
   if (isLoading) {
     return (
       <div className="space-y-5">
-        <PageTitle title="Rent Payment Method" withBack />
+        <PageTitle title={t("rentPaymentMethodTitle")} withBack />
         <div className="flex items-center gap-3">
           <Skeleton className="size-6" />
           <Skeleton className="h-6 w-32" />
