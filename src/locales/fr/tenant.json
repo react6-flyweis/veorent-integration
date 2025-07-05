@@ -401,5 +401,27 @@
     "statusLabel": "Statut",
     "lateFeeLabel": "Frais de retard :",
     "noPendingRentAtThisTime": "Vous n'avez aucun paiement de loyer en attente pour le moment.",
-    "back": "Retour"
+    "back": "Retour",
+    "cardDetailsForm": {
+        "cardHolderName": "Nom du titulaire de la carte",
+        "cardNumber": "Numéro de carte",
+        "expiryDate": "Expiration",
+        "cvv": "CVV",
+        "country": "Pays",
+        "countryPlaceholder": "Sélectionnez le pays",
+        "usa": "États-Unis",
+        "canada": "Canada",
+        "uk": "Royaume-Uni",
+        "france": "France",
+        "germany": "Allemagne",
+        "other": "Autre",
+        "setAsDefault": "Définir comme méthode de paiement par défaut",
+        "saveCardForFuture": "Enregistrer la carte pour de futurs paiements",
+        "success": "Détails de la carte ajoutés avec succès !",
+        "cardHolderNameRequired": "Le nom du titulaire est requis",
+        "cardNumberInvalid": "Le numéro de carte doit comporter 16 chiffres",
+        "expiryDateInvalid": "Utilisez le format MM/AA",
+        "cvvInvalid": "Le CVV doit comporter 3 ou 4 chiffres",
+        "countryRequired": "Le pays est requis"
+    }
 }

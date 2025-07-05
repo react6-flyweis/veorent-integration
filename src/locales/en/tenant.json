@@ -410,5 +410,27 @@
         "tbd": "TBD",
         "propertyOwnerPlaceholder": "Property Owner"
     },
-    "filter": "Filter"
+    "filter": "Filter",
+    "cardDetailsForm": {
+        "cardHolderName": "Cardholder Name",
+        "cardNumber": "Card Number",
+        "expiryDate": "Expiration",
+        "cvv": "CVV",
+        "country": "Country",
+        "countryPlaceholder": "Select country",
+        "usa": "USA",
+        "canada": "Canada",
+        "uk": "UK",
+        "france": "France",
+        "germany": "Germany",
+        "other": "Other",
+        "setAsDefault": "Set as default payment method",
+        "saveCardForFuture": "Save card for future payments",
+        "success": "Card details added successfully!",
+        "cardHolderNameRequired": "Cardholder name is required",
+        "cardNumberInvalid": "Card number must be 16 digits",
+        "expiryDateInvalid": "Use MM/YY format",
+        "cvvInvalid": "CVV must be 3 or 4 digits",
+        "countryRequired": "Country is required"
+    }
 }

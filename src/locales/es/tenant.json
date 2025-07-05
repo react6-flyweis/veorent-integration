@@ -401,5 +401,27 @@
         "landlord": "Propietario:",
         "perMonth": "/MES",
         "viewListing": "Ver listado"
+    },
+    "cardDetailsForm": {
+        "cardHolderName": "Nombre del titular de la tarjeta",
+        "cardNumber": "Número de tarjeta",
+        "expiryDate": "Vencimiento",
+        "cvv": "CVV",
+        "country": "País",
+        "countryPlaceholder": "Selecciona país",
+        "usa": "EE.UU.",
+        "canada": "Canadá",
+        "uk": "Reino Unido",
+        "france": "Francia",
+        "germany": "Alemania",
+        "other": "Otro",
+        "setAsDefault": "Establecer como método de pago predeterminado",
+        "saveCardForFuture": "Guardar tarjeta para pagos futuros",
+        "success": "¡Detalles de la tarjeta añadidos correctamente!",
+        "cardHolderNameRequired": "El nombre del titular es obligatorio",
+        "cardNumberInvalid": "El número de tarjeta debe tener 16 dígitos",
+        "expiryDateInvalid": "Usa el formato MM/AA",
+        "cvvInvalid": "El CVV debe tener 3 o 4 dígitos",
+        "countryRequired": "El país es obligatorio"
     }
 }

@@ -33,15 +33,24 @@ import { getErrorMessage } from "@/utils/getErrorMessage";
 
 import { useCreateCardMutation } from "../api/mutations";
 
-const formSchema = z.object({
-  cardHolderName: z.string().min(1, "Cardholder name is required"),
-  cardNumber: z.string().regex(/^\d{16}$/, "Card number must be 16 digits"),
-  expiryDate: z.string().regex(/^\d{2}\/\d{2}$/, "Use MM/YY format"),
-  cvv: z.string().regex(/^\d{3,4}$/, "CVV must be 3 or 4 digits"),
-  country: z.string().min(1, "Country is required"),
-  isDefault: z.boolean(),
-  isCarSaved: z.boolean(),
-});
+import type { TFunction } from "i18next";
+
+const createFormSchema = (t: TFunction) =>
+  z.object({
+    cardHolderName: z
+      .string()
+      .min(1, t("cardDetailsForm.cardHolderNameRequired")),
+    cardNumber: z
+      .string()
+      .regex(/^\d{16}$/, t("cardDetailsForm.cardNumberInvalid")),
+    expiryDate: z
+      .string()
+      .regex(/^\d{2}\/\d{2}$/, t("cardDetailsForm.expiryDateInvalid")),
+    cvv: z.string().regex(/^\d{3,4}$/, t("cardDetailsForm.cvvInvalid")),
+    country: z.string().min(1, t("cardDetailsForm.countryRequired")),
+    isDefault: z.boolean(),
+    isCarSaved: z.boolean(),
+  });
 
 export function CardDetailsForm() {
   const { t } = useTranslation();
@@ -49,6 +58,8 @@ export function CardDetailsForm() {
   const navigate = useNavigate();
   const { showToast } = useToast();
   const { mutateAsync, isPending } = useCreateCardMutation();
+
+  const formSchema = createFormSchema(t);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -66,7 +77,7 @@ export function CardDetailsForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       await mutateAsync(values);
-      showToast("Card details added successfully!", "success");
+      showToast(t("cardDetailsForm.success"), "success");
       navigate(-1); // Go back to the previous page
     } catch (error) {
       showToast(getErrorMessage(error), "error");
@@ -84,7 +95,7 @@ export function CardDetailsForm() {
           name="cardHolderName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Cardholder Name</FormLabel>
+              <FormLabel>{t("cardDetailsForm.cardHolderName")}</FormLabel>
               <FormControl>
                 <Input type="text" {...field} />
               </FormControl>
@@ -98,7 +109,7 @@ export function CardDetailsForm() {
           name="cardNumber"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("cardNumber")}</FormLabel>
+              <FormLabel>{t("cardDetailsForm.cardNumber")}</FormLabel>
               <FormControl>
                 <CardNumberInput {...field} />
               </FormControl>
@@ -114,7 +125,7 @@ export function CardDetailsForm() {
               name="expiryDate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Expiration</FormLabel>
+                  <FormLabel>{t("cardDetailsForm.expiryDate")}</FormLabel>
                   <FormControl>
                     <CardExpiryInput {...field} />
                   </FormControl>
@@ -130,7 +141,7 @@ export function CardDetailsForm() {
               name="cvv"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>CVV</FormLabel>
+                  <FormLabel>{t("cardDetailsForm.cvv")}</FormLabel>
                   <FormControl>
                     <CardCvcInput {...field} />
                   </FormControl>
@@ -146,23 +157,37 @@ export function CardDetailsForm() {
               name="country"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("country")}</FormLabel>
+                  <FormLabel>{t("cardDetailsForm.country")}</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select country" />
+                        <SelectValue
+                          placeholder={t("cardDetailsForm.countryPlaceholder")}
+                        />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="USA">USA</SelectItem>
-                      <SelectItem value="Canada">Canada</SelectItem>
-                      <SelectItem value="UK">UK</SelectItem>
-                      <SelectItem value="France">France</SelectItem>
-                      <SelectItem value="Germany">Germany</SelectItem>
-                      <SelectItem value="Other">Other</SelectItem>
+                      <SelectItem value="USA">
+                        {t("cardDetailsForm.usa")}
+                      </SelectItem>
+                      <SelectItem value="Canada">
+                        {t("cardDetailsForm.canada")}
+                      </SelectItem>
+                      <SelectItem value="UK">
+                        {t("cardDetailsForm.uk")}
+                      </SelectItem>
+                      <SelectItem value="France">
+                        {t("cardDetailsForm.france")}
+                      </SelectItem>
+                      <SelectItem value="Germany">
+                        {t("cardDetailsForm.germany")}
+                      </SelectItem>
+                      <SelectItem value="Other">
+                        {t("cardDetailsForm.other")}
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -185,7 +210,7 @@ export function CardDetailsForm() {
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">
-                  <FormLabel>Set as default payment method</FormLabel>
+                  <FormLabel>{t("cardDetailsForm.setAsDefault")}</FormLabel>
                 </div>
               </FormItem>
             )}
@@ -203,7 +228,9 @@ export function CardDetailsForm() {
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">
-                  <FormLabel>Save card for future payments</FormLabel>
+                  <FormLabel>
+                    {t("cardDetailsForm.saveCardForFuture")}
+                  </FormLabel>
                 </div>
               </FormItem>
             )}
