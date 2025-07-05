@@ -14,7 +14,7 @@ export default function RequestLeasing() {
     <div>
       <div className="flex items-center gap-3">
         <Button variant="outline" className="size-8 rounded-full" asChild>
-          <Link to="/leases">
+          <Link to="/tenant/leases">
             <XIcon className="size-5!" />
           </Link>
         </Button>
