@@ -269,7 +269,7 @@ export function AppSidebar({ navigationItems, ...props }: AppSidebarProps) {
                             </SidebarMenuButton>
                           </TooltipTrigger>
                           <TooltipContent side="right">
-                            <p>{t(item.title.toLowerCase())}</p>
+                            <p>{t(item.title)}</p>
                           </TooltipContent>
                         </Tooltip>
                       ) : (
@@ -287,7 +287,7 @@ export function AppSidebar({ navigationItems, ...props }: AppSidebarProps) {
                             className="max-h-4 max-w-4 flex-shrink-0 transition-all duration-300"
                           />
                           <AnimatedText className="text-white">
-                            {t(item.title.toLowerCase())}
+                            {t(item.title)}
                           </AnimatedText>
                         </SidebarMenuButton>
                       )}
