@@ -129,11 +129,11 @@ export function MaintenanceRequestForm() {
       };
 
       await createMaintenanceRequest(requestData);
-      showToast("Your Request created successfully", "success");
+      showToast(t("requestCreatedSuccess"), "success");
       navigate("/tenant/maintenance");
     } catch (error) {
       form.setError("root", {
-        message: getErrorMessage(error) || "Failed to create request",
+        message: getErrorMessage(error) || t("failedToCreateRequest"),
       });
     }
   }
@@ -147,18 +147,18 @@ export function MaintenanceRequestForm() {
           name="priority"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Priority</FormLabel>
+              <FormLabel>{t("priority")}</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Priority..." />
+                    <SelectValue placeholder={t("priorityPlaceholder")} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="Emergency">Emergency</SelectItem>
-                  <SelectItem value="High">High</SelectItem>
-                  <SelectItem value="Medium">Medium</SelectItem>
-                  <SelectItem value="Low">Low</SelectItem>
+                  <SelectItem value="Emergency">{t("emergency")}</SelectItem>
+                  <SelectItem value="High">{t("high")}</SelectItem>
+                  <SelectItem value="Medium">{t("medium")}</SelectItem>
+                  <SelectItem value="Low">{t("low")}</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -172,18 +172,20 @@ export function MaintenanceRequestForm() {
           name="category"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Category</FormLabel>
+              <FormLabel>{t("category")}</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Category..." />
+                    <SelectValue placeholder={t("categoryPlaceholder")} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="Appliances">Appliances</SelectItem>
-                  <SelectItem value="Electrical">Electrical</SelectItem>
-                  <SelectItem value="Pest Control">Pest Control</SelectItem>
-                  <SelectItem value="Plumbing">Plumbing</SelectItem>
+                  <SelectItem value="Appliances">{t("Appliances")}</SelectItem>
+                  <SelectItem value="Electrical">{t("Electrical")}</SelectItem>
+                  <SelectItem value="Pest Control">
+                    {t("Pest Control")}
+                  </SelectItem>
+                  <SelectItem value="Plumbing">{t("Plumbing")}</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -202,14 +204,15 @@ export function MaintenanceRequestForm() {
                 <Textarea
                   rows={5}
                   className="h-24"
-                  placeholder="Describe the issue..."
+                  placeholder={t("descriptionPlaceholder")}
                   {...field}
                 />
               </FormControl>
               <FormDescription
                 className={cn(errors.description && "text-destructive")}
               >
-                {field.value.length}/500 characters | 100 minimum
+                {t("charactersUsed", { count: field.value.length, max: 500 })} |{" "}
+                {t("minimumCharacters", { count: 100 })}
               </FormDescription>
             </FormItem>
           )}
@@ -221,7 +224,7 @@ export function MaintenanceRequestForm() {
           name="photos"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Add Photos</FormLabel>
+              <FormLabel>{t("addPhotos")}</FormLabel>
               <FormControl>
                 <ImageInput multiple maxFiles={5} {...field} />
               </FormControl>
@@ -235,18 +238,16 @@ export function MaintenanceRequestForm() {
           <div className="flex size-5 items-center justify-center rounded-full bg-white">
             <MicIcon className="text-primary" />
           </div>
-          <span className="text-base"> Voice Memo</span>
+          <span className="text-base"> {t("voiceMemo")}</span>
         </Button>
 
         {/* Property Access */}
         <div>
           <div className="my-2 flex items-center gap-2">
             <IconRound icon={accessIcon} size="xs" />
-            <h3 className="text-lg font-bold">Property Access</h3>
+            <h3 className="text-lg font-bold">{t("propertyAccess")}</h3>
           </div>
-          <p className="text-primary text-lg">
-            The service team may arrive when you are not home:
-          </p>
+          <p className="text-primary text-lg">{t("serviceTeamInfo")}</p>
           <FormField
             control={form.control}
             name="accessPermission"
@@ -282,15 +283,18 @@ export function MaintenanceRequestForm() {
               name="accessInstructions"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Access Instructions</FormLabel>
+                  <FormLabel>{t("accessInstructions")}</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Provide access instructions..."
+                      placeholder={t("accessInstructionsPlaceholder")}
                       {...field}
                     />
                   </FormControl>
                   <FormDescription>
-                    0/{field.value?.length || 0}/1000 characters
+                    {t("charactersUsed", {
+                      count: field.value?.length || 0,
+                      max: 1000,
+                    })}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -303,11 +307,9 @@ export function MaintenanceRequestForm() {
         <div>
           <div className="my-2 flex items-center gap-2">
             <IconRound icon={infoIcon} size="xs" />
-            <h3 className="text-lg font-bold">Additional INFO</h3>
+            <h3 className="text-lg font-bold">{t("additionalInfo")}</h3>
           </div>
-          <p className="text-primary text-lg">
-            Are there animal(s) in the unit?
-          </p>
+          <p className="text-primary text-lg">{t("areThereAnimals")}</p>
           <FormField
             control={form.control}
             name="animals"
@@ -343,15 +345,15 @@ export function MaintenanceRequestForm() {
               name="animalInstructions"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Animal Details</FormLabel>
+                  <FormLabel>{t("animalDetails")}</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Please provide details about the animals..."
+                      placeholder={t("animalDetailsPlaceholder")}
                       {...field}
                     />
                   </FormControl>
                   <FormDescription>
-                    0/{field.value?.length || 0}/1000 characters
+                    {t("charactersUsed", { count: field.value?.length || 0 })}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
