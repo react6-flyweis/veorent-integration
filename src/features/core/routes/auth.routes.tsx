@@ -1,13 +1,32 @@
-import { LoginPage } from "@/features/core/auth/LoginPage";
+import { lazy } from "react";
+import { Navigate } from "react-router-dom";
 import { type RouteObject } from "react-router-dom";
 
-import { ForgotPasswordPage } from "@/features/core/auth/ForgotPassword";
-import { SingUpPage } from "@/features/core/auth/SignUp";
-import { ResetPasswordPage } from "@/features/core/auth/ResetPassword";
-import Personalize from "@/features/core/auth/Personalize";
-import { Navigate } from "react-router-dom";
 import { AuthWrapper } from "@/features/core/auth/AuthWrapper";
-import SingUpLandlord from "../auth/SignUpLandlord";
+
+// Lazy imports for code splitting
+const LoginPage = lazy(() =>
+  import("@/features/core/auth/LoginPage").then((module) => ({
+    default: module.LoginPage,
+  })),
+);
+const ForgotPasswordPage = lazy(() =>
+  import("@/features/core/auth/ForgotPassword").then((module) => ({
+    default: module.ForgotPasswordPage,
+  })),
+);
+const SingUpPage = lazy(() =>
+  import("@/features/core/auth/SignUp").then((module) => ({
+    default: module.SingUpPage,
+  })),
+);
+const ResetPasswordPage = lazy(() =>
+  import("@/features/core/auth/ResetPassword").then((module) => ({
+    default: module.ResetPasswordPage,
+  })),
+);
+const Personalize = lazy(() => import("@/features/core/auth/Personalize"));
+const SingUpLandlord = lazy(() => import("../auth/SignUpLandlord"));
 
 export const authRoutes: RouteObject[] = [
   // Redirect from root to personalize if no user preference has been set
