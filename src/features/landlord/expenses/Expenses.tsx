@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { lazy, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CalendarDaysIcon, LayoutDashboardIcon } from "lucide-react";
 
@@ -30,7 +30,8 @@ import { useIsMobile } from "@/hooks/use-mobile";
 
 import { useGetExpenses } from "./api/queries";
 import { CreateExpense } from "./components/CreateExpense";
-import { ExportButton } from "./components/ExportButton";
+
+const ExportButton = lazy(() => import("./components/ExportButton"));
 
 const Expenses = () => {
   const { t } = useTranslation();

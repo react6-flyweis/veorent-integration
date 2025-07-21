@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import * as XLSX from "xlsx";
+import { utils, writeFile } from "xlsx";
 
 import { LoadingButton } from "@/components/ui/loading-button";
 import {
@@ -16,10 +16,7 @@ interface ExportButtonProps {
   totalExpenses: number;
 }
 
-export const ExportButton = ({
-  expenses,
-  totalExpenses,
-}: ExportButtonProps) => {
+const ExportButton = ({ expenses, totalExpenses }: ExportButtonProps) => {
   const { t } = useTranslation();
   const [isExporting, setIsExporting] = useState(false);
   const isMobile = useIsMobile();
@@ -57,16 +54,16 @@ export const ExportButton = ({
       });
 
       // Create workbook and worksheet
-      const ws = XLSX.utils.json_to_sheet(exportData);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "Expenses");
+      const ws = utils.json_to_sheet(exportData);
+      const wb = utils.book_new();
+      utils.book_append_sheet(wb, ws, "Expenses");
 
       // Generate filename with current date
       const currentDate = new Date().toISOString().split("T")[0];
       const filename = `expenses_${currentDate}.xlsx`;
 
       // Save file
-      XLSX.writeFile(wb, filename);
+      writeFile(wb, filename);
     } catch (error) {
       console.error("Error exporting expenses:", error);
       alert(t("failedToExportExpenses"));
@@ -95,3 +92,5 @@ export const ExportButton = ({
     </Tooltip>
   );
 };
+
+export default ExportButton;
