@@ -119,6 +119,8 @@ interface IBooking {
   isCouponApplied: boolean;
   status: "Pending" | "Approved" | "Canceled";
   paymentStatus: "Pending" | "Paid" | "Canceled";
+  paymentMode?: "stripe" | "momo" | "orange-money";
+  stripeClientSecret?: string;
   _id: string;
   createdAt: string;
   updatedAt: string;
