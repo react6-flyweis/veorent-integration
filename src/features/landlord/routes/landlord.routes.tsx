@@ -1,71 +1,112 @@
-import NotFound from "@/components/NotFound";
-import Dashboard from "@/features/landlord/dashboard/Dashboard";
-import Messages from "@/features/shared/messaging/Messages";
+import { lazy } from "react";
 import { type RouteObject } from "react-router-dom";
-import Invite from "../dashboard/Invite";
-import Screen from "../dashboard/Screen";
-import SelectLease from "../dashboard/SelectLease";
-import CreateLeaseAgreement from "../dashboard/CreateLeaseAgreement";
-import LeaseSpecific from "../dashboard/LeaseSpecific";
-import RentDepositFee from "../dashboard/RentDepositFee";
-import PeopleOnLease from "../dashboard/PeopleOnLease";
-import PetSmoking from "../dashboard/PetSmoking";
-import UtilitiesServices from "../dashboard/UtilitiesServices";
-import SelectLeaseAddendum from "../dashboard/SelectLeaseAddendum";
-import ProvisionAttachment from "../dashboard/ProvisionAttachment";
-import CreateLeaseAddendum from "../dashboard/CreateLeaseAddendum";
-import ESign from "../dashboard/ESign";
-import NeedsWork from "../dashboard/NeedsWork";
-import Maintenance from "../maintenance/Maintenance";
-import CreateMaintenance from "../maintenance/CreateMaintenance";
-import MaintenanceDetails from "../maintenance/MaintenanceDetails";
-import Leases from "../leases/Leases";
-import AddLeaseDetails from "../leases/AddLeaseDetails";
-import WhatsNext from "../leases/WhatsNext";
-import UploadLeaseDocument from "../leases/UploadLeaseDocument";
-import Forms from "../forms/Forms";
-import RentersDetails from "../renters/RentersDetails";
-import ApplicationScreened from "../renters/ApplicationScreened";
-import ScreeningReportSoon from "../renters/ScreeningReportSoon";
-import ApplicationUnscreened from "../renters/ApplicationUnscreened";
-import Application from "../renters/Application";
-import MoveInRenter from "../renters/MoveInRenter";
-import AddTenant from "../renters/AddTenant";
-import TenantDetails from "../renters/TenantDetails";
-import Payments from "../payments/Payments";
-import CreateCharge from "../payments/CreateCharge";
-import MonthlyCharge from "../payments/MonthlyCharge";
-import OneTimeCharge from "../payments/OneTimeCharge";
-import DailyCharge from "../payments/DailyCharge";
-import Expenses from "../expenses/Expenses";
-import Accounting from "../accounting/Accounting";
-import Education from "../education/Education";
-import Support from "@/features/shared/support/Support";
-import Referral from "../referral/Referral";
-import Subscription from "../subscription/Subscription";
-import SubscriptionDetails from "../subscription/SubscriptionDetails";
-import Setting from "../settings/Setting";
-import PaymentSuccessful from "@/features/shared/payments/PaymentSuccessful";
-import Properties from "../properties/Properties";
-import PropertyDetail from "../properties/PropertyDetail";
-import AddProperty from "../properties/AddProperty";
-import SetupListing from "../properties/SetupListing";
-import SetupListingPrompt from "../properties/SetupListingPrompt";
-import BookingCalendar from "../calendar/BookingCalendar";
-import AddContacts from "@/features/shared/messaging/AddContacts";
-import MarketingExtended from "../properties/MarketingExtended";
-import EditProperty from "../properties/EditProperty";
-import EditPropertySize from "../properties/EditPropertySize";
-import EditPropertyAddress from "../properties/EditPropertyAdress";
-import PropertyUnits from "../properties/PropertyUnits";
-import Applicants from "../renters/Applicants";
-import Tenants from "../renters/Tenants";
-import RentersLeads from "../renters/RentersLeads";
-import EditPropertyBasics from "../properties/EditPropertyBasics";
-import EditPropertyPermissions from "../properties/EditPropertyPermissions";
-import EditPropertyDescription from "../properties/EditPropertyDescription";
-import EditPropertyUtilities from "../properties/EditPropertyUtilities";
-import EditPropertyAmenities from "../properties/EditPropertyAmenities";
+
+// Lazy imports for code splitting
+const NotFound = lazy(() => import("@/components/NotFound"));
+const Dashboard = lazy(() => import("@/features/landlord/dashboard/Dashboard"));
+const Messages = lazy(() => import("@/features/shared/messaging/Messages"));
+const Invite = lazy(() => import("../dashboard/Invite"));
+const Screen = lazy(() => import("../dashboard/Screen"));
+const SelectLease = lazy(() => import("../dashboard/SelectLease"));
+const CreateLeaseAgreement = lazy(
+  () => import("../dashboard/CreateLeaseAgreement"),
+);
+const LeaseSpecific = lazy(() => import("../dashboard/LeaseSpecific"));
+const RentDepositFee = lazy(() => import("../dashboard/RentDepositFee"));
+const PeopleOnLease = lazy(() => import("../dashboard/PeopleOnLease"));
+const PetSmoking = lazy(() => import("../dashboard/PetSmoking"));
+const UtilitiesServices = lazy(() => import("../dashboard/UtilitiesServices"));
+const SelectLeaseAddendum = lazy(
+  () => import("../dashboard/SelectLeaseAddendum"),
+);
+const ProvisionAttachment = lazy(
+  () => import("../dashboard/ProvisionAttachment"),
+);
+const CreateLeaseAddendum = lazy(
+  () => import("../dashboard/CreateLeaseAddendum"),
+);
+const ESign = lazy(() => import("../dashboard/ESign"));
+const NeedsWork = lazy(() => import("../dashboard/NeedsWork"));
+const Maintenance = lazy(() => import("../maintenance/Maintenance"));
+const CreateMaintenance = lazy(
+  () => import("../maintenance/CreateMaintenance"),
+);
+const MaintenanceDetails = lazy(
+  () => import("../maintenance/MaintenanceDetails"),
+);
+const Leases = lazy(() => import("../leases/Leases"));
+const AddLeaseDetails = lazy(() => import("../leases/AddLeaseDetails"));
+const WhatsNext = lazy(() => import("../leases/WhatsNext"));
+const UploadLeaseDocument = lazy(() => import("../leases/UploadLeaseDocument"));
+const Forms = lazy(() => import("../forms/Forms"));
+const RentersDetails = lazy(() => import("../renters/RentersDetails"));
+const ApplicationScreened = lazy(
+  () => import("../renters/ApplicationScreened"),
+);
+const ScreeningReportSoon = lazy(
+  () => import("../renters/ScreeningReportSoon"),
+);
+const ApplicationUnscreened = lazy(
+  () => import("../renters/ApplicationUnscreened"),
+);
+const Application = lazy(() => import("../renters/Application"));
+const MoveInRenter = lazy(() => import("../renters/MoveInRenter"));
+const AddTenant = lazy(() => import("../renters/AddTenant"));
+const TenantDetails = lazy(() => import("../renters/TenantDetails"));
+const Payments = lazy(() => import("../payments/Payments"));
+const CreateCharge = lazy(() => import("../payments/CreateCharge"));
+const MonthlyCharge = lazy(() => import("../payments/MonthlyCharge"));
+const OneTimeCharge = lazy(() => import("../payments/OneTimeCharge"));
+const DailyCharge = lazy(() => import("../payments/DailyCharge"));
+const Expenses = lazy(() => import("../expenses/Expenses"));
+const Accounting = lazy(() => import("../accounting/Accounting"));
+const Education = lazy(() => import("../education/Education"));
+const Support = lazy(() => import("@/features/shared/support/Support"));
+const Referral = lazy(() => import("../referral/Referral"));
+const Subscription = lazy(() => import("../subscription/Subscription"));
+const SubscriptionDetails = lazy(
+  () => import("../subscription/SubscriptionDetails"),
+);
+const Setting = lazy(() => import("../settings/Setting"));
+const PaymentSuccessful = lazy(
+  () => import("@/features/shared/payments/PaymentSuccessful"),
+);
+const Properties = lazy(() => import("../properties/Properties"));
+const PropertyDetail = lazy(() => import("../properties/PropertyDetail"));
+const AddProperty = lazy(() => import("../properties/AddProperty"));
+const SetupListing = lazy(() => import("../properties/SetupListing"));
+const SetupListingPrompt = lazy(
+  () => import("../properties/SetupListingPrompt"),
+);
+const BookingCalendar = lazy(() => import("../calendar/BookingCalendar"));
+const AddContacts = lazy(
+  () => import("@/features/shared/messaging/AddContacts"),
+);
+const MarketingExtended = lazy(() => import("../properties/MarketingExtended"));
+const EditProperty = lazy(() => import("../properties/EditProperty"));
+const EditPropertySize = lazy(() => import("../properties/EditPropertySize"));
+const EditPropertyAddress = lazy(
+  () => import("../properties/EditPropertyAdress"),
+);
+const PropertyUnits = lazy(() => import("../properties/PropertyUnits"));
+const Applicants = lazy(() => import("../renters/Applicants"));
+const Tenants = lazy(() => import("../renters/Tenants"));
+const RentersLeads = lazy(() => import("../renters/RentersLeads"));
+const EditPropertyBasics = lazy(
+  () => import("../properties/EditPropertyBasics"),
+);
+const EditPropertyPermissions = lazy(
+  () => import("../properties/EditPropertyPermissions"),
+);
+const EditPropertyDescription = lazy(
+  () => import("../properties/EditPropertyDescription"),
+);
+const EditPropertyUtilities = lazy(
+  () => import("../properties/EditPropertyUtilities"),
+);
+const EditPropertyAmenities = lazy(
+  () => import("../properties/EditPropertyAmenities"),
+);
 
 export const landlordRoutes: RouteObject[] = [
   {
