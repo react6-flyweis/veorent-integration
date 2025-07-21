@@ -32,14 +32,18 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PaymentModeDialog } from "@/features/shared/payments/components/PaymentModeDialog";
+import { redirectToStripeCheckout } from "@/utils/stripePayment";
 
 import { useUpdateBookingMutation } from "../../api/mutation";
 
 const PaymentSchema = z.object({
   cardHolderName: z.string().min(1, "Cardholder name is required"),
-  cardNumber: z.string().regex(/^\d{16}$/, "Card number must be 16 digits"),
-  expiration: z.string().regex(/^\d{2}\/\d{2}$/, "Use MM/YY format"),
-  cvc: z.string().regex(/^\d{3,4}$/, "CVC must be 3 or 4 digits"),
+  cardNumber: z.string(),
+  expiration: z.string(),
+  cvc: z.string(),
+  // cardNumber: z.string().regex(/^\d{19}$/, "Card number must be 16 digits"),
+  // expiration: z.string().regex(/^\d{2} \/\ d{2}$/, "Use MM/YY format"),
+  // cvc: z.string().regex(/^\d{3,4}$/, "CVC must be 3 or 4 digits"),
   zipCode: z.string().min(3, "Zip code is required"),
 });
 
@@ -62,10 +66,18 @@ export function PaymentFee() {
     resolver: zodResolver(PaymentSchema),
   });
 
-  const onSubmit = () => {
-    // Form submission for card payment if needed
-    // This would handle the card payment flow
-    // Process card payment data
+  const onSubmit = async () => {
+    const result = await updateBooking({
+      paymentMode: "stripe",
+    });
+    redirectToStripeCheckout(result.data.data.stripeClientSecret || "");
+    // {
+    //   sessionId: result.data.data.stripeClientSecret,
+    //   amount: SCREENING_AMOUNT,
+    //   description: "Screening Fee",
+    //   successUrl: `/tenant/payment/success?bookingId=${id}`,
+    //   cancelUrl: `/tenant/payment/cancel?bookingId=${id}`,
+    // }
   };
 
   const handlePaymentMethodSelect = (method: "card" | "mtn" | "orange") => {
@@ -247,7 +259,7 @@ export function PaymentFee() {
             />
           </div>
 
-          <Button disabled type="submit" className="w-full">
+          <Button type="submit" className="w-full">
             <span>{t("paymentFee.pay")}</span>
             <CurrencyIcon size="sm" />
             <span>{SCREENING_AMOUNT}</span>
