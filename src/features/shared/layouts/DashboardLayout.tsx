@@ -13,7 +13,7 @@ import { useIsMobile, useScreenSize } from "@/hooks/use-screen-size";
 
 import { AppSidebar } from "./AppSidebar";
 
-export function DashboardLayout() {
+export default function DashboardLayout() {
   const location = useLocation();
   const isLandlord = location.pathname.startsWith("/landlord");
 

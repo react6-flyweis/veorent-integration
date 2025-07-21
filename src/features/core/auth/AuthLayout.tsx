@@ -3,7 +3,7 @@ import { Navigate, Outlet } from "react-router";
 import { Toaster } from "@/components/ui/sonner";
 import { useAuthStore } from "@/store/useAuthStore";
 
-export function AuthLayout() {
+export default function AuthLayout() {
   const user = useAuthStore((state) => state.user);
   if (user) {
     // If user is already authenticated, redirect to the dashboard
