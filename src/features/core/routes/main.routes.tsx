@@ -1,9 +1,19 @@
+import { lazy } from "react";
 import { type RouteObject } from "react-router-dom";
 
-import ApplicationProcess from "@/features/tenant/applications/ApplicationProcess";
-import ApplyListing from "@/features/tenant/search/ApplyListing";
-import PropertyListingDetail from "@/features/tenant/search/Listing";
-import SearchProperty from "@/features/tenant/search/SearchProperty";
+// Lazy imports for code splitting
+const ApplicationProcess = lazy(
+  () => import("@/features/tenant/applications/ApplicationProcess"),
+);
+const ApplyListing = lazy(
+  () => import("@/features/tenant/search/ApplyListing"),
+);
+const PropertyListingDetail = lazy(
+  () => import("@/features/tenant/search/Listing"),
+);
+const SearchProperty = lazy(
+  () => import("@/features/tenant/search/SearchProperty"),
+);
 
 export const mainRoutes: RouteObject[] = [
   {
