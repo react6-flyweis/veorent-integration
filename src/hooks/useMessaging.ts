@@ -1,7 +1,20 @@
 import { useState, useEffect, useCallback } from "react";
 
-import { firebaseMessagingService } from "@/services/firebaseMessaging";
+import type { FirebaseMessagingService } from "@/services/firebaseMessaging";
 import { useAuthStore } from "@/store/useAuthStore";
+
+// Lazy load Firebase messaging service
+let firebaseMessagingService: FirebaseMessagingService | null = null;
+const getFirebaseMessagingService =
+  async (): Promise<FirebaseMessagingService> => {
+    if (!firebaseMessagingService) {
+      const { firebaseMessagingService: service } = await import(
+        "@/services/firebaseMessaging"
+      );
+      firebaseMessagingService = service;
+    }
+    return firebaseMessagingService;
+  };
 
 export function useMessaging() {
   const user = useAuthStore((state) => state.user);
@@ -14,16 +27,38 @@ export function useMessaging() {
     if (!user?._id) return;
 
     setLoading(true);
-    const unsubscribe = firebaseMessagingService.getUserConversations(
-      user._id,
-      (updatedConversations) => {
-        setConversations(updatedConversations);
+
+    const loadConversations = async () => {
+      try {
+        const service = await getFirebaseMessagingService();
+        const unsubscribe = service.getUserConversations(
+          user._id,
+          (updatedConversations) => {
+            setConversations(updatedConversations);
+            setLoading(false);
+          },
+        );
+
+        return unsubscribe;
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "Failed to load conversations",
+        );
         setLoading(false);
-      },
-    );
+        return () => {};
+      }
+    };
+
+    let unsubscribe: (() => void) | null = null;
+
+    loadConversations().then((unsub) => {
+      unsubscribe = unsub;
+    });
 
     return () => {
-      unsubscribe();
+      if (unsubscribe) {
+        unsubscribe();
+      }
     };
   }, [user?._id]);
 
@@ -36,19 +71,19 @@ export function useMessaging() {
       if (!user) throw new Error("User not authenticated");
 
       try {
+        const service = await getFirebaseMessagingService();
         const currentUserDetails = {
           name: user.fullName || `${user.firstname} ${user.lastname}`.trim(),
           avatar: user.image || "/assets/user.jpg",
           email: user.email,
         };
 
-        const conversationId =
-          await firebaseMessagingService.createConversation(
-            user._id,
-            contactUserId,
-            currentUserDetails,
-            contactDetails,
-          );
+        const conversationId = await service.createConversation(
+          user._id,
+          contactUserId,
+          currentUserDetails,
+          contactDetails,
+        );
 
         return conversationId;
       } catch (err) {
@@ -71,9 +106,10 @@ export function useMessaging() {
       if (!user) throw new Error("User not authenticated");
 
       try {
+        const service = await getFirebaseMessagingService();
         const senderName =
           user.fullName || `${user.firstname} ${user.lastname}`.trim();
-        await firebaseMessagingService.sendMessage(
+        await service.sendMessage(
           conversationId,
           user._id,
           senderName,
@@ -109,16 +145,36 @@ export function useConversationMessages(conversationId: string | null) {
     }
 
     setLoading(true);
-    const unsubscribe = firebaseMessagingService.getConversationMessages(
-      conversationId,
-      (updatedMessages) => {
-        setMessages(updatedMessages);
+
+    const loadMessages = async () => {
+      try {
+        const service = await getFirebaseMessagingService();
+        const unsubscribe = service.getConversationMessages(
+          conversationId,
+          (updatedMessages) => {
+            setMessages(updatedMessages);
+            setLoading(false);
+          },
+        );
+
+        return unsubscribe;
+      } catch (err) {
+        console.error("Failed to load messages:", err);
         setLoading(false);
-      },
-    );
+        return () => {};
+      }
+    };
+
+    let unsubscribe: (() => void) | null = null;
+
+    loadMessages().then((unsub) => {
+      unsubscribe = unsub;
+    });
 
     return () => {
-      unsubscribe();
+      if (unsubscribe) {
+        unsubscribe();
+      }
     };
   }, [conversationId]);
 

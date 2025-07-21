@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, Suspense } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 
@@ -17,6 +17,7 @@ import {
   ChatLayoutMain,
   ChatLayoutHeader,
 } from "./components/ChatLayout";
+import { MessagingLoadingFallback } from "./components/MessagingLoadingFallbacks";
 
 interface Contact {
   id: string;
@@ -27,7 +28,7 @@ interface Contact {
   originalData: IUser;
 }
 
-export default function AddContacts() {
+function AddContacts() {
   const user = useAuthStore((store) => store.user);
   const userPref = user?.userType;
   const navigate = useNavigate();
@@ -211,5 +212,15 @@ function ContactItem({ contact, onClick, className }: ContactItemProps) {
         <p className="truncate text-sm text-gray-500">{contact.description}</p>
       </div>
     </div>
+  );
+}
+
+export default function AddContactsWithSuspense() {
+  return (
+    <Suspense
+      fallback={<MessagingLoadingFallback message="Loading contacts..." />}
+    >
+      <AddContacts />
+    </Suspense>
   );
 }

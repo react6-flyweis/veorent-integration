@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router";
 
@@ -16,6 +16,7 @@ import {
 import { ChatMain } from "./components/ChatMain";
 import { ChatSidebar, ChatSidebarContent } from "./components/ChatSidebar";
 import { ChatSidebarItem } from "./components/ChatSidebarItem";
+import { ConversationLoadingFallback } from "./components/MessagingLoadingFallbacks";
 
 export default function Messages() {
   const { t } = useTranslation();
@@ -98,8 +99,21 @@ export default function Messages() {
         <ChatSidebar>
           <ChatSidebarContent>
             {loading ? (
-              <div className="flex items-center justify-center py-8">
-                <div className="text-gray-500">{t("loadingConversations")}</div>
+              <div className="space-y-3 p-4">
+                {/* Loading skeleton for conversation list */}
+                {[...Array(5)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="flex animate-pulse items-center space-x-3"
+                  >
+                    <div className="h-10 w-10 rounded-full bg-gray-300"></div>
+                    <div className="flex-1 space-y-2">
+                      <div className="h-4 w-3/4 rounded bg-gray-300"></div>
+                      <div className="h-3 w-1/2 rounded bg-gray-200"></div>
+                    </div>
+                    <div className="h-3 w-12 rounded bg-gray-200"></div>
+                  </div>
+                ))}
               </div>
             ) : conversations.length === 0 ? (
               <div className="flex items-center justify-center py-8">
@@ -126,10 +140,12 @@ export default function Messages() {
 
       <ChatLayoutMain showOnMobile={showMainChat}>
         {selectedConversation ? (
-          <ChatMain
-            selectedChat={selectedConversation}
-            onBackClick={handleBackToSidebar}
-          />
+          <Suspense fallback={<ConversationLoadingFallback />}>
+            <ChatMain
+              selectedChat={selectedConversation}
+              onBackClick={handleBackToSidebar}
+            />
+          </Suspense>
         ) : (
           <div className="flex h-full items-center justify-center bg-gray-50">
             <div className="text-center text-gray-500">
