@@ -120,7 +120,6 @@ interface IBooking {
   status: "Pending" | "Approved" | "Canceled";
   paymentStatus: "Pending" | "Paid" | "Canceled";
   paymentMode?: "stripe" | "momo" | "orange-money";
-  stripeClientSecret?: string;
   _id: string;
   createdAt: string;
   updatedAt: string;
@@ -129,6 +128,7 @@ interface IBooking {
 
 interface IBookingCreateData {
   applyingFor: "Tenant" | "Co-signer";
+  paymentMode: "stripe";
   propertyId: string;
   personalDetails: {
     firstName: string;
