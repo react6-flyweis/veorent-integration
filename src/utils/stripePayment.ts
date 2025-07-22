@@ -178,6 +178,7 @@ export async function confirmPayment(
 ) {
   const { error } = await stripe.confirmPayment({
     elements,
+    redirect: "if_required",
     confirmParams: {
       return_url: returnUrl || `${window.location.origin}/payment/success`,
     },
