@@ -86,6 +86,7 @@ export default function ApplyListing() {
             ? "Tenant"
             : ("Co-signer" as "Tenant" | "Co-signer"),
         propertyId: id || "",
+        paymentMode: "stripe",
         personalDetails: {
           firstName: values.firstName,
           lastName: values.lastName,
@@ -93,9 +94,13 @@ export default function ApplyListing() {
           phone: values.phone,
           dateOfBirth: values.dob.toISOString().split("T")[0], // Format as YYYY-MM-DD
         },
-      };
+      } as const;
 
       const booking = await mutateAsync(bookingData);
+      const stripeSecret = booking.data.stripeClientSecret;
+      if (stripeSecret) {
+        localStorage.setItem("stripeSecret", stripeSecret);
+      }
       navigate(`/tenant/applying/${booking.data.data._id}`);
     } catch (error) {
       form.setError("root", {
