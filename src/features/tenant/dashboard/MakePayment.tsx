@@ -1,6 +1,8 @@
+import { useState, useMemo } from "react";
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
 import duesImg from "@/assets/images/charges.png";
 import paperMoneyImg from "@/assets/images/paper-money.png";
@@ -29,6 +31,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { PaymentModeDialog } from "@/features/shared/payments/components/PaymentModeDialog";
 
+import {
+  useCreatePendingRentPaymentIntentMutation,
+  useUpdatePendingRentStatusMutation,
+} from "./api/mutations";
 import { useGetPendingRentQuery } from "./api/queries";
 
 type FormValues = {
@@ -40,6 +46,10 @@ export default function MakePayment() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { data: pendingRent, isLoading, error } = useGetPendingRentQuery();
+  const { mutateAsync } = useCreatePendingRentPaymentIntentMutation();
+  const { mutateAsync: updatePendingRentStatus } =
+    useUpdatePendingRentStatusMutation();
+  const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
 
   const form = useForm<FormValues>({
     defaultValues: {
@@ -51,9 +61,39 @@ export default function MakePayment() {
   const selectedDues =
     useWatch({ control: form.control, name: "selectedDues" }) || [];
 
-  const dues = pendingRent || [];
+  const dues = useMemo(() => pendingRent || [], [pendingRent]);
   const selectedItems = dues.filter((due) => selectedDues.includes(due._id));
   const total = selectedItems.reduce((sum, due) => sum + due.amount, 0);
+
+  const handlePaymentMethodSelected = async (
+    method: "card" | "mtn" | "orange",
+  ) => {
+    if (method === "card") {
+      const result = await mutateAsync({
+        pendingRentIds: selectedItems.map((item) => item._id),
+      });
+      return { stripeClientSecret: result.data.clientSecret };
+    }
+    return { stripeClientSecret: "" }; // For MTN and Orange, we don't need to return anything
+  };
+
+  const handlePaymentSuccess = async () => {
+    toast.success(t("paymentSuccess"));
+    setIsPaymentDialogOpen(false);
+    await updatePendingRentStatus({
+      pendingRentIds: selectedItems.map((item) => item._id),
+      updateFields: {
+        amountStatus: "Paid",
+        depositedStatus: "Paid",
+      },
+    });
+    navigate(`/tenant/payment/success`, {
+      state: {
+        amount: total,
+        redirectUrl: `/tenant/`,
+      },
+    });
+  };
 
   if (isLoading) {
     return (
@@ -93,7 +133,6 @@ export default function MakePayment() {
         <form
           onSubmit={form.handleSubmit(() => {
             // Handle form submission here
-            // TODO: Implement payment submission logic
           })}
         >
           <MultiStepper>
@@ -284,14 +323,21 @@ export default function MakePayment() {
 
             {/* Submit */}
             <MultiStepperButton>
-              <Dialog>
+              <Dialog
+                open={isPaymentDialogOpen}
+                onOpenChange={setIsPaymentDialogOpen}
+              >
                 <DialogTrigger asChild>
                   <Button size="lg" type="submit" className="w-3/5">
                     {t("makePaymentBtn")}
                   </Button>
                 </DialogTrigger>
                 <DialogContent>
-                  <PaymentModeDialog amount={total.toString()} />
+                  <PaymentModeDialog
+                    amount={total > 0 ? total.toString() : "0"}
+                    onSuccess={handlePaymentSuccess}
+                    onMethodSelected={handlePaymentMethodSelected}
+                  />
                 </DialogContent>
               </Dialog>
             </MultiStepperButton>

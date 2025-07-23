@@ -13,13 +13,13 @@ import { useAuthStore } from "@/store/useAuthStore";
 
 import { MTNMoMoPayment } from "./MTNMoMoPayment";
 import { OrangeMoneyPayment } from "./OrangeMoneyPayment";
+import { StripePayment } from "./StripePayment";
 
 const paymentOptions = [
   {
     id: "card",
     label: "Card",
     icon: cardImg,
-    disabled: true, // Card payment is disabled for now
   },
   {
     id: "mtn",
@@ -36,14 +36,24 @@ const paymentOptions = [
 export function PaymentModeDialog({
   amount,
   defaultPaymentMethod,
+  onMethodSelected,
   onSuccess,
 }: {
   amount: number | string;
   defaultPaymentMethod?: "card" | "mtn" | "orange";
+  onMethodSelected?: (
+    method: "card" | "mtn" | "orange",
+  ) => Promise<{ stripeClientSecret: string }>;
   onSuccess?: (transactionId?: string) => void;
 }) {
   const [selected, setSelected] = useState(defaultPaymentMethod || "orange");
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
+  const [stripeClientSecret, setStripeClientSecret] = useState<string | null>(
+    null,
+  );
+  const [showStripePayment, setShowStripePayment] = useState(
+    defaultPaymentMethod === "card",
+  );
   const [showMTNMoMoPayment, setShowMTNMoMoPayment] = useState(
     defaultPaymentMethod === "mtn",
   );
@@ -60,6 +70,16 @@ export function PaymentModeDialog({
       : `/tenant/payment/success`;
 
   const handlePayment = async () => {
+    if (onMethodSelected) {
+      const { stripeClientSecret } = await onMethodSelected(selected);
+      setStripeClientSecret(stripeClientSecret);
+    }
+
+    if (selected === "card") {
+      setShowStripePayment(true);
+      return;
+    }
+
     if (selected === "mtn") {
       setShowMTNMoMoPayment(true);
       return;
@@ -92,6 +112,29 @@ export function PaymentModeDialog({
     } finally {
       setIsPaymentProcessing(false);
     }
+  };
+
+  const handleStripeSuccess = (sessionId: string) => {
+    if (onSuccess) {
+      onSuccess(sessionId);
+    } else {
+      navigate(paymentSuccessUrl, {
+        state: {
+          amount,
+          paymentMethod: "Card",
+          transactionId: sessionId,
+        },
+      });
+    }
+  };
+
+  const handleStripeError = (error: string) => {
+    toast.error(error);
+    setShowStripePayment(false);
+  };
+
+  const handleStripeCancel = () => {
+    setShowStripePayment(false);
   };
 
   const handleMTNMoMoSuccess = (transactionId: string) => {
@@ -140,6 +183,19 @@ export function PaymentModeDialog({
     setShowOrangeMoneyPayment(false);
   };
 
+  // Show Stripe payment component
+  if (showStripePayment && stripeClientSecret) {
+    return (
+      <StripePayment
+        amount={amount}
+        stripeClientSecret={stripeClientSecret}
+        onPaymentSuccess={handleStripeSuccess}
+        onPaymentError={handleStripeError}
+        onCancel={handleStripeCancel}
+      />
+    );
+  }
+
   // Show MTN MoMo payment component
   if (showMTNMoMoPayment) {
     return (
@@ -187,7 +243,7 @@ export function PaymentModeDialog({
             <Button
               size="sm"
               variant={selected === method.id ? "default" : "outline"}
-              disabled={method.disabled}
+              // disabled={method.disabled}
               className={cn(
                 "rounded-full text-xs",
                 selected === method.id && "bg-green-500",

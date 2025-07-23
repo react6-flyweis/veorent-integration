@@ -94,3 +94,34 @@ export const useUpdateInsuranceMutation = () => {
       ),
   });
 };
+
+export const useCreatePendingRentPaymentIntentMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: { pendingRentIds: string[] }) =>
+      axiosTenant.post<
+        IResponse<null> & { clientSecret: string; totalAmount: number }
+      >("/pending-rent/bulk-payment", data),
+    onSuccess: () => {
+      // Invalidate and refetch pending rents data
+      queryClient.invalidateQueries({ queryKey: ["pending-rents"] });
+    },
+  });
+};
+
+// update pending rent status
+export const useUpdatePendingRentStatusMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: {
+      pendingRentIds: string[];
+      updateFields: Partial<IPendingRent>;
+    }) => axiosTenant.put<IResponse<null>>("/pending-rent/multiple/data", data),
+    onSuccess: () => {
+      // Invalidate and refetch pending rents data
+      queryClient.invalidateQueries({ queryKey: ["pending-rents"] });
+    },
+  });
+};
