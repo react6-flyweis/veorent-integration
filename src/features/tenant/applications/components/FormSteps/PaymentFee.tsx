@@ -10,13 +10,12 @@ import orangePayIcon from "@/assets/images/orange-money.png";
 import { CurrencyIcon } from "@/components/CurrencyIcon";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { SCREENING_AMOUNT } from "@/constants";
 import { PaymentModeDialog } from "@/features/shared/payments/components/PaymentModeDialog";
 import { StripeElements } from "@/features/shared/payments/components/StripeElements";
 
 import { useUpdateBookingMutation } from "../../api/mutation";
 
-export function PaymentFee() {
+export function PaymentFee({ data }: { data: IBooking }) {
   const { t } = useTranslation();
 
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
@@ -40,7 +39,7 @@ export function PaymentFee() {
       });
       navigate("/tenant/payment/success", {
         state: {
-          amount: SCREENING_AMOUNT,
+          amount: data.totalAmount,
           redirectUrl: "/tenant/dashboard",
         },
       });
@@ -69,7 +68,7 @@ export function PaymentFee() {
         </p>
         <div className="flex items-center gap-1">
           <CurrencyIcon />
-          <p className="text-2xl font-bold">{SCREENING_AMOUNT}</p>
+          <p className="text-2xl font-bold">{data.totalAmount}</p>
         </div>
       </div>
 
@@ -108,7 +107,7 @@ export function PaymentFee() {
           </DialogTrigger>
           <DialogContent className="max-w-md">
             <PaymentModeDialog
-              amount={SCREENING_AMOUNT}
+              amount={data.totalAmount}
               defaultPaymentMethod={selectedPaymentMethod}
               onSuccess={handlePaymentSuccess}
             />

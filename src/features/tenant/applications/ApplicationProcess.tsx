@@ -40,6 +40,7 @@ export default function ApplicationProcess() {
 
   // Redirect if payment is already completed
   useEffect(() => {
+    console.log("Booking data:", bookingData);
     if (bookingData?.paymentStatus === "Paid") {
       navigate("/tenant/dashboard", { replace: true });
     }
@@ -194,7 +195,7 @@ export default function ApplicationProcess() {
         />
       </MultiStepperStep>
       <MultiStepperStep>
-        <PaymentFee />
+        <PaymentFee data={bookingData} />
       </MultiStepperStep>
     </MultiStepper>
   );

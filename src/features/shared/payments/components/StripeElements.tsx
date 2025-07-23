@@ -1,150 +1,138 @@
-"use client";
-
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import {
+  Elements,
+  PaymentElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import { toast } from "sonner";
 
 import { CurrencyIcon } from "@/components/CurrencyIcon";
 import { Button } from "@/components/ui/button";
-import { SCREENING_AMOUNT } from "@/constants";
-import { confirmPayment, createPaymentElement } from "@/utils/stripePayment";
 
-import type { Stripe, StripeElements } from "@stripe/stripe-js";
+interface StripeElementsProps {
+  handlePaymentSuccess: () => Promise<void>;
+}
 
-export function StripeElements({
+function StripeElementsDialog({
   handlePaymentSuccess,
+  stripeClientSecret,
 }: {
   handlePaymentSuccess: () => Promise<void>;
+  stripeClientSecret: string;
 }) {
   const { t } = useTranslation();
+  const stripe = useStripe();
+  const elements = useElements();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const [stripe, setStripe] = useState<Stripe | null>(null);
-  const [elements, setElements] = useState<StripeElements | null>(null);
-  const [isStripeLoading, setIsStripeLoading] = useState(false);
-  const [stripeError, setStripeError] = useState<string | null>(null);
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
-
-  const onSubmit = async () => {
-    if (!stripe || !elements) {
-      setStripeError("Stripe is not initialized");
-      return;
-    }
-
+  const handleStripePayment = async () => {
+    setIsProcessing(true);
+    setErrorMessage("");
     try {
-      setIsStripeLoading(true);
-      setStripeError(null);
-
-      await confirmPayment(stripe, elements);
-
-      // If payment is successful, update booking and navigate
-      await handlePaymentSuccess();
-    } catch (error) {
-      console.error("Payment failed:", error);
-      setStripeError(error instanceof Error ? error.message : "Payment failed");
-    } finally {
-      setIsStripeLoading(false);
-    }
-  };
-
-  // Initialize Stripe Elements using the client secret from localStorage
-  const initializeStripe = async () => {
-    try {
-      setIsStripeLoading(true);
-      setStripeError(null);
-
-      const clientSecret = localStorage.getItem("stripeSecret");
-      if (!clientSecret) {
-        throw new Error(
-          "Payment intent not found. Please refresh and try again.",
-        );
+      if (!stripe || !elements) {
+        setErrorMessage("Stripe is not initialized");
+        setIsProcessing(false);
+        return;
       }
 
-      setClientSecret(clientSecret);
+      elements.submit();
 
-      // Initialize Stripe Elements with the client secret
-      const { stripe, elements } = await createPaymentElement(
-        "stripe-container",
-        clientSecret,
-      );
+      const result = await stripe.confirmPayment({
+        elements,
+        clientSecret: stripeClientSecret,
+        confirmParams: {
+          return_url: `${window.location.origin}/tenant/payment/success`,
+        },
+        redirect: "if_required",
+      });
 
-      setStripe(stripe);
-      setElements(elements);
+      if (result.error) {
+        setErrorMessage(result.error.message || "Payment failed");
+        setIsProcessing(false);
+        toast.error(result.error.message || "Payment failed");
+        return;
+      }
+
+      if (result.paymentIntent?.status === "succeeded") {
+        setIsProcessing(false);
+        await handlePaymentSuccess();
+      }
     } catch (error) {
-      console.error("Failed to initialize Stripe:", error);
-      setStripeError(
-        error instanceof Error ? error.message : "Failed to initialize payment",
-      );
-    } finally {
-      setIsStripeLoading(false);
+      console.error("Stripe payment error:", error);
+      const errorMsg =
+        error instanceof Error ? error.message : "Payment failed";
+      setErrorMessage(errorMsg);
+      toast.error(errorMsg);
+      setIsProcessing(false);
     }
   };
 
-  useEffect(() => {
-    // Initialize Stripe Elements with the client secret from localStorage
-    initializeStripe();
-  }, []);
-
   return (
-    <div className="">
-      {/* Stripe Payment Section */}
-      <div className="space-y-4">
-        {stripeError && (
-          <div className="text-destructive rounded-md bg-red-50 p-3 text-sm">
-            {stripeError}
-          </div>
-        )}
+    <div className="flex h-full max-h-[90vh] flex-col overflow-y-auto">
+      <div className="flex-1 space-y-6">
+        <div className="space-y-4">
+          {errorMessage && (
+            <div className="rounded-lg bg-red-50 p-4">
+              <p className="text-red-800">{errorMessage}</p>
+            </div>
+          )}
+          <PaymentElement />
 
-        {/* Show loading state while initializing */}
-        {isStripeLoading && !elements && (
-          <div className="py-4 text-center">
-            <p className="text-muted-foreground">Initializing payment...</p>
-          </div>
-        )}
-
-        {/* Stripe Elements container */}
-        <div
-          id="stripe-container"
-          className={elements ? "rounded-md border p-4" : "hidden"}
-        ></div>
-
-        {/* Elements payment button - show when properly initialized */}
-        {elements && stripe && clientSecret && (
-          <Button
-            onClick={onSubmit}
-            disabled={isStripeLoading}
-            className="w-full"
-          >
-            {isStripeLoading ? (
-              "Processing payment..."
-            ) : (
-              <>
-                <span>{t("paymentFee.pay")}</span>
-                <CurrencyIcon size="sm" />
-                <span>{SCREENING_AMOUNT}</span>
-              </>
-            )}
-          </Button>
-        )}
-
-        {/* Fallback: Stripe Checkout option */}
-        {!elements && !isStripeLoading && (
-          <Button
-            onClick={onSubmit}
-            disabled={isStripeLoading}
-            className="w-full"
-            variant="outline"
-          >
-            {isStripeLoading ? (
-              "Processing..."
-            ) : (
-              <>
-                <span>{t("paymentFee.payWithCard") || "Pay with Card"}</span>
-                <CurrencyIcon size="sm" />
-                <span>{SCREENING_AMOUNT}</span>
-              </>
-            )}
-          </Button>
-        )}
+          {elements && (
+            <Button
+              onClick={handleStripePayment}
+              disabled={isProcessing}
+              className="w-full"
+            >
+              {isProcessing ? (
+                "Processing..."
+              ) : (
+                <>
+                  <span>{t("payNow")}</span>
+                  <CurrencyIcon size="sm" />
+                </>
+              )}
+            </Button>
+          )}
+        </div>
       </div>
     </div>
+  );
+}
+
+export function StripeElements({ handlePaymentSuccess }: StripeElementsProps) {
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+
+  // Get client secret from localStorage
+  useState(() => {
+    const secret = localStorage.getItem("stripeSecret");
+    setClientSecret(secret);
+  });
+
+  const stripePromise = loadStripe(
+    import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!,
+  );
+
+  if (!clientSecret) {
+    return (
+      <div className="py-4 text-center">
+        <p className="text-muted-foreground">
+          Payment intent not found. Please refresh and try again.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <Elements stripe={stripePromise} options={{ clientSecret }}>
+      <StripeElementsDialog
+        handlePaymentSuccess={handlePaymentSuccess}
+        stripeClientSecret={clientSecret}
+      />
+    </Elements>
   );
 }
