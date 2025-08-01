@@ -114,6 +114,9 @@
     "subscription": {
         "loading": "Loading subscription plans...",
         "noPlans": "No subscription plans available.",
+        "activeStart": "Active from",
+        "activePlan": "Active Plan",
+        "activeUntil": "Active until:",
         "premiumPlan": "Premium Plan",
         "learnMore": "Learn More",
         "getNow": "Get Now",
