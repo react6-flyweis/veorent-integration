@@ -11,21 +11,6 @@ import { usePurchaseSubscriptionMutation } from "./api/mutations";
 import { useGetSubscriptionPlanQuery } from "./api/queries";
 import subscriptionDetailsIcon from "./assets/subscription-details.png";
 
-// const subscriptionPlan = {
-//   title: "Veorent Standard",
-//   price: "15,000",
-//   description:
-//     "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries.",
-//   period: "Monthly",
-//   features: [
-//     "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-//     "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-//     "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-//     "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-//     "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-//   ],
-// };
-
 export default function SubscriptionDetails() {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
