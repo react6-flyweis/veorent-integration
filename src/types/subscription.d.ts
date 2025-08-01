@@ -29,3 +29,13 @@ interface IPurchaseSubscriptionResponse {
   userSubscription: ILandlordSubscription;
   stripeClientSecret: string;
 }
+
+interface IActiveSubscription {
+  subscription: ISubscription;
+  startDate: string;
+  endDate: string;
+  paymentStatus: "completed" | "failed" | "pending";
+  paymentMethod: PaymentMethod;
+  transactionId: string | null;
+  isActive: boolean;
+}

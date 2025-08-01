@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+
 import { axiosLandlord } from "../../api/axios";
 
 export const useGetSubscriptionPlansQuery = () => {
@@ -16,5 +17,14 @@ export const useGetSubscriptionPlanQuery = (id: string) => {
       axiosLandlord.get<IResponse<ISubscription>>(`/subscriptions/${id}`),
     queryKey: ["subscription-plan", id],
     select: (data) => data.data.data,
+  });
+};
+
+// /partner/active
+export const useGetActiveSubscriptionQuery = () => {
+  return useQuery({
+    queryFn: () => axiosLandlord.get<[IActiveSubscription]>("/active"),
+    queryKey: ["active-subscription"],
+    select: (data) => data.data[0],
   });
 };
