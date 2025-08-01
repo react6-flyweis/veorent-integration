@@ -119,7 +119,14 @@
         "getNow": "Obtener ahora",
         "detailsTitle": "Detalles de la suscripción",
         "buy": "Comprar suscripción",
-        "description": "Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto."
+        "description": "Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto.",
+        "cancelTitle": "¿Cancelar suscripción?",
+        "cancelConfirm": "¿Estás seguro de que deseas cancelar tu suscripción? Esta acción no se puede deshacer.",
+        "cancelSubscription": "Cancelar suscripción",
+        "action": {
+            "yesCancel": "Sí, cancelar",
+            "no": "No"
+        }
     },
     "expenses": {
         "datePaid": "Fecha de pago",

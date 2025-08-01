@@ -122,7 +122,14 @@
         "getNow": "Get Now",
         "detailsTitle": "Subscription Details",
         "buy": "Buy Subscription",
-        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+        "cancelTitle": "Cancel Subscription?",
+        "cancelConfirm": "Are you sure you want to cancel your subscription? This action cannot be undone.",
+        "cancelSubscription": "Cancel Subscription",
+        "action": {
+            "yesCancel": "Yes, Cancel",
+            "no": "No"
+        }
     },
     "expenses": {
         "datePaid": "Date Paid",

@@ -119,7 +119,14 @@
         "getNow": "Obtenir maintenant",
         "detailsTitle": "Détails de l'abonnement",
         "buy": "Acheter un abonnement",
-        "description": "Le Lorem Ipsum est simplement un faux texte de l'industrie de l'imprimerie et de la composition."
+        "description": "Le Lorem Ipsum est simplement un faux texte de l'industrie de l'imprimerie et de la composition.",
+        "cancelTitle": "Annuler l'abonnement ?",
+        "cancelConfirm": "Êtes-vous sûr de vouloir annuler votre abonnement ? Cette action ne peut pas être annulée.",
+        "cancelSubscription": "Annuler l'abonnement",
+        "action": {
+            "yesCancel": "Oui, annuler",
+            "no": "Non"
+        }
     },
     "expenses": {
         "datePaid": "Date de paiement",
