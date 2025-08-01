@@ -22,3 +22,14 @@ export const usePurchaseSubscriptionMutation = () => {
     }) => axiosLandlord.post<IPurchaseSubscriptionResponse>("/purchase", data),
   });
 };
+
+// /update-payment-status
+export const useUpdatePaymentStatusMutation = () => {
+  return useMutation({
+    mutationFn: (data: {
+      subscriptionId: string;
+      transactionId: string;
+      paymentStatus: "completed" | "failed" | "pending";
+    }) => axiosLandlord.put<IResponse<"">>("/update-payment-status", data),
+  });
+};

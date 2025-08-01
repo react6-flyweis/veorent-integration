@@ -7,7 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { PaymentModeDialog } from "@/features/shared/payments/components/PaymentModeDialog";
 
-import { usePurchaseSubscriptionMutation } from "./api/mutations";
+import {
+  usePurchaseSubscriptionMutation,
+  useUpdatePaymentStatusMutation,
+} from "./api/mutations";
 import { useGetSubscriptionPlanQuery } from "./api/queries";
 import subscriptionDetailsIcon from "./assets/subscription-details.png";
 
@@ -18,6 +21,7 @@ export default function SubscriptionDetails() {
     id || "",
   );
   const { mutateAsync } = usePurchaseSubscriptionMutation();
+  const updatePaymentStatus = useUpdatePaymentStatusMutation();
 
   if (!id) {
     return <Navigate to="/landlord/subscription" replace />;
@@ -33,6 +37,14 @@ export default function SubscriptionDetails() {
       return { stripeClientSecret: data.data.stripeClientSecret };
     }
     return { stripeClientSecret: "" }; // For MTN and Orange, we don't need to return anything
+  };
+
+  const handlePaymentStatusUpdate = async (transactionId?: string) => {
+    await updatePaymentStatus.mutateAsync({
+      subscriptionId: id,
+      transactionId: transactionId || "",
+      paymentStatus: "completed",
+    });
   };
 
   if (isLoading || !subscriptionPlan) return <></>;
@@ -82,6 +94,7 @@ export default function SubscriptionDetails() {
             </DialogTrigger>
             <DialogContent>
               <PaymentModeDialog
+                onSuccess={handlePaymentStatusUpdate}
                 onMethodSelected={handleMethodSelected}
                 amount={subscriptionPlan.price}
               />
