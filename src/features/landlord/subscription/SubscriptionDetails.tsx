@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { PaymentModeDialog } from "@/features/shared/payments/components/PaymentModeDialog";
 
+import { usePurchaseSubscriptionMutation } from "./api/mutations";
 import { useGetSubscriptionPlanQuery } from "./api/queries";
 import subscriptionDetailsIcon from "./assets/subscription-details.png";
 
@@ -31,10 +32,23 @@ export default function SubscriptionDetails() {
   const { data: subscriptionPlan, isLoading } = useGetSubscriptionPlanQuery(
     id || "",
   );
+  const { mutateAsync } = usePurchaseSubscriptionMutation();
 
   if (!id) {
     return <Navigate to="/landlord/subscription" replace />;
   }
+
+  const handleMethodSelected = async (method: "card" | "mtn" | "orange") => {
+    if (method === "card") {
+      const data = await mutateAsync({
+        subscriptionId: id,
+        paymentMethod: "stripe",
+      });
+
+      return { stripeClientSecret: data.data.stripeClientSecret };
+    }
+    return { stripeClientSecret: "" }; // For MTN and Orange, we don't need to return anything
+  };
 
   if (isLoading || !subscriptionPlan) return <></>;
 
@@ -82,7 +96,10 @@ export default function SubscriptionDetails() {
               </Button>
             </DialogTrigger>
             <DialogContent>
-              <PaymentModeDialog amount={subscriptionPlan.price} />
+              <PaymentModeDialog
+                onMethodSelected={handleMethodSelected}
+                amount={subscriptionPlan.price}
+              />
             </DialogContent>
           </Dialog>
         </div>
