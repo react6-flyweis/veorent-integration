@@ -33,3 +33,11 @@ export const useUpdatePaymentStatusMutation = () => {
     }) => axiosLandlord.put<IResponse<"">>("/update-payment-status", data),
   });
 };
+
+// /cancel
+export const useCancelSubscriptionMutation = () => {
+  return useMutation({
+    mutationFn: (subscriptionId: string) =>
+      axiosLandlord.post<IResponse<"">>("/cancel", { subscriptionId }),
+  });
+};
