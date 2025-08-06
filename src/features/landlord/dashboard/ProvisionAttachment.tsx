@@ -24,7 +24,6 @@ import additionalTermsIcon from "./assets/additional.png";
 import attachmentIcon from "./assets/attachment.png";
 import { BuilderLayout } from "./components/BuilderLayout";
 
-
 // Define schema for the form
 const provisionAttachmentSchema = z.object({
   additionalTerms: z.string(),
@@ -68,8 +67,9 @@ export default function ProvisionAttachment() {
       if (values.attachment) {
         // upload the attachment
         const formData = new FormData();
-        formData.append("file", values.attachment);
+        formData.append("image", values.attachment);
         // response as url
+
         const response = await uploadAttachment(formData);
         // pass url to valuesToSave
         valuesToSave.ProvisionsAndAttachments.attachment =
